@@ -1,3 +1,4 @@
 *.bin
 */output/
-*/.idea
+src/ir_decoder/.idea
+src/ir_encoder/.idea
