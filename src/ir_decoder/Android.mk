@@ -4,8 +4,8 @@ include $(CLEAR_VARS)
 
 LOCAL_CFLAGS    := -DBOARD_MT6580
 LOCAL_MODULE    := libirdecode
-LOCAL_SRC_FILES := ucon_decode_jni.c \
-                   ucon_decode.c \
+LOCAL_SRC_FILES := irda_decode_jni.c \
+                   irda_decode.c \
                    bc_parse_parameter.c \
                    irda_lib.c \
                    irda_apply.c \

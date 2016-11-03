@@ -1,20 +1,20 @@
 ﻿/**************************************************************************************************
-Filename:       ucon_decode_jni.c
+Filename:       irda_decode_jni.c
 Revised:        Date: 2016-03-21
 Revision:       Revision: 1.0
 
 Description:    This file links to java layer for Android application
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2016-03-21: created by strawmanbobi
 **************************************************************************************************/
 #include <jni.h>
 #include <stdio.h>
-#include "include/ucon_decode_jni.h"
+#include "include/irda_decode_jni.h"
 #include "irda_defs.h"
-#include "ucon_decode.h"
+#include "irda_decode.h"
 
 // function declaration
 void FillBCCommandValuesToJni(JNIEnv* env, jobject j_bc_command, jclass bccommand_class, t_bc_command bc_command);

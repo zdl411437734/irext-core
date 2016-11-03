@@ -3,9 +3,9 @@ Filename:       irda_parse_ac_parameter.c
 Revised:        Date: 2015-08-12
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode for AC functionality parameters
+Description:    This file provides algorithms for IR decode for AC functionality parameters
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-12: created by strawmanbobi
@@ -18,7 +18,7 @@ Revision log:
 #include <string.h>
 #include "irda_utils.h"
 #include "irda_parse_ac_parameter.h"
-#include "ucon_decode.h"
+#include "irda_decode.h"
 
 /*
  * global vars

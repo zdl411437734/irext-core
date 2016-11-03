@@ -4,10 +4,8 @@ project(irda_decoder)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions(-DBOARD_PC)
 set(SOURCE_FILES
-        ucon_decode.c
-        ucon_decode.h
-        bc_parse_parameter.c
-        bc_parse_parameter.h
+        irda_decode.c
+        irda_decode.h
         irda_lib.c
         irda_lib.h
         irda_apply.c

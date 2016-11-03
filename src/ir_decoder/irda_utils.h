@@ -3,15 +3,15 @@ Filename:       irda_utils.c
 Revised:        Date: 2015-08-26
 Revision:       Revision: 1.0
 
-Description:    This file provides generic utils for UCON IRDA algorithms
+Description:    This file provides generic utils for IRDA algorithms
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-01: created by strawmanbobi
 **************************************************************************************************/
 #include "irda_defs.h"
-#include "ucon_decode.h"
+#include "irda_decode.h"
 
 #ifndef _IRDA_UTILS_H_
 #define _IRDA_UTILS_H_

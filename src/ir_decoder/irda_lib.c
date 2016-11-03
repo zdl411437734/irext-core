@@ -3,9 +3,9 @@ Filename:       irda_lib.c
 Revised:        Date: 2016-01-21
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode (command type)
+Description:    This file provides algorithms for IR decode (compressed command type)
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2016-01-21: created by strawmanbobi
@@ -20,14 +20,6 @@ Revision log:
 #include "irda_defs.h"
 #include "irda_lib.h"
 #include "string.h"
-
-#if defined BOARD_CC254X
-#include "ucon_public.h"
-#include "ucon_data.h"
-#include "ucon_remote.h"
-#include "OSAL.h"
-#include "npi.h"
-#endif
 
 
 /**************************************************************************************************

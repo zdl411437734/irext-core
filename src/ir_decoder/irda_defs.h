@@ -3,9 +3,9 @@ Filename:       irda_defs.h
 Revised:        Date: 2015-08-26
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode
+Description:    This file provides algorithms for IR decode
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-01: created by strawmanbobi
@@ -21,7 +21,7 @@ Revision log:
 
 #if defined BOARD_MT6580
 #include <android/log.h>
-#define  LOG_TAG    "ucon_decode"
+#define  LOG_TAG    "irda_decode"
 #endif
 
 #ifndef PARSE_IR_DEFS_H
@@ -49,7 +49,7 @@ typedef unsigned char BOOL;
 #define IR_PRINTF(A)
 
 #if !defined BOARD_CC254X
-#define USER_DATA_SIZE UCON_USER_DATA_SIZE
+#define USER_DATA_SIZE IRDA_USER_DATA_SIZE
 #endif
 
 #elif defined BOARD_MC200

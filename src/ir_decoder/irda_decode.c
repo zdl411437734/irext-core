@@ -1,11 +1,11 @@
 /**************************************************************************************************
-Filename:       ucon_decode.c
+Filename:       irda_decode.c
 Revised:        Date: 2015-08-01
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode (status type)
+Description:    This file provides algorithms for IR decode (status type)
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-01: created by strawmanbobi
@@ -21,7 +21,7 @@ Revision log:
 
 #include <string.h>
 
-#include "ucon_decode.h"
+#include "irda_decode.h"
 #include "irda_utils.h"
 #include "irda_parse_frame_parameter.h"
 #include "irda_parse_ac_parameter.h"
@@ -29,19 +29,6 @@ Revision log:
 #include "irda_irframe.h"
 #include "irda_apply.h"
 #include "irda_lib.h"
-#include "bc_parse_parameter.h"
-
-#if defined BOARD_CC254X
-#include "ucon_data.h"
-#include "ucon_remote.h"
-#include "ucon_public.h"
-#include "ucon_irda.h"
-#include "npi.h"
-#endif
-
-#if defined BOARD_MC200
-#include "yk_irda.h"
-#endif
 
 struct ir_bin_buffer binaryfile;
 struct ir_bin_buffer *pirda_buffer = &binaryfile;
@@ -87,7 +74,7 @@ protocol *context = (protocol *) byteArray;
 t_bc_protocol *context_bc = (t_bc_protocol *) byteArray;
 
 // ban function table
-// fixed swing should not be counted in case of UCON
+// fixed swing should not be counted in case of AC
 INT8 apply_power(remote_ac_status_t ac_status, UINT8 function_code);
 INT8 apply_mode(remote_ac_status_t ac_status, UINT8 function_code);
 INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code);
@@ -1332,324 +1319,6 @@ UINT16 irda_tv_lib_close()
 
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
 
-///////////////////////////////////////////////// BLE Central Begin /////////////////////////////////////////////////
-
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
-INT8 binary_ble_open(const char *file)
-{
-    FILE *stream = fopen(file, "rb");
-    if (stream == NULL)
-    {
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    pirda_buffer->len = ftell(stream);
-
-    fseek(stream, 0, SEEK_SET);
-    fread(pirda_buffer->data, pirda_buffer->len, 1, stream);
-    fclose(stream);
-
-    return IR_DECODE_SUCCEEDED;
-}
-#endif
-
-INT8 binary_bc_parse_offset()
-{
-    int i = 0;
-    UINT16 *phead = (UINT16 *) &pirda_buffer->data[1];
-
-    tag_count = pirda_buffer->data[0];
-    if(TAG_COUNT_FOR_BC_PROTOCOL != tag_count)
-    {
-        return IR_DECODE_FAILED;
-    }
-
-    tag_head_offset = (tag_count << 1) + 1;
-
-    tags = (t_tag_head *) irda_malloc(tag_count * sizeof(t_tag_head));
-    if (NULL == tags)
-    {
-        return IR_DECODE_FAILED;
-    }
-
-    for (i = 0; i < tag_count; i++)
-    {
-        tags[i].tag = bc_tag_index[i];
-        tags[i].offset = *(phead + i);
-        if (tags[i].offset == TAG_INVALID)
-        {
-            tags[i].len = 0;
-        }
-    }
-    return IR_DECODE_SUCCEEDED;
-}
-
-// might be merged with function binary_parse_len
-INT8 binary_bc_parse_len()
-{
-    UINT16 i = 0, j = 0;
-    for (i = 0; i < (tag_count - 1); i++)
-    {
-        if (tags[i].offset == TAG_INVALID)
-        {
-            continue;
-        }
-
-        for (j = (i + 1); j < tag_count; j++)
-        {
-            if (tags[j].offset != TAG_INVALID)
-            {
-                break;
-            }
-        }
-        if (j < tag_count)
-        {
-            tags[i].len = tags[j].offset - tags[i].offset;
-        }
-        else
-        {
-            tags[i].len = pirda_buffer->len - tags[i].offset - tag_head_offset;
-            return IR_DECODE_SUCCEEDED;
-        }
-    }
-    if (tags[tag_count - 1].offset != TAG_INVALID)
-    {
-        tags[tag_count - 1].len = pirda_buffer->len - tag_head_offset - tags[tag_count - 1].offset;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-// might be merged with function binary_parse_data
-INT8 binary_bc_parse_data()
-{
-    UINT16 i = 0;
-    for (i = 0; i < tag_count; i++)
-    {
-        tags[i].pdata = pirda_buffer->data + tags[i].offset + tag_head_offset;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-INT8 free_bc_context()
-{
-    UINT8 i = 0;
-
-    if (NULL != context_bc->device_name)
-    {
-        irda_free(context_bc->device_name);
-        context_bc->device_name = NULL;
-    }
-
-    if (NULL != context_bc->conn_ack.commands)
-    {
-        irda_free(context_bc->conn_ack.commands);
-        context_bc->conn_ack.commands = NULL;
-    }
-    context_bc->conn_ack.seg_count = 0;
-
-    for (i = 0; i < KEY_COUNT; i++)
-    {
-        if (NULL != context_bc->generic_command[i].commands)
-        {
-            irda_free(context_bc->generic_command[i].commands);
-            context_bc->generic_command[i].commands = NULL;
-        }
-        context_bc->generic_command[i].seg_count = 0;
-    }
-    return IR_DECODE_SUCCEEDED;
-}
-
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
-INT8 bc_lib_open(const char *file_name)
-{
-    return binary_ble_open(file_name);
-}
-#else
-INT8 bc_lib_open(UINT8 *binary_file, UINT16 binary_length)
-{
-    // load bin to buffer
-    pirda_buffer->data = binary_file;
-    pirda_buffer->len = binary_length;
-    pirda_buffer->offset = 0;
-    return IR_DECODE_SUCCEEDED;
-}
-#endif
-
-INT8 bc_context_init()
-{
-    irda_memset(context_bc, 0, sizeof(t_bc_protocol));
-    return IR_DECODE_SUCCEEDED;
-}
-
-INT8 bc_lib_parse()
-{
-    UINT16 i = 0;
-    // suggest not to call init function here for de-couple purpose
-#if defined BOARD_CC254X
-    bc_context_init();
-#endif
-    if (IR_DECODE_FAILED == binary_bc_parse_offset())
-    {
-        return IR_DECODE_FAILED;
-    }
-
-    if (IR_DECODE_FAILED == binary_bc_parse_len())
-    {
-        return IR_DECODE_FAILED;
-    }
-
-    if (IR_DECODE_FAILED == binary_bc_parse_data())
-    {
-        return IR_DECODE_FAILED;
-    }
-
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
-    binary_tags_info();
-#endif
-
-    // parse tags
-    for (i = 0; i < tag_count; i++)
-    {
-        if (tags[i].len == 0)
-        {
-            continue;
-        }
-        if (tags[i].tag == TAG_BC_BLE_NAME)
-        {
-            context_bc->device_name = (char*)irda_malloc(tags[i].len + 1);
-            irda_memset(context_bc->device_name, 0x00, tags[i].len + 1);
-            if (IR_DECODE_FAILED == parse_ble_name(tags[i].pdata, tags[i].len, context_bc->device_name))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-        else if (tags[i].tag == TAG_BC_NEED_CONN_ACK)
-        {
-            if (IR_DECODE_FAILED == parse_ble_need_conn_ack(tags[i].pdata, &context_bc->need_connection_ack))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-        else if (tags[i].tag == TAG_BC_NAME_LENGTH)
-        {
-            if (IR_DECODE_FAILED == parse_ble_name_length(tags[i].pdata, &context_bc->name_length))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-        else if (tags[i].tag == TAG_BC_NAME_ESS_LENGTH)
-        {
-            if (IR_DECODE_FAILED == parse_ble_name_essential_length(tags[i].pdata, &context_bc->name_essential_length))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-        else if (tags[i].tag == TAG_BC_CONN_ACK_CMD)
-        {
-            if (IR_DECODE_FAILED == parse_ble_commands(&tags[i],
-                                                       &context_bc->conn_ack))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-        else if (tags[i].tag >= TAG_BC_KEY_0_CMD && tags[i].tag <= TAG_BC_KEY_14_CMD)
-        {
-            if (IR_DECODE_FAILED == parse_ble_commands(&tags[i],
-                                                       &context_bc->generic_command[tags[i].tag - TAG_BC_KEY_0_CMD]))
-            {
-                return IR_DECODE_FAILED;
-            }
-        }
-    }
-
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
-    IR_PRINTF("\n=====================================\n");
-    {
-        IR_PRINTF("\n");
-        IR_PRINTF("device name = %s\n", context_bc->device_name);
-        IR_PRINTF("need ack per connected = %d\n", context_bc->need_connection_ack);
-        IR_PRINTF("length of name = %d\n", context_bc->name_length);
-        IR_PRINTF("essential length of name = %d\n", context_bc->name_essential_length);
-        IR_PRINTF("conn ack segment count = %d\n", context_bc->conn_ack.seg_count);
-    };
-    IR_PRINTF("\n=====================================\n");
-#endif
-
-    if(NULL != tags)
-    {
-        irda_free(tags);
-        tags = NULL;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-UINT16 bc_lib_control(int key_code, t_bc_commands* bc_commands)
-{
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
-    UINT8 seg_index = 0;
-    UINT8 i = 0;
-    t_bc_commands key_command = context_bc->generic_command[key_code];
-
-    for (seg_index = 0; seg_index < key_command.seg_count; seg_index++)
-    {
-        IR_PRINTF("send %d bytes of command with handle 0x%04X\n",
-                  key_command.commands[seg_index].length,
-                  key_command.commands[seg_index].handle);
-        for(i = 0; i < key_command.commands[seg_index].length; i++)
-        {
-            IR_PRINTF("[%02X] ", key_command.commands[seg_index].command[i]);
-        }
-    }
-
-    IR_PRINTF("\n");
-    return 0;
-#else
-    if (NULL == bc_commands)
-    {
-        return IR_DECODE_FAILED;
-    }
-    // CC254X would load some data from flash to complete this procedure
-    // TODO:
-
-	return IR_DECODE_SUCCEEDED;
-#endif
-}
-
-void bc_lib_close()
-{
-    if (NULL != tags)
-    {
-        irda_free(tags);
-        tags = NULL;
-    }
-    // free context
-    free_bc_context();
-    return;
-}
-
-// utils
-int get_valid_keys(int *valid_keys)
-{
-    int i = 0;
-    for (i = 0; i < KEY_COUNT; i++)
-    {
-        if (context_bc->generic_command[i].seg_count != 0)
-        {
-            valid_keys[i] = 1;
-        }
-        else
-        {
-            valid_keys[i] = 0;
-        }
-    }
-    return KEY_COUNT;
-}
-///////////////////////////////////////////////// BLE Central End /////////////////////////////////////////////////
-
 ///////////////////////////////////////////////// Decode Test Begin /////////////////////////////////////////////////
 #if (defined BOARD_PC) || (defined BOARD_MT6580)
 
@@ -1841,52 +1510,6 @@ UINT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT8 decode_as_ble_central(char *file_name)
-{
-    // keyboard input
-    int in_char = 0;
-    int count = 0;
-    int key_code = -1;
-    BOOL op_match = TRUE;
-
-    if (IR_DECODE_FAILED == bc_lib_open(file_name))
-    {
-        bc_lib_close();
-        return IR_DECODE_FAILED;
-    }
-
-    // no need to verify return value
-    bc_context_init();
-
-    if (IR_DECODE_FAILED == bc_lib_parse())
-    {
-        bc_lib_close();
-        return IR_DECODE_FAILED;
-    }
-    do
-    {
-        in_char = getchar();
-        if (in_char >= '0' && in_char <= '9')
-        {
-            key_code = in_char - '0';
-            bc_lib_control(key_code, NULL);
-        }
-        else if (in_char >= 'a' && in_char <= 'f')
-        {
-            key_code = 10 + (in_char - 'a');
-            bc_lib_control(key_code, NULL);
-        }
-        else
-        {
-            // do nothing
-        }
-    } while('Q' != in_char);
-
-    bc_lib_close();
-
-    return IR_DECODE_SUCCEEDED;
-}
-
 #endif
 
 #if defined BOARD_PC
@@ -1916,11 +1539,6 @@ int main(int argc, char *argv[])
         case '1':
             IR_PRINTF("decode binary file as TV : %d\n", irda_hex_encode);
             decode_as_tv(argv[2], irda_hex_encode);
-            break;
-
-        case '2':
-            IR_PRINTF("decode binary file as BLE CENTRAL\n");
-            decode_as_ble_central(argv[2]);
             break;
 
         default:

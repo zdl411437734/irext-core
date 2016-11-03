@@ -2,7 +2,7 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/ucon_decode.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/irda_parse_forbidden_info.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_parse_forbidden_info.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_irframe.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
@@ -12,16 +12,14 @@
       <sourceFolder url="file://$MODULE_DIR$/irda_parse_frame_parameter.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_defs.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_parse_ac_parameter.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ucon_decode.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_parse_frame_parameter.c" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/irda_lib.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bc_parse_parameter.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_parse_ac_parameter.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_apply.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bc_parse_parameter.c" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/irda_parse_forbidden_info.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/irda_lib.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/irda_decode.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_apply.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/irda_lib.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/irda_decode.c" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

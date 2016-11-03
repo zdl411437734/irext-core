@@ -3,9 +3,9 @@ Filename:       irda_apply.h
 Revised:        Date: 2015-08-12
 Revision:       Revision: 1.0
 
-Description:    This file provides methods for UCON applying functionalities
+Description:    This file provides methods for AC IR applying functionalities
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-12: created by strawmanbobi
@@ -14,7 +14,7 @@ Revision log:
 /*
  *inclusion
  */
-#include "ucon_decode.h"
+#include "irda_decode.h"
 
 #ifndef _IRDA_APPLY_H_
 #define _IRDA_APPLY_H_

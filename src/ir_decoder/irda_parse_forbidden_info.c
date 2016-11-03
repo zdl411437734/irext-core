@@ -3,9 +3,9 @@ Filename:       irda_parse_forbidden_info.c
 Revised:        Date: 2015-08-05
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode for TAG 150x
+Description:    This file provides algorithms for IR decode for TAG 150x
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-05: created by strawmanbobi
@@ -14,7 +14,7 @@ Revision log:
 /*
  *inclusion
  */
-#include "ucon_decode.h"
+#include "irda_decode.h"
 #include "irda_utils.h"
 #include "irda_parse_forbidden_info.h"
 #include <stdio.h>

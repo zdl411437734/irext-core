@@ -3,9 +3,9 @@ Filename:       irda_irframe.c
 Revised:        Date: 2015-08-01
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for UCON IR decode
+Description:    This file provides algorithms for IR frame build
 
-Copyright 2014-2016 UCON Tech all rights reserved
+
 
 Revision log:
 * 2015-08-01: created by strawmanbobi
@@ -13,7 +13,7 @@ Revision log:
 #include <stdio.h>
 
 #include "irda_irframe.h"
-#include "ucon_decode.h"
+#include "irda_decode.h"
 
 extern protocol* context;
 
