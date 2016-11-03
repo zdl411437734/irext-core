@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_irframe.c
-Revised:        Date: 2015-08-01
+Revised:        Date: 2016-10-01
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR frame build
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR frame build
 
 
 Revision log:
-* 2015-08-01: created by strawmanbobi
+* 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 #include <stdio.h>
 
@@ -47,34 +47,6 @@ UINT16 add_delaycode(UINT8 index)
     UINT8 size = 0;
     UINT8 tail_delaycode = 0;
     UINT16 tail_pos = 0;
-
-/* updated by xiangjiang - 2015-08-31 - begin */
-#if 0
-    //Handle TAG307
-    if ((context->lastbit == 0) && (index == (ir_hex_len - 1)))
-    {
-        context->time[context->code_cnt++] = context->one.low; //high
-    }
-
-    if (context->dc_cnt == 0)
-        return 0;
-    else
-        size = context->dc_cnt;
-
-    for (i = 0; i < size; i++)
-    {
-
-        if (context->dc[i].pos == index)
-        {
-            for (j = 0; j < context->dc[i].time_cnt; j++)
-            {
-                context->time[context->code_cnt++] = context->dc[i].time[j];
-            }
-            return context->dc[i].time_cnt;
-        }
-    }
-    return 0;
-#else
 
     if(context->dc_cnt != 0)
     {
@@ -115,8 +87,6 @@ UINT16 add_delaycode(UINT8 index)
     }
 
     return context->dc[i].time_cnt;
-#endif
-/* updated by xiangjiang - 2015-08-31 - end */
 }
 
 UINT16 create_ir_frame()
@@ -176,7 +146,7 @@ UINT16 create_ir_frame()
         }
     }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     for (i = 0; i < context->code_cnt; i++)
     {
         IR_PRINTF("%d,", context->time[i]);

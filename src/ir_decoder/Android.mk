@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS    := -DBOARD_MT6580
+LOCAL_CFLAGS    := -DBOARD_ANDROID
 LOCAL_MODULE    := libirdecode
 LOCAL_SRC_FILES := irda_decode_jni.c \
                    irda_decode.c \

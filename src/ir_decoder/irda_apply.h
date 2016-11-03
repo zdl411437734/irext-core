@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_apply.h
-Revised:        Date: 2015-08-12
+Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
 Description:    This file provides methods for AC IR applying functionalities
@@ -8,7 +8,7 @@ Description:    This file provides methods for AC IR applying functionalities
 
 
 Revision log:
-* 2015-08-12: created by strawmanbobi
+* 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
 /*

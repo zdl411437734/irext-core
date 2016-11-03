@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_parse_frame_parameter.c
-Revised:        Date: 2015-08-11
+Revised:        Date: 2016-10-11
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for AC frame parameters
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR decode for AC frame paramet
 
 
 Revision log:
-* 2015-08-11: created by strawmanbobi
+* 2016-10-11: created by strawmanbobi
 **************************************************************************************************/
 
 /*
@@ -215,18 +215,6 @@ INT8 parse_delaycode_303(struct tag_head *tag)
     irda_memcpy(buf, tag->pdata + preindex, i - preindex);
     parse_delaycode_303_pos(buf);
     irda_memset(buf, 0, 64);
-
-    /* updated by xiangjiang - 2015-08-31 - begin */
-#if 0
-    for (i = 0; i < context->dc_cnt; i++)
-    {
-        if (context->dc[i].pos == -1)
-        {
-            context->dc[i].pos = (context->default_code.len - 1);
-        }
-    }
-#endif
-    /* updated by xiangjiang - 2015-08-31 - end */
 
     return IR_DECODE_SUCCEEDED;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_decode.h
-Revised:        Date: 2015-08-01
+Revised:        Date: 2016-10-01
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR decode
 
 
 Revision log:
-* 2015-08-01: created by strawmanbobi
+* 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 #ifndef _IRDA_DECODE_H_
 #define _IRDA_DECODE_H_
@@ -19,11 +19,11 @@ Revision log:
 #define TAG_COUNT_FOR_PROTOCOL 29
 #define TAG_COUNT_FOR_BC_PROTOCOL 20
 
-#if defined BOARD_CC254X
+#if defined BOARD_EMBEDDED
 
 #define KEY_COUNT 15
 
-#elif (defined BOARD_PC) || (defined BOARD_MT6580)
+#elif (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 #define KEY_COUNT 15
 
@@ -33,7 +33,7 @@ Revision log:
 
 #endif
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 #define EXPECTED_MEM_SIZE 1024
 #endif
 
@@ -255,7 +255,6 @@ typedef struct tag_1006_horiswing_1
 } hori_swing_1;
 #endif
 
-/* modified by xiangjiang 2015-11-20 - begin - */
 typedef struct _tag_checksum_data
 {
     UINT8 len;
@@ -273,7 +272,6 @@ typedef struct tag_checksum
     UINT16 count;
     tag_checksum_data *checksum_data;
 } tchecksum;
-/* modified by xiangjiang 2015-11-20 - end - */
 
 typedef struct tag_function_1
 {
@@ -377,7 +375,7 @@ typedef struct ac_protocol
     UINT8 solo_function_mark;
 } protocol;
 
-#if defined BOARD_MC200
+#if defined BOARD_FREE_RTOS
 #pragma pack(1)
 #endif
 typedef struct bc_command
@@ -386,7 +384,7 @@ typedef struct bc_command
     UINT16 handle;
     UINT8 command[BLE_GAP_MTU];
 } t_bc_command;
-#if defined BOARD_MC200
+#if defined BOARD_FREE_RTOS
 #pragma pack()
 #endif
 
@@ -420,7 +418,7 @@ typedef struct tag_head
     UINT8 *pdata;
 } t_tag_head;
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 struct ir_bin_buffer
 {
     UINT8 data[EXPECTED_MEM_SIZE];
@@ -514,13 +512,13 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 #define TAG_BC_KEY_14_CMD        214
 
 // definition about size
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 #define PROTOCOL_SIZE (sizeof(protocol))
 #define BC_PROTOCOL_SIZE (sizeof(t_bc_protocol))
-#elif defined BOARD_CC254X
+#elif defined BOARD_EMBEDDED
 #define PROTOCOL_SIZE 850
 #define BC_PROTOCOL_SIZE  (sizeof(t_bc_protocol))
-#elif defined BOARD_MC200
+#elif defined BOARD_FREE_RTOS
 #define PROTOCOL_SIZE (sizeof(protocol))              //1168
 #define BC_PROTOCOL_SIZE (sizeof(t_bc_protocol))
 #else
@@ -555,7 +553,7 @@ extern INT8 irda_context_init();
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 extern UINT16 user_data[];
 extern INT8 irda_ac_lib_open(const char *file_name);
 #else
@@ -595,7 +593,7 @@ extern void irda_ac_lib_close();
 ///////////////////////////////////////////////// AC End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 /*
  * function irda_tv_lib_open
  *
@@ -645,7 +643,7 @@ extern INT8 bc_context_init();
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 extern INT8 bc_lib_open(const char *file_name);
 #else
 extern INT8 bc_lib_open(UINT8 *binary_file, UINT16 binary_length);

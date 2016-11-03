@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_parse_forbidden_info.c
-Revised:        Date: 2015-08-05
+Revised:        Date: 2016-10-05
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for TAG 150x
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR decode for TAG 150x
 
 
 Revision log:
-* 2015-08-05: created by strawmanbobi
+* 2016-10-05: created by strawmanbobi
 **************************************************************************************************/
 
 /*

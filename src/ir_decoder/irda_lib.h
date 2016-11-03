@@ -8,8 +8,7 @@ Description:    This file provides algorithms for IR decode (compressed command 
 
 
 Revision log:
-* 2016-01-21: created by strawmanbobi
-* 2016-05-06: upadted by xiangjiang
+* 2016-10-21: created by strawmanbobi
 **************************************************************************************************/
 
 #ifndef _IRDA_H_
@@ -88,7 +87,7 @@ typedef struct irda_data
     UINT8 index;
 }  irda_data_t;
 
-#if (defined BOARD_PC) || (defined BOARD_MC200) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_FREE_RTOS) || (defined BOARD_ANDROID)
 #pragma pack(1)
 #endif
 typedef struct irda_cycles
@@ -97,7 +96,7 @@ typedef struct irda_cycles
     UINT16 mask;
     UINT16 space;
 } irda_cycles_t;
-#if (defined BOARD_PC) || (defined BOARD_MC200) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_FREE_RTOS) || (defined BOARD_ANDROID)
 #pragma pack()
 #endif
 

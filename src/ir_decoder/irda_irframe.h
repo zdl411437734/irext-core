@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_utils.c
-Revised:        Date: 2015-08-26
+Revised:        Date: 2016-10-26
 Revision:       Revision: 1.0
 
 Description:    This file provides generic utils for IR frame build
@@ -8,7 +8,7 @@ Description:    This file provides generic utils for IR frame build
 
 
 Revision log:
-* 2015-08-01: created by strawmanbobi
+* 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 #include "irda_defs.h"
 

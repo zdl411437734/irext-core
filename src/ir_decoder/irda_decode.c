@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_decode.c
-Revised:        Date: 2015-08-01
+Revised:        Date: 2016-10-01
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode (status type)
@@ -8,12 +8,12 @@ Description:    This file provides algorithms for IR decode (status type)
 
 
 Revision log:
-* 2015-08-01: created by strawmanbobi
+* 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
@@ -44,7 +44,7 @@ UINT16 tag_head_offset = 0;
 
 UINT16 global_mem_consume = 0;
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 UINT8 byteArray[PROTOCOL_SIZE] = {0};
 UINT16 user_data[USER_DATA_SIZE] = {0};
 UINT8 tv_bin[EXPECTED_MEM_SIZE] = {0};
@@ -52,7 +52,7 @@ UINT16 tv_bin_length = 0;
 remote_ac_status_t ac_status;
 #endif
 
-// 2015-09-06 protocol version minor change: parse TAG 1009 instead of TAG 304
+// 2016-10-06 protocol version minor change: parse TAG 1009 instead of TAG 304
 const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
 {
     300, 301, 302, 303, 305, 306, 307, 1001, 1002,
@@ -67,7 +67,7 @@ const UINT16 bc_tag_index[TAG_COUNT_FOR_BC_PROTOCOL] =
     206, 207, 208, 209, 210, 211, 212, 213, 214, 300
 };
 
-// 2015-09-09 updated by strawmanbobi, change global data context to array pointer
+// 2016-10-09 updated by strawmanbobi, change global data context to array pointer
 protocol *context = (protocol *) byteArray;
 
 // BLE decode structure, share with a same byteArray to save memory
@@ -94,7 +94,7 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
 
 ///////////////////////////////////////////////// Air Conditioner Begin /////////////////////////////////////////////////
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 INT8 binary_open(const char *file)
 {
     FILE *stream = fopen(file, "rb");
@@ -181,7 +181,7 @@ INT8 binary_parse_len()
     return IR_DECODE_SUCCEEDED;
 }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 void binary_tags_info()
 {
     UINT16 i = 0;
@@ -328,14 +328,6 @@ INT8 free_ac_context()
         context->swing2.comp_data = NULL;
     }
 
-    /* modified by xiangjiang 2015-11-20 - begin - */
-#if 0
-    if(context->checksum.spec_pos != NULL)
-    {
-        irda_free(context->checksum.spec_pos);
-        context->checksum.spec_pos = NULL;
-    }
-#else
     for(i = 0; i < context->checksum.count; i++)
     {
         if(context->checksum.checksum_data != NULL &&
@@ -351,13 +343,11 @@ INT8 free_ac_context()
         irda_free(context->checksum.checksum_data);
         context->checksum.checksum_data = NULL;
     }
-#endif
-    /* modified by xiangjiang 2015-11-20 - end - */
 
     return IR_DECODE_SUCCEEDED;
 }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 INT8 irda_ac_lib_open(const char *file_name)
 {
     IR_PRINTF("\nirda_ac_lib_open: %s\n", file_name);
@@ -384,7 +374,7 @@ INT8 irda_ac_lib_parse()
 {
     UINT16 i = 0;
     // suggest not to  call init function here for de-couple purpose
-#if defined BOARD_CC254X
+#if defined BOARD_EMBEDDED
     irda_context_init();
 #endif
     if (IR_DECODE_FAILED == binary_parse_offset())
@@ -402,7 +392,7 @@ INT8 irda_ac_lib_parse()
         return IR_DECODE_FAILED;
     }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     binary_tags_info();
 #endif
     context->endian = 0;
@@ -940,7 +930,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
                            UINT8 change_wind_direction)
 {
     UINT16 time_length = 0;
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
+#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
     UINT8 i = 0;
 #endif
 
@@ -1048,7 +1038,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
     apply_checksum(context);
 
     // have some debug
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
+#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
     IR_PRINTF("==============================\n");
     for(i = 0; i < ir_hex_len; i++)
     {
@@ -1056,7 +1046,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
     }
     IR_PRINTF("\n");
 #endif
-#if (defined BOARD_CC254X) && (PRINT_IRDA_DATA == TRUE)
+#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
     NPI_PrintString("hex:\r\n");
 
     for (UINT16 i = 0; i < context->default_code.len; i++)
@@ -1229,7 +1219,7 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 INT8 binary_tv_open(const char *file)
 {
     int print_index = 0;
@@ -1265,7 +1255,7 @@ INT8 binary_tv_open(const char *file)
 }
 #endif
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 INT8 irda_tv_lib_open(const char *file_name)
 {
     return binary_tv_open(file_name);
@@ -1278,7 +1268,7 @@ INT8 irda_tv_lib_open(UINT8 *binary_file, UINT16 binary_length)
 }
 #endif
 
-#if (defined BOARD_PC)|| (defined BOARD_MT6580)
+#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
 INT8 irda_tv_lib_parse(UINT8 irda_hex_encode)
 {
     if (FALSE == irda_lib_parse(irda_hex_encode))
@@ -1320,7 +1310,7 @@ UINT16 irda_tv_lib_close()
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// Decode Test Begin /////////////////////////////////////////////////
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 UINT8 decode_as_ac(char *file_name)
 {

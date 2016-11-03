@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_parse_ac_parameter.h
-Revised:        Date: 2015-08-12
+Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for AC functionality parameters
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR decode for AC functionality
 
 
 Revision log:
-* 2015-08-12: created by strawmanbobi
+* 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
 /*
@@ -40,7 +40,7 @@ extern INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT
 
 extern INT8 parse_defaultcode_1002(struct tag_head *tag, ac_hex *default_code);
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 extern INT8 parse_power_1_1001(struct tag_head *tag, power_1 *power1);
 
@@ -48,7 +48,7 @@ extern INT8 parse_power_1_1001(struct tag_head *tag, power_1 *power1);
 
 extern INT8 parse_temp_1_1003(struct tag_head *tag, temp_1 *temp1);
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 extern INT8 parse_mode_1_1004(struct tag_head *tag, mode_1 *mode1);
 
@@ -64,7 +64,7 @@ extern INT8 parse_function_1_1010(struct tag_head *tag, function_1 *function1);
 
 extern INT8 parse_temp_2_1011(struct tag_head *tag, temp_2 *temp2);
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 extern INT8 parse_mode_2_1012(struct tag_head *tag, mode_2 *mode2);
 

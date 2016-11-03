@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_apply.c
-Revised:        Date: 2015-08-12
+Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
 Description:    This file provides methods for AC IR applying functionalities
@@ -8,7 +8,7 @@ Description:    This file provides methods for AC IR applying functionalities
 
 
 Revision log:
-* 2015-08-12: created by strawmanbobi
+* 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 /*
  *inclusion
@@ -17,9 +17,6 @@ Revision log:
 #include "irda_utils.h"
 #include "irda_decode.h"
 #include "irda_apply.h"
-#if defined BOARD_CC254X
-#include "npi.h"
-#endif
 
 /*
  * global vars
@@ -401,7 +398,6 @@ INT8 apply_ac_function(struct ac_protocol *protocol, UINT8 function)
     return IR_DECODE_SUCCEEDED;
 }
 
-/* modified by xiangjiang 2015-11-20 - begin - */
 INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
@@ -427,7 +423,7 @@ INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum);
     IR_PRINTF("checksum byte pos = %d\n", cs.checksum_byte_pos);
     IR_PRINTF("\n");
@@ -461,7 +457,7 @@ INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum & 0x0F);
     IR_PRINTF("checksum byte pos = %d\n", cs.checksum_byte_pos);
     IR_PRINTF("\n");
@@ -518,7 +514,7 @@ INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse
         ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F);
     }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum & 0x0F);
     IR_PRINTF("checksum byte pos = %d\n", apply_byte_pos);
 #endif
@@ -565,48 +561,16 @@ INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL
     apply_byte_pos = cs.checksum_byte_pos >> 1;
     ac_code[apply_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum);
     IR_PRINTF("checksum byte pos = %d\n", apply_byte_pos);
 #endif
 
     return IR_DECODE_SUCCEEDED;
 }
-/* modified by xiangjiang 2015-11-20 - end - */
 
 INT8 apply_checksum(struct ac_protocol *protocol)
 {
-/* modified by xiangjiang 2015-11-20 - begin - */
-#if 0
-    if (0 == protocol->checksum.len)
-    {
-        return IR_DECODE_SUCCEEDED;
-    }
-
-    switch (protocol->checksum.type)
-    {
-        case CHECKSUM_TYPE_BYTE:
-            apply_checksum_byte(ir_hex_code, protocol->checksum, FALSE);
-            break;
-        case CHECKSUM_TYPE_BYTE_INVERSE:
-            apply_checksum_byte(ir_hex_code, protocol->checksum, TRUE);
-            break;
-        case CHECKSUM_TYPE_HALF_BYTE:
-            apply_checksum_halfbyte(ir_hex_code, protocol->checksum, FALSE);
-            break;
-        case CHECKSUM_TYPE_HALF_BYTE_INVERSE:
-            apply_checksum_halfbyte(ir_hex_code, protocol->checksum, TRUE);
-            break;
-        case CHECKSUM_TYPE_SPEC_HALF_BYTE:
-            apply_checksum_spec_byte(ir_hex_code, protocol->checksum, FALSE);
-            break;
-        case CHECKSUM_TYPE_SPEC_HALF_BYTE_INVERSE:
-            apply_checksum_spec_byte(ir_hex_code, protocol->checksum, TRUE);
-            break;
-        default:
-            break;
-    }
-#else
     UINT8 i = 0;
 
     if (0 == protocol->checksum.len)
@@ -614,7 +578,7 @@ INT8 apply_checksum(struct ac_protocol *protocol)
         return IR_DECODE_SUCCEEDED;
     }
 
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     // have some debug
     IR_PRINTF("\napply checksum :\n");
     IR_PRINTF("checksum num = %d\n", protocol->checksum.count);
@@ -622,7 +586,7 @@ INT8 apply_checksum(struct ac_protocol *protocol)
 
     for(i = 0; i < protocol->checksum.count; i++)
     {
-#if (defined BOARD_PC) || (defined BOARD_MT6580)
+#if (defined BOARD_PC) || (defined BOARD_ANDROID)
         // have some debug
         IR_PRINTF("num : %d\n", i + 1);
         IR_PRINTF("checksum type = %02X\n", protocol->checksum.checksum_data[i].type);
@@ -658,9 +622,6 @@ INT8 apply_checksum(struct ac_protocol *protocol)
                 break;
         }
     }
-
-#endif
-/* modified by xiangjiang 2015-11-20 - end - */
 
     return IR_DECODE_SUCCEEDED;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************************************
 Filename:       irda_parse_frame_parameter.h
-Revised:        Date: 2015-08-11
+Revised:        Date: 2016-10-11
 Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for AC frame parameters
@@ -8,7 +8,7 @@ Description:    This file provides algorithms for IR decode for AC frame paramet
 
 
 Revision log:
-* 2015-08-11: created by strawmanbobi
+* 2016-10-11: created by strawmanbobi
 **************************************************************************************************/
 
 /*
