@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file links to java layer for Android application
 
-
-
 Revision log:
 * 2016-03-21: created by strawmanbobi
 **************************************************************************************************/
@@ -19,7 +17,7 @@ Revision log:
 // function declaration
 void FillBCCommandValuesToJni(JNIEnv* env, jobject j_bc_command, jclass bccommand_class, t_bc_command bc_command);
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
@@ -44,7 +42,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACLibOp
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaACControl
           (JNIEnv *env, jobject this_obj, jobject jni_ac_status, jint function_code, jint change_wind_direction)
 {
     int i = 0;
@@ -104,20 +102,20 @@ JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_irdaAC
     return result;
 }
 
-JNIEXPORT void JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibClose
           (JNIEnv *env, jobject this_obj)
 {
     irda_ac_lib_close();
 }
 
-JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetTemperatureRange
+JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetTemperatureRange
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int tempMin = 0;
     int tempMax = 0;
 
     jobject temperature_range = NULL;
-    jclass temperature_range_class = (*env)->FindClass(env, "com/yuekong/remote/bean/jnibean/JNITemperatureRange");
+    jclass temperature_range_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNITemperatureRange");
     jmethodID temperature_range_mid = (*env)->GetMethodID(env, temperature_range_class, "<init>", "()V");
     jfieldID min_temp_fid = (*env)->GetFieldID(env, temperature_range_class, "tempMin", "I");
     jfieldID max_temp_fid = (*env)->GetFieldID(env, temperature_range_class, "tempMax", "I");
@@ -132,7 +130,7 @@ JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGe
     return temperature_range;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSupportedMode
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedMode
           (JNIEnv *env, jobject this_obj)
 {
     int supported_mode = 0;
@@ -140,7 +138,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSu
     return supported_mode;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSupportedWindSpeed
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindSpeed
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_wind_speed = 0;
@@ -148,7 +146,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSu
     return supported_wind_speed;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSupportedSwing
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedSwing
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_swing = 0;
@@ -156,7 +154,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSu
     return supported_swing;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSupportedWindDirection
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindDirection
           (JNIEnv *env, jobject this_obj)
 {
     int supported_wind_direction = 0;
@@ -164,7 +162,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaACGetSu
     return supported_wind_direction;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaTVLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name, jint j_irda_hex_encode)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
@@ -185,7 +183,7 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_irdaTVLibOp
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_irdaTVControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaTVControl
           (JNIEnv *env, jobject this_obj, jint key_number)
 {
     int i = 0;
@@ -208,14 +206,14 @@ JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_irdaTV
     return result;
 }
 
-JNIEXPORT void JNICALL Java_com_yuekong_remote_service_DecodeService_irdaTVLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibClose
           (JNIEnv *env, jobject this_obj)
 {
     // do nothing
     return;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_bcLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
@@ -240,13 +238,13 @@ JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_bcLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jint JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetNeedConnAck
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcGetNeedConnAck
           (JNIEnv *env, jobject this_obj)
 {
     return context_bc->need_connection_ack;
 }
 
-JNIEXPORT jstring JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetDeviceName
+JNIEXPORT jstring JNICALL Java_net_irext_remote_service_DecodeService_bcGetDeviceName
           (JNIEnv *env, jobject this_obj)
 {
     jstring ret_name;
@@ -255,7 +253,7 @@ JNIEXPORT jstring JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetDev
     return ret_name;
 }
 
-JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetValidKeys
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_bcGetValidKeys
           (JNIEnv *env, jobject this_obj)
 {
     jintArray result;
@@ -272,21 +270,21 @@ JNIEXPORT jintArray JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetV
     return result;
 }
 
-JNIEXPORT void JNICALL Java_com_yuekong_remote_service_DecodeService_bcLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_bcLibClose
           (JNIEnv *env, jobject this_obj)
 {
     bc_lib_close();
 }
 
-JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetConnAck
+JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetConnAck
           (JNIEnv *env, jobject this_obj)
 {
     int segment_count = 0;
     int i = 0;
     jobject bc_commands = NULL;
 
-    jclass bccommands_class = (*env)->FindClass(env, "com/yuekong/remote/bean/jnibean/JNIBCCommands");
-    jclass bccommand_class = (*env)->FindClass(env, "com/yuekong/remote/bean/jnibean/JNIBCCommand");
+    jclass bccommands_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommands");
+    jclass bccommand_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommand");
 
     jmethodID bccommands_mid = (*env)->GetMethodID(env, bccommands_class, "<init>", "()V");
     jmethodID bccommand_mid = (*env)->GetMethodID(env, bccommand_class, "<init>", "()V");
@@ -300,7 +298,7 @@ JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetCon
     jfieldID commands_fid = (*env)->GetFieldID(env,
                                                 bccommands_class,
                                                 "commands",
-                                                "[com/yuekong/remote/bean/jnibean/JNIBCCommand");
+                                                "[com/irext/remote/bean/jnibean/JNIBCCommand");
 
     (*env)->SetIntField(env, bc_commands, segment_count_fid, segment_count);
 
@@ -319,15 +317,15 @@ JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetCon
     return bc_commands;
 }
 
-JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetCommand
+JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetCommand
           (JNIEnv *env, jobject this_obj, jint key_number)
 {
     int segment_count = 0;
     int i = 0;
     jobject bc_commands = NULL;
 
-    jclass bccommands_class = (*env)->FindClass(env, "com/yuekong/remote/bean/jnibean/JNIBCCommands");
-    jclass bccommand_class = (*env)->FindClass(env, "com/yuekong/remote/bean/jnibean/JNIBCCommand");
+    jclass bccommands_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommands");
+    jclass bccommand_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommand");
 
     jmethodID bccommands_mid = (*env)->GetMethodID(env, bccommands_class, "<init>", "()V");
     jmethodID bccommand_mid = (*env)->GetMethodID(env, bccommand_class, "<init>", "()V");
@@ -341,7 +339,7 @@ JNIEXPORT jobject JNICALL Java_com_yuekong_remote_service_DecodeService_bcGetCom
     jfieldID commands_fid = (*env)->GetFieldID(env,
                                                 bccommands_class,
                                                 "commands",
-                                                "[com/yuekong/remote/bean/jnibean/JNIBCCommand");
+                                                "[com/irext/remote/bean/jnibean/JNIBCCommand");
 
     (*env)->SetIntField(env, bc_commands, segment_count_fid, segment_count);
 

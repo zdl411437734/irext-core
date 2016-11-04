@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode (compressed command type)
 
-
-
 Revision log:
 * 2016-10-21: created by strawmanbobi
 **************************************************************************************************/

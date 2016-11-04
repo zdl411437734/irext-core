@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file provides generic utils for IRDA algorithms
 
-
-
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/

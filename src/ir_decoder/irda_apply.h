@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file provides methods for AC IR applying functionalities
 
-
-
 Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/

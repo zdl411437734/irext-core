@@ -6,7 +6,6 @@ LOCAL_CFLAGS    := -DBOARD_ANDROID
 LOCAL_MODULE    := libirdecode
 LOCAL_SRC_FILES := irda_decode_jni.c \
                    irda_decode.c \
-                   bc_parse_parameter.c \
                    irda_lib.c \
                    irda_apply.c \
                    irda_irframe.c \

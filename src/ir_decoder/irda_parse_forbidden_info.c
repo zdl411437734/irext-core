@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for TAG 150x
 
-
-
 Revision log:
 * 2016-10-05: created by strawmanbobi
 **************************************************************************************************/

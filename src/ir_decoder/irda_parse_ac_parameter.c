@@ -5,8 +5,6 @@ Revision:       Revision: 1.0
 
 Description:    This file provides algorithms for IR decode for AC functionality parameters
 
-
-
 Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
