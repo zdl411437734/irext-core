@@ -2,5 +2,6 @@
 */output/
 src/ir_decoder/.idea
 src/ir_encoder/.idea
+src/ir_decoder/out
 files/
 files/*

@@ -31,9 +31,7 @@ Revision log:
 
 #endif
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 #define EXPECTED_MEM_SIZE 1024
-#endif
 
 #define TAG_INVALID 0xffff
 #define MAX_DELAYCODE_NUM 16
@@ -510,19 +508,8 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 #define TAG_BC_KEY_14_CMD        214
 
 // definition about size
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
+
 #define PROTOCOL_SIZE (sizeof(protocol))
-#define BC_PROTOCOL_SIZE (sizeof(t_bc_protocol))
-#elif defined BOARD_EMBEDDED
-#define PROTOCOL_SIZE 850
-#define BC_PROTOCOL_SIZE  (sizeof(t_bc_protocol))
-#elif defined BOARD_FREE_RTOS
-#define PROTOCOL_SIZE (sizeof(protocol))              //1168
-#define BC_PROTOCOL_SIZE (sizeof(t_bc_protocol))
-#else
-#define PROTOCOL_SIZE 0
-#define BC_PROTOCOL_SIZE 0
-#endif
 
 /* exported variables */
 extern UINT8* ir_hex_code;
@@ -619,6 +606,15 @@ extern INT8 irda_tv_lib_parse(UINT8 irda_hex_encode);
  * return: length of wave code array
  */
 extern UINT16 irda_tv_lib_control(UINT8 key_code, UINT16 * l_user_data);
+
+/*
+ * function irda_tv_lib_close
+ *
+ * parameters:
+ *
+ * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
+ */
+extern UINT16 irda_tv_lib_close();
 #endif
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
 
