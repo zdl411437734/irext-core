@@ -13,10 +13,11 @@ Revision log:
  *                                            INCLUDES
  **************************************************************************************************/
 
-#include "stdio.h"
-#include "irda_defs.h"
-#include "irda_lib.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
+
+#include "./include/irda_defs.h"
+#include "./include/irda_lib.h"
 
 
 /**************************************************************************************************

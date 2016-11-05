@@ -12,9 +12,9 @@ Revision log:
  *inclusion
  */
 
-#include "irda_utils.h"
-#include "irda_decode.h"
-#include "irda_apply.h"
+#include "./include/irda_utils.h"
+#include "./include/irda_decode.h"
+#include "./include/irda_apply.h"
 
 /*
  * global vars

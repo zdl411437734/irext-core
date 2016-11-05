@@ -10,8 +10,8 @@ Revision log:
 **************************************************************************************************/
 #include <stdio.h>
 
-#include "irda_irframe.h"
-#include "irda_decode.h"
+#include "./include/irda_irframe.h"
+#include "./include/irda_decode.h"
 
 extern protocol* context;
 

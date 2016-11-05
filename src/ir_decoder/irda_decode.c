@@ -19,14 +19,14 @@ Revision log:
 
 #include <string.h>
 
-#include "irda_decode.h"
-#include "irda_utils.h"
-#include "irda_parse_frame_parameter.h"
-#include "irda_parse_ac_parameter.h"
-#include "irda_parse_forbidden_info.h"
-#include "irda_irframe.h"
-#include "irda_apply.h"
-#include "irda_lib.h"
+#include "./include/irda_decode.h"
+#include "./include/irda_utils.h"
+#include "./include/irda_parse_frame_parameter.h"
+#include "./include/irda_parse_ac_parameter.h"
+#include "./include/irda_parse_forbidden_info.h"
+#include "./include/irda_irframe.h"
+#include "./include/irda_apply.h"
+#include "./include/irda_lib.h"
 
 struct ir_bin_buffer binaryfile;
 struct ir_bin_buffer *pirda_buffer = &binaryfile;

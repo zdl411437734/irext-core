@@ -12,13 +12,13 @@ Revision log:
 /*
  *inclusion
  */
-#include "irda_decode.h"
-#include "irda_utils.h"
-#include "irda_parse_forbidden_info.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "./include/irda_decode.h"
+#include "./include/irda_utils.h"
+#include "./include/irda_parse_forbidden_info.h"
 /*
  * global vars
  */

@@ -12,8 +12,8 @@ Revision log:
 #include <string.h>
 #include <stdlib.h>
 
-#include "irda_utils.h"
-#include "irda_decode.h"
+#include "./include/irda_utils.h"
+#include "./include/irda_decode.h"
 
 /*
 *0123456789abcdef/0123456789ABCDEF

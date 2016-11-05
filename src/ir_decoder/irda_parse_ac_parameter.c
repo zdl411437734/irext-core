@@ -14,9 +14,10 @@ Revision log:
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "irda_utils.h"
-#include "irda_parse_ac_parameter.h"
-#include "irda_decode.h"
+
+#include "./include/irda_utils.h"
+#include "./include/irda_parse_ac_parameter.h"
+#include "./include/irda_decode.h"
 
 /*
  * global vars
