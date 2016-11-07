@@ -11,7 +11,7 @@ Revision log:
 
 #if defined BOARD_ANDROID
 #include <android/log.h>
-#define  LOG_TAG    "irda_decode"
+#define LOG_TAG "irda_decode"
 #endif
 
 #ifndef PARSE_IR_DEFS_H
@@ -30,49 +30,13 @@ typedef unsigned short UINT16;
 typedef signed short INT16;
 typedef unsigned char BOOL;
 
-#if defined BOARD_EMBEDDED
-#define irda_malloc(A)  malloc(A)
-#define irda_free(A) free(A)
-#define irda_memcpy(A, B, C) memcpy(A, B, C)
-#define irda_memset(A, B, C) memcpy(A, B, C)
-#define irda_strlen(A) strlen(A)
-#define IR_PRINTF(...)
-#define USER_DATA_SIZE 1536
-#elif defined BOARD_FREE_RTOS
-#define irda_malloc(A)  os_mem_alloc(A)
-#define irda_free(A) os_mem_free(A)
-#define irda_memcpy(A, B, C) memcpy(A, B, C)
-#define irda_memset(A, B, C) memset(A, B, C)
-#define irda_strlen(A) strlen(A)
-#define IR_PRINTF(A)
-// temporarily define USER_DATA_SIZE as 1536 for BOARD_FREE_RTOS
-#define USER_DATA_SIZE 1536
-#elif defined BOARD_PC
 #define irda_malloc(A) malloc(A)
 #define irda_free(A) free(A)
 #define irda_memcpy(A, B, C) memcpy(A, B, C)
 #define irda_memset(A, B, C) memset(A, B, C)
 #define irda_strlen(A) strlen(A)
 #define IR_PRINTF printf
-// temporarily define USER_DATA_SIZE as 2048 for BOARD_PC
 #define USER_DATA_SIZE 2048
-#elif defined BOARD_ANDROID
-#define irda_malloc(A) malloc(A)
-#define irda_free(A) free(A)
-#define irda_memcpy(A, B, C) memcpy(A, B, C)
-#define irda_memset(A, B, C) memset(A, B, C)
-#define irda_strlen(A) strlen(A)
-#define IR_PRINTF(...)
-#define USER_DATA_SIZE 2048
-#else
-#define irda_malloc(A) malloc(A)
-#define irda_free(A) free(A)
-#define irda_memcpy(A, B, C) memcpy(A, B, C)
-#define irda_memset(A, B, C) memset(A, B, C)
-#define irda_strlen(A) strlen(A)
-#define IR_PRINTF(A)
-#endif
-
 
 #ifdef __cplusplus
 }

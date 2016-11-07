@@ -16,6 +16,26 @@ extern "C"
 {
 #endif
 
+extern struct ir_bin_buffer *pirda_buffer;
+
+/*
+ * function irda_ac_file_open
+ *
+ * parameters:  file_name (in) specified bin file path
+ *
+ * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
+ */
+extern INT8 irda_ac_file_open(const char *file_name);
+
+/*
+ * function irda_tv_lib_open
+ *
+ * parameters:  file_name (in, for PC and MT6580) specified bin file path
+ *
+ * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
+ */
+extern INT8 irda_tv_file_open(const char *file_name);
+
 #ifdef __cplusplus
 }
 #endif

@@ -144,13 +144,11 @@ UINT16 create_ir_frame()
         }
     }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     for (i = 0; i < context->code_cnt; i++)
     {
         IR_PRINTF("%d,", context->time[i]);
     }
     IR_PRINTF("\n");
-#endif
 
     return context->code_cnt;
 }

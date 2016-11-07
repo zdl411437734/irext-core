@@ -89,9 +89,7 @@ INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
 INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_end, UINT8 type)
 {
     UINT16 hex_len = 0;
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     UINT16 i = 0;
-#endif
     UINT16 trav_offset = 0;
     UINT16 seg_index = 0;
     UINT8 *hex_data = NULL;
@@ -128,7 +126,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
+
             // have some debug
             IR_PRINTF("seg[%d].len = %d : \n", seg_index, comp_data[seg_index].seg_len);
             for(i = 0; i < comp_data[seg_index].seg_len; i++)
@@ -136,7 +134,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 IR_PRINTF("[%02X] ", comp_data[seg_index].segment[i]);
             }
             IR_PRINTF("\n");
-#endif
 
             if (trav_offset >= hex_len)
             {
@@ -154,7 +151,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
+
             // have some debug
             IR_PRINTF("seg[%d].len = %d : \n", seg_index, comp_data[seg_index].seg_len);
             for(i = 0; i < comp_data[seg_index].seg_len; i++)
@@ -162,7 +159,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 IR_PRINTF("[%02X] ", comp_data[seg_index].segment[i]);
             }
             IR_PRINTF("\n");
-#endif
+
             if (trav_offset >= hex_len)
             {
                 break;
@@ -190,8 +187,6 @@ INT8 parse_defaultcode_1002(struct tag_head *tag, ac_hex *default_code)
 
     return IR_DECODE_SUCCEEDED;
 }
-
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 INT8 parse_power_1_1001(struct tag_head *tag, power_1 *power1)
 {
@@ -249,8 +244,6 @@ INT8 parse_power_1_1001(struct tag_head *tag, power_1 *power1)
 
     return IR_DECODE_SUCCEEDED;
 }
-
-#endif
 
 INT8 parse_temp_1_1003(struct tag_head *tag, temp_1 *temp1)
 {
@@ -318,7 +311,6 @@ INT8 parse_temp_1_1003(struct tag_head *tag, temp_1 *temp1)
                 return IR_DECODE_FAILED;
             }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
             // have some debug
             IR_PRINTF("seg[%d].len = %d : \n", seg_index, temp1->comp_data[seg_index].seg_len);
             for(i = 0; i < temp1->comp_data[seg_index].seg_len; i++)
@@ -326,7 +318,6 @@ INT8 parse_temp_1_1003(struct tag_head *tag, temp_1 *temp1)
                 IR_PRINTF("[%02X] ", temp1->comp_data[seg_index].segment[i]);
             }
             IR_PRINTF("\n");
-#endif
 
             if (trav_offset >= hex_len)
             {
@@ -339,8 +330,6 @@ INT8 parse_temp_1_1003(struct tag_head *tag, temp_1 *temp1)
 
     return IR_DECODE_SUCCEEDED;
 }
-
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 INT8 parse_mode_1_1004(struct tag_head *tag, mode_1 *mode1)
 {
@@ -503,8 +492,6 @@ INT8 parse_swing_1_1007(struct tag_head *tag, swing_1 *swing1, UINT16 swing_coun
     return IR_DECODE_SUCCEEDED;
 }
 
-#endif
-
 INT8 parse_checksum_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, UINT16 len)
 {
     checksum->start_byte_pos = csdata[2];
@@ -619,7 +606,6 @@ INT8 parse_checksum_1008_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 len
 
     string_to_hex_common(buf, hex_data, hex_len);
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     UINT8 i = 0;
     IR_PRINTF("hex len = %d\n", hex_len);
     for(i = 0; i < hex_len; i++)
@@ -627,7 +613,6 @@ INT8 parse_checksum_1008_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 len
         IR_PRINTF("[%02X] ", hex_data[i]);
     }
     IR_PRINTF("\n");
-#endif
 
     if (length != hex_data[0] + 1)
     {
@@ -724,7 +709,6 @@ INT8 parse_checksum_1008(struct tag_head *tag, tchecksum *checksum)
         return IR_DECODE_FAILED;
     }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     UINT8 j = 0;
     for(i = 0; i < checksum->count; i++)
     {
@@ -739,7 +723,7 @@ INT8 parse_checksum_1008(struct tag_head *tag, tchecksum *checksum)
         }
         IR_PRINTF("\n");
     }
-#endif
+
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -922,7 +906,6 @@ INT8 parse_temp_2_1011(struct tag_head *tag, temp_2 *temp2)
                 temp2->comp_data[seg_index].segment[i] = hex_data[i + 1] * seg_index;
             }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
             // have some debug
             IR_PRINTF("seg[%d].len = %d : \n", seg_index, temp2->comp_data[seg_index].seg_len);
             for(i = 0; i < temp2->comp_data[seg_index].seg_len; i++)
@@ -930,7 +913,6 @@ INT8 parse_temp_2_1011(struct tag_head *tag, temp_2 *temp2)
                 IR_PRINTF("[%02X] ", temp2->comp_data[seg_index].segment[i]);
             }
             IR_PRINTF("\n");
-#endif
         }
     }
     else
@@ -958,8 +940,6 @@ INT8 parse_temp_2_1011(struct tag_head *tag, temp_2 *temp2)
 
     return IR_DECODE_SUCCEEDED;
 }
-
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 
 INT8 parse_mode_2_1012(struct tag_head *tag, mode_2 *mode2)
 {
@@ -1136,8 +1116,6 @@ INT8 parse_swing_2_1015(struct tag_head *tag, swing_2 *swing2, UINT16 swing_coun
 
     return IR_DECODE_SUCCEEDED;
 }
-
-#endif
 
 INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
 {

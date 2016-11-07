@@ -17,19 +17,7 @@ Revision log:
 #define TAG_COUNT_FOR_PROTOCOL 29
 #define TAG_COUNT_FOR_BC_PROTOCOL 20
 
-#if defined BOARD_EMBEDDED
-
 #define KEY_COUNT 15
-
-#elif (defined BOARD_PC) || (defined BOARD_ANDROID)
-
-#define KEY_COUNT 15
-
-#else
-
-#define KEY_COUNT 15
-
-#endif
 
 #define EXPECTED_MEM_SIZE 1024
 
@@ -42,11 +30,6 @@ Revision log:
 
 #define AC_PARAMETER_TYPE_1 0
 #define AC_PARAMETER_TYPE_2 1
-
-#define BLE_GAP_MTU 20
-#define BLE_UUID_SIZE 16
-#define BLE_UUID_STRING_SIZE 32
-#define BLE_UUID_STRING_SIZE_MAX 36
 
 typedef enum
 {
@@ -371,41 +354,6 @@ typedef struct ac_protocol
     UINT8 solo_function_mark;
 } protocol;
 
-#if defined BOARD_FREE_RTOS
-#pragma pack(1)
-#endif
-typedef struct bc_command
-{
-    UINT8 length;
-    UINT16 handle;
-    UINT8 command[BLE_GAP_MTU];
-} t_bc_command;
-#if defined BOARD_FREE_RTOS
-#pragma pack()
-#endif
-
-typedef struct bc_commands
-{
-    UINT8 seg_count;
-    t_bc_command *commands;
-} t_bc_commands;
-
-typedef struct bc_protocol
-{
-    // would save device_name within 20 bytes to flash
-    char *device_name;
-	// would save need_connection_ack of 1 byte to flash
-    UINT8 need_connection_ack;
-    // would save name essential length of 1 bytes to flash
-    UINT8 name_essential_length;
-    // would save name length of 2 byte to flash
-    UINT8 name_length;
-
-    // would save generic_command of 4 x 20 bytes to flash with segment length tag
-    t_bc_commands conn_ack;
-    t_bc_commands generic_command[KEY_COUNT];
-} t_bc_protocol;
-
 typedef struct tag_head
 {
     UINT16 tag;
@@ -414,21 +362,12 @@ typedef struct tag_head
     UINT8 *pdata;
 } t_tag_head;
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-struct ir_bin_buffer
-{
-    UINT8 data[EXPECTED_MEM_SIZE];
-    UINT16 len;
-    UINT16 offset;
-};
-#else
 struct ir_bin_buffer
 {
     UINT8 *data;
     UINT16 len;
     UINT16 offset;
 };
-#endif
 
 typedef struct REMOTE_AC_STATUS
 {
@@ -442,7 +381,7 @@ typedef struct REMOTE_AC_STATUS
     UINT8 acTimer;
 } remote_ac_status_t;
 
-// function polymorhism
+// function polymorphism
 typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 function_code);
 
 #define TAG_AC_POWER_1            1001
@@ -483,30 +422,6 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 #define TAG_AC_BAN_FUNCTION_IN_FAN_MODE   1504
 #define TAG_AC_BAN_FUNCTION_IN_DRY_MODE   1505
 
-//////////////// TAGS FOR BLE CENTRAL //////////////////
-#define TAG_BC_BLE_NAME         100
-#define TAG_BC_NEED_CONN_ACK    101
-#define TAG_BC_NAME_LENGTH      102
-#define TAG_BC_NAME_ESS_LENGTH  103
-
-#define TAG_BC_CONN_ACK_CMD     300
-
-#define TAG_BC_KEY_0_CMD        200
-#define TAG_BC_KEY_1_CMD        201
-#define TAG_BC_KEY_2_CMD        202
-#define TAG_BC_KEY_3_CMD        203
-#define TAG_BC_KEY_4_CMD        204
-#define TAG_BC_KEY_5_CMD        205
-#define TAG_BC_KEY_6_CMD        206
-#define TAG_BC_KEY_7_CMD        207
-#define TAG_BC_KEY_8_CMD        208
-#define TAG_BC_KEY_9_CMD        209
-#define TAG_BC_KEY_10_CMD        210
-#define TAG_BC_KEY_11_CMD        211
-#define TAG_BC_KEY_12_CMD        212
-#define TAG_BC_KEY_13_CMD        213
-#define TAG_BC_KEY_14_CMD        214
-
 // definition about size
 
 #define PROTOCOL_SIZE (sizeof(protocol))
@@ -515,8 +430,8 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 extern UINT8* ir_hex_code;
 extern UINT8 ir_hex_len;
 extern protocol* context;
-extern t_bc_protocol* context_bc;
 extern remote_ac_status_t ac_status;
+extern UINT16 user_data[];
 
 /* exported functions */
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
@@ -532,18 +447,12 @@ extern INT8 irda_context_init();
 /*
  * function irda_ac_lib_open
  *
- * parameters:  file_name (in, for PC and MT6580) specified bin file path
- *              binary_file (in, for CC2541 and MC200) specified file content of bin
- *              binary_length (in, for CC2541 and MC200) length of binary file content
+ * parameters:  binary (in) binary content
+ *              binary_length (in) length of binary content
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-extern UINT16 user_data[];
-extern INT8 irda_ac_lib_open(const char *file_name);
-#else
-extern INT8 irda_ac_lib_open(UINT8 *binary_file, UINT16 binary_length);
-#endif
+extern INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length);
 
 /*
  * function irda_ac_lib_parse
@@ -578,15 +487,15 @@ extern void irda_ac_lib_close();
 ///////////////////////////////////////////////// AC End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 /*
  * function irda_tv_lib_open
  *
- * parameters:  file_name (in, for PC and MT6580) specified bin file path
+ * parameters:  binary (in) binary content
+ *              binary_length (in) length of binary content
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_tv_lib_open(const char *file_name);
+INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length);
 
 /*
  * function irda_tv_lib_parse
@@ -615,70 +524,7 @@ extern UINT16 irda_tv_lib_control(UINT8 key_code, UINT16 * l_user_data);
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
 extern UINT16 irda_tv_lib_close();
-#endif
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
-
-///////////////////////////////////////////////// BLE Central Begin /////////////////////////////////////////////////
-/*
- * function bc_context_init
- *
- * parameters:
- *
- * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
- */
-extern INT8 bc_context_init();
-
-/*
- * function bc_lib_open
- *
- * parameters:  file_name (in, for PC and MT6580) specified bin file path
- *              binary_file (in, for CC2541 and MC200) specified file content of bin
- *              binary_length (in, for CC2541 and MC200) length of binary file content
- *
- * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
- */
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-extern INT8 bc_lib_open(const char *file_name);
-#else
-extern INT8 bc_lib_open(UINT8 *binary_file, UINT16 binary_length);
-#endif
-
-/*
- * function bc_lib_parse
- *
- * parameters:
- *
- * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
- */
-extern INT8 bc_lib_parse();
-
-/*
- * function bc_lib_parse
- *
- * parameters:
- *
- * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
- */
-
-/*
- * function bc_lib_control
- *
- * parameters:  key_code (in) indicates the number of pressed key
- *              bc_commands (out) command information
- *
- * return: length of commands
- */
-extern UINT16 bc_lib_control(int key_code, t_bc_commands* bc_commands);
-
-/*
- * function bc_lib_close
- *
- * parameters:
- *
- * return:
- */
-extern void bc_lib_close();
-///////////////////////////////////////////////// BLE Central End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// Utils Begin /////////////////////////////////////////////////
 /*
@@ -729,33 +575,6 @@ extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
 INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
-
-/*
- * function get_bc_need_conn_ack
- *
- * parameters:
- *
- * return: boolean status indicating if bc connection need ACK
- */
-extern UINT8 get_bc_need_conn_ack();
-
-/*
- * function get_bc_device_name
- *
- * parameters:
- *
- * return: name of BLE Peripheral device
- */
-extern char* get_bc_device_name();
-
-/*
- * function get_valid_keys
- *
- * parameters:  valid_keys (out)
- *
- * return: name of BLE Peripheral device
- */
-extern int get_valid_keys(int *valid_keys);
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////
 

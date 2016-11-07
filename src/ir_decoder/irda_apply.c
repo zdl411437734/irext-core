@@ -421,11 +421,9 @@ INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum);
     IR_PRINTF("checksum byte pos = %d\n", cs.checksum_byte_pos);
     IR_PRINTF("\n");
-#endif
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -455,11 +453,9 @@ INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum & 0x0F);
     IR_PRINTF("checksum byte pos = %d\n", cs.checksum_byte_pos);
     IR_PRINTF("\n");
-#endif
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -512,10 +508,8 @@ INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse
         ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F);
     }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum & 0x0F);
     IR_PRINTF("checksum byte pos = %d\n", apply_byte_pos);
-#endif
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -559,10 +553,8 @@ INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL
     apply_byte_pos = cs.checksum_byte_pos >> 1;
     ac_code[apply_byte_pos] = checksum;
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     IR_PRINTF("checksum value = %02X\n", checksum);
     IR_PRINTF("checksum byte pos = %d\n", apply_byte_pos);
-#endif
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -576,19 +568,15 @@ INT8 apply_checksum(struct ac_protocol *protocol)
         return IR_DECODE_SUCCEEDED;
     }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     // have some debug
     IR_PRINTF("\napply checksum :\n");
     IR_PRINTF("checksum num = %d\n", protocol->checksum.count);
-#endif
 
     for(i = 0; i < protocol->checksum.count; i++)
     {
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
         // have some debug
         IR_PRINTF("num : %d\n", i + 1);
         IR_PRINTF("checksum type = %02X\n", protocol->checksum.checksum_data[i].type);
-#endif
 
         switch (protocol->checksum.checksum_data[i].type)
         {

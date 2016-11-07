@@ -85,18 +85,14 @@ typedef struct irda_data
     UINT8 index;
 }  irda_data_t;
 
-#if (defined BOARD_PC) || (defined BOARD_FREE_RTOS) || (defined BOARD_ANDROID)
 #pragma pack(1)
-#endif
 typedef struct irda_cycles
 {
     UINT8 flag;
     UINT16 mask;
     UINT16 space;
 } irda_cycles_t;
-#if (defined BOARD_PC) || (defined BOARD_FREE_RTOS) || (defined BOARD_ANDROID)
 #pragma pack()
-#endif
 
 //==================================  TV  ==================================
 typedef enum tv_key_value
@@ -248,9 +244,9 @@ typedef struct irda_data_tv
 /**************************************************************************************************
  *                                     GLOBAL FUNCTION PROTOTYPES
  **************************************************************************************************/
-extern void irda_lib_open(UINT8 *binary_file, UINT16 binary_length);
-extern BOOL irda_lib_parse(UINT8 encode_type);
-extern UINT16 irda_lib_control(UINT8 key, UINT16 *user_data);
+extern INT8 tv_lib_open(UINT8* binary, UINT16 binary_length);
+extern BOOL tv_lib_parse(UINT8 encode_type);
+extern UINT16 tv_lib_control(UINT8 key, UINT16 *user_data);
 
 
 #endif /* _IRDA_H_ */

@@ -7,8 +7,8 @@ add_definitions(-DBOARD_PC)
 set(SOURCE_FILES_EXECUTABLE
         irda_decode.c
         include/irda_decode.h
-        irda_lib.c
-        include/irda_lib.h
+        irda_tv_parse.c
+        include/irda_tv_parse.h
         irda_apply.c
         include/irda_apply.h
         include/irda_defs.h
@@ -28,8 +28,8 @@ set(SOURCE_FILES_EXECUTABLE
 set(SOURCE_FILES_SHARED_LIB
         irda_decode.c
         include/irda_decode.h
-        irda_lib.c
-        include/irda_lib.h
+        irda_tv_parse.c
+        include/irda_tv_parse.h
         irda_apply.c
         include/irda_apply.h
         include/irda_defs.h

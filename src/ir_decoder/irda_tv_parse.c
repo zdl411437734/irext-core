@@ -17,8 +17,8 @@ Revision log:
 #include <string.h>
 
 #include "./include/irda_defs.h"
-#include "./include/irda_lib.h"
-
+#include "./include/irda_tv_parse.h"
+#include "./include/irda_decode.h"
 
 /**************************************************************************************************
  *                                            MACROS
@@ -74,13 +74,13 @@ struct buffer
 /**************************************************************************************************
  *                                         LOCAL VARIABLES
  **************************************************************************************************/
-static struct buffer *pbuffer = &irda_file;                  /* Store irda library data */
+static struct buffer *pbuffer = &irda_file;
 
-//static UINT8 *prot_name = NULL;                 //irda protocol name
-static UINT8 *prot_cycles_num = NULL;           //irda protocol cycles num
+//static UINT8 *prot_name = NULL;
+static UINT8 *prot_cycles_num = NULL;
 static irda_cycles_t *prot_cycles_data[IRDA_MAX];
 static UINT8 prot_items_cnt = 0;
-static irda_data_t *prot_items_data = NULL;          //irda protocol frame data
+static irda_data_t *prot_items_data = NULL;
 static irda_data_tv_t *remote_p;
 static UINT8 *remote_pdata = NULL;
 
@@ -90,12 +90,9 @@ static UINT8 irda_toggle_bit = FALSE;
 static UINT8 irda_decode_flag = IRDA_DECODE_1_BIT;
 static UINT8 cycles_num_size = 0;
 
-
-
 /**************************************************************************************************
  *                                         LOCAL TABLES
  **************************************************************************************************/
-
 
 
 
@@ -111,20 +108,18 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 static void convert_to_irda_time(UINT8 value, UINT16 *irda_time);
 static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time);
 
-
-
 /**************************************************************************************************
  *                                         GLOBAL FUNCTIONS
  **************************************************************************************************/
-void irda_lib_open(UINT8 *binary_file, UINT16 binary_length)
+INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     // load binary to buffer
-    pbuffer->data = binary_file;
+    pbuffer->data = binary;
     pbuffer->len = binary_length;
     pbuffer->offset = 0;
 }
 
-BOOL irda_lib_parse(UINT8 encode_type)
+BOOL tv_lib_parse(UINT8 encode_type)
 {
     if (FALSE == get_irda_protocol(encode_type))
     {
@@ -134,7 +129,7 @@ BOOL irda_lib_parse(UINT8 encode_type)
     return get_irda_keymap();
 }
 
-UINT16 irda_lib_control(UINT8 key, UINT16 *user_data)
+UINT16 tv_lib_control(UINT8 key, UINT16 *user_data)
 {
     UINT16 i = 0;
 
@@ -529,4 +524,3 @@ static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time)
         irda_level = IRDA_LEVEL_HIGH;
     }
 }
-
