@@ -6,7 +6,7 @@ LOCAL_CFLAGS    := -DBOARD_ANDROID
 LOCAL_MODULE    := libirdecode
 LOCAL_SRC_FILES := irda_decode_jni.c \
                    irda_decode.c \
-                   irda_lib.c \
+                   irda_tv_parse.c \
                    irda_apply.c \
                    irda_irframe.c \
                    irda_parse_ac_parameter.c \
@@ -14,9 +14,6 @@ LOCAL_SRC_FILES := irda_decode_jni.c \
                    irda_parse_frame_parameter.c \
                    irda_utils.c \
 
-LOCAL_MODULE_TAGS := optional
-LOCAL_PRELINK_MODULE := false
-
-LOCAL_SHARED_LIBRARIES := liblog libcutils
+LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog
 
 include $(BUILD_SHARED_LIBRARY)
