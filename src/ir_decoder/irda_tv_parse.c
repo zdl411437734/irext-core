@@ -39,18 +39,14 @@ Revision log:
 /**************************************************************************************************
  *                                         LOCAL DATA TYPES
  **************************************************************************************************/
-#if defined BOARD_FREE_RTOS
 #pragma pack(1)
-#endif
 struct buffer
 {
     UINT8 *data;
     UINT16 len;
     UINT16 offset;
 } irda_file;
-#if defined BOARD_FREE_RTOS
 #pragma pack()
-#endif
 
 
 
@@ -367,23 +363,14 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
 
         if (irda_decode_flag == IRDA_DECODE_1_BIT)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 1 bit");
-#endif
             process_decode_number(keycode, data, 1, irda_time);        // '0','1'
         }
         else if (irda_decode_flag == IRDA_DECODE_2_BITS)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 2 bits");
-#endif
             process_decode_number(keycode, data, 2, irda_time);        // '0','1','2','3'
         }
         else if (irda_decode_flag == IRDA_DECODE_4_BITS)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 4 bits");
-#endif
             process_decode_number(keycode, data, 4, irda_time);        // '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F',
         }
     }
@@ -398,17 +385,8 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 
     valid_value = (valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1);
 
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-    NPI_PrintValue("\r\n keycode : 0x", keycode, 16);
-    NPI_PrintValue("\r\n bits : ", data->bits, 10);
-    NPI_PrintValue("\r\n valid bits : 0x", valid_value, 16);
-#endif
-
     if (data->lsb == IRDA_LSB)
     {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-        NPI_PrintString("\r\n endian : lsb");
-#endif
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (valid_bits * i)) & valid_value;
@@ -417,9 +395,6 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
     }
     else if (data->lsb == IRDA_MSB)
     {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-        NPI_PrintString("\r\n endian : msb");
-#endif
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (data->bits - valid_bits * (i + 1))) & valid_value;
@@ -430,9 +405,6 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 
 static void convert_to_irda_time(UINT8 value, UINT16 *irda_time)
 {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-    NPI_PrintValue("\r\n replace value : 0x", value, 16);
-#endif
     switch (value)
     {
         case 0:

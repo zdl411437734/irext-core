@@ -79,6 +79,10 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
     apply_swing
 };
 
+#if defined BOARD_PC
+void free_pirda(void);
+#endif
+
 ///////////////////////////////////////////////// Air Conditioner Begin /////////////////////////////////////////////////
 
 INT8 binary_parse_offset()
@@ -330,7 +334,7 @@ INT8 irda_context_init()
 INT8 irda_ac_lib_parse()
 {
     UINT16 i = 0;
-    // suggest not to  call init function here for de-couple purpose
+    // suggest not to call init function here for de-couple purpose
     irda_context_init();
 
     if (IR_DECODE_FAILED == binary_parse_offset())
@@ -690,8 +694,25 @@ INT8 irda_ac_lib_parse()
         }
     }
 
+    // it is strongly recommended that we free pirda_buffer
+    // or make global buffer shared in extreme memory case
+    /* in case of running with test - begin */
+#if defined BOARD_PC
+    free_pirda();
+#endif
+    /* in case of running with test - end */
+
     return IR_DECODE_SUCCEEDED;
 }
+
+#if defined BOARD_PC
+void free_pirda(void)
+{
+    irda_free(pirda_buffer->data);
+    pirda_buffer->len = 0;
+    pirda_buffer->offset = 0;
+}
+#endif
 
 BOOL is_solo_function(UINT8 function_code)
 {

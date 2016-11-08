@@ -91,9 +91,6 @@ UINT8 decode_as_ac(const char* file_name)
         return IR_DECODE_FAILED;
     }
 
-    // no need to verify return value
-    irda_context_init();
-
     if (IR_DECODE_FAILED == irda_ac_lib_parse())
     {
         IR_PRINTF("\nac lib parse failed\n");
