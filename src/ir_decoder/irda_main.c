@@ -9,11 +9,56 @@ Revision log:
 * 2016-11-05: created by strawmanbobi
 **************************************************************************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+
+#include "./include/irda_defs.h"
 #include "./include/irda_decode.h"
+#include "./include/irda_main.h"
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
+// global variable definition
+long binary_length = 0;
+UINT8 *binary_content = NULL;
 
-UINT8 decode_as_ac(char *file_name)
+INT8 irda_ac_file_open(const char* file_name);
+INT8 irda_tv_file_open(const char* file_name);
+
+INT8 irda_ac_file_open(const char* file_name)
+{
+    FILE *stream = fopen(file_name, "rb");
+    if (NULL == stream)
+    {
+        IR_PRINTF("\nfile open failed : %d\n", errno);
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    if (NULL == binary_content)
+    {
+        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 decode_as_ac(const char* file_name)
 {
     // keyboard input
     int in_char = 0;
@@ -40,14 +85,11 @@ UINT8 decode_as_ac(char *file_name)
     ac_status.acWindDir = AC_SWING_ON;
     ac_status.acWindSpeed = AC_WS_AUTO;
 
-    if (IR_DECODE_FAILED == irda_ac_lib_open(file_name))
+    if (IR_DECODE_FAILED == irda_ac_file_open(file_name))
     {
         irda_ac_lib_close();
         return IR_DECODE_FAILED;
     }
-
-    // no need to verify return value
-    irda_context_init();
 
     if (IR_DECODE_FAILED == irda_ac_lib_parse())
     {
@@ -156,17 +198,54 @@ UINT8 decode_as_ac(char *file_name)
 
     irda_ac_lib_close();
 
+    // free binary buffer
+    irda_free(binary_content);
+    binary_length = 0;
+
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
+INT8 irda_tv_file_open(const char* file_name)
+{
+    int print_index = 0;
+    FILE *stream = fopen(file_name, "rb");
+
+    IR_PRINTF("file name = %s\n", file_name);
+
+    if (stream == NULL)
+    {
+        IR_PRINTF("\nfile open failed : %d\n", errno);
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    IR_PRINTF("length of binary = %d\n", binary_length);
+
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
 {
     // keyboard input
     int in_char = 0;
     int key_code = -1;
     int count = 0;
 
-    if (IR_DECODE_FAILED == irda_tv_lib_open(file_name))
+    if (IR_DECODE_FAILED == irda_tv_file_open(file_name))
     {
         return IR_DECODE_FAILED;
     }
@@ -198,12 +277,12 @@ UINT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
         }
     } while('Q' != in_char);
 
+    // free binary buffer
+    irda_free(binary_content);
+    binary_length = 0;
+
     return IR_DECODE_SUCCEEDED;
 }
-
-#endif
-
-#if defined BOARD_PC
 
 int main(int argc, char *argv[])
 {
@@ -237,5 +316,3 @@ int main(int argc, char *argv[])
             break;
     }
 }
-
-#endif

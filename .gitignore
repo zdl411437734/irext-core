@@ -3,5 +3,7 @@
 src/ir_decoder/.idea
 src/ir_encoder/.idea
 src/ir_decoder/out
+src/ir_decoder/libs
+src/ir_decoder/obj
 files/
 files/*

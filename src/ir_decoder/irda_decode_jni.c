@@ -9,19 +9,88 @@ Revision log:
 * 2016-03-21: created by strawmanbobi
 **************************************************************************************************/
 #include <jni.h>
+#include <stdlib.h>
 #include <stdio.h>
-#include "include/irda_decode_jni.h"
-#include "irda_defs.h"
-#include "irda_decode.h"
+#include <errno.h>
+#include "./include/irda_decode_jni.h"
+#include "./include/irda_defs.h"
+#include "./include/irda_decode.h"
 
-// function declaration
-void FillBCCommandValuesToJni(JNIEnv* env, jobject j_bc_command, jclass bccommand_class, t_bc_command bc_command);
+// global variable definition
+UINT16 binary_length = 0;
+UINT8 *binary_content = NULL;
+
+INT8 irda_ac_file_open(const char* file_name)
+{
+    FILE *stream = fopen(file_name, "rb");
+    if (NULL == stream)
+    {
+        IR_PRINTF("\nfile open failed : %d\n", errno);
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    if (NULL == binary_content)
+    {
+        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 irda_tv_file_open(const char* file_name)
+{
+    int print_index = 0;
+    FILE *stream = fopen(file_name, "rb");
+
+    IR_PRINTF("file name = %s\n", file_name);
+
+    if (stream == NULL)
+    {
+        IR_PRINTF("\nfile open failed : %d\n", errno);
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    IR_PRINTF("length of binary = %d\n", binary_length);
+
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
 
 JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
-    if (IR_DECODE_FAILED == irda_ac_lib_open(n_file_name))
+    if (IR_DECODE_FAILED == irda_ac_file_open(n_file_name))
     {
         irda_ac_lib_close();
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
@@ -167,7 +236,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibOpen
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
 
-    if (IR_DECODE_FAILED == irda_tv_lib_open(n_file_name))
+    if (IR_DECODE_FAILED == irda_tv_file_open(n_file_name))
     {
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
@@ -211,177 +280,4 @@ JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibClos
 {
     // do nothing
     return;
-}
-
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcLibOpen
-          (JNIEnv *env, jobject this_obj, jstring file_name)
-{
-    const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
-    if (IR_DECODE_FAILED == bc_lib_open(n_file_name))
-    {
-        bc_lib_close();
-        (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-        return IR_DECODE_FAILED;
-    }
-
-    // no need to verify return value
-    bc_context_init();
-
-    if (IR_DECODE_FAILED == bc_lib_parse())
-    {
-        bc_lib_close();
-        (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-        return IR_DECODE_FAILED;
-    }
-
-    (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-    return IR_DECODE_SUCCEEDED;
-}
-
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcGetNeedConnAck
-          (JNIEnv *env, jobject this_obj)
-{
-    return context_bc->need_connection_ack;
-}
-
-JNIEXPORT jstring JNICALL Java_net_irext_remote_service_DecodeService_bcGetDeviceName
-          (JNIEnv *env, jobject this_obj)
-{
-    jstring ret_name;
-    const char* device_name = context_bc->device_name;
-    ret_name = (*env)->NewStringUTF(env, device_name);
-    return ret_name;
-}
-
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_bcGetValidKeys
-          (JNIEnv *env, jobject this_obj)
-{
-    jintArray result;
-    int valid_keys[KEY_COUNT] = {0};
-    int valid_keys_length = get_valid_keys(valid_keys);
-
-    result = (*env)->NewIntArray(env, valid_keys_length);
-    if (result == NULL)
-    {
-        return NULL;
-    }
-    (*env)->SetIntArrayRegion(env, result, 0, valid_keys_length, valid_keys);
-
-    return result;
-}
-
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_bcLibClose
-          (JNIEnv *env, jobject this_obj)
-{
-    bc_lib_close();
-}
-
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetConnAck
-          (JNIEnv *env, jobject this_obj)
-{
-    int segment_count = 0;
-    int i = 0;
-    jobject bc_commands = NULL;
-
-    jclass bccommands_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommands");
-    jclass bccommand_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommand");
-
-    jmethodID bccommands_mid = (*env)->GetMethodID(env, bccommands_class, "<init>", "()V");
-    jmethodID bccommand_mid = (*env)->GetMethodID(env, bccommand_class, "<init>", "()V");
-
-    bc_commands = (*env)->NewObject(env, bccommands_class, bccommands_mid);
-
-    // get connection ACK info
-    segment_count = context_bc->conn_ack.seg_count;
-    // set segment count for result data-structure
-    jfieldID segment_count_fid = (*env)->GetFieldID(env, bccommands_class, "segmentCount", "I");
-    jfieldID commands_fid = (*env)->GetFieldID(env,
-                                                bccommands_class,
-                                                "commands",
-                                                "[com/irext/remote/bean/jnibean/JNIBCCommand");
-
-    (*env)->SetIntField(env, bc_commands, segment_count_fid, segment_count);
-
-    // fill bc_command array for bc_commands
-    jobjectArray j_bc_command_array = (*env)->NewObjectArray(env, segment_count, bccommand_class, NULL);
-
-    for (i = 0; i < segment_count; i++)
-    {
-        jobject bc_command = (*env)->NewObject(env, bccommand_class, bccommand_mid);
-        FillBCCommandValuesToJni(env, bc_command, bccommand_class, context_bc->conn_ack.commands[i]);
-        (*env)->SetObjectArrayElement(env, j_bc_command_array,
-                i, bc_command);
-    }
-    (*env)->SetObjectField(env, bc_commands, commands_fid, j_bc_command_array);
-
-    return bc_commands;
-}
-
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetCommand
-          (JNIEnv *env, jobject this_obj, jint key_number)
-{
-    int segment_count = 0;
-    int i = 0;
-    jobject bc_commands = NULL;
-
-    jclass bccommands_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommands");
-    jclass bccommand_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNIBCCommand");
-
-    jmethodID bccommands_mid = (*env)->GetMethodID(env, bccommands_class, "<init>", "()V");
-    jmethodID bccommand_mid = (*env)->GetMethodID(env, bccommand_class, "<init>", "()V");
-
-    bc_commands = (*env)->NewObject(env, bccommands_class, bccommands_mid);
-
-    // get connection ACK info
-    segment_count = context_bc->conn_ack.seg_count;
-    // set segment count for result data-structure
-    jfieldID segment_count_fid = (*env)->GetFieldID(env, bccommands_class, "segmentCount", "I");
-    jfieldID commands_fid = (*env)->GetFieldID(env,
-                                                bccommands_class,
-                                                "commands",
-                                                "[com/irext/remote/bean/jnibean/JNIBCCommand");
-
-    (*env)->SetIntField(env, bc_commands, segment_count_fid, segment_count);
-
-    // fill bc_command array for bc_commands
-    jobjectArray j_bc_command_array = (*env)->NewObjectArray(env, segment_count, bccommand_class, NULL);
-
-    for (i = 0; i < segment_count; i++)
-    {
-        jobject bc_command = (*env)->NewObject(env, bccommand_class, bccommand_mid);
-        FillBCCommandValuesToJni(env, bc_command, bccommand_class, context_bc->generic_command[key_number].commands[i]);
-        (*env)->SetObjectArrayElement(env, j_bc_command_array,
-                i, bc_command);
-    }
-    (*env)->SetObjectField(env, bc_commands, commands_fid, j_bc_command_array);
-
-    return bc_commands;
-}
-
-// utils
-void FillBCCommandValuesToJni(JNIEnv* env, jobject j_bc_command, jclass bccommand_class, t_bc_command n_bc_command)
-{
-    int copy_array[BLE_GAP_MTU] = {0};
-    jintArray ble_command_array = NULL;
-    int i = 0;
-
-    jfieldID length_fid = (*env)->GetFieldID(env, bccommand_class, "length", "I");
-    jfieldID handle_fid = (*env)->GetFieldID(env, bccommand_class, "handle", "I");
-    jfieldID command_fid = (*env)->GetFieldID(env, bccommand_class, "command", "[I");
-
-    IR_PRINTF("Set int field [length] for bc_command : %d\n", n_bc_command.length);
-    (*env)->SetIntField(env, j_bc_command, length_fid, n_bc_command.length);
-    IR_PRINTF("Set int field [handle] for bc_command : 0x%02X\n", n_bc_command.handle);
-    (*env)->SetIntField(env, j_bc_command, handle_fid, n_bc_command.handle);
-
-    ble_command_array = (*env)->NewIntArray(env, BLE_GAP_MTU);
-
-    // prepare BLE command as int32 for java
-    for(i = 0; i < BLE_GAP_MTU; i++)
-    {
-        copy_array[i] = n_bc_command.command[i];
-        IR_PRINTF("command %d origin_value = %02X, converted_value = %02X ", i, n_bc_command.command[i], copy_array[i]);
-    }
-    (*env)->SetIntArrayRegion(env, ble_command_array, 0, BLE_GAP_MTU, copy_array);
-    (*env)->SetObjectField(env, j_bc_command, command_fid, ble_command_array);
 }

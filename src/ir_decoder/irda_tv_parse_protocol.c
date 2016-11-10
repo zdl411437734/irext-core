@@ -17,8 +17,8 @@ Revision log:
 #include <string.h>
 
 #include "./include/irda_defs.h"
-#include "./include/irda_lib.h"
-
+#include "include/irda_tv_parse_protocol.h"
+#include "./include/irda_decode.h"
 
 /**************************************************************************************************
  *                                            MACROS
@@ -39,18 +39,14 @@ Revision log:
 /**************************************************************************************************
  *                                         LOCAL DATA TYPES
  **************************************************************************************************/
-#if defined BOARD_FREE_RTOS
 #pragma pack(1)
-#endif
 struct buffer
 {
     UINT8 *data;
     UINT16 len;
     UINT16 offset;
 } irda_file;
-#if defined BOARD_FREE_RTOS
 #pragma pack()
-#endif
 
 
 
@@ -74,13 +70,13 @@ struct buffer
 /**************************************************************************************************
  *                                         LOCAL VARIABLES
  **************************************************************************************************/
-static struct buffer *pbuffer = &irda_file;                  /* Store irda library data */
+static struct buffer *pbuffer = &irda_file;
 
-//static UINT8 *prot_name = NULL;                 //irda protocol name
-static UINT8 *prot_cycles_num = NULL;           //irda protocol cycles num
+//static UINT8 *prot_name = NULL;
+static UINT8 *prot_cycles_num = NULL;
 static irda_cycles_t *prot_cycles_data[IRDA_MAX];
 static UINT8 prot_items_cnt = 0;
-static irda_data_t *prot_items_data = NULL;          //irda protocol frame data
+static irda_data_t *prot_items_data = NULL;
 static irda_data_tv_t *remote_p;
 static UINT8 *remote_pdata = NULL;
 
@@ -90,12 +86,9 @@ static UINT8 irda_toggle_bit = FALSE;
 static UINT8 irda_decode_flag = IRDA_DECODE_1_BIT;
 static UINT8 cycles_num_size = 0;
 
-
-
 /**************************************************************************************************
  *                                         LOCAL TABLES
  **************************************************************************************************/
-
 
 
 
@@ -111,20 +104,18 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 static void convert_to_irda_time(UINT8 value, UINT16 *irda_time);
 static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time);
 
-
-
 /**************************************************************************************************
  *                                         GLOBAL FUNCTIONS
  **************************************************************************************************/
-void irda_lib_open(UINT8 *binary_file, UINT16 binary_length)
+INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     // load binary to buffer
-    pbuffer->data = binary_file;
+    pbuffer->data = binary;
     pbuffer->len = binary_length;
     pbuffer->offset = 0;
 }
 
-BOOL irda_lib_parse(UINT8 encode_type)
+BOOL tv_lib_parse(UINT8 encode_type)
 {
     if (FALSE == get_irda_protocol(encode_type))
     {
@@ -134,7 +125,7 @@ BOOL irda_lib_parse(UINT8 encode_type)
     return get_irda_keymap();
 }
 
-UINT16 irda_lib_control(UINT8 key, UINT16 *user_data)
+UINT16 tv_lib_control(UINT8 key, UINT16 *user_data)
 {
     UINT16 i = 0;
 
@@ -235,7 +226,7 @@ static BOOL get_irda_keymap(void)
     remote_p = (irda_data_tv_t *) (pbuffer->data + pbuffer->offset);
     pbuffer->offset += sizeof(irda_data_tv_t);
 
-    if (strncmp(remote_p->magic, "ykir", 4) == 0)
+    if (strncmp(remote_p->magic, "irda", 4) == 0)
     {
         remote_pdata = pbuffer->data + pbuffer->offset;
         return TRUE;
@@ -372,23 +363,14 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
 
         if (irda_decode_flag == IRDA_DECODE_1_BIT)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 1 bit");
-#endif
             process_decode_number(keycode, data, 1, irda_time);        // '0','1'
         }
         else if (irda_decode_flag == IRDA_DECODE_2_BITS)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 2 bits");
-#endif
             process_decode_number(keycode, data, 2, irda_time);        // '0','1','2','3'
         }
         else if (irda_decode_flag == IRDA_DECODE_4_BITS)
         {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-            NPI_PrintString("\r\n\r\n\r\n[TV-DECODE]: decode as 4 bits");
-#endif
             process_decode_number(keycode, data, 4, irda_time);        // '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F',
         }
     }
@@ -403,17 +385,8 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 
     valid_value = (valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1);
 
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-    NPI_PrintValue("\r\n keycode : 0x", keycode, 16);
-    NPI_PrintValue("\r\n bits : ", data->bits, 10);
-    NPI_PrintValue("\r\n valid bits : 0x", valid_value, 16);
-#endif
-
     if (data->lsb == IRDA_LSB)
     {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-        NPI_PrintString("\r\n endian : lsb");
-#endif
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (valid_bits * i)) & valid_value;
@@ -422,9 +395,6 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
     }
     else if (data->lsb == IRDA_MSB)
     {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-        NPI_PrintString("\r\n endian : msb");
-#endif
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (data->bits - valid_bits * (i + 1))) & valid_value;
@@ -435,9 +405,6 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
 
 static void convert_to_irda_time(UINT8 value, UINT16 *irda_time)
 {
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-    NPI_PrintValue("\r\n replace value : 0x", value, 16);
-#endif
     switch (value)
     {
         case 0:
@@ -529,4 +496,3 @@ static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time)
         irda_level = IRDA_LEVEL_HIGH;
     }
 }
-

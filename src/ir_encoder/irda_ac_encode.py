@@ -3,7 +3,7 @@
 # for protocol version V1.0
 # 29 tags are supported
 
-import sys,os
+import sys
 import xml.dom.minidom
 import struct
 
@@ -60,22 +60,21 @@ def create_binary(ac_device):
     for i in range(len(alltags)):
         find = 0
         for j in range(len(ac_device.tags)):
-            if (alltags[i] == ac_device.tags[j].tag):
+            if alltags[i] == ac_device.tags[j].tag:
                 f_content.write(ac_device.tags[j].value)
 
                 f_head.write(struct.pack("H", offset))
                 offset = offset + ac_device.tags[j].len
-###############################################################################
-# Find Max length
-###############################################################################
-                if (tags_max_size[i] < ac_device.tags[j].len):
+
+                # Find Max length
+                if tags_max_size[i] < ac_device.tags[j].len:
                     tags_max_size[i] = ac_device.tags[j].len;
                 find = 1
                 break
             
         if find == 0:
             f_head.write(struct.pack("H", 0xffff))
-    #f.write(ac_device)
+    # f.write(ac_device)
     f_content.close()
     f_tmp = open(sys.argv[2] + str(ac_device.device_id) + "_tmp.bin", "rb")
     f_head.write(f_tmp.read())
@@ -84,7 +83,7 @@ def create_binary(ac_device):
 
 dom = xml.dom.minidom.parse(sys.argv[1])
 device = dom.documentElement
-#devices = root.getElementsByTagName('remote_controller')
+# devices = root.getElementsByTagName('remote_controller')
 
 print "============================"
 print "AC data:"

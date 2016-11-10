@@ -11,22 +11,16 @@ Revision log:
 #include <stdio.h>
 #include <stdlib.h>
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#endif
-
 #include <string.h>
 
 #include "./include/irda_decode.h"
 #include "./include/irda_utils.h"
-#include "./include/irda_parse_frame_parameter.h"
-#include "./include/irda_parse_ac_parameter.h"
-#include "./include/irda_parse_forbidden_info.h"
-#include "./include/irda_irframe.h"
-#include "./include/irda_apply.h"
-#include "./include/irda_lib.h"
+#include "include/irda_ac_parse_frame_parameter.h"
+#include "include/irda_ac_parse_parameter.h"
+#include "include/irda_ac_parse_forbidden_info.h"
+#include "include/irda_ac_build_frame.h"
+#include "include/irda_ac_apply.h"
+#include "include/irda_tv_parse_protocol.h"
 
 struct ir_bin_buffer binaryfile;
 struct ir_bin_buffer *pirda_buffer = &binaryfile;
@@ -66,9 +60,6 @@ const UINT16 bc_tag_index[TAG_COUNT_FOR_BC_PROTOCOL] =
 // 2016-10-09 updated by strawmanbobi, change global data context to array pointer
 protocol *context = (protocol *) byteArray;
 
-// BLE decode structure, share with a same byteArray to save memory
-t_bc_protocol *context_bc = (t_bc_protocol *) byteArray;
-
 // ban function table
 // fixed swing should not be counted in case of AC
 INT8 apply_power(remote_ac_status_t ac_status, UINT8 function_code);
@@ -88,28 +79,11 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
     apply_swing
 };
 
-///////////////////////////////////////////////// Air Conditioner Begin /////////////////////////////////////////////////
-
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-INT8 binary_open(const char *file)
-{
-    FILE *stream = fopen(file, "rb");
-    if (stream == NULL)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    pirda_buffer->len = ftell(stream);
-
-    fseek(stream, 0, SEEK_SET);
-    fread(pirda_buffer->data, pirda_buffer->len, 1, stream);
-    fclose(stream);
-
-    return IR_DECODE_SUCCEEDED;
-}
+#if defined BOARD_PC
+void free_pirda(void);
 #endif
+
+///////////////////////////////////////////////// Air Conditioner Begin /////////////////////////////////////////////////
 
 INT8 binary_parse_offset()
 {
@@ -177,7 +151,6 @@ INT8 binary_parse_len()
     return IR_DECODE_SUCCEEDED;
 }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
 void binary_tags_info()
 {
     UINT16 i = 0;
@@ -190,7 +163,6 @@ void binary_tags_info()
         IR_PRINTF("tag(%d).len = %d\n", tags[i].tag, tags[i].len);
     }
 }
-#endif
 
 INT8 binary_parse_data()
 {
@@ -343,22 +315,15 @@ INT8 free_ac_context()
     return IR_DECODE_SUCCEEDED;
 }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-INT8 irda_ac_lib_open(const char *file_name)
+INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length)
 {
-    IR_PRINTF("\nirda_ac_lib_open: %s\n", file_name);
-    return binary_open(file_name);
-}
-#else
-INT8 irda_ac_lib_open(UINT8 *binary_file, UINT16 binary_length)
-{
-    // load bin to buffer
-    pirda_buffer->data = binary_file;
+    // it is recommended that the parameter binary pointing to
+    // a global memory block in embedded platform environment
+    pirda_buffer->data = binary;
     pirda_buffer->len = binary_length;
     pirda_buffer->offset = 0;
     return IR_DECODE_SUCCEEDED;
 }
-#endif
 
 INT8 irda_context_init()
 {
@@ -369,10 +334,9 @@ INT8 irda_context_init()
 INT8 irda_ac_lib_parse()
 {
     UINT16 i = 0;
-    // suggest not to  call init function here for de-couple purpose
-#if defined BOARD_EMBEDDED
+    // suggest not to call init function here for de-couple purpose
     irda_context_init();
-#endif
+
     if (IR_DECODE_FAILED == binary_parse_offset())
     {
         return IR_DECODE_FAILED;
@@ -388,9 +352,8 @@ INT8 irda_ac_lib_parse()
         return IR_DECODE_FAILED;
     }
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
     binary_tags_info();
-#endif
+
     context->endian = 0;
     context->lastbit = 0;
     context->repeat_times = 1;
@@ -731,8 +694,25 @@ INT8 irda_ac_lib_parse()
         }
     }
 
+    // it is strongly recommended that we free pirda_buffer
+    // or make global buffer shared in extreme memory case
+    /* in case of running with test - begin */
+#if defined BOARD_PC
+    free_pirda();
+#endif
+    /* in case of running with test - end */
+
     return IR_DECODE_SUCCEEDED;
 }
+
+#if defined BOARD_PC
+void free_pirda(void)
+{
+    irda_free(pirda_buffer->data);
+    pirda_buffer->len = 0;
+    pirda_buffer->offset = 0;
+}
+#endif
 
 BOOL is_solo_function(UINT8 function_code)
 {
@@ -926,22 +906,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
                            UINT8 change_wind_direction)
 {
     UINT16 time_length = 0;
-#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
     UINT8 i = 0;
-#endif
-
-#if 0
-    // prepare ac status to parameter array
-    UINT8 parameter_array[AC_APPLY_MAX] =
-    {
-        ac_status.acPower,
-        ac_status.acMode,
-        ac_status.acWindSpeed,
-        ac_status.acWindDir,
-        ac_status.acTemp,
-        function_code
-    };
-#endif
 
     if (0 == context->default_code.len)
     {
@@ -1034,23 +999,12 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
     apply_checksum(context);
 
     // have some debug
-#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
     IR_PRINTF("==============================\n");
     for(i = 0; i < ir_hex_len; i++)
     {
         IR_PRINTF("[%02X] ", ir_hex_code[i]);
     }
     IR_PRINTF("\n");
-#endif
-#if (defined BOARD_EMBEDDED) && (PRINT_IRDA_DATA == TRUE)
-    NPI_PrintString("hex:\r\n");
-
-    for (UINT16 i = 0; i < context->default_code.len; i++)
-    {
-        NPI_PrintValue("", ir_hex_code[i], 16);
-    }
-    NPI_PrintString("\r\n");
-#endif
 
     time_length = create_ir_frame();
 
@@ -1214,60 +1168,14 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 ///////////////////////////////////////////////// Air Conditioner End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
-
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-INT8 binary_tv_open(const char *file)
+INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
-    int print_index = 0;
-    FILE *stream = fopen(file, "rb");
-
-    IR_PRINTF("file name = %s\n", file);
-
-    if (stream == NULL)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    tv_bin_length = ftell(stream);
-
-    IR_PRINTF("length of binary = %d\n", tv_bin_length);
-
-    fseek(stream, 0, SEEK_SET);
-    fread(tv_bin, tv_bin_length, 1, stream);
-    fclose(stream);
-
-    // have some debug
-    IR_PRINTF("=============================\n");
-    // IR_PRINTF("length of binary = %d\n", tv_bin_length);
-    for(print_index = 0; print_index < tv_bin_length; print_index++)
-    {
-        IR_PRINTF("%02X ", tv_bin[print_index]);
-    }
-    IR_PRINTF("\n=============================\n");
-    irda_lib_open(tv_bin, tv_bin_length);
-    return IR_DECODE_SUCCEEDED;
+    return tv_lib_open(binary, binary_length);
 }
-#endif
 
-#if (defined BOARD_PC) || (defined BOARD_ANDROID)
-INT8 irda_tv_lib_open(const char *file_name)
-{
-    return binary_tv_open(file_name);
-}
-#else
-INT8 irda_tv_lib_open(UINT8 *binary_file, UINT16 binary_length)
-{
-    irda_lib_open(binary_file, binary_length);
-    return IR_DECODE_SUCCEEDED;
-}
-#endif
-
-#if (defined BOARD_PC)|| (defined BOARD_ANDROID)
 INT8 irda_tv_lib_parse(UINT8 irda_hex_encode)
 {
-    if (FALSE == irda_lib_parse(irda_hex_encode))
+    if (FALSE == tv_lib_parse(irda_hex_encode))
     {
         IR_PRINTF("parse irda binary failed\n");
         memset(tv_bin, 0x00, EXPECTED_MEM_SIZE);
@@ -1283,7 +1191,7 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
     UINT16 print_index = 0;
     UINT16 irda_code_length = 0;
     memset(user_data, 0x00, USER_DATA_SIZE);
-    irda_code_length = irda_lib_control(key, l_user_data);
+    irda_code_length = tv_lib_control(key, l_user_data);
 
     // have some debug
     IR_PRINTF("=============================\n");
@@ -1301,5 +1209,4 @@ UINT16 irda_tv_lib_close()
 {
     // no need to close tv binary
 }
-#endif
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////

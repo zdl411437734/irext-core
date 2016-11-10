@@ -143,62 +143,6 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaTVCo
 JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibClose
   (JNIEnv *, jobject);
 
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcLibOpen
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcLibOpen
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcGetNeedConnAck
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_bcGetNeedConnAck
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcGetDeviceName
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_irext_remote_service_DecodeService_bcGetDeviceName
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcGetValidKeys
- * Signature: ()[I
- */
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_bcGetValidKeys
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcLibClose
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_bcLibClose
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcGetConnAck
- * Signature: ()Lcom/irext/remote/bean/jnibean/JNIBCCommands;
- */
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetConnAck
-  (JNIEnv *, jobject);
-
-/*
- * Class:     net_irext_remote_service_DecodeService
- * Method:    bcGetCommand
- * Signature: (I)Lcom/irext/remote/bean/jnibean/JNIBCCommands;
- */
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_bcGetCommand
-  (JNIEnv *, jobject, jint);
-
 #ifdef __cplusplus
 }
 #endif
