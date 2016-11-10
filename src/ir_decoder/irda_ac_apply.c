@@ -12,8 +12,7 @@ Revision log:
  *inclusion
  */
 
-#include "./include/irda_utils.h"
-#include "./include/irda_decode.h"
+#include "include/irda_utils.h"
 #include "include/irda_ac_apply.h"
 
 /*

@@ -8,12 +8,9 @@ Description:    This file provides generic utils for IRDA algorithms
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
-#include "./include/irda_utils.h"
-#include "./include/irda_decode.h"
+#include "include/irda_utils.h"
 
 /*
 *0123456789abcdef/0123456789ABCDEF

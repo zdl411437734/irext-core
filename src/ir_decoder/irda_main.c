@@ -14,9 +14,9 @@ Revision log:
 #include <unistd.h>
 #include <errno.h>
 
-#include "./include/irda_defs.h"
-#include "./include/irda_decode.h"
-#include "./include/irda_main.h"
+#include "include/irda_defs.h"
+#include "include/irda_decode.h"
+#include "include/irda_main.h"
 
 // global variable definition
 long binary_length = 0;

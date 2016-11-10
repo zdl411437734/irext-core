@@ -1,0 +1,9 @@
+backup/
+.idea/
+db/
+logs/
+tools/
+
+.idea/workspace.xml
+*.DS_Store
+nohup.out

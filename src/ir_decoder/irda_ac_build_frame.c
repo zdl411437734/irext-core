@@ -11,7 +11,7 @@ Revision log:
 #include <stdio.h>
 
 #include "include/irda_ac_build_frame.h"
-#include "./include/irda_decode.h"
+#include "include/irda_decode.h"
 
 extern protocol* context;
 

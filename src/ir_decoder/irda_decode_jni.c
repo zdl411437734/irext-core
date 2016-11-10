@@ -12,9 +12,9 @@ Revision log:
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include "./include/irda_decode_jni.h"
-#include "./include/irda_defs.h"
-#include "./include/irda_decode.h"
+#include "include/irda_decode_jni.h"
+#include "include/irda_defs.h"
+#include "include/irda_decode.h"
 
 // global variable definition
 UINT16 binary_length = 0;

@@ -13,12 +13,10 @@ Revision log:
  *                                            INCLUDES
  **************************************************************************************************/
 
-#include <stdio.h>
 #include <string.h>
 
-#include "./include/irda_defs.h"
+#include "include/irda_defs.h"
 #include "include/irda_tv_parse_protocol.h"
-#include "./include/irda_decode.h"
 
 /**************************************************************************************************
  *                                            MACROS

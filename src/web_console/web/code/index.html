@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-cmn">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="description" content="yuekong application">
+    <meta name="author" content="strawmanbobi">
+    <title>UCON 控制台</title>
+
+    <link href="../public_js/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public_js/select2/select2.min.css" rel="stylesheet">
+    <link href="../public_js/bootstrap_table/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link href="./css/remote.css" rel="stylesheet">
+    <link href="../public_js/bootstrap_sidebar/css/simple-sidebar.css" rel="stylesheet">
+    <link href="../public_js/bootstrap_multiselect/css/bootstrap-multiselect.css" type="text/css" rel="stylesheet">
+
+    <script src="../public_js/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../public_js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../public_js/bootstrap_spinner/bootstrap-spinner.min.js"></script>
+    <script src="../public_js/bower_components/bootstrap/js/modal.js"></script>
+    <script src="../public_js/bootstrap_table/dist/bootstrap-table.min.js"></script>
+    <script src="../public_js/bootstrap_table/dist/extensions/export/bootstrap-table-export.js"></script>
+    <script src="../public_js/bootstrap_table/table_export/tableExport.min.js"></script>
+    <script src="../public_js/bootstrap_table/table_export/libs/FileSaver/FileSaver.min.js"></script>
+    <script src="../public_js/bootstrap_table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../public_js/bootstrap_multiselect/js/bootstrap-multiselect.js"></script>
+    <script src="../public_js/select2/select2.min.js"></script>
+    <script src="../public_js/utils/json2xls.js"></script>
+    <script src="../public_js/utils/date_utils.js"></script>
+    <script src="../public_js/utils/url_parser.js"></script>
+    <script src="../public_js/chinese/await.js"></script>
+    <script src="../public_js/chinese/chinese.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" id="side_bar">
+
+        </ul>
+    </div>
+    <div class="container" id="page-content-wrapper">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a id="menu_toggle" class="navbar-brand glyphicon glyphicon-transfer" href="#"></a><a class="navbar-brand" href="#"> 家电控制码管理</a>
+            </div>
+        </nav>
+        <div class="starter-template" style="padding: 0;">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group" style="max-height: 25px;">
+                        <span class="input-group-addon">类型</span>
+                        <select id="filter_category_id" name="filter_category_id" class="input-group-addon" onchange="onFilterCategoryChange();" style="width: 100%;">
+                        </select>
+                    </div>
+                    <br>
+                    <div class="input-group" id="filter_brand_panel" style="max-height: 25px;">
+                        <span class="input-group-addon">品牌</span>
+                        <select id="filter_brand_id" name="filter_brand_id" class="input-group-addon" onchange="onFilterBrandChange();" style="width: 100%;">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="input-group" id="filter_province_panel" style="max-height: 25px; display: none;">
+                        <span class="input-group-addon">选择省份</span>
+                        <select id="filter_province_id" name="filter_province_id" onchange="onFilterProvinceChange();" style="width: 100%;">
+                        </select>
+                        <!-- <span class="input-group-addon pointer">+</span> -->
+                    </div>
+                    <br>
+                    <div class="input-group" id="filter_city_panel" style="max-height: 25px; display: none;">
+                        <span class="input-group-addon">选择城市</span>
+                        <select id="filter_city_code" name="filter_city_code" onchange="onFilterCityChange();" style="width: 100%;">
+                        </select>
+                        <!-- <span class="input-group-addon pointer">+</span> -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-normal btn-default" onclick="loadRemoteList();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-refresh" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-default" onclick="onCreateRemote();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-plus" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-danger" onclick="onDeleteRemote();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-trash" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onFallbackRemote();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-arrow-left" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onVerifyRemote(1);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-remove" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onVerifyRemote(0);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-ok" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button id="download_bin_button" class="btn btn-normal btn-default" onclick="downloadBin();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                </div>
+                <button id="publish_button" class="btn btn-normal btn-success" onclick="onPublishRemote();" style="font-size: 14px; display: none;">
+                    <span class="glyphicon glyphicon-send" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                </button>
+                <button id="search_bin_button" class="btn btn-normal btn-default" onclick="onSearchRemote();" style="font-size: 14px;">
+                    <span class="glyphicon glyphicon-search" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                </button>
+            </div>
+            <div id = "remote_table_container" style="width: 100%">
+            </div>
+            <hr>
+            <div style="float: right;">
+                <a href="http://yuekong-release-published.oss-cn-hangzhou.aliyuncs.com/Android%2FUCON_Android_Test.apk">点这里下载测试专用APP</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="create_remote_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加新遥控器</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row marketing">
+                    <form id="remote_upload_form" enctype="multipart/form-data" method="post"
+                          action="/yuekong/int/create_remote_index"  target="post_iframe">
+                        <div class="col-lg-6">
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">优先排序</span>
+                                <input type="text" data-ride="spinner" id="spinner" name="priority" class="form-control input-number" value="1" data-min="1" data-max="999">
+                                <span class="input-group-btn" style="border-radius: 0;">
+                                <button type="button" class="btn btn-default" data-value="decrease" data-target="#spinner"
+                                        data-toggle="spinner" style="border-radius: 0;">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" data-value="increase" data-target="#spinner"
+                                        data-toggle="spinner">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">无线类型</span>
+                                <select id="radio_type" name="radio_type" class="input-group-addon" onchange="onRadioTypeChange();" style="width: 100%;">
+                                    <option value="0">红外</option>
+                                    <option value="1">蓝牙主机</option>
+                                    <!--
+                                    <option value="2">蓝牙HID</option>
+                                    <option value="3">WLAN</option>
+                                    <option value="4">Zigbee</option>
+                                    <option value="5">433M</option>
+                                    <option value="6">第三方接入</option>
+                                    -->
+                                </select>
+                                <!-- <span class="input-group-addon pointer">+</span> -->
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">家电类型</span>
+                                <select id="category_id" name="category_id" class="input-group-addon" onchange="onCategoryChange();" style="width: 100%;">
+                                </select>
+                                <input type="hidden" id="category_name" name="category_name">
+                                <input type="hidden" id="category_name_tw" name="category_name_tw">
+                                <!-- <span class="input-group-addon pointer">+</span> -->
+                            </div>
+                            <br>
+                            <div class="input-group" id="brand_panel">
+                                <span class="input-group-addon">家电品牌</span>
+                                <select id="brand_id" name="brand_id" class="input-group-addon" onchange="onBrandChange();" style="width: 100%; border-radius: 0;">
+                                </select>
+                                <input type="hidden" id="brand_name" name="brand_name">
+                                <input type="hidden" id="brand_name_tw" name="brand_name_tw">
+                                <span class="input-group-addon pointer" onclick="onCreateBrand();">+</span>
+                            </div>
+                            <div class="input-group" id="province_panel" style="display: none;">
+                                <span class="input-group-addon">选择省份</span>
+                                <select id="province_id" name="province_id" onchange="onProvinceChange();" style="width: 100%;">
+                                </select>
+                                <!-- <span class="input-group-addon pointer">+</span> -->
+                            </div>
+                            <br>
+                            <div id="city_panel" style="display: none;">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="cursor: pointer;" onclick="discoverCityCode();">选择城市</span>
+                                    <select id="city_code" name="city_code" onchange="onCityChange();" style="width: 100%;">
+                                    </select>
+                                    <input type="hidden" id="city_name" name="city_name">
+                                    <input type="hidden" id="city_name_tw" name="city_name_tw">
+                                    <!-- <span class="input-group-addon pointer">+</span> -->
+                                </div>
+                                <br>
+                            </div>
+                            <div id="operator_panel" style="display: none;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">选择SP&nbsp;&nbsp;</span>
+                                    <select id="operator_id" name="operator_id" onchange="onOperatorChange();" style="width: 100%;">
+                                    </select>
+                                    <input type="hidden" id="operator_name" name="operator_name">
+                                    <input type="hidden" id="operator_name_tw" name="operator_name_tw">
+                                    <!-- <span class="input-group-addon pointer">+</span> -->
+                                </div>
+                                <br>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">地区保护</span>
+                                <select id="protector_selection" multiple="multiple" style="width: 100%;">
+                                    <option value="S" selected="selected">标准(S)</option>
+                                    <option value="C">中国大陆(C)</option>
+                                    <option value="T">台湾(T)</option>
+                                    <option value="P">旧版本(P)</option>
+                                </select>
+                                <input type="hidden" id="protector" name="protector"/>
+                            </div>
+                            <br>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="protocol_panel" style="display: none;">
+                                <div class="input-group protocol_panel" style="display:none;">
+                                    <span class="input-group-addon">编码协议</span>
+                                    <select id="protocol_id" name="protocol_id" onchange="onProtocolChange();" style="width: 100%;">
+                                    </select>
+                                    <input type="hidden" id="protocol_name" name="protocol_name">
+                                    <span class="input-group-addon pointer" onclick="onCreateProtocol();">+</span>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">协议类型</span>
+                                <select id="sub_cate" name="sub_cate" class="input-group-addon" onchange="onSubCateChange();" style="width: 100%;">
+                                    <option value="0" disabled>1代协议</option>
+                                    <option value="1" selected>2代协议(4进制码)</option>
+                                    <option value="2">2代协议(16进制码)</option>
+                                    <option value="3">新的电器</option>
+                                </select>
+                                <!-- <span class="input-group-addon pointer">+</span> -->
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">码表名称</span>
+                                <input type="text" class="form-control" placeholder="Remote Name" id="remote_name" name="remote_name">
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">码表文件</span>
+                                <input type="file" class="form-control" name="remote_file" placeholder="Remote File" id="remote_file">
+                            </div>
+                            <br>
+                            <div class="input-group ble_central_panel" style="display:none;">
+                                <div class="input-group" style="max-height: 25px;">
+                                    <span class="input-group-addon">测试信令</span>
+                                    <input type="text" class="form-control" id="ble_remote_index" name="ble_remote_index" readonly
+                                            placeholder=""
+                                            value="">
+                                    <span class="input-group-addon pointer" onclick="onBleTestInfo();">+</span>
+                                    <input type="hidden" id="ble_mode" name="ble_mode" value="1"/>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">参考序号</span>
+                                <input type="text" class="form-control input-number" id="kk_remote_number" name="kk_remote_number">
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">遥控启用</span>
+                                <input type="text" class="form-control input-number" id="remote_applied_version" name="remote_applied_version" value="1.6.3">
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">遥控禁用</span>
+                                <input type="text" class="form-control input-number" id="remote_banned_version" name="remote_banned_version" value="99.0.0">
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">底座启用</span>
+                                <input type="text" class="form-control input-number" id="device_applied_version" name="device_applied_version" value="1.4.0">
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">底座禁用</span>
+                                <input type="text" class="form-control input-number" id="device_banned_version" name="device_banned_version" value="99.0.0">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-normal btn-success" href="#" onclick="createRemote();">提交</a>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- search dialog -->
+<div class="modal fade" id="search_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">搜索码表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">编码映射</span>
+                    <input type="text" class="form-control" placeholder="eg. upd6121g_box_041 or new_ac_11737" id="remote_map">
+                </div>
+                <br>
+                <!--
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">编码来源</span>
+                    <input type="text" class="form-control" placeholder="eg. strawmanbobi@yuekong.com.cn" id="input_source">
+                </div>
+                -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="searchRemote();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- hint dialog -->
+<div class="modal fade" id="delete_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">删除码表</h4>
+            </div>
+            <div class="modal-body">
+                <div id="delete_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="deleteRemote();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="fallback_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">回退码表</h4>
+            </div>
+            <div class="modal-body">
+                <div id="fallback_hint">确认要回退码表到待验证状态吗？</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="fallbackRemote();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="verify_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">验证码表</h4>
+            </div>
+            <div class="modal-body">
+                <div id="verify_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" onclick="verifyRemote();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="publish_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">发布码表</h4>
+            </div>
+            <div class="modal-body">
+                <div id="publish_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" onclick="publishUnpublished();">报表</button>
+                <button type="button" class="btn btn-success" onclick="publishBrands();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="uploading_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">提交码表文件</h4>
+            </div>
+            <div class="modal-body">
+                <iframe name="post_iframe" id="post_iframe" style="border: none; width: 100%; height: 50px;">
+                    <html>
+                        <body>
+                            <div style="width: 100%; text-align: center; font-family: '微软雅黑'">正在提交</div>
+                        </body>
+                    </html>
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="creating_protocol_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">提交新协议</h4>
+            </div>
+            <div class="modal-body">
+                <iframe name="post_protocol_iframe" id="post_protocol_iframe" style="border: none; width: 100%; height: 50px;">
+                    <html>
+                    <body>
+                    <div style="width: 100%; text-align: center; font-family: '微软雅黑'">正在提交</div>
+                    </body>
+                    </html>
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create brand dialog -->
+<div class="modal fade" id="create_brand_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加品牌</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">电器类型</span>
+                    <input type="text" class="form-control" id="category_name_b" value="" readonly>
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">品牌名称</span>
+                    <input type="text" class="form-control" id="brand_name_b" value=""
+                           onchange="translateToTC('brand_name_b', 'brand_name_tw_b');">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">英文名称</span>
+                    <input type="text" class="form-control" id="brand_name_en_b" value="">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">繁中名称</span>
+                    <input type="text" class="form-control" id="brand_name_tw_b" value="">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">优先排序</span>
+                    <input type="text" data-ride="brand_priority" id="brand_priority" name="brand_priority"
+                           class="form-control input-number" value="1" data-min="1" data-max="999">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">地区保护</span>
+                    <select id="protector_selection_b" multiple="multiple" style="width: 100%;">
+                        <option value="S" selected="selected">标准(S)</option>
+                        <option value="C">中国大陆(C)</option>
+                        <option value="T">台湾(T)</option>
+                        <option value="P">旧版本(P)</option>
+                    </select>
+                </div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createBrand();">确定添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create protocol dialog -->
+<div class="modal fade" id="create_protocol_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="protocol_upload_form" enctype="multipart/form-data" method="post"
+                  action="/yuekong/int/create_protocol" target="post_protocol_iframe">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加协议</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">协议名称</span>
+                    <input type="text" class="form-control" id="protocol_name_b" name="protocol_name_b" value="">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">协议文件</span>
+                    <input type="file" class="form-control" id="protocol_file" name="protocol_file" value="">
+                </div>
+                <br>
+                <div class="input-group" style="max-height: 25px;">
+                    <span class="input-group-addon">协议类型</span>
+                    <select id="protocol_type" name="protocol_type" class="input-group-addon" onchange="onProtocolTypeChange();" style="width: 100%;">
+                        <option value="0" disabled>1代协议</option>
+                        <option value="1" selected>2代协议(4进制码)</option>
+                        <option value="2">2代协议(16进制码)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createProtocol();">确定添加</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- create ble remote index test info dialog -->
+<div class="modal fade" id="create_ble_test_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">蓝牙控制测试信令</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="ble_test_info" name="description" style="width: 100%; height: 200px; resize: none;"
+                          maxlength="10000" class="form-control" placeholder="在这里按格式填入测试信令"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createBleTestInfo();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- signout dialog -->
+<div class="modal fade" id="signout_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">退出登录</h4>
+            </div>
+            <div class="modal-body">
+                <div id="signout_hint">确定要退出吗？</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="signout();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- hint dialog -->
+<div class="modal fade" id="hint_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <div id="text_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="./js/remote.js"></script>
+<script type="text/javascript" src="../js/ui.js"></script>
+</html>
