@@ -21,7 +21,7 @@ for root, dirs, files in os.walk(sys.argv[1]):
                 if cmp(protocolType[0].split('/')[-1], fileType[0]) == 0:
                     outName = remotePath.split('#')
                     binary = open(sys.argv[3] + "/irda_" + outName[0].split('/')[-1] + "_" + outName[1], 'wb')
-                    prot_file = open(root+i, "rb")
+                    prot_file = open(root + i, "rb")
                     remote_file = open(remotePath, "rb")
                     binary.write(prot_file.read())
                     binary.write(remote_file.read())

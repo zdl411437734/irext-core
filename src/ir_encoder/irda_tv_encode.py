@@ -95,17 +95,17 @@ def print_remote(input_file, real_path, real_name, category):
             key.append(data)
 
     key[0].pack_length(binary)
-    for j in range(len(keymap_dicts[category])):
-        empty_key = CKeyMap(keymap_dicts[category][j], empty_value)
+    for j in range(len(keymap_dicts[int(category)])):
+        empty_key = CKeyMap(keymap_dicts[int(category)][j], empty_value)
         find = 0
         for n in range(len(key)):
-            if cmp(keymap_dicts[category][j], key[n].name) == 0:
+            if cmp(keymap_dicts[int(category)][j], key[n].name) == 0:
                 key[n].print_info()
                 key[n].pack_key(binary)
                 find = 1
                 break
         if find == 0:
-            print "Don't file this key %s" % (keymap_dicts[category][j])
+            print "Don't file this key %s" % (keymap_dicts[int(category)][j])
             empty_key.pack_key(binary)
 
 fileName = sys.argv[1]
