@@ -5,6 +5,8 @@ import sys
 import xml.dom.minidom
 import struct
 
+keymap_dict_ac = ()
+
 keymap_dict_tv = ("POWER", "MUTE", "UP", "DOWN", "LEFT", "RIGHT", "OK", "VOL+", "VOL-", "BACK", "INPUT", "MENU", "HOME",
                   "SET", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 
@@ -32,12 +34,15 @@ keymap_dict_projector = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "OK", "VOL+", "
 keymap_dict_light = ("POWER", "COLOR_1", "COLOR_2", "COLOR_3", "COLOR_4", "COLOR_0", "BRIGHT", "DARK", "POWER_ON",
                      "RAINBOW", "POWER_OFF", "BACK", "HOME", "MENU", "SWITCH")
 
-keymap_dict_air_cleaner = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "ION", "PLUS", "MINUS", "AUTO", "SPEED", "MODE",
-                           "TIMING", "LIGHT", "FORCE", "SWITCH")
-
 keymap_dict_clean_robot = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "START", "PLUS", "MINUS", "AUTO", "SPOT", "SPEED",
                            "TIMING", "CHARGE", "PLAN", "SWITCH")
 
+keymap_dict_air_cleaner = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "ION", "PLUS", "MINUS", "AUTO", "SPEED", "MODE",
+                           "TIMING", "LIGHT", "FORCE", "SWITCH")
+
+keymap = [keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
+          keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_clean_robot,
+          keymap_dict_ac];
 
 class CKeyMap:
     def __init__(self, name, value):
@@ -60,7 +65,7 @@ class CKeyMap:
         print len(self.value)
 
 
-def print_remote(input_file, real_path, real_name):
+def print_remote(input_file, real_path, real_name, category):
     print input_file
     dom = xml.dom.minidom.parse(input_file)
     root = dom.documentElement
@@ -90,22 +95,23 @@ def print_remote(input_file, real_path, real_name):
             key.append(data)
 
     key[0].pack_length(binary)
-    for j in range(len(keymap_dict)):
-        empty_key = CKeyMap(keymap_dict[j], empty_value)
+    for j in range(len(keymap[category])):
+        empty_key = CKeyMap(keymap[category][j], empty_value)
         find = 0
         for n in range(len(key)):
-            if cmp(keymap_dict[j], key[n].name) == 0:
+            if cmp(keymap[category][j], key[n].name) == 0:
                 key[n].print_info()
                 key[n].pack_key(binary)
                 find = 1
                 break
         if find == 0:
-            print "Don't file this key %s" % (keymap_dict[j])
+            print "Don't file this key %s" % (keymap[category][j])
             empty_key.pack_key(binary)
 
 fileName = sys.argv[1]
 realName = sys.argv[2]
 realPath = sys.argv[3]
+inCategory = sys.argv[4]
 fileType = fileName.split('.')
 if cmp(fileType[1], "xml") == 0:
-    print_remote(fileName, realPath, realName)
+    print_remote(fileName, realPath, realName, inCategory)
