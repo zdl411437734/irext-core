@@ -40,9 +40,9 @@ keymap_dict_clean_robot = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "START", "PLU
 keymap_dict_air_cleaner = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "ION", "PLUS", "MINUS", "AUTO", "SPEED", "MODE",
                            "TIMING", "LIGHT", "FORCE", "SWITCH")
 
-keymap = [keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
-          keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_clean_robot,
-          keymap_dict_ac];
+keymap_dicts = [keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
+                keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_clean_robot,
+                keymap_dict_ac];
 
 class CKeyMap:
     def __init__(self, name, value):
@@ -95,17 +95,17 @@ def print_remote(input_file, real_path, real_name, category):
             key.append(data)
 
     key[0].pack_length(binary)
-    for j in range(len(keymap[category])):
-        empty_key = CKeyMap(keymap[category][j], empty_value)
+    for j in range(len(keymap_dicts[category])):
+        empty_key = CKeyMap(keymap_dicts[category][j], empty_value)
         find = 0
         for n in range(len(key)):
-            if cmp(keymap[category][j], key[n].name) == 0:
+            if cmp(keymap_dicts[category][j], key[n].name) == 0:
                 key[n].print_info()
                 key[n].pack_key(binary)
                 find = 1
                 break
         if find == 0:
-            print "Don't file this key %s" % (keymap[category][j])
+            print "Don't file this key %s" % (keymap_dicts[category][j])
             empty_key.pack_key(binary)
 
 fileName = sys.argv[1]
