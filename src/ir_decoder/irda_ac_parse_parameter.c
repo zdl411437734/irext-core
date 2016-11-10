@@ -16,7 +16,7 @@ Revision log:
 #include <string.h>
 
 #include "./include/irda_utils.h"
-#include "./include/irda_parse_ac_parameter.h"
+#include "include/irda_ac_parse_parameter.h"
 #include "./include/irda_decode.h"
 
 /*

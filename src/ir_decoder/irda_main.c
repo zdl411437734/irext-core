@@ -19,7 +19,7 @@ Revision log:
 #include "./include/irda_main.h"
 
 // global variable definition
-UINT16 binary_length = 0;
+long binary_length = 0;
 UINT8 *binary_content = NULL;
 
 INT8 irda_ac_file_open(const char* file_name);
@@ -58,7 +58,7 @@ INT8 irda_ac_file_open(const char* file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT8 decode_as_ac(const char* file_name)
+INT8 decode_as_ac(const char* file_name)
 {
     // keyboard input
     int in_char = 0;
@@ -238,7 +238,7 @@ INT8 irda_tv_file_open(const char* file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
+INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
 {
     // keyboard input
     int in_char = 0;

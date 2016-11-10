@@ -14,7 +14,7 @@ Revision log:
 
 #include "./include/irda_utils.h"
 #include "./include/irda_decode.h"
-#include "./include/irda_apply.h"
+#include "include/irda_ac_apply.h"
 
 /*
  * global vars
@@ -611,4 +611,3 @@ INT8 apply_checksum(struct ac_protocol *protocol)
 
     return IR_DECODE_SUCCEEDED;
 }
-

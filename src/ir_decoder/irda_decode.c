@@ -15,12 +15,12 @@ Revision log:
 
 #include "./include/irda_decode.h"
 #include "./include/irda_utils.h"
-#include "./include/irda_parse_frame_parameter.h"
-#include "./include/irda_parse_ac_parameter.h"
-#include "./include/irda_parse_forbidden_info.h"
-#include "./include/irda_irframe.h"
-#include "./include/irda_apply.h"
-#include "include/irda_tv_parse.h"
+#include "include/irda_ac_parse_frame_parameter.h"
+#include "include/irda_ac_parse_parameter.h"
+#include "include/irda_ac_parse_forbidden_info.h"
+#include "include/irda_ac_build_frame.h"
+#include "include/irda_ac_apply.h"
+#include "include/irda_tv_parse_protocol.h"
 
 struct ir_bin_buffer binaryfile;
 struct ir_bin_buffer *pirda_buffer = &binaryfile;

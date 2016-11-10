@@ -5,7 +5,8 @@ import struct
 import sys
 import xml.dom.minidom
 
-flag_tab = ("boot", "stop", "separator", "one", "zero", "flip", "two", "three", "four", "five", "six", "seven", "eight", "nine", "A", "B", "C", "D", "E", "F")
+flag_tab = ("boot", "stop", "separator", "one", "zero", "flip", "two", "three", "four", "five", "six", "seven",
+            "eight", "nine", "A", "B", "C", "D", "E", "F")
 
 class IRDAData:
     def __init__(self, bits, lsb, mode, index):

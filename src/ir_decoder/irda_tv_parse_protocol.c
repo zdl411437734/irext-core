@@ -17,7 +17,7 @@ Revision log:
 #include <string.h>
 
 #include "./include/irda_defs.h"
-#include "./include/irda_tv_parse.h"
+#include "include/irda_tv_parse_protocol.h"
 #include "./include/irda_decode.h"
 
 /**************************************************************************************************
@@ -226,7 +226,7 @@ static BOOL get_irda_keymap(void)
     remote_p = (irda_data_tv_t *) (pbuffer->data + pbuffer->offset);
     pbuffer->offset += sizeof(irda_data_tv_t);
 
-    if (strncmp(remote_p->magic, "ykir", 4) == 0)
+    if (strncmp(remote_p->magic, "irda", 4) == 0)
     {
         remote_pdata = pbuffer->data + pbuffer->offset;
         return TRUE;
