@@ -4,13 +4,13 @@
  */
 
 // system inclusion
-var constants = require('../../../Infrastructure/BackEnd/configuration/constants');
+var constants = require('../mini-poem/configuration/constants');
 
 // local inclusion
 var ServiceResponse = require('../response/service_response.js');
 var LoginResponse = require('../response/login_response.js');
 
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini-poem/logging/logger4js').helper;
 
 var certificateLogic = require('../work_unit/certificate_logic.js');
 

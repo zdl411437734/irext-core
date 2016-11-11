@@ -4,15 +4,15 @@
  */
 
 // global inclusion
-require('../../../Infrastructure/BackEnd/configuration/constants');
-var RequestSender = require('../../../Infrastructure/BackEnd/http/request.js');
-var Map = require('../../../Infrastructure/BackEnd/mem/map.js');
+require('../mini-poem/configuration/constants');
+var RequestSender = require('../mini-poem/http/request.js');
+var Map = require('../mini-poem/mem/map.js');
 
 // local inclusion
 
 var Enums = require('../configuration/enums.js');
 var ErrorCode = require('../configuration/error_code.js');
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini-poem/logging/logger4js').helper;
 
 var enums = new Enums();
 var errorCode = new ErrorCode();

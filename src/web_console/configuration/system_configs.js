@@ -2,7 +2,7 @@
  * Created by strawmanbobi on 14-10-17.
  */
 
-require('../../../Infrastructure/BackEnd/configuration/constants');
+require('../mini-poem/configuration/constants');
 var Enums = require('./enums');
 var enums = new Enums();
 

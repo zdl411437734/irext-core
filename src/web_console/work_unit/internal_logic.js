@@ -8,10 +8,10 @@ fs = require('fs');
 var crypto = require('crypto');
 
 // global inclusion
-var orm = require('../../../Infrastructure/BackEnd/node_modules/orm');
-var Constants = require('../../../Infrastructure/BackEnd/configuration/constants');
-var PythonCaller = require('../../../Infrastructure/BackEnd/external/python_caller');
-var OSS = require('../../../Infrastructure/BackEnd/data_set/ali_oss.js');
+var orm = require('orm');
+var Constants = require('../mini-poem/configuration/constants');
+var PythonCaller = require('../mini-poem/external/python_caller');
+var OSS = require('../mini-poem/data_set/ali_oss.js');
 
 var Category = require('../model/category_dao.js');
 var Brand = require('../model/brand_dao.js');
@@ -19,16 +19,14 @@ var IRProtocol = require('../model/ir_protocol_dao.js');
 var City = require('../model/city_dao.js');
 var RemoteIndex = require('../model/remote_index_dao.js');
 var StbOperator = require('../model/stb_operator_dao.js');
-var Version = require('../model/version_dao.js');
 var Admin = require('../model/admin_dao.js');
-var VirtualBleRemoteIndex = require('../model/virtual_ble_remote_index_dao.js');
 
-var RequestSender = require('../../../Infrastructure/BackEnd/http/request.js');
-var Map = require('../../../Infrastructure/BackEnd/mem/map.js');
+var RequestSender = require('../mini-poem/http/request.js');
+var Map = require('../mini-poem/mem/map.js');
 
 var Enums = require('../configuration/enums.js');
 var ErrorCode = require('../configuration/error_code.js');
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini-poem/logging/logger4js').helper;
 
 var enums = new Enums();
 var errorCode = new ErrorCode();

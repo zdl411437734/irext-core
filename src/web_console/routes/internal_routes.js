@@ -3,7 +3,7 @@
  * 2015-01-22.
  */
 
-var app = require('../yk_console.js');
+var app = require('../irext_console.js');
 var intService = require('../services/internal_service.js');
 
 app.get('/yuekong/int/list_provinces', intService.listProvinces);

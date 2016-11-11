@@ -3,15 +3,15 @@
  * 2015-01-24
  */
 
-require('../../../Infrastructure/BackEnd/configuration/constants');
-var Cache = require('../../../Infrastructure/BackEnd/cache/memcached.js');
+require('../mini-poem/configuration/constants');
+var Cache = require('../mini-poem/cache/memcached.js');
 var Enums = require('../configuration/enums');
 var ErrorCode = require('../configuration/error_code');
 
 var enums = new Enums();
 var errorCode = new ErrorCode();
 
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini-poem/logging/logger4js').helper;
 
 var AdminAuth = function(_cacheHost, _cachePort, _cacheAdmin, _cachePassword) {
     this.cache = new Cache(_cacheHost, _cachePort, _cacheAdmin, _cachePassword);

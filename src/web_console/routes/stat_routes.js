@@ -2,7 +2,7 @@
  * Created by Strawmanbobi
  * 2016-05-29.
  */
-var app = require('../yk_console.js');
+var app = require('../irext_console.js');
 var statService = require('../services/stat_service.js');
 
 app.get('/yuekong/stat/generic_count', statService.genericCount);

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
+#
+# created by strawmanbobi 2016-11-10
 
 import struct
 import sys

@@ -10,8 +10,8 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
 // global inclusion
-require('../../Infrastructure/BackEnd/configuration/constants');
-var System = require('../../Infrastructure/BackEnd/utils/system_utils');
+require('./mini-poem/configuration/constants');
+var System = require('./mini-poem/utils/system_utils');
 var systemConfig = require('./configuration/system_configs');
 
 // local inclusion
@@ -35,13 +35,13 @@ app.use("/", express.static(__dirname + '/web/'));
 systemConfig.setupEnvironment();
 serverListenPort = LISTEN_PORT;
 
-var dbConn = require('../../Infrastructure/BackEnd/db/mysql/mysql_connection');
+var dbConn = require('./mini-poem/db/mysql/mysql_connection');
 
 console.log("initializing MySQL connection to : " + MYSQL_DB_SERVER_ADDRESS + ":" + MYSQL_DB_NAME);
 dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
 
 // the following statements is automatically generated according to system configuration
-var kvConn = require('../../Infrastructure/BackEnd/db/mongodb/mongodb_connection');
+var kvConn = require('./mini-poem/db/mongodb/mongodb_connection');
 console.log('initializing MongoDB connection to : ' + MONGO_DB_SERVER_ADDRESS + ":" + MONGO_DB_NAME);
 kvConn.setMongoDBParameter(MONGO_DB_SERVER_ADDRESS, MONGO_DB_NAME, MONGO_DB_USER, MONGO_DB_PASSWORD);
 

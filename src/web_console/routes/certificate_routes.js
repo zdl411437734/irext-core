@@ -3,7 +3,7 @@
  * 2015-11-12
  */
 
-var app = require('../yk_console.js');
+var app = require('../irext_console.js');
 var certificateService = require('../services/certificate_service.js');
 
 app.get('/yuekong/certificate/confirm_pw', certificateService.confirmPassword);

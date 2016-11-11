@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding = utf-8
+#
+# created by strawmanbobi 2016-11-10
 
 import sys
 import xml.dom.minidom
@@ -42,7 +44,7 @@ keymap_dict_air_cleaner = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "ION", "PLUS"
 
 keymap_dicts = [keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
                 keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_clean_robot,
-                keymap_dict_ac];
+                keymap_dict_ac]
 
 class CKeyMap:
     def __init__(self, name, value):

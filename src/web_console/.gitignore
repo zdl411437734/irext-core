@@ -7,3 +7,4 @@ tools/
 .idea/workspace.xml
 *.DS_Store
 nohup.out
+node_modules/

@@ -2,6 +2,8 @@
 # coding=utf-8
 # for protocol version V1.0
 # 29 tags are supported
+#
+# created by strawmanbobi 2016-11-10
 
 import sys
 import xml.dom.minidom

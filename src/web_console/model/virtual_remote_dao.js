@@ -4,9 +4,9 @@
  */
 
 // global inclusion
-var kvConn = require('../../../Infrastructure/BackEnd/db/mongodb/mongodb_connection');
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
-var Map = require('../../../Infrastructure/BackEnd/mem/map');
+var kvConn = require('../mini-poem/db/mongodb/mongodb_connection');
+var logger = require('../mini-poem/logging/logger4js').helper;
+var Map = require('../mini-poem/mem/map');
 
 // local inclusion
 var ErrorCode = require('../configuration/error_code');

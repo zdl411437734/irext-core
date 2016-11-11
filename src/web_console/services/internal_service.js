@@ -4,7 +4,7 @@
  */
 
 // system inclusion
-var constants = require('../../../Infrastructure/BackEnd/configuration/constants');
+var constants = require('../mini-poem/configuration/constants');
 var formidable = require('formidable');
 var fs = require('fs');
 
@@ -16,10 +16,8 @@ var ProtocolResponse = require('../response/protocol_response.js');
 var CityResponse = require('../response/city_response.js');
 var OperatorResponse = require('../response/operator_response.js');
 var RemoteIndexResponse = require('../response/remote_index_response.js');
-var VersionResponse = require('../response/version_response.js');
-var StatResponse = require('../response/stat_response.js');
 
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini-poem/logging/logger4js').helper;
 
 var internalLogic = require('../work_unit/internal_logic.js');
 
