@@ -3,7 +3,7 @@
 
   This open source project helps people who is developing a smart home remote controller controls IRDA household appliances.
 
-#### Features are supported:
+#### Following features are supported:
   - IRDA pulse wave encoding from xml source format
   - IRDA pulse wave decoding from binary format
   - Web console managing brands of household appliances
@@ -15,7 +15,7 @@
   - Various platforms supported including 51(without OS), RTOS, Android, PC and webside decoding
   - Sample drivers and Android Apps
 
-#### Components are included:
+#### Following components are included:
   - IRDA pulse wave encoder
   - IRDA pulse wave decoder
   - Management web console
