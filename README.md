@@ -8,7 +8,7 @@
   - IRDA pulse wave decoding from binary format
   - Web console managing brands of household appliances
   - Encoding to binary code file uploading via friendly web console
-  - Basic RAM requirement is minimized for 1536 bytes for embedded systems
+  - Basic RAM requirement is minimized to 1536 bytes for embedded systems
   - Currently support over 10,000 types of household appliances
   - Currently support 13 categories of household appliances including AC, TV, Netbox, etc.
   - Currently support most commonly used control functionalities, including POWER, VOL-, VOL+, TEMP-, TEMP+, TV Channel switch, etc.
