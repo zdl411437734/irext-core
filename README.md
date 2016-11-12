@@ -1,7 +1,7 @@
 # irext (revision 0.0.1)
   IRDA code lib for household electrical appliances
 
-  This open source project helps people who is developing a smart home remote controller controls IRDA household appliances.
+  IREXT helps people who is working on a smart home remote controller for the IRDA household appliances.
 
 #### Following features are supported:
   - IRDA pulse wave encoding from xml source format
