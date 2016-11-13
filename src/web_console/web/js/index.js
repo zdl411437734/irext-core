@@ -55,7 +55,7 @@ function changePassword() {
         return;
     }
     $.ajax({
-        url: "/yuekong/certificate/change_pw",
+        url: "/irext/certificate/change_pw",
         type: "POST",
         data: {
             user_name : userName
@@ -81,7 +81,7 @@ function doSignIn(userName, password) {
     var token = "";
     var adminID = "";
     $.ajax({
-        url: "/yuekong/certificate/admin_login",
+        url: "/irext/certificate/admin_login",
         type: "POST",
         data: JSON.stringify({user_name: userName, password: password}),
         contentType: "application/json; charset=utf-8",
@@ -139,7 +139,7 @@ function doSignIn(userName, password) {
 
 function verifyToken(id, token) {
     $.ajax({
-        url: "/yuekong/certificate/token_verify",
+        url: "/irext/certificate/token_verify",
         type: "POST",
         data: JSON.stringify({id: id, token: token}),
         contentType: "application/json; charset=utf-8",

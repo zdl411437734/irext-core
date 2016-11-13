@@ -21,14 +21,14 @@ var REQUEST_APP_KEY = "d6119900556c4c1e629fd92d";
 var REQUEST_APP_TOKEN = "fcac5496cba7a12b3bae34abf061f526";
 
 // out going HTTP request parameters
-var PRIMARY_SERVER_ADDRESS = "api.yuekong.com.cn";
+var PRIMARY_SERVER_ADDRESS = "irext.net";
 // var PRIMARY_SERVER_ADDRESS = "127.0.0.1";
 var PRIMARY_SERVER_PORT = "8200";
 
-var STAT_GENERIC_COUNT_SERVICE = "/yuekong/stat/generic_count";
-var STAT_CATEGORIES_SERVICE = "/yuekong/stat/stat_categories";
-var STAT_BRANDS_SERVICE = "/yuekong/stat/stat_brands";
-var STAT_CITIES_SERVICE = "/yuekong/stat/stat_cities";
+var STAT_GENERIC_COUNT_SERVICE = "/irext/stat/generic_count";
+var STAT_CATEGORIES_SERVICE = "/irext/stat/stat_categories";
+var STAT_BRANDS_SERVICE = "/irext/stat/stat_brands";
+var STAT_CITIES_SERVICE = "/irext/stat/stat_cities";
 
 exports.countRemoteWorkUnit = function(statType, callback) {
     if (parseInt(statType) < parseInt(enums.STAT_TYPE_REMOTE_INSTANCE_ACTIVE) ||

@@ -82,7 +82,7 @@ exports.changePassword = function (req, res) {
  * function :   Confirm password change
  * parameter :  id of Adminstrator
  *              new password fetch ID
- * return :     redirection to UCON data center
+ * return :     redirection to irext data center
  */
 exports.confirmPassword = function (req, res) {
     var id = req.query.id;

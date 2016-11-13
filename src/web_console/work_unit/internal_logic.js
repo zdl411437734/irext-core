@@ -46,25 +46,23 @@ var PROJECTOR_REMOTE_PATH = "remote_projector";
 var STEREO_REMOTE_PATH = "remote_stereo";
 var BLE_CENTRAL_REMOTE_PATH = "remote_ble_central";
 
-var BUCKET_NAME = "yuekong-code-ii-debug";
-var RELEASE_RC_BUCKET_NAME = "yuekong-code-ii-rel";
-var RELEASE_BUCKET_NAME = "yuekong-release";
-var PUBLISHED_RELEASE_BUCKET_NAME = "yuekong-release-published";
-var PROTOCOL_BUCKET_NAME = "yuekong-protocol";
+var BUCKET_NAME = "irext-code-ii-debug";
+var RELEASE_RC_BUCKET_NAME = "irext-code-ii-rel";
+var PROTOCOL_BUCKET_NAME = "irext-protocol";
 
 // out going HTTP request parameters
-var PRIMARY_SERVER_ADDRESS = "api.yuekong.com.cn";
+var PRIMARY_SERVER_ADDRESS = "irext.net";
 // var PRIMARY_SERVER_ADDRESS = "127.0.0.1";
 var PRIMARY_SERVER_PORT = "8200";
 
 var REQUEST_APP_KEY = "d6119900556c4c1e629fd92d";
 var REQUEST_APP_TOKEN = "fcac5496cba7a12b3bae34abf061f526";
 
-var PUBLISH_BRAND_SERVICE = "/yuekong/remote/publish_brands";
-var PUBLISH_REMOTE_INDEX_SERVICE = "/yuekong/remote/publish_remote_indexes";
-var DELETE_REMOTE_INDEX_SERVICE = "/yuekong/remote/delete_remote_index";
-var PUBLISH_VERSION_SERVICE = "/yuekong/version/publish_version";
-var DELETE_VERSION_SERVICE = "/yuekong/version/delete_version";
+var PUBLISH_BRAND_SERVICE = "/irext/remote/publish_brands";
+var PUBLISH_REMOTE_INDEX_SERVICE = "/irext/remote/publish_remote_indexes";
+var DELETE_REMOTE_INDEX_SERVICE = "/irext/remote/delete_remote_index";
+var PUBLISH_VERSION_SERVICE = "/irext/version/publish_version";
+var DELETE_VERSION_SERVICE = "/irext/version/delete_version";
 
 exports.listCategoriesWorkUnit = function (from, count, callback) {
     var conditions = {
@@ -243,7 +241,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                 switch(parseInt(categoryID)) {
                     case enums.CATEGORY_AC:
                         // remoteDir = AC_REMOTE_PATH;
-                        // recalculate AC binary using ucon protocol encoder - ii
+                        // recalculate AC binary using irext protocol encoder - ii
                         pythonFile = "s_ac_ii.py";
                         // outputDir = "output_ac";
                         break;
@@ -1230,7 +1228,7 @@ exports.createVersionWorkUnit = function(adminID, version, devWlanFile, devBleFi
         ipaHash,
         apkHash;
 
-    var outputFileName = "UCON/";
+    var outputFileName = "irext/";
 
     var fileArray = [];
     if (null != devWlanFile && "" != devWlanFile && version.version_type == "0") {
@@ -1291,7 +1289,7 @@ exports.createVersionWorkUnit = function(adminID, version, devWlanFile, devBleFi
                 // dev_wlan_V1.7.0.bin
                 binFilePath = baseDir + "/" + "dev_wlan_" + version.dev_wlan_ver + ".bin";
                 binFileName = "dev_wlan_" + version.dev_wlan_ver + ".bin";
-                outputFileName = "UCON/";
+                outputFileName = "irext/";
                 break;
             case 1:
                 // file template:
@@ -1304,7 +1302,7 @@ exports.createVersionWorkUnit = function(adminID, version, devWlanFile, devBleFi
                     binFilePath = baseDir + "/" + "dev_ble_" + version.dev_ble_ver + ".hex";
                     binFileName = "dev_ble_" + version.dev_ble_ver + ".hex";
                 }
-                outputFileName = "UCON/";
+                outputFileName = "irext/";
                 break;
             case 2:
                 // file template:
@@ -1317,7 +1315,7 @@ exports.createVersionWorkUnit = function(adminID, version, devWlanFile, devBleFi
                     binFilePath = baseDir + "/" + "ucon_ble_" + version.rem_ble_ver + ".hex";
                     binFileName = "ucon_ble_" + version.rem_ble_ver + ".hex";
                 }
-                outputFileName = "UCON/";
+                outputFileName = "irext/";
                 break;
             case 3:
                 // file template:
@@ -1330,7 +1328,7 @@ exports.createVersionWorkUnit = function(adminID, version, devWlanFile, devBleFi
                     binFilePath = baseDir + "/" + "rem_ble_" + version.rem_ble_ver + ".hex";
                     binFileName = "rem_ble_" + version.rem_ble_ver + ".hex";
                 }
-                outputFileName = "UCON/";
+                outputFileName = "irext/";
                 break;
             case 4:
                 binFilePath = baseDir + "/" + "UCON_iOS_" + version.ipa_ver + ".ipa";
@@ -1497,7 +1495,7 @@ exports.fallbackVersionWorkUnit = function (version, adminID, callback) {
 };
 
 exports.publishVersionWorkUnit = function (versionID, callback) {
-    var ossFilePath = "UCON/";
+    var ossFilePath = "irext/";
     var unpublishFileArray = [];
     var unpublishedFile = "";
     var downloadOssFilePath = "";
@@ -1511,8 +1509,8 @@ exports.publishVersionWorkUnit = function (versionID, callback) {
                 //////////////////////////////////////
                 // step 1, construct download file array according to version type
                 if ("0" == version.version_type) {
-                    // version group of UCON Kits
-                    ossFilePath = "UCON/";
+                    // version group of irext Kits
+                    ossFilePath = "irext/";
                     unpublishedFile = {
                         path: "dev_wlan_" + version.dev_wlan_ver + ".bin",
                         hash: version.dev_wlan_hash
@@ -1536,8 +1534,8 @@ exports.publishVersionWorkUnit = function (versionID, callback) {
 
                     unpublishFileArray.push(unpublishedFile);
                 } else if ("1" == version.version_type) {
-                    // version group of UCON remote
-                    ossFilePath = "UCON/";
+                    // version group of irext remote
+                    ossFilePath = "irext/";
                     var prefix,
                         suffix;
                     if ("0" == version.sub_type) {

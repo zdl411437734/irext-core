@@ -30,11 +30,11 @@ global.MONGO_DB_USER = null;
 global.MONGO_DB_PASSWORD = null;
 
 // data_set : Aliyun-OSS
-global.OSS_HOST = "oss-cn-hangzhou.aliyuncs.com";
+global.OSS_HOST = "default_host";
 global.OSS_PORT = "80";
-global.OSS_APP_ID = "T82nbipHSESmHzd8";
-global.OSS_APP_SECRET = "SOweQ8UVwCwPr2NC8EC89EOeKJc5Um";
-global.BUCKET_NAME = "strawmanbobi-beats";
+global.OSS_APP_ID = "";
+global.OSS_APP_SECRET = "";
+global.BUCKET_NAME = "default_bucket";
 
 // cache : memcached
 global.MEMCACHED_HOST = "";
@@ -42,12 +42,15 @@ global.MEMCACHED_PORT = "";
 global.MEMCACHED_SASL_USER = "";
 global.MEMCACHED_SASL_PASSWORD = "";
 
+// cache : redis
+global.REDIS_HOST = "";
+global.REDIS_PORT = "";
+global.REDIS_PASSWORD = "";
+
 // sns : Weixin
 global.WEIXIN_APP_ID = "";
 global.WEIXIN_APP_SECRET = "";
 global.WEIXIN_TOKEN = "";
-
-// sns : facebook
 
 // external : python path
 global.PYTHON_PATH = "";
@@ -57,7 +60,7 @@ global.PUSH_APP_KEY = "";
 global.PUSH_APP_SECRET = "";
 
 // generic server configuration
-global.SERVER_LISTEN_PORT = "8080";
+global.SERVER_LISTEN_PORT = "80";
 global.SERVER_ADDRESS = "127.0.0.1";
 
 // OSS direct download bucket name

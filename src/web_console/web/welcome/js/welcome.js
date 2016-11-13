@@ -27,7 +27,7 @@ $(document).ready(function() {
 ///////////////////////////// Data functions /////////////////////////////
 function getRemoteInstanceCount() {
     $.ajax({
-        url: "/yuekong/int/generic_count?stat_type=0&id="+id+"&token="+token,
+        url: "/irext/int/generic_count?stat_type=0&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -45,7 +45,7 @@ function getRemoteInstanceCount() {
 
 function getDeviceCount() {
     $.ajax({
-        url: "/yuekong/int/generic_count?stat_type=1&id="+id+"&token="+token,
+        url: "/irext/int/generic_count?stat_type=1&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -63,7 +63,7 @@ function getDeviceCount() {
 
 function getRemoteCount() {
     $.ajax({
-        url: "/yuekong/int/generic_count?stat_type=2&id="+id+"&token="+token,
+        url: "/irext/int/generic_count?stat_type=2&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {

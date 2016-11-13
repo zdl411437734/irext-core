@@ -83,7 +83,7 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
 void free_pirda(void);
 #endif
 
-///////////////////////////////////////////////// Air Conditioner Begin /////////////////////////////////////////////////
+///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
 
 INT8 binary_parse_offset()
 {
@@ -509,7 +509,9 @@ INT8 irda_ac_lib_parse()
         {
             IR_PRINTF("\nparse mode 2\n");
             context->mode2.len = tags[i].len >> 1;
-            if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i], context->mode2.comp_data, AC_MODE_MAX, AC_PARAMETER_TYPE_1))
+            if (IR_DECODE_FAILED ==
+                    parse_common_ac_parameter(&tags[i],
+                                              context->mode2.comp_data, AC_MODE_MAX, AC_PARAMETER_TYPE_1))
             {
                 return IR_DECODE_FAILED;
             }
@@ -518,7 +520,9 @@ INT8 irda_ac_lib_parse()
         {
             IR_PRINTF("\nparse speed 2\n");
             context->speed2.len = tags[i].len >> 1;
-            if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i], context->speed2.comp_data, AC_WS_MAX, AC_PARAMETER_TYPE_1))
+            if (IR_DECODE_FAILED ==
+                    parse_common_ac_parameter(&tags[i],
+                                              context->speed2.comp_data, AC_WS_MAX, AC_PARAMETER_TYPE_1))
             {
                 return IR_DECODE_FAILED;
             }
@@ -864,11 +868,13 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
         {
             if(IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.acTemp))
             {
-                if(function_code == AC_FUNCTION_TEMPERATURE_UP /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+                if(function_code == AC_FUNCTION_TEMPERATURE_UP
+                    /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
                 {
                     return IR_DECODE_FAILED;
                 }
-                else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+                else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+                    /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
                 {
                     return IR_DECODE_FAILED;
                 }
@@ -877,11 +883,13 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
         else
         {
             // if this level is in black list, do not send IR wave if user want to apply this function
-            if(function_code == AC_FUNCTION_TEMPERATURE_UP /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+            if(function_code == AC_FUNCTION_TEMPERATURE_UP
+                /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
             {
                 return IR_DECODE_FAILED;
             }
-            else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+            else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+                /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
             {
                 return IR_DECODE_FAILED;
             }
@@ -890,11 +898,13 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
     else
     {
         // if this level is in black list, do not send IR wave if user want to apply this function
-        if(function_code == AC_FUNCTION_TEMPERATURE_UP /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+        if(function_code == AC_FUNCTION_TEMPERATURE_UP
+            /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
         {
             return IR_DECODE_FAILED;
         }
-        else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+        else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+            /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
         {
             return IR_DECODE_FAILED;
         }
@@ -1165,7 +1175,7 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
     }
 }
 
-///////////////////////////////////////////////// Air Conditioner End /////////////////////////////////////////////////
+///////////////////////////////////////////////// AC End //////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
 INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length)

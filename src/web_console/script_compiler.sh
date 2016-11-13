@@ -1,5 +1,5 @@
 SOURCE="."
-TARGET="$POEM_APPLICATION/yuekong_console"
+TARGET="$POEM_APPLICATION/irext_console"
 MODULE_API="./web/api_doc/js/"
 
 function deploy()

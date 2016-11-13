@@ -97,7 +97,9 @@ def printProtocol(file):
     mode = 0
     flag = 0
     irda_frame = []
-    flag_tab_dict = {"boot": 0, "stop": 1, "separator": 2, "one": 3, "zero": 4, "flip": 5, "two": 6, "three": 7, "four": 8, "five": 9, "six": 10, "seven": 11, "eight": 12, "nine": 13, "A": 14, "B": 15, "C": 16, "D": 17, "E": 18, "F": 19}
+    flag_tab_dict = {"boot": 0, "stop": 1, "separator": 2, "one": 3, "zero": 4, "flip": 5, "two": 6, "three": 7,
+                     "four": 8, "five": 9, "six": 10, "seven": 11, "eight": 12, "nine": 13,
+                     "A": 14, "B": 15, "C": 16, "D": 17, "E": 18, "F": 19}
     for i in frame[0].childNodes:
         if i.nodeType == i.ELEMENT_NODE:
             index += 1

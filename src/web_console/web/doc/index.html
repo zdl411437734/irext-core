@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="screen-orientation" content="portrait"/>
-    <meta name="description" content="yuekong application">
+    <meta name="description" content="irext application">
     <meta name="author" content="strawmanbobi">
     <title>UCON服务器逻辑接口文档 V2.4</title>
 
@@ -185,11 +185,11 @@
             <table class="table table-striped table-bordered table-condensed">
                 <tr>
                     <td style="width:20%; height: 25px;">WebService服务器测试环境URL</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200</td>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">WebService服务器生产环境URL</td>
-                    <td style="width:80%; height: 25px;">http://api.yuekong.com.cn:8200</td>
+                    <td style="width:80%; height: 25px;">http://api.irext.com.cn:8200</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">工厂服务器URL</td>
@@ -197,13 +197,13 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">Query参数示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/get_device_by_id?device_id=1
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/get_device_by_id?device_id=1
                     </td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">Form参数示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/register_device?password=098f6bcd4621d373cade4e83&op_flag=0x01<br>
-                        表单参数: { name: 'UCON-XXXXX', pdsn: 'P000000000000001', ip_address: '192.168.1.101', version: '1.0.0' }
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/register_device?password=098f6bcd4621d373cade4e83&op_flag=0x01<br>
+                        表单参数: { name: 'irext-XXXXX', pdsn: 'P000000000000001', ip_address: '192.168.1.101', version: '1.0.0' }
                     </td>
                 </tr>
             </table>
@@ -220,7 +220,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device_validation/create_device_validation</td>
+                    <td style="width:80%; height: 25px;">/irext/device_validation/create_device_validation</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -252,7 +252,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device_validation/create_device_validation?pdsn=P000000000000001
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device_validation/create_device_validation?pdsn=P000000000000001
                     </td>
                 </tr>
             </table>
@@ -267,7 +267,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/register_device</td>
+                    <td style="width:80%; height: 25px;">/irext/device/register_device</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -309,8 +309,8 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/register_device?op_flag=0x01&password=098f6bcd4621d373cade4e83<br>
-                        表单参数(newDevice): { "pdsn" : "P000000000000001", "name" : "UCON-XXXXXX", "ip_address" : "192.168.1.102", "version" : "1.1.0" }
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/register_device?op_flag=0x01&password=098f6bcd4621d373cade4e83<br>
+                        表单参数(newDevice): { "pdsn" : "P000000000000001", "name" : "irext-XXXXXX", "ip_address" : "192.168.1.102", "version" : "1.1.0" }
                     </td>
                 </tr>
                 <tr>
@@ -335,7 +335,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/update_device_by_pdsn</td>
+                    <td style="width:80%; height: 25px;">/irext/device/update_device_by_pdsn</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -377,8 +377,8 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/update_device_by_pdsn?token=098f6bcd4621d373cade4e83&psdn=P000000000000001<br>
-                        表单参数(newDevice): { "name" : "UCON-XXXXXX", "ip_address" : "192.168.1.102", "version" : "1.1.0" } <br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/update_device_by_pdsn?token=098f6bcd4621d373cade4e83&psdn=P000000000000001<br>
+                        表单参数(newDevice): { "name" : "irext-XXXXXX", "ip_address" : "192.168.1.102", "version" : "1.1.0" } <br>
                         数据结构: <a href="#ds_device">Device</a>
                     </td>
                 </tr>
@@ -398,7 +398,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/get_device_by_pdsn</td>
+                    <td style="width:80%; height: 25px;">/irext/device/get_device_by_pdsn</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -430,7 +430,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/get_device_by_pdsn?pdsn=P000000000000001<br>
+                    <td style="width:80%; height: 25px;">/irext/device/get_device_by_pdsn?pdsn=P000000000000001<br>
                     </td>
                 </tr>
                 <tr>
@@ -450,7 +450,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/create_device_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/device/create_device_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -482,8 +482,8 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/create_device_instance<br>
-                        表单参数(newDeviceInstance): { "pdsn" : "P000000000000001", "name" : "UCON-XXXXXX", "ip_address" : "192.168.1.102", "version" : "V1.0.0", "mobile_id": "2" }
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/create_device_instance<br>
+                        表单参数(newDeviceInstance): { "pdsn" : "P000000000000001", "name" : "irext-XXXXXX", "ip_address" : "192.168.1.102", "version" : "V1.0.0", "mobile_id": "2" }
                     </td>
                 </tr>
                 <tr>
@@ -503,7 +503,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/update_device_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/device/update_device_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -545,7 +545,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/device/update_device_instance?pdsn=P000000000000001&token=098f6bcd4621d373cade4e83<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/device/update_device_instance?pdsn=P000000000000001&token=098f6bcd4621d373cade4e83<br>
                         表单参数(newDeviceInstance): { "name" : "我的底座", "ip_address" : "192.168.1.102", "version" : "V1.0.0", "mobile_id": "xxxxxxxxxx", "user_open_id" : "wx_123456789", "user_name" : "strawmanbobi:" }
                     </td>
                 </tr>
@@ -568,7 +568,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/list_device_instances</td>
+                    <td style="width:80%; height: 25px;">/irext/device/list_device_instances</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -600,7 +600,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/list_device_instances?mobile_id=2<br>
+                    <td style="width:80%; height: 25px;">/irext/device/list_device_instances?mobile_id=2<br>
                     </td>
                 </tr>
             </table>
@@ -615,7 +615,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/get_device_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/device/get_device_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -652,7 +652,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">/yuekong/device/get_device_instance?mobile_id=xxxxxx&pdsn=P000000000000001<br>
+                    <td style="width:80%; height: 25px;">/irext/device/get_device_instance?mobile_id=xxxxxx&pdsn=P000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -669,7 +669,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_categories</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_categories</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -711,7 +711,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_categories?from=0&count=20&pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_categories?from=0&count=20&pdsn=S000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -726,7 +726,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_brands</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_brands</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -773,7 +773,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_brands?category_id=1&from=0&count=20&pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_brands?category_id=1&from=0&count=20&pdsn=S000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -788,7 +788,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_popular_brands</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_popular_brands</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -825,7 +825,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_popular_brands?category_id=1&pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_popular_brands?category_id=1&pdsn=S000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -841,7 +841,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_remote_indexes</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_remote_indexes</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -898,9 +898,9 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_remote_indexes?category_id=1&brand_id=1&from=0&count=20&pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_remote_indexes?category_id=1&brand_id=1&from=0&count=20&pdsn=S000000000000001<br>
                         或者
-                        http://yuekongdev.wicp.net:8200/yuekong/remote/list_remote_indexes?category_id=3&city_code=320100&from=0&count=20
+                        http://irextdev.wicp.net:8200/irext/remote/list_remote_indexes?category_id=3&city_code=320100&from=0&count=20
                     </td>
                 </tr>
                 <tr>
@@ -922,7 +922,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/count_user_remote_indexes</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/count_user_remote_indexes</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -974,9 +974,9 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_user_remote_indexes?sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0&mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_user_remote_indexes?sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0&mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4<br>
                         或者
-                        http://yuekongdev.wicp.net:8200/yuekong/remote/list_user_remote_indexes?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4
+                        http://irextdev.wicp.net:8200/irext/remote/list_user_remote_indexes?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4
                     </td>
                 </tr>
                 <tr>
@@ -999,7 +999,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_user_remote_indexes</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_user_remote_indexes</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1051,9 +1051,9 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_user_remote_indexes?sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0&mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_user_remote_indexes?sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0&mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4<br>
                         或者
-                        http://yuekongdev.wicp.net:8200/yuekong/remote/list_user_remote_indexes?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4
+                        http://irextdev.wicp.net:8200/irext/remote/list_user_remote_indexes?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&remote_version=V2.2.4
                     </td>
                 </tr>
                 <tr>
@@ -1077,7 +1077,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/match_remote</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/match_remote</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1118,7 +1118,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/match_remote<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/match_remote<br>
                         表单参数(matchObj): { "category_id" : "1", "brand_id" : "2", "city_code" : "", "key" : "POWER", "code" : [9048,4420,598,1612,598,520,572,520,...] }
                     </td>
                 </tr>
@@ -1175,7 +1175,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/rb/ykir_upd6121g_remote_box_164.bin<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/rb/ykir_upd6121g_remote_box_164.bin<br>
                     </td>
                 </tr>
             </table>
@@ -1192,7 +1192,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/create_remote_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/create_remote_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1224,7 +1224,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/create_remote_instance<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/create_remote_instance<br>
                         表单参数(remote_instance): <br>
                         { "rsn":"098f6bcd4621d373cade4e83", "device_pdsn":"P000000000000001", "device_ip":"192.168.1.102", "is_bound" : "1", "mobile_id" : "098f6bcd4621d373cade4e83", "user_open_id":"wx_123456789", "user_name":"strawmanbobi", "mac_address" : "11:22:33:44:55:66", "remote_instance_type" : "2" }(默认和底座配对) <br>
                         或者
@@ -1260,7 +1260,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/rename_remote_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/rename_remote_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1296,7 +1296,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/rename_remote_instance?name=UCON&remote_instance_id=1
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/rename_remote_instance?name=irext&remote_instance_id=1
                     </td>
                 </tr>
             </table>
@@ -1311,7 +1311,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/update_remote_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/update_remote_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1347,7 +1347,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/update_remote_instance?remote_instance_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/update_remote_instance?remote_instance_id=1<br>
                         表单参数(remote_instance): <br>
                         { "rsn":"098f6bcd4621d373cade4e83", "device_pdsn":"P000000000000001", "device_ip":"192.168.1.102", "is_bound" : "1", "mobile_id" : "098f6bcd4621d373cade4e83", "user_open_id":"wx_123456789", "user_name":"strawmanbobi", "mac_address" : "11:22:33:44:55:66", "remote_instance_type" : "2" }(默认和底座配对) <br>
                         或者
@@ -1367,7 +1367,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_remote_instances</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_remote_instances</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1399,7 +1399,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_remote_instances?mobile_id=098f6bcd4621d373cade4e83
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_remote_instances?mobile_id=098f6bcd4621d373cade4e83
                     </td>
                 </tr>
                 <tr>
@@ -1421,7 +1421,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/reset_remote_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/reset_remote_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1452,7 +1452,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/reset_remote_instance?remote_instance_id=2
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/reset_remote_instance?remote_instance_id=2
                     </td>
                 </tr>
                 <tr>
@@ -1475,7 +1475,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/bind_remote_instance</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/bind_remote_instance</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1511,7 +1511,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/bind_remote_instance?device_pdsn=P000000000000001&remote_instance_id=1
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/bind_remote_instance?device_pdsn=P000000000000001&remote_instance_id=1
                     </td>
                 </tr>
             </table>
@@ -1526,7 +1526,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/create_remote</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/create_remote</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1558,7 +1558,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/create_remote<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/create_remote<br>
                         表单参数(remote): <br>
                         { "device_pdsn":"", "rsn":"098f6bcd4621d373cade4e83", "name":"客厅空调", "category_id" : "1", "brand_id" : "2", "category_name":"空调", "brand_name":"奥克斯",
                         "city_code" : "", "create_type":"0", "mac_address": "11:22:33:44:55:66", "remote_number":"1", "identifier":"xxxxxxx" } <br>
@@ -1594,7 +1594,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/update_remote</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/update_remote</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1630,7 +1630,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/update_remote?remote_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/update_remote?remote_id=1<br>
                         表单参数(remote): <br>
                         { "device_pdsn":"", "rsn":"098f6bcd4621d373cade4e83", "name":"客厅空调", "category_id" : "1", "brand_id" : "2", "category_name":"空调", "brand_name":"奥克斯",
                         "city_code" : "", "create_type":"0" } <br>
@@ -1662,7 +1662,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/delete_remote</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/delete_remote</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1693,7 +1693,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/delete_remote?remote_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/delete_remote?remote_id=1<br>
                     </td>
                 </tr>
             </table>
@@ -1708,7 +1708,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_remotes</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_remotes</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1750,7 +1750,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_remotes?remote_instance_id=1&from=0&count=8
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_remotes?remote_instance_id=1&from=0&count=8
                     </td>
                 </tr>
                 <tr>
@@ -1771,7 +1771,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_remotes_by_room</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_remotes_by_room</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1818,7 +1818,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_remotes_by_room?sirius_id=098f6bcd4621d373cade4e83cade4e83&room_id=1&from=0&count=20
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_remotes_by_room?sirius_id=098f6bcd4621d373cade4e83cade4e83&room_id=1&from=0&count=20
                     </td>
                 </tr>
                 <tr>
@@ -1842,7 +1842,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/list_remotes_by_room_and_category</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/list_remotes_by_room_and_category</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1894,7 +1894,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_remotes_by_room_and_category?sirius_id=098f6bcd4621d373cade4e83cade4e83&room_id=1&category_id=1&from=0&count=20
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_remotes_by_room_and_category?sirius_id=098f6bcd4621d373cade4e83cade4e83&room_id=1&category_id=1&from=0&count=20
                     </td>
                 </tr>
                 <tr>
@@ -1918,7 +1918,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/create_remote_relationship</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/create_remote_relationship</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -1950,7 +1950,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/create_remote_relationship<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/create_remote_relationship<br>
                         表单参数(remote_relationship): <br>
                         { "remote_id":"1", "remote_map":"upd6121g_box_201", "remote_id":"2", "remote_map":"upd6121g_tv_300", }
                     </td>
@@ -1974,7 +1974,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/get_remote_relationship</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/get_remote_relationship</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2006,7 +2006,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/get_remote_relationship?remote_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/get_remote_relationship?remote_id=1<br>
                     </td>
                 </tr>
                 <tr>
@@ -2028,7 +2028,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/delete_remote_relationship</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/delete_remote_relationship</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2059,7 +2059,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/delete_remote_relationship?remote_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/delete_remote_relationship?remote_id=1<br>
                     </td>
                 </tr>
                 <tr>
@@ -2080,7 +2080,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/remote/get_remote_info</td>
+                    <td style="width:80%; height: 25px;">/irext/remote/get_remote_info</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2112,7 +2112,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/get_remote_info?remote_id=2
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/get_remote_info?remote_id=2
                     </td>
                 </tr>
             </table>
@@ -2129,7 +2129,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/subscription/create_subscription</td>
+                    <td style="width:80%; height: 25px;">/irext/subscription/create_subscription</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2171,7 +2171,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/subscription/create_subscription?pdsn=P000000000000001&token=098f6bcd4621d373cade4e83cade4e83<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/subscription/create_subscription?pdsn=P000000000000001&token=098f6bcd4621d373cade4e83cade4e83<br>
                         表单参数(subscription): <br>
                         电视机、机顶盒等命令码：<br>
                         { "sub_time":"2015-06-01 18:00:00", "device_pdsn":"P000000000000001", "remote_id":"ykir_tc9012f_remote_tv_291", "remote_keys":"0,0,10,5", "remote_index_type":"0", "category_id":"2", "remote_no":"1", "mobile_id": "xxxxxxxxxxxxxxxxxx", "user_id":"xxxxxx", "remote_instance_id":"1", "remote_name":"客厅电视机", "remote_status":"1" } <br>
@@ -2183,12 +2183,12 @@
                     <td style="width:20%; height: 25px;">建议和备注</td>
                     <td style="width:80%; height: 25px;">
                         下面为APP客户端实现预约的基本方法：<br>
-                        0. 预约必须在APP添加了UCON CENTER之后进行，由于在添加UCON CENTER时，在后台数据库device_instance表中(详细请参考/yuekong/device/create_device_instance接口)根据mobile_id字段获取已经添加的UCON Center设备，为所有和此手机相关的设备生成预约<br>
+                        0. 预约必须在APP添加了UCON CENTER之后进行，由于在添加UCON CENTER时，在后台数据库device_instance表中(详细请参考/irext/device/create_device_instance接口)根据mobile_id字段获取已经添加的UCON Center设备，为所有和此手机相关的设备生成预约<br>
                         1. 每调用一个接口，只为一个底座生成一条预约，如果有多个底座和此APP关联，需要调用此接口多次<br>
                         2. Query参数中的pdsn和body参数中的device_pdsn均表示本次要为某个特定PDSN的UCON Center生成<br>
                         3. remote_id为选中家电遥控器的码库文件前缀 (protocol + remote) 字段组合(码库文件名去掉.bin扩展名)，remote_no因为历史原因，这里其实代表remote表的外键，表示唯一的一个remote(家电遥控器，例如：客厅电视机、卧室空调等)<br>
                         4. 目前只有经由码库下载进行配置的家电才可预约，自学习的不支持预约，需要在APP界面和流程上进行限制处理<br>
-                        5. 底座版本为V1.0.0及以下，不支持预约空调，底座版本可使用/yuekong/device/list_device_instances接口进行版本号查询<br>
+                        5. 底座版本为V1.0.0及以下，不支持预约空调，底座版本可使用/irext/device/list_device_instances接口进行版本号查询<br>
                         6. remote_keys根据家电类型不同，格式也不相同，空调属于一类；电视机、机顶盒等属于一类<br>
                         7. 空调类型的预约，remote_keys恒为5个数组组成，用逗号分割，分别含义是：“电源, 温度, 模式, 风速, 是否扫风”，每个字段枚举如下：<br>
                         a) 电源：0-打开，1-关闭<br>
@@ -2246,7 +2246,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/subscription/update_subscription</td>
+                    <td style="width:80%; height: 25px;">/irext/subscription/update_subscription</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2283,7 +2283,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/subscription/update_subscription?subscription_id=1<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/subscription/update_subscription?subscription_id=1<br>
                         表单参数(subscription): <br>
                         电视机、机顶盒等命令码：<br>
                         { "sub_time":"2015-06-01 18:00:00", "device_pdsn":"P000000000000001", "remote_id":"ykir_tc9012f_remote_tv_291", "remote_keys":"0,0,10,5", "remote_index_type":"0", "category_id":"2", "remote_no":"1", "mobile_id": "xxxxxxxxxxxxxxxxxx", "user_id":"xxxxxx", "remote_instance_id":"1", "remote_name":"客厅电视机", "remote_status":"1" } <br>
@@ -2295,12 +2295,12 @@
                     <td style="width:20%; height: 25px;">建议和备注</td>
                     <td style="width:80%; height: 25px;">
                         下面为APP客户端实现预约的基本方法：<br>
-                        0. 预约必须在APP添加了UCON CENTER之后进行，由于在添加UCON CENTER时，在后台数据库device_instance表中(详细请参考/yuekong/device/create_device_instance接口)根据mobile_id字段获取已经添加的UCON Center设备，为所有和此手机相关的设备生成预约<br>
+                        0. 预约必须在APP添加了UCON CENTER之后进行，由于在添加UCON CENTER时，在后台数据库device_instance表中(详细请参考/irext/device/create_device_instance接口)根据mobile_id字段获取已经添加的UCON Center设备，为所有和此手机相关的设备生成预约<br>
                         1. 每调用一个接口，只为一个底座生成一条预约，如果有多个底座和此APP关联，需要调用此接口多次<br>
                         2. Query参数中的pdsn和body参数中的device_pdsn均表示本次要为某个特定PDSN的UCON Center生成<br>
                         3. remote_id为选中家电遥控器的码库文件前缀 (protocol + remote) 字段组合(码库文件名去掉.bin扩展名)，remote_no因为历史原因，这里其实代表remote表的外键，表示唯一的一个remote(家电遥控器，例如：客厅电视机、卧室空调等)<br>
                         4. 目前只有经由码库下载进行配置的家电才可预约，自学习的不支持预约，需要在APP界面和流程上进行限制处理<br>
-                        5. 底座版本为V1.0.0及以下，不支持预约空调，底座版本可使用/yuekong/device/list_device_instances接口进行版本号查询<br>
+                        5. 底座版本为V1.0.0及以下，不支持预约空调，底座版本可使用/irext/device/list_device_instances接口进行版本号查询<br>
                         6. remote_keys根据家电类型不同，格式也不相同，空调属于一类；电视机、机顶盒等属于一类<br>
                         7. 空调类型的预约，remote_keys恒为5个数组组成，用逗号分割，分别含义是：“电源, 温度, 模式, 风速, 是否扫风”，每个字段枚举如下：<br>
                         a) 电源：0-打开，1-关闭<br>
@@ -2357,7 +2357,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/subscription/list_subscriptions</td>
+                    <td style="width:80%; height: 25px;">/irext/subscription/list_subscriptions</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2399,7 +2399,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/subscription/list_subscriptions?mobile_id=xxxxxxxxxxxxxxxx<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/subscription/list_subscriptions?mobile_id=xxxxxxxxxxxxxxxx<br>
                     </td>
                 </tr>
             </table>
@@ -2416,7 +2416,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/mobile/update_mobile</td>
+                    <td style="width:80%; height: 25px;">/irext/mobile/update_mobile</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2448,7 +2448,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/mobile/update_mobile
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/mobile/update_mobile
                     </td>
                 </tr>
                 <tr>
@@ -2471,7 +2471,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/mobile/get_mobile_by_mobile_id</td>
+                    <td style="width:80%; height: 25px;">/irext/mobile/get_mobile_by_mobile_id</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2503,7 +2503,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/mobile/get_mobile_by_pdsn?mobile_id=0123456<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/mobile/get_mobile_by_pdsn?mobile_id=0123456<br>
                     </td>
                 </tr>
             </table>
@@ -2520,7 +2520,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/user/register_user</td>
+                    <td style="width:80%; height: 25px;">/irext/user/register_user</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2557,7 +2557,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/user/register_user<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/user/register_user<br>
                         表单参数: { "name":"strawmanbobi", "weixin_id":"1234567", "avatar_url":"http://www.baidu.com/1.jpg" }
                     </td>
                 </tr>
@@ -2573,7 +2573,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/user/bind_mobile_to_user</td>
+                    <td style="width:80%; height: 25px;">/irext/user/bind_mobile_to_user</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2614,7 +2614,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/user/bind_mobile_to_user?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/user/bind_mobile_to_user?mobile_id=7b7951d5e08d9d11b71084ddf869ecea&sns_id=oVlSbwQlWG0kJhrw68gpQ9WZDL94&sns_type=0<br>
                     </td>
                 </tr>
             </table>
@@ -2629,7 +2629,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/user/weixin_access_token</td>
+                    <td style="width:80%; height: 25px;">/irext/user/weixin_access_token</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2661,7 +2661,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/user/weixin_access_token<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/user/weixin_access_token<br>
                         表单参数: { "app_id":"1234567890", "auth_code":"1234567890" }
                     </td>
                 </tr>
@@ -2677,7 +2677,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/user/weixin_get_user_info</td>
+                    <td style="width:80%; height: 25px;">/irext/user/weixin_get_user_info</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2709,7 +2709,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/user/weixin_get_user_info<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/user/weixin_get_user_info<br>
                         表单参数: { "access_token":"1234567890", "openid":"1234567890" }<br>
                         备注：无需传入lang参数，默认就是简体中文，将来如果需要英文和繁体中文另加
                     </td>
@@ -2726,7 +2726,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/user/get_weixin_share_wording</td>
+                    <td style="width:80%; height: 25px;">/irext/user/get_weixin_share_wording</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2762,7 +2762,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/user/get_weixin_share_wording?mobile_id=1234567890<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/user/get_weixin_share_wording?mobile_id=1234567890<br>
                         表单参数: { "name":"strawmanbobi", "weixin_id":"1234567890" }
                     </td>
                 </tr>
@@ -2780,7 +2780,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/stat/create_stat</td>
+                    <td style="width:80%; height: 25px;">/irext/stat/create_stat</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2812,7 +2812,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/stat/create_stat<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/stat/create_stat<br>
                         表单参数: { stat_type: '0', remote_pdsn: 'P000000000000001', uda: ['1451533320','1451533321','1451533322','1451533323'], uop：[], mobile_id: '1', user_id: 'wx_1234567890', longitude: '12345.12345', latitude: '12345.12345' }
                     </td>
                 </tr>
@@ -2838,7 +2838,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/push/notify_app</td>
+                    <td style="width:80%; height: 25px;">/irext/push/notify_app</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2869,7 +2869,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/push/notify_app<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/push/notify_app<br>
                         表单参数: { from_peer: '0', to_peer: '7b7951d5e08d9d11b71084ddf869ecea', message: '1' }
                     </td>
                 </tr>
@@ -2893,7 +2893,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/room/update_room</td>
+                    <td style="width:80%; height: 25px;">/irext/room/update_room</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2924,7 +2924,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/room/update_room<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/room/update_room<br>
                         表单参数: { name: '书房', user_id: '0123456789', mobile_id: '0123456789' }
                     </td>
                 </tr>
@@ -2948,7 +2948,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/room/list_rooms</td>
+                    <td style="width:80%; height: 25px;">/irext/room/list_rooms</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -2994,7 +2994,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/room/list_rooms?user_id=0123456789&mobile_id=0123456789&from=0&count=10
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/room/list_rooms?user_id=0123456789&mobile_id=0123456789&from=0&count=10
                     </td>
                 </tr>
                 <tr>
@@ -3018,7 +3018,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/version/get_latest_version</td>
+                    <td style="width:80%; height: 25px;">/irext/version/get_latest_version</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3065,7 +3065,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/version/get_latest_version?type=0&sub_type=0&remote_type=0&come_from=0<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/version/get_latest_version?type=0&sub_type=0&remote_type=0&come_from=0<br>
                     </td>
                 </tr>
                 <tr>
@@ -3089,7 +3089,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/switch/get_switch</td>
+                    <td style="width:80%; height: 25px;">/irext/switch/get_switch</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3121,7 +3121,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/switch/get_switch?target_device=0<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/switch/get_switch?target_device=0<br>
                     </td>
                 </tr>
             </table>
@@ -3136,7 +3136,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/version/update_update_record</td>
+                    <td style="width:80%; height: 25px;">/irext/version/update_update_record</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3168,7 +3168,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/version/update_update_record<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/version/update_update_record<br>
                         表单参数: { "src_remote_version" : " V1.3.0", "dest_remote_version": "V2.2.4", "remote_update_status":"1", "updater_id": "12345", "updater_type": "1", "target_pdsn":"S000000000000002"}
                     </td>
                 </tr>
@@ -3180,7 +3180,7 @@
                         2. 如果是给底座升级（底座静默升级），必须填入 src_device_version，dest_device_version，device_update_status 三个字段<br>
                         3. 无论是给遥控器还是给底座升级，都必须填入updater_type，updater_id 和 target_pdsn 字段<br>
                         4. 输入参数 updater_type 的说明：0-UCON底座, 1-PC端升级助手, 2-Web, 3-售后升级板, 4-Android APP, 5-iOS APP<br>
-                        5. 如果 updater_type 是 UCON 底座，那么 updater_id 为自身PDSN；如果是 APP，那么 updater_id 为 mobile_id；如果是 PC，那么 updater_id 为 PC CPU_ID
+                        5. 如果 updater_type 是 irext 底座，那么 updater_id 为自身PDSN；如果是 APP，那么 updater_id 为 mobile_id；如果是 PC，那么 updater_id 为 PC CPU_ID
                     </td>
                 </tr>
             </table>
@@ -3195,7 +3195,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/version/list_update_records</td>
+                    <td style="width:80%; height: 25px;">/irext/version/list_update_records</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3237,13 +3237,13 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/version/list_update_records?updater_id=P000000000000001&from=0&count=10
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/version/list_update_records?updater_id=P000000000000001&from=0&count=10
                     </td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">建议和备注</td>
                     <td style="width:80%; height: 25px;">
-                        1. 如果 updater_type 是 UCON 底座，那么 updater_id 为自身PDSN；如果是 APP，那么 updater_id 为 mobile_id；如果是 PC，那么 updater_id 为 PC CPU_ID
+                        1. 如果 updater_type 是 irext 底座，那么 updater_id 为自身PDSN；如果是 APP，那么 updater_id 为 mobile_id；如果是 PC，那么 updater_id 为 PC CPU_ID
                     </td>
                 </tr>
             </table>
@@ -3258,7 +3258,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/city/list_provinces</td>
+                    <td style="width:80%; height: 25px;">/irext/city/list_provinces</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3290,7 +3290,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/remote/list_provinces?pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/remote/list_provinces?pdsn=S000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -3306,7 +3306,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/city/list_cities</td>
+                    <td style="width:80%; height: 25px;">/irext/city/list_cities</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3343,7 +3343,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/city/list_cities?province_prefix=32&pdsn=S000000000000001<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/city/list_cities?province_prefix=32&pdsn=S000000000000001<br>
                     </td>
                 </tr>
             </table>
@@ -3359,7 +3359,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/city/list_covered_cities</td>
+                    <td style="width:80%; height: 25px;">/irext/city/list_covered_cities</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3396,7 +3396,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/city/list_covered_cities?from=0&count=50<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/city/list_covered_cities?from=0&count=50<br>
                     </td>
                 </tr>
             </table>
@@ -3412,7 +3412,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">URL</td>
-                    <td style="width:80%; height: 25px;">/yuekong/operator/list_operators</td>
+                    <td style="width:80%; height: 25px;">/irext/operator/list_operators</td>
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">请求类型</td>
@@ -3454,7 +3454,7 @@
                 </tr>
                 <tr>
                     <td style="width:20%; height: 25px;">示例</td>
-                    <td style="width:80%; height: 25px;">http://yuekongdev.wicp.net:8200/yuekong/operator/list_operators?city_code=320100&from=0&count=20<br>
+                    <td style="width:80%; height: 25px;">http://irextdev.wicp.net:8200/irext/operator/list_operators?city_code=320100&from=0&count=20<br>
                     </td>
                 </tr>
             </table>

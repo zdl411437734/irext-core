@@ -73,7 +73,7 @@ def create_binary(ac_device):
                     tags_max_size[i] = ac_device.tags[j].len;
                 find = 1
                 break
-            
+
         if find == 0:
             f_head.write(struct.pack("H", 0xffff))
     # f.write(ac_device)

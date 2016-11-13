@@ -62,7 +62,7 @@ function onStatBrands(categoryIndex) {
 ///////////////////////////// Data functions /////////////////////////////
 function getRemoteInstanceCount() {
     $.ajax({
-        url: "/yuekong/stat/generic_count?stat_type=0&id="+id+"&token="+token,
+        url: "/irext/stat/generic_count?stat_type=0&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -80,7 +80,7 @@ function getRemoteInstanceCount() {
 
 function getDeviceCount() {
     $.ajax({
-        url: "/yuekong/stat/generic_count?stat_type=1&id="+id+"&token="+token,
+        url: "/irext/stat/generic_count?stat_type=1&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -98,7 +98,7 @@ function getDeviceCount() {
 
 function getRemoteCount() {
     $.ajax({
-        url: "/yuekong/stat/generic_count?stat_type=2&id="+id+"&token="+token,
+        url: "/irext/stat/generic_count?stat_type=2&id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -116,7 +116,7 @@ function getRemoteCount() {
 
 function statCategories() {
     $.ajax({
-        url: "/yuekong/stat/stat_categories?id="+id+"&token="+token,
+        url: "/irext/stat/stat_categories?id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -135,7 +135,7 @@ function statCategories() {
 
 function statBrands(categoryID, categoryIndex) {
     $.ajax({
-        url: "/yuekong/stat/stat_brands?id="+id+"&token="+token+"&category_id="+categoryID,
+        url: "/irext/stat/stat_brands?id="+id+"&token="+token+"&category_id="+categoryID,
         type: "GET",
         timeout: 20000,
         success: function (response) {
@@ -155,7 +155,7 @@ function statBrands(categoryID, categoryIndex) {
 
 function statCities(categoryID, categoryIndex) {
     $.ajax({
-        url: "/yuekong/stat/stat_cities?id="+id+"&token="+token,
+        url: "/irext/stat/stat_cities?id="+id+"&token="+token,
         type: "GET",
         timeout: 20000,
         success: function (response) {

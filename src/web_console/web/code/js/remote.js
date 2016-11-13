@@ -134,13 +134,13 @@ function loadRemoteList(isSearch, remoteMap) {
     var url;
 
     if (isSearch && remoteMap) {
-        url = "/yuekong/int/search_remote_indexes?remote_map="+remoteMap+"&from=0&count=2000&id="+id+"&token="+token;
+        url = "/irext/int/search_remote_indexes?remote_map="+remoteMap+"&from=0&count=2000&id="+id+"&token="+token;
     } else {
         if(currentFilterCategory.id == 3) {
-            url = "/yuekong/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&city_code="+currentFilterCity.code+
+            url = "/irext/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&city_code="+currentFilterCity.code+
                 "&from=0&count=100&id="+id+"&token="+token;
         } else {
-            url = "/yuekong/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&brand_id="+currentFilterBrand.id+
+            url = "/irext/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&brand_id="+currentFilterBrand.id+
                 "&from=0&count=100&id="+id+"&token="+token;
         }
     }
@@ -416,7 +416,7 @@ function createRemote() {
         " deviceBannedVersion = " + deviceBannedVersion + ", protector = " + protector);
 
     var form = $('#remote_upload_form');
-    form.attr('action', '/yuekong/int/create_remote_index?id='+id+"&token="+token);
+    form.attr('action', '/irext/int/create_remote_index?id='+id+"&token="+token);
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
@@ -466,7 +466,7 @@ function deleteRemote() {
     }
 
     $.ajax({
-        url: "/yuekong/int/delete_remote_index?id="+id+"&token="+token,
+        url: "/irext/int/delete_remote_index?id="+id+"&token="+token,
         type: "POST",
         dataType: "json",
         data: remoteToDelete,
@@ -518,7 +518,7 @@ function fallbackRemote() {
             break;
     }
     $.ajax({
-        url: "/yuekong/int/fallback_remote_index?id="+id+"&token="+token,
+        url: "/irext/int/fallback_remote_index?id="+id+"&token="+token,
         type: "POST",
         dataType: "json",
         data: remoteToFallback,
@@ -578,7 +578,7 @@ function verifyRemote() {
             break;
     }
     $.ajax({
-        url: "/yuekong/int/verify_remote_index?pass="+pass+"&id="+id+"&token="+token,
+        url: "/irext/int/verify_remote_index?pass="+pass+"&id="+id+"&token="+token,
         type: "POST",
         dataType: "json",
         data: remoteToVerify,
@@ -610,7 +610,7 @@ function publishBrands() {
     $("#publish_hint").empty();
     $("#publish_hint").append('正在发布新增品牌，请稍候...');
     $.ajax({
-        url: "/yuekong/int/publish_brands?id="+id+"&token="+token,
+        url: "/irext/int/publish_brands?id="+id+"&token="+token,
         type: "POST",
         timeout: 200000,
         success: function (response) {
@@ -634,7 +634,7 @@ function publishBrands() {
 
 function publishRemoteIndexes() {
     $.ajax({
-        url: "/yuekong/int/publish_remote_index?id="+id+"&token="+token,
+        url: "/irext/int/publish_remote_index?id="+id+"&token="+token,
         type: "POST",
         timeout: 200000,
         success: function (response) {
@@ -683,7 +683,7 @@ function createBrand() {
     }
 
     $.ajax({
-        url: "/yuekong/int/create_brand?id="+id+"&token="+token,
+        url: "/irext/int/create_brand?id="+id+"&token="+token,
         type: "POST",
         data: {
             category_id : currentCategory.id,
@@ -731,7 +731,7 @@ function createProtocol() {
         ", protocolType = " + protocolType);
 
     var form = $('#protocol_upload_form');
-    form.attr('action', '/yuekong/int/create_protocol?id='+id+"&token="+token);
+    form.attr('action', '/irext/int/create_protocol?id='+id+"&token="+token);
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
@@ -757,7 +757,7 @@ function initializeRadioTypes() {
 
 function initializeProtocols() {
     $.ajax({
-        url: "/yuekong/int/list_ir_protocols?from=0&count=200&id="+id+"&token="+token,
+        url: "/irext/int/list_ir_protocols?from=0&count=200&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -784,7 +784,7 @@ function initializeProtocols() {
 
 function initializeCategories() {
     $.ajax({
-        url: "/yuekong/int/list_categories?from=0&count=200&id="+id+"&token="+token,
+        url: "/irext/int/list_categories?from=0&count=200&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -817,7 +817,7 @@ function initializeCategories() {
 
 function initializeProvince() {
     $.ajax({
-        url: "/yuekong/int/list_provinces?id="+id+"&token="+token,
+        url: "/irext/int/list_provinces?id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -847,7 +847,7 @@ function initializeProvince() {
 function initializeCity() {
     var provincePrefix = currentProvince.code.substring(0, 2);
     $.ajax({
-        url: "/yuekong/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
+        url: "/irext/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -890,7 +890,7 @@ function initializeCity() {
 
 function initializeOperator() {
     $.ajax({
-        url: "/yuekong/int/list_operators?city_code="+currentCity.code+"&from=0&count=50&id="+id+"&token="+token,
+        url: "/irext/int/list_operators?city_code="+currentCity.code+"&from=0&count=50&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -932,7 +932,7 @@ function initializeOperator() {
 
 function initializeBrands() {
     $.ajax({
-        url: "/yuekong/int/list_brands?category_id="+currentCategory.id+"&from=0&count=300&id="+id+"&token="+token,
+        url: "/irext/int/list_brands?category_id="+currentCategory.id+"&from=0&count=300&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -963,7 +963,7 @@ function initializeBrands() {
 
 function initializeFilterCategories() {
     $.ajax({
-        url: "/yuekong/int/list_categories?from=0&count=200&id="+id+"&token="+token,
+        url: "/irext/int/list_categories?from=0&count=200&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -992,7 +992,7 @@ function initializeFilterCategories() {
 
 function initializeFilterProvince() {
     $.ajax({
-        url: "/yuekong/int/list_provinces?id="+id+"&token="+token,
+        url: "/irext/int/list_provinces?id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -1022,7 +1022,7 @@ function initializeFilterProvince() {
 function initializeFilterCity() {
     var provincePrefix = currentFilterProvince.code.substring(0, 2);
     $.ajax({
-        url: "/yuekong/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
+        url: "/irext/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -1052,7 +1052,7 @@ function initializeFilterCity() {
 
 function initializeFilterBrands() {
     $.ajax({
-        url: "/yuekong/int/list_brands?category_id="+currentFilterCategory.id+"&from=0&count=300&id="+id+"&token="+token,
+        url: "/irext/int/list_brands?category_id="+currentFilterCategory.id+"&from=0&count=300&id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -1438,7 +1438,7 @@ function onPublishRemote() {
 
 function getUnpublishedBrands() {
     $.ajax({
-        url: "/yuekong/int/list_unpublished_brands?id="+id+"&token="+token,
+        url: "/irext/int/list_unpublished_brands?id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -1458,7 +1458,7 @@ function getUnpublishedBrands() {
 
 function getUnpublishedRemoteIndexes() {
     $.ajax({
-        url: "/yuekong/int/list_unpublished_remote_indexes?id="+id+"&token="+token,
+        url: "/irext/int/list_unpublished_remote_indexes?id="+id+"&token="+token,
         dataType: 'JSON',
         type: 'GET',
         timeout: 20000,
@@ -1477,7 +1477,7 @@ function getUnpublishedRemoteIndexes() {
 }
 
 function downloadBin() {
-    var downloadURL = "http://yuekong-code-ii-debug.oss-cn-hangzhou.aliyuncs.com/ykir_";
+    var downloadURL = "http://irext-code-ii-debug.oss-cn-hangzhou.aliyuncs.com/ykir_";
     if(null == selectedRemote) {
         popUpHintDialog('请先选中一个遥控器索引');
         return;

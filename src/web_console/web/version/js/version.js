@@ -32,7 +32,7 @@ $(document).ready(function() {
 });
 
 function loadVersion() {
-    var url = "/yuekong/int/list_versions?id="+id+"&token="+token;
+    var url = "/irext/int/list_versions?id="+id+"&token="+token;
 
     $('#version_table_container').empty();
     $('#version_table_container').append('<table id="version_table" data-row-style="rowStyle"></table>');
@@ -347,7 +347,7 @@ function uploadVersion() {
         return;
     }
     if (currentVersionType == '0') {
-        // if this is a version of UCON Center
+        // if this is a version of irext Center
         if ("" == devBleVer || "" == devWlanVer) {
             popUpHintDialog('请填写UCON Center的无线和BLE二进制版本');
             return;
@@ -387,7 +387,7 @@ function uploadVersion() {
             return;
         }
     } else if (currentVersionType == '1') {
-        // if this is a version of UCON Remote
+        // if this is a version of irext Remote
         if ("" == remBleVer) {
             popUpHintDialog('请填写UCON Remote的BLE二进制版本');
             return;
@@ -506,7 +506,7 @@ function uploadVersion() {
 
 function doUploadVersion() {
     var form = $('#version_upload_form');
-    form.attr('action', '/yuekong/int/create_version?id='+id+"&token="+token);
+    form.attr('action', '/irext/int/create_version?id='+id+"&token="+token);
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
@@ -522,7 +522,7 @@ function deleteVersion() {
         return;
     }
     $.ajax({
-        url: "/yuekong/int/delete_version?version_id="+selectedVersion.id+"&id="+id+"&token="+token,
+        url: "/irext/int/delete_version?version_id="+selectedVersion.id+"&id="+id+"&token="+token,
         type: "POST",
         timeout: 20000,
         success: function (response) {
@@ -566,7 +566,7 @@ function fallbackVersion() {
             break;
     }
     $.ajax({
-        url: "/yuekong/int/fallback_version?id="+id+"&token="+token,
+        url: "/irext/int/fallback_version?id="+id+"&token="+token,
         type: "POST",
         dataType: "json",
         data: versionToFallback,
@@ -594,7 +594,7 @@ function verifyVersion() {
         return;
     }
     $.ajax({
-        url: "/yuekong/int/verify_version?version_id="+selectedVersion.id+"&pass="+pass+"&id="+id+"&token="+token,
+        url: "/irext/int/verify_version?version_id="+selectedVersion.id+"&pass="+pass+"&id="+id+"&token="+token,
         type: "POST",
         timeout: 20000,
         success: function (response) {
@@ -624,7 +624,7 @@ function publishVersion() {
         return;
     }
     $.ajax({
-        url: "/yuekong/int/publish_version?version_id="+selectedVersion.id+"&id="+id+"&token="+token,
+        url: "/irext/int/publish_version?version_id="+selectedVersion.id+"&id="+id+"&token="+token,
         type: "POST",
         timeout: 20000,
         success: function (response) {
@@ -652,7 +652,7 @@ function publishVersion() {
 function downloadBin() {
     var wlanVer = "";
     var bleVer = "";
-    var downloadURL = "http://yuekong-release.oss-cn-hangzhou.aliyuncs.com/";
+    var downloadURL = "http://irext-release.oss-cn-hangzhou.aliyuncs.com/";
     var bleDownload, wlanDownload;
     var fileSuffix;
 
@@ -670,7 +670,7 @@ function downloadBin() {
 
 
     if ("底座" == selectedVersion.version_type) {
-        downloadURL += "UCON/";
+        downloadURL += "irext/";
         wlanVer = selectedVersion.dev_wlan_ver;
         bleVer = selectedVersion.dev_ble_ver;
         bleDownload = "dev_ble_" + bleVer + fileSuffix;
@@ -680,14 +680,14 @@ function downloadBin() {
             downloadURL,
             '_blank'
         );
-        downloadURL = "http://yuekong-release.oss-cn-hangzhou.aliyuncs.com/UCON/";
+        downloadURL = "http://irext-release.oss-cn-hangzhou.aliyuncs.com/irext/";
         downloadURL += wlanDownload;
         window.open(
             downloadURL,
             '_blank'
         );
     } else if ("遥控器" == selectedVersion.version_type) {
-        downloadURL += "UCON/";
+        downloadURL += "irext/";
         bleVer = selectedVersion.rem_ble_ver;
         if ("单体遥控器" == selectedVersion.sub_type) {
             bleDownload = "ucon_ble_" + bleVer + fileSuffix;

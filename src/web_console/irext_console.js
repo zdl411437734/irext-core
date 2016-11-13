@@ -40,17 +40,12 @@ var dbConn = require('./mini-poem/db/mysql/mysql_connection');
 console.log("initializing MySQL connection to : " + MYSQL_DB_SERVER_ADDRESS + ":" + MYSQL_DB_NAME);
 dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
 
-// the following statements is automatically generated according to system configuration
-var kvConn = require('./mini-poem/db/mongodb/mongodb_connection');
-console.log('initializing MongoDB connection to : ' + MONGO_DB_SERVER_ADDRESS + ":" + MONGO_DB_NAME);
-kvConn.setMongoDBParameter(MONGO_DB_SERVER_ADDRESS, MONGO_DB_NAME, MONGO_DB_USER, MONGO_DB_PASSWORD);
-
 require('./routes');
 
 var certificateLogic = require('./work_unit/certificate_logic.js');
 
 // kick start the engine
-System.startup(app, serverListenPort, "UCON Console V1.7.3");
+System.startup(app, serverListenPort, "irext Console V0.0.1");
 
 ////////////////// middleware //////////////////
 function tokenValidation (req, res, next) {
@@ -60,7 +55,7 @@ function tokenValidation (req, res, next) {
     var menu3 = req.url.indexOf("stat/index.html");
     var menu4 = req.url.indexOf("push/index.html");
 
-    if (req.url.indexOf("/yuekong/int") != -1) {
+    if (req.url.indexOf("/irext/int") != -1) {
         var contentType = req.get("content-type");
         if (null != contentType && contentType.indexOf("multipart/form-data") != -1) {
             next();

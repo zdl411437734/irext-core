@@ -24,7 +24,7 @@ var enums = new Enums();
 var errorCode = new ErrorCode();
 
 /*
- * function :   Count remote of UCON remote and device
+ * function :   Count remote of irext remote and device
  * parameter :  stat_type
  * return :     Customized statistics response
  */

@@ -16,7 +16,7 @@ function signout() {
 function showMenu(id, token, active) {
     $("#side_bar").html("<li class='sidebar-brand'>" +
             "<a href='#' onclick='gotoWelcome();'>" +
-            "UCON 控制台" +
+            "irext 控制台" +
             "</a>" +
         "</li>" +
         "<li>" +

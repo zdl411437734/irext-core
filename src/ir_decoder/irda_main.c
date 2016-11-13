@@ -172,7 +172,8 @@ INT8 decode_as_ac(const char* file_name)
             case '6':
                 if (IR_DECODE_SUCCEEDED == get_temperature_range(ac_status.acMode, &min_temperature, &max_temperature))
                 {
-                    IR_PRINTF("\nsupported temperature range in mode %d = %d, %d\n", ac_status.acMode, min_temperature, max_temperature);
+                    IR_PRINTF("\nsupported temperature range in mode %d = %d, %d\n",
+                              ac_status.acMode, min_temperature, max_temperature);
                 }
                 need_control = FALSE;
                 break;

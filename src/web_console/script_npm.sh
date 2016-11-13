@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # run this script before you setup the irext web console
 echo "running script of npm install needed by irext..."
 
@@ -42,5 +43,8 @@ npm install aliyun-sdk
 
 echo "npm install nodemailer"
 npm install nodemailer
+
+echo "npm install mongoose"
+npm install mongoose
 
 echo "npm install done"

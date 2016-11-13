@@ -106,7 +106,7 @@ exports.sendChangePwMailWorkUnit = function (userName, callback) {
                 use_authentication: true,
                 port: 465,
                 auth: {
-                    user: "app@yuekong.com.cn",
+                    user: "app@irext.net",
                     pass: "Ucon1002."
                 }
             });
@@ -115,14 +115,14 @@ exports.sendChangePwMailWorkUnit = function (userName, callback) {
                     logger.info("save temp password successfully, continue process email post");
                     // send email to notify user
                     smtpTransport.sendMail({
-                        from : "app@yuekong.com.cn",
+                        from : "app@irext.net",
                         to : userEmail ,
                         subject: "分配新密码",
                         generateTextFromHTML : true,
                         html: "<html><body style='font-family: 微软雅黑; font-size: 14px;'>"+
-                        "<p>Yo~~ 这是 UCON 数据中心为您随机分配的新密码，请牢记之后，点击它表示确认 &lt;(￣︶￣)&gt;</p>" +
+                        "<p>Yo~~ 这是 irext 数据中心为您随机分配的新密码，请牢记之后，点击它表示确认 &lt;(￣︶￣)&gt;</p>" +
                         "<a target='_blank' href='http://"+MAIN_SERVER_ADDRESS+":"+MAIN_SERVER_PORT+
-                        "/yuekong/certificate/confirm_pw?id="+ admin.id +
+                        "/irext/certificate/confirm_pw?id="+ admin.id +
                         "&key="+passwdKey+"&password="+newPw+"'><b>" + newPw + "</b></a></body></html>"
                     }, function(error, response) {
                         if(error) {

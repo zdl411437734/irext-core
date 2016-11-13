@@ -236,7 +236,7 @@ exports.listUnpublishedRemoteIndexes = function (req, res) {
 };
 
 /*
- * function :   List published version of UCON
+ * function :   List published version of irext
  * parameter :  version_type
  *              upload date
  *              purpose

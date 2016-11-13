@@ -8,13 +8,9 @@ Description:    This file provides generic utils for IRDA algorithms
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
-#include <stdlib.h>
 
 #include "include/irda_utils.h"
 
-/*
-*0123456789abcdef/0123456789ABCDEF
-*/
 UINT8 char_to_hex(char chr)
 {
     UINT8 value = 0;

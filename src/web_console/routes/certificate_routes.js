@@ -6,8 +6,8 @@
 var app = require('../irext_console.js');
 var certificateService = require('../services/certificate_service.js');
 
-app.get('/yuekong/certificate/confirm_pw', certificateService.confirmPassword);
+app.get('/irext/certificate/confirm_pw', certificateService.confirmPassword);
 
-app.post('/yuekong/certificate/admin_login', certificateService.adminLogin);
-app.post('/yuekong/certificate/token_verify', certificateService.verifyToken);
-app.post('/yuekong/certificate/change_pw', certificateService.changePassword);
+app.post('/irext/certificate/admin_login', certificateService.adminLogin);
+app.post('/irext/certificate/token_verify', certificateService.verifyToken);
+app.post('/irext/certificate/change_pw', certificateService.changePassword);

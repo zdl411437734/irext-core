@@ -361,15 +361,18 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
 
         if (irda_decode_flag == IRDA_DECODE_1_BIT)
         {
-            process_decode_number(keycode, data, 1, irda_time);        // '0','1'
+            // for binary formatted code
+            process_decode_number(keycode, data, 1, irda_time);
         }
         else if (irda_decode_flag == IRDA_DECODE_2_BITS)
         {
-            process_decode_number(keycode, data, 2, irda_time);        // '0','1','2','3'
+            // for quanternary formatted code
+            process_decode_number(keycode, data, 2, irda_time);
         }
         else if (irda_decode_flag == IRDA_DECODE_4_BITS)
         {
-            process_decode_number(keycode, data, 4, irda_time);        // '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F',
+            // for hexadecimal formatted code
+            process_decode_number(keycode, data, 4, irda_time);
         }
     }
 }

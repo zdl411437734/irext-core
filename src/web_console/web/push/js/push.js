@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 function loadMessages() {
     filterMonth = $("#filter_date").val();
-    var url = "/yuekong/push/list_push_messages?id="+id+"&token="+token+"&month="+filterMonth;
+    var url = "/irext/push/list_push_messages?id="+id+"&token="+token+"&month="+filterMonth;
 
     $('#message_table_container').empty();
     $('#message_table_container').append('<table id="push_table" data-row-style="rowStyle"></table>');
@@ -189,7 +189,7 @@ function sendPushMessage() {
     var messageContent = $("#message_content").val();
 
     $.ajax({
-        url: "/yuekong/push/broadcast?id="+id+"&token="+token,
+        url: "/irext/push/broadcast?id="+id+"&token="+token,
         type: "POST",
         data: {
             from_peer : 'data-center',
