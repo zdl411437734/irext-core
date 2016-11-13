@@ -7,58 +7,84 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../favicon.ico">
-    <title>Cover Template for Bootstrap</title>
+    <title>IRext</title>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/cover.css">
-    <style>
-        body {
-            font-family: "Microsoft YaHei UI Light", "Californian FB";
-        }
-    </style>
+
 </head>
 
 <body>
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">教程</a></li>
+                    <li role="presentation"><a href="#">控制台</a></li>
+                    <li role="presentation"><a href="#">Github</a></li>
+                </ul>
+            </nav>
+            <h3 class="text-muted" style="color: #FFF">IRext</h3>
+        </div>
 
-<div class="site-wrapper">
-    <div class="site-wrapper-inner">
-        <div class="cover-container">
-            <div class="masthead clearfix">
-                <div class="inner">
-                    <h3 class="masthead-brand">IRext</h3>
-                    <nav>
-                        <ul class="nav masthead-nav">
-                            <li class="active"><a href="#">主页</a></li>
-                            <li><a href="#">教程</a></li>
-                            <li><a href="#">控制台</a></li>
-                            <li><a href="https://github.com/strawmanbobi/irext">Github</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+        <div class="jumbotron" style="background: #333; padding-top: 20px; padding-bottom: 40px;">
+            <h1>IRext</h1>
+            <p class="lead">IRext是一款开源家用电器红外编、解码方法.</p>
+            <p><a class="btn btn-lg btn-success" href="#" role="button">登录控制台</a></p>
+        </div>
+
+        <div class="row marketing">
             <div class="row">
                 <div class="col-md-4">
                     <h2>红外编码</h2>
-                    <p>基于XML的编码输入语言+压缩算法支持</p>
+                    <p>- 基于XML的编码输入语言</p>
+                    <p>- 支持远程录入</p>
+                    <p>- 支持红外分析仪插件</p>
                 </div>
                 <div class="col-md-4">
                     <h2>红外解码</h2>
-                    <p>支持多种平台，占用资源少，运行效率高</p>
+                    <p>- 支持多种平台下的解码</p>
+                    <p>- 极小的内存开销</p>
+                    <p>- 高性能解码</p>
                 </div>
                 <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum
-                        id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                        condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                    <h2>码库索引</h2>
+                    <p>- 利用Web控制台录入码库</p>
+                    <p>- 规范的码库审核和发布流程</p>
+                    <p>- 支持协议扩充</p>
                 </div>
             </div>
-            <div class="mastfoot">
-                <div class="inner">
-                    <p><a href="http://irext.net">irext</a></p>
+
+            <br>
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>码库支持</h2>
+                    <p>- 支持13种电器类型</p>
+                    <p>- 支持数百个品牌</p>
+                    <p>- 支持上万种型号家电</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>扩展功能</h2>
+                    <p>- 支持基于开源硬件的IR学习</p>
+                    <p>- 提供远程编码服务</p>
+                    <p>- 代码完全开源</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>易于上手</h2>
+                    <p>- 仅需几步就能移植到您的项目</p>
+                    <p>- Web服务接口文档</p>
+                    <p>- 提供开放式控制台和示例代码</p>
                 </div>
             </div>
         </div>
-    </div>
+
+        <footer class="footer">
+            <p>&copy; Company 2014</p>
+        </footer>
+
+    </div> <!-- /container -->
+
 
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
