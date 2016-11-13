@@ -1215,8 +1215,9 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
     return irda_code_length;
 }
 
-UINT16 irda_tv_lib_close()
+INT8 irda_tv_lib_close()
 {
     // no need to close tv binary
+    return IR_DECODE_SUCCEEDED;
 }
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
