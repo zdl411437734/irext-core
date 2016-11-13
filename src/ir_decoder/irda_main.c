@@ -68,8 +68,8 @@ INT8 decode_as_ac(const char* file_name)
 
     // get status
     UINT8 supported_mode = 0x00;
-    UINT8 min_temperature = 0;
-    UINT8 max_temperature = 0;
+    INT8 min_temperature = 0;
+    INT8 max_temperature = 0;
     UINT8 supported_speed = 0x00;
     UINT8 supported_swing = 0x00;
 
@@ -221,7 +221,7 @@ INT8 irda_tv_file_open(const char* file_name)
 
     fseek(stream, 0, SEEK_END);
     binary_length = ftell(stream);
-    IR_PRINTF("length of binary = %d\n", binary_length);
+    IR_PRINTF("length of binary = %d\n", (int)binary_length);
 
     binary_content = (UINT8*) irda_malloc(binary_length);
 

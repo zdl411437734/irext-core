@@ -16,6 +16,7 @@ Revision log:
 #include <string.h>
 
 #include "include/irda_defs.h"
+#include "include/irda_decode.h"
 #include "include/irda_tv_parse_protocol.h"
 
 /**************************************************************************************************
@@ -111,6 +112,7 @@ INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
     pbuffer->data = binary;
     pbuffer->len = binary_length;
     pbuffer->offset = 0;
+    return IR_DECODE_SUCCEEDED;
 }
 
 BOOL tv_lib_parse(UINT8 encode_type)
