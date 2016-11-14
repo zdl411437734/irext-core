@@ -8,3 +8,5 @@ src/ir_decoder/obj
 src/ir_encoder/source
 files/
 files/*
+.DS_Store
+
