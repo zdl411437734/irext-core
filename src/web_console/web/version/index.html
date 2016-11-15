@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-cmn">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="description" content="irext application">
+    <meta name="author" content="strawmanbobi">
+    <title>irext 控制台</title>
+
+    <link href="../public_js/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public_js/select2/select2.min.css" rel="stylesheet">
+    <link href="../public_js/bootstrap_table/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link href="./css/version.css" rel="stylesheet">
+    <link href="../public_js/bootstrap_sidebar/css/simple-sidebar.css" rel="stylesheet">
+
+    <script src="../public_js/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../public_js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../public_js/bootstrap_spinner/bootstrap-spinner.min.js"></script>
+    <script src="../public_js/bower_components/bootstrap/js/modal.js"></script>
+    <script src="../public_js/bootstrap_table/dist/bootstrap-table.min.js"></script>
+    <script src="../public_js/bootstrap_table/dist/extensions/export/bootstrap-table-export.js"></script>
+    <script src="../public_js/bootstrap_table/table_export/tableExport.min.js"></script>
+    <script src="../public_js/bootstrap_table/table_export/libs/FileSaver/FileSaver.min.js"></script>
+    <script src="../public_js/bootstrap_table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../public_js/select2/select2.min.js"></script>
+    <script src="../public_js/utils/json2xls.js"></script>
+    <script src="../public_js/utils/date_utils.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" id="side_bar">
+
+        </ul>
+    </div>
+    <div class="container" id="page-content-wrapper">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a id="menu_toggle" class="navbar-brand glyphicon glyphicon-transfer" href="#"></a><a class="navbar-brand" href="#"> 版本发布</a>
+            </div>
+        </nav>
+        <div class="starter-template" style="padding: 0;">
+            <div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-normal btn-default" onclick="loadVersion();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-refresh" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-default" onclick="onCreateVersion();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-plus" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-danger" onclick="onDeleteVersion();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-trash" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onFallbackVersion();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-arrow-left" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onVerifyVersion(1);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-remove" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-warning" onclick="onVerifyVersion(0);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-ok" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-default" onclick="watchDetail(0);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-eye-open" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button class="btn btn-normal btn-default" onclick="downloadBin(0);" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                </div>
+                <button id="publish_button" class="btn btn-normal btn-success" onclick="onPublishVersion();" style="font-size: 14px; display: none;">
+                    <span class="glyphicon glyphicon-send" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                </button>
+            </div>
+            <div id="version_table_container" style="width: 100%">
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="create_version_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">上传版本</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row marketing">
+                    <form id="version_upload_form" enctype="multipart/form-data" method="post"
+                          action="/irext/int/create_version"  target="post_iframe">
+                        <div class="col-lg-12">
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">版本类型</span>
+                                    <select id="version_type" name="version_type" class="input-group-addon" onchange="onVersionTypeChange();" style="width: 100%;">
+                                    </select>
+                                </span>
+                            </div>
+                            <br>
+                            <div class="input-group" style="max-height: 25px;">
+                                <span class="input-group-addon">版本用途</span>
+                                <select id="purpose" name="purpose" class="input-group-addon" onchange="onPurposeChange();" style="width: 100%;">
+                                </select>
+                                </span>
+                            </div>
+                            <br>
+                            <div id="sub_type_panel" style="display: none;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">遥控类型</span>
+                                    <select id="sub_type" name="sub_type" class="input-group-addon" onchange="onSubtypeChange();" style="width: 100%;">
+                                    </select>
+                                </div>
+                                <br>
+                            </div>
+                            <div id="remote_type_panel" style="display: none;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">语言选择</span>
+                                    <select id="language" name="language" class="input-group-addon" onchange="onLanguageChange();" style="width: 100%;">
+                                    </select>
+                                    <span class="input-group-addon">存储选择</span>
+                                    <select id="storage" name="storage" class="input-group-addon" onchange="onStorageChange();" style="width: 100%;">
+                                    </select>
+                                    <input type="hidden" name="remote_type" id="remote_type">
+                                </div>
+                                <br>
+                            </div>
+                            <div id="rbv_panel" style="display: none;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">蓝牙版本</span>
+                                    <input type="text" class="form-control" placeholder="V1.7.0" id="rem_ble_ver" name="rem_ble_ver">
+                                    <span class="input-group-addon">文件</span>
+                                    <input type="file" class="form-control" name="rem_ble_file" placeholder="rem_ble_V1.7.0.bin" id="rem_ble_file">
+                                </div>
+                                <br>
+                            </div>
+                            <div id="dwv_panel">
+                                <div class="input-group">
+                                    <span class="input-group-addon">无线版本</span>
+                                    <input type="text" class="form-control" placeholder="V1.7.0" id="dev_wlan_ver" name="dev_wlan_ver">
+                                    <span class="input-group-addon">文件</span>
+                                    <input type="file" class="form-control" name="dev_wlan_file" placeholder="dev_wlan_V1.7.0.bin" id="dev_wlan_file">
+                                </div>
+                                <br>
+                            </div>
+                            <div id="dbv_panel">
+                                <div class="input-group">
+                                    <span class="input-group-addon">蓝牙版本</span>
+                                    <input type="text" class="form-control" placeholder="V1.7.0" id="dev_ble_ver" name="dev_ble_ver">
+                                    <span class="input-group-addon">文件</span>
+                                    <input type="file" class="form-control" name="dev_ble_file" placeholder="dev_ble_V1.7.0.bin" id="dev_ble_file">
+                                </div>
+                                <br>
+                            </div>
+                            <div id="ipa_panel">
+                                <div class="input-group">
+                                    <span class="input-group-addon">预览文件</span>
+                                    <input type="text" class="form-control" placeholder="V1.7.0" id="ipa_ver" name="ipa_ver">
+                                    <span class="input-group-addon">文件</span>
+                                    <input type="file" class="form-control" name="ipa_file" placeholder="UCON_iOS_V1.7.0.bin" id="ipa_file">
+                                </div>
+                                <br>
+                            </div>
+                            <div id="apk_panel">
+                                <div class="input-group">
+                                    <span class="input-group-addon">预览文件</span>
+                                    <input type="text" class="form-control" placeholder="V1.7.0" id="apk_ver" name="apk_ver">
+                                    <span class="input-group-addon">文件</span>
+                                    <input type="file" class="form-control" name="apk_file" placeholder="UCON_iOS_V1.7.0.bin" id="apk_file">
+                                </div>
+                                <br>
+                            </div>
+                            <div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">发布描述</span>
+                                    <textarea id="description" name="description" style="height: 200px; resize: none;"
+                                              maxlength="10000" class="form-control" placeholder="版本说明"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-normal btn-success" href="#" onclick="uploadVersion();">提交</a>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="version_detail_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">版本信息</h4>
+            </div>
+            <div class="modal-body">
+                <div id="rem_ble_hash" style="display: none;"></div>
+                <br>
+                <div id="dev_wlan_hash" style="display: none;"></div>
+                <br>
+                <div id="dev_ble_hash" style="display: none;"></div>
+                <br>
+                <div>
+                    <textarea id="release_note" style="height: 200px; resize: none;" class="form-control" placeholder=""></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">删除版本</h4>
+            </div>
+            <div class="modal-body">
+                <div id="delete_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="deleteVersion();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="verify_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">验证版本</h4>
+            </div>
+            <div class="modal-body">
+                <div id="verify_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="verifyVersion();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="fallback_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">回退版本</h4>
+            </div>
+            <div class="modal-body">
+                <div id="fallback_hint">确认要回退版本到待验证状态吗？</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="fallbackVersion();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="publish_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">发布版本</h4>
+            </div>
+            <div class="modal-body">
+                <div id="publish_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="publishVersion();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- status dialog -->
+<div class="modal fade" id="uploading_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">提交版本文件</h4>
+            </div>
+            <div class="modal-body">
+                <iframe name="post_iframe" id="post_iframe" style="border: none; width: 100%; height: 50px;">
+                    <html>
+                    <body>
+                    <div style="width: 100%; text-align: center; font-family: '微软雅黑'">正在提交</div>
+                    </body>
+                    </html>
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="onCloseUploadingDialog();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- hint dialog -->
+<div class="modal fade" id="hint_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <div id="text_hint"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- signout dialog -->
+<div class="modal fade" id="signout_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">退出登录</h4>
+            </div>
+            <div class="modal-body">
+                <div id="signout_hint">确定要退出吗？</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="signout();">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./js/version.js"></script>
+<script type="text/javascript" src="../js/ui.js"></script>
+</body>
+</html>
