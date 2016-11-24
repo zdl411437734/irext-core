@@ -28,6 +28,13 @@ Revision log:
 #define AC_PARAMETER_TYPE_1          0
 #define AC_PARAMETER_TYPE_2          1
 
+const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
+{
+    1, 2, 3, 4, 5, 6, 7,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+    41, 42, 43, 44, 45, 46, 47, 48
+};
+
 typedef enum
 {
     AC_POWER_ON = 0,
