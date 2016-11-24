@@ -67,7 +67,6 @@ UINT16 add_delaycode(UINT8 index)
         }
     }
 
-    //Handle TAG307
     if ((context->lastbit == 0) && (index == (ir_hex_len - 1)))
     {
         context->time[context->code_cnt++] = context->one.low; //high
@@ -100,7 +99,6 @@ UINT16 create_ir_frame()
     //bootcode
     for (i = 0; i < context->bootcode.len; i++)
     {
-        //IR_PRINTF("%d,",context->bootcode.data[i]); //tag[300]
         context->time[context->code_cnt++] = context->bootcode.data[i];
     }
     //code_cnt += context->bootcode.len;
