@@ -107,7 +107,7 @@ UINT16 create_ir_frame()
 
     for (i = 0; i < ir_hex_len; i++)
     {
-        bitnum = bits_per_byte(i);//use tag[1509]
+        bitnum = bits_per_byte(i);
         //IR_PRINTF("bitnum:%d\n", bitnum);
         for (j = 0; j < bitnum; j++)
         {
@@ -118,14 +118,12 @@ UINT16 create_ir_frame()
 
             if (irdata[i] & mask)
             {
-                //one[302]
                 //IR_PRINTF("%d,%d,", context->one.low, context->one.high);
                 context->time[context->code_cnt++] = context->one.low;
                 context->time[context->code_cnt++] = context->one.high;
             }
             else
             {
-                //zero[301]
                 //IR_PRINTF("%d,%d,", context->zero.low, context->zero.high);
                 context->time[context->code_cnt++] = context->zero.low;
                 context->time[context->code_cnt++] = context->zero.high;

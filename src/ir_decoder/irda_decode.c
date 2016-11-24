@@ -30,31 +30,24 @@ struct tag_head *tags;
 UINT8* ir_hex_code = NULL;
 UINT8 ir_hex_len = 0;
 
+// tv raw code length
+UINT16 tv_bin_length = 0;
+
 // global output buffer
 UINT8 tag_count = 0;
 UINT16 tag_head_offset = 0;
 
-UINT16 global_mem_consume = 0;
-
 UINT8 byteArray[PROTOCOL_SIZE] = {0};
 UINT16 user_data[USER_DATA_SIZE] = {0};
 UINT8 tv_bin[EXPECTED_MEM_SIZE] = {0};
-UINT16 tv_bin_length = 0;
 remote_ac_status_t ac_status;
 
-// 2016-10-06 protocol version minor change: parse TAG 1009 instead of TAG 304
 const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
 {
-    300, 301, 302, 303, 305, 306, 307, 1001, 1002,
-    1003, 1004, 1005, 1007, 1008, 1009, 1010, 1011,
-    1012, 1013, 1015, 1016, 1501, 1502, 1503, 1504, 1505,
-    1506, 1508, 1509
-};
-
-const UINT16 bc_tag_index[TAG_COUNT_FOR_BC_PROTOCOL] =
-{
-    100, 101, 102, 103, 200, 201, 202, 203, 204, 205,
-    206, 207, 208, 209, 210, 211, 212, 213, 214, 300
+    1, 2, 3, 4, 5, 6, 7, 21, 22,
+    23, 24, 25, 26, 27, 28, 29, 30,
+    31, 32, 33, 34, 41, 42, 43, 44, 45,
+    46, 47, 48
 };
 
 // 2016-10-09 updated by strawmanbobi, change global data context to array pointer
@@ -369,14 +362,14 @@ INT8 irda_ac_lib_parse()
         context->n_mode[i].temp_cnt = 0;
     }
 
-    // parse tag 1506 in first priority
+    // parse TAG 46 in first priority
     for (i = 0; i < tag_count; i++)
     {
         if (tags[i].tag == TAG_AC_SWING_INFO)
         {
             if (tags[i].len != 0)
             {
-                parse_swing_info_1506(&tags[i], &(context->si));
+                parse_swing_info(&tags[i], &(context->si));
             }
             else
             {
@@ -393,7 +386,7 @@ INT8 irda_ac_lib_parse()
         {
             continue;
         }
-        // then parse TAG 1007 or 1015
+        // then parse TAG 26 or 33
         if (context->si.type == SWING_TYPE_NORMAL)
         {
             UINT16 swing_space_size = 0;
@@ -448,7 +441,7 @@ INT8 irda_ac_lib_parse()
             {
                 return IR_DECODE_FAILED;
             }
-            if (IR_DECODE_FAILED == parse_defaultcode_1002(&tags[i], &(context->default_code)))
+            if (IR_DECODE_FAILED == parse_defaultcode(&tags[i], &(context->default_code)))
             {
                 return IR_DECODE_FAILED;
             }
@@ -468,7 +461,7 @@ INT8 irda_ac_lib_parse()
         else if (tags[i].tag == TAG_AC_TEMP_1) // temperature tag type 1
         {
             IR_PRINTF("\nparse temperature 1\n");
-            if (IR_DECODE_FAILED == parse_temp_1_1003(&tags[i], &(context->temp1)))
+            if (IR_DECODE_FAILED == parse_temp_1(&tags[i], &(context->temp1)))
             {
                 return IR_DECODE_FAILED;
             }
@@ -500,7 +493,7 @@ INT8 irda_ac_lib_parse()
         else if (tags[i].tag == TAG_AC_CHECKSUM_TYPE)
         {
             IR_PRINTF("\nparse checksum\n");
-            if (IR_DECODE_FAILED == parse_checksum_1008(&tags[i], &(context->checksum)))
+            if (IR_DECODE_FAILED == parse_checksum(&tags[i], &(context->checksum)))
             {
                 return IR_DECODE_FAILED;
             }
@@ -530,7 +523,7 @@ INT8 irda_ac_lib_parse()
         else if (tags[i].tag == TAG_AC_TEMP_2)
         {
             IR_PRINTF("\nparse temperature 2\n");
-            if (IR_DECODE_FAILED == parse_temp_2_1011(&tags[i], &(context->temp2)))
+            if (IR_DECODE_FAILED == parse_temp_2(&tags[i], &(context->temp2)))
             {
                 return IR_DECODE_FAILED;
             }
@@ -538,7 +531,7 @@ INT8 irda_ac_lib_parse()
         else if (tags[i].tag == TAG_AC_SOLO_FUNCTION)
         {
             IR_PRINTF("\nparse solo functions\n");
-            if (IR_DECODE_FAILED == parse_solo_code_1009(&tags[i], &(context->sc)))
+            if (IR_DECODE_FAILED == parse_solo_code(&tags[i], &(context->sc)))
             {
                 return IR_DECODE_FAILED;
             }
@@ -546,7 +539,7 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_FUNCTION_1)
         {
-            if (IR_DECODE_FAILED == parse_function_1_1010(&tags[i], &(context->function1)))
+            if (IR_DECODE_FAILED == parse_function_1_tag29(&tags[i], &(context->function1)))
             {
                 IR_PRINTF("\nfunction code parse error\n");
                 return IR_DECODE_FAILED;
@@ -555,91 +548,91 @@ INT8 irda_ac_lib_parse()
         else if (tags[i].tag == TAG_AC_FUNCTION_2)
         {
             IR_PRINTF("\nparse function 2\n");
-            if (IR_DECODE_FAILED == parse_function_2_1016(&tags[i], &(context->function2)))
+            if (IR_DECODE_FAILED == parse_function_2_tag34(&tags[i], &(context->function2)))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_FRAME_LENGTH)
         {
-            if (IR_DECODE_FAILED == parse_framelen_304(&tags[i], tags[i].len))
+            if (IR_DECODE_FAILED == parse_framelen(&tags[i], tags[i].len))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_ZERO)
         {
-            if (IR_DECODE_FAILED == parse_zero_301(&tags[i]))
+            if (IR_DECODE_FAILED == parse_zero(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_ONE)
         {
-            if (IR_DECODE_FAILED == parse_one_302(&tags[i]))
+            if (IR_DECODE_FAILED == parse_one(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BOOT_CODE)
         {
-            if (IR_DECODE_FAILED == parse_bootcode_300(&tags[i]))
+            if (IR_DECODE_FAILED == parse_bootcode(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_REPEAT_TIMES)
         {
-            if (IR_DECODE_FAILED == parse_repeat_times_1508(&tags[i]))
+            if (IR_DECODE_FAILED == parse_repeat_times(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BITNUM)
         {
-            if (IR_DECODE_FAILED == parse_bitnum_1509(&tags[i]))
+            if (IR_DECODE_FAILED == parse_bitnum(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_ENDIAN)
         {
-            if (IR_DECODE_FAILED == parse_endian_306(&tags[i]))
+            if (IR_DECODE_FAILED == parse_endian(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BAN_FUNCTION_IN_COOL_MODE)
         {
-            if (IR_DECODE_FAILED == parse_nmode_150x(&tags[i], N_COOL))
+            if (IR_DECODE_FAILED == parse_nmode(&tags[i], N_COOL))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BAN_FUNCTION_IN_HEAT_MODE)
         {
-            if (IR_DECODE_FAILED == parse_nmode_150x(&tags[i], N_HEAT))
+            if (IR_DECODE_FAILED == parse_nmode(&tags[i], N_HEAT))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BAN_FUNCTION_IN_AUTO_MODE)
         {
-            if (IR_DECODE_FAILED == parse_nmode_150x(&tags[i], N_AUTO))
+            if (IR_DECODE_FAILED == parse_nmode(&tags[i], N_AUTO))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BAN_FUNCTION_IN_FAN_MODE)
         {
-            if (IR_DECODE_FAILED == parse_nmode_150x(&tags[i], N_FAN))
+            if (IR_DECODE_FAILED == parse_nmode(&tags[i], N_FAN))
             {
                 return IR_DECODE_FAILED;
             }
         }
         else if (tags[i].tag == TAG_AC_BAN_FUNCTION_IN_DRY_MODE)
         {
-            if (IR_DECODE_FAILED == parse_nmode_150x(&tags[i], N_DRY))
+            if (IR_DECODE_FAILED == parse_nmode(&tags[i], N_DRY))
             {
                 return IR_DECODE_FAILED;
             }
@@ -654,14 +647,14 @@ INT8 irda_ac_lib_parse()
         }
         if (tags[i].tag == TAG_AC_DELAY_CODE)
         {
-            if (IR_DECODE_FAILED == parse_delaycode_303(&tags[i]))
+            if (IR_DECODE_FAILED == parse_delaycode(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }
         }
         if (tags[i].tag == TAG_AC_LASTBIT)
         {
-            if (IR_DECODE_FAILED == parse_lastbit_307(&tags[i]))
+            if (IR_DECODE_FAILED == parse_lastbit(&tags[i]))
             {
                 return IR_DECODE_FAILED;
             }

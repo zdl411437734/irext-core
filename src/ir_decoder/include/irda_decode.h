@@ -14,22 +14,19 @@ Revision log:
 #include <stdio.h>
 #include "irda_defs.h"
 
-#define TAG_COUNT_FOR_PROTOCOL 29
-#define TAG_COUNT_FOR_BC_PROTOCOL 20
+#define TAG_COUNT_FOR_PROTOCOL       29
 
-#define KEY_COUNT 15
+#define EXPECTED_MEM_SIZE            1024
 
-#define EXPECTED_MEM_SIZE 1024
+#define TAG_INVALID                  0xffff
+#define MAX_DELAYCODE_NUM            16
+#define MAX_BITNUM                   16
 
-#define TAG_INVALID 0xffff
-#define MAX_DELAYCODE_NUM 16
-#define MAX_BITNUM 16
+#define IR_DECODE_FAILED             (-1)
+#define IR_DECODE_SUCCEEDED          (0)
 
-#define IR_DECODE_FAILED (-1)
-#define IR_DECODE_SUCCEEDED  (0)
-
-#define AC_PARAMETER_TYPE_1 0
-#define AC_PARAMETER_TYPE_2 1
+#define AC_PARAMETER_TYPE_1          0
+#define AC_PARAMETER_TYPE_2          1
 
 typedef enum
 {
@@ -161,65 +158,65 @@ typedef struct _tag_comp_type_1
     UINT8 *segment;
 } tag_comp;
 
-typedef struct _tag_1506_swing_info
+typedef struct _tag_swing_info
 {
     swing_type type;
     UINT8 mode_count;
     UINT8 dir_index;
 } swing_info;
 
-typedef struct _tag_1001_power_1
+typedef struct _tag_power_1
 {
     UINT8 len;
     tag_comp comp_data[AC_POWER_MAX];
 } power_1;
 
-typedef struct _tag_1003_temp_1
+typedef struct _tag_temp_1
 {
     UINT8 len;
     UINT8 type;
     tag_comp comp_data[AC_TEMP_MAX];
 } temp_1;
 
-typedef struct tag_1004_mode_1
+typedef struct tag_mode_1
 {
     UINT8 len;
     tag_comp comp_data[AC_MODE_MAX];
 } mode_1;
 
-typedef struct tag_1005_speed_1
+typedef struct tag_speed_1
 {
     UINT8 len;
     tag_comp comp_data[AC_WS_MAX];
 } speed_1;
 
-typedef struct tag_1007_swing_1
+typedef struct tag_swing_1
 {
     UINT8 len;
     UINT16 count;
     tag_comp *comp_data;
 } swing_1;
 
-typedef struct tag_1011_temp_2
+typedef struct tag_temp_2
 {
     UINT8 len;
     UINT8 type;
     tag_comp comp_data[AC_TEMP_MAX];
 } temp_2;
 
-typedef struct tag_1012_mode_2
+typedef struct tag_mode_2
 {
     UINT8 len;
     tag_comp comp_data[AC_MODE_MAX];
 } mode_2;
 
-typedef struct tag_1013_speed_2
+typedef struct tag_speed_2
 {
     UINT8 len;
     tag_comp comp_data[AC_WS_MAX];
 } speed_2;
 
-typedef struct tag_1015_swing_2
+typedef struct tag_swing_2
 {
     UINT8 len;
     UINT16 count;
@@ -227,7 +224,7 @@ typedef struct tag_1015_swing_2
 } swing_2;
 
 #if defined SUPPORT_HORIZONTAL_SWING
-typedef struct tag_1006_horiswing_1
+typedef struct tag_horiswing_1
 {
     UINT16 len;
     tag_comp comp_data[AC_HORI_SWING_MAX];
@@ -384,43 +381,41 @@ typedef struct REMOTE_AC_STATUS
 // function polymorphism
 typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 function_code);
 
-#define TAG_AC_POWER_1            1001
-#define TAG_AC_DEFAULT_CODE        1002
-#define TAG_AC_TEMP_1            1003
-#define TAG_AC_MODE_1            1004
-#define TAG_AC_SPEED_1            1005
-#define TAG_AC_SWING_1            1007
 
-#define TAG_AC_CHECKSUM_TYPE    1008
 
-#define TAG_AC_TEMP_2            1011
-#define TAG_AC_MODE_2            1012
-#define TAG_AC_SPEED_2            1013
-#define TAG_AC_SWING_2            1015
 
-#define TAG_AC_SOLO_FUNCTION     1009
+#define TAG_AC_BOOT_CODE                  1
+#define TAG_AC_ZERO                       2
+#define TAG_AC_ONE                        3
+#define TAG_AC_DELAY_CODE                 4
+#define TAG_AC_FRAME_LENGTH               5
+#define TAG_AC_ENDIAN                     6
+#define TAG_AC_LASTBIT                    7
 
-#define TAG_AC_FUNCTION_1        1010
-#define TAG_AC_FUNCTION_2        1016
+#define TAG_AC_POWER_1                    21
+#define TAG_AC_DEFAULT_CODE               22
+#define TAG_AC_TEMP_1                     23
+#define TAG_AC_MODE_1                     24
+#define TAG_AC_SPEED_1                    25
+#define TAG_AC_SWING_1                    26
+#define TAG_AC_CHECKSUM_TYPE              27
+#define TAG_AC_SOLO_FUNCTION              28
+#define TAG_AC_FUNCTION_1                 29
+#define TAG_AC_TEMP_2                     30
+#define TAG_AC_MODE_2                     31
+#define TAG_AC_SPEED_2                    32
+#define TAG_AC_SWING_2                    33
+#define TAG_AC_FUNCTION_2                 34
 
-#define TAG_AC_SWING_INFO        1506
+#define TAG_AC_BAN_FUNCTION_IN_COOL_MODE  41
+#define TAG_AC_BAN_FUNCTION_IN_HEAT_MODE  42
+#define TAG_AC_BAN_FUNCTION_IN_AUTO_MODE  43
+#define TAG_AC_BAN_FUNCTION_IN_FAN_MODE   44
+#define TAG_AC_BAN_FUNCTION_IN_DRY_MODE   45
+#define TAG_AC_SWING_INFO                 46
+#define TAG_AC_REPEAT_TIMES               47
+#define TAG_AC_BITNUM                     48
 
-#define TAG_AC_BOOT_CODE        300
-#define TAG_AC_ZERO            301
-#define TAG_AC_ONE                302
-#define TAG_AC_DELAY_CODE        303
-#define TAG_AC_FRAME_LENGTH        304
-#define TAG_AC_REPEAT_TIMES        1508
-#define TAG_AC_BITNUM            1509
-
-#define TAG_AC_ENDIAN            306
-#define TAG_AC_LASTBIT          307
-
-#define TAG_AC_BAN_FUNCTION_IN_COOL_MODE  1501
-#define TAG_AC_BAN_FUNCTION_IN_HEAT_MODE  1502
-#define TAG_AC_BAN_FUNCTION_IN_AUTO_MODE  1503
-#define TAG_AC_BAN_FUNCTION_IN_FAN_MODE   1504
-#define TAG_AC_BAN_FUNCTION_IN_DRY_MODE   1505
 
 // definition about size
 

@@ -3,7 +3,7 @@ Filename:       irda_parse_forbidden_info.h
 Revised:        Date: 2016-10-05
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for IR decode for TAG 1002
+Description:    This file provides algorithms for forbidden area of AC code
 
 Revision log:
 * 2016-10-05: created by strawmanbobi
@@ -14,8 +14,8 @@ Revision log:
  */
 #include "irda_decode.h"
 
-#ifndef _IRDA_PARSE_PARSE_150X_H_
-#define _IRDA_PARSE_PARSE_150X_H_
+#ifndef _IRDA_PARSE_PARSE_H_
+#define _IRDA_PARSE_PARSE_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -33,11 +33,11 @@ extern "C"
 /*
  * public function declaration
  */
-extern INT8 parse_nmode_150x(struct tag_head *tag, ac_n_mode index);
+extern INT8 parse_nmode(struct tag_head *tag, ac_n_mode index);
 
 #ifdef __cplusplus
 	}
 #endif
 
-#endif // _IRDA_PARSE_PARSE_150X_H_
+#endif // _IRDA_PARSE_PARSE_H_
 

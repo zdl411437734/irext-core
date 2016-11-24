@@ -3,7 +3,7 @@ Filename:       irda_parse_forbidden_info.c
 Revised:        Date: 2016-10-05
 Revision:       Revision: 1.0
 
-Description:    This file provides algorithms for IR decode for TAG 150x
+Description:    This file provides algorithms for forbidden area of AC code
 
 Revision log:
 * 2016-10-05: created by strawmanbobi
@@ -34,7 +34,7 @@ extern protocol* context;
 /*
  * function definition
  */
-INT8 parse_nmode_150x_data_speed(char *pdata, ac_n_mode seq)
+INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
 {
     char buf[16] = {0};
     char *p = pdata;
@@ -58,7 +58,7 @@ INT8 parse_nmode_150x_data_speed(char *pdata, ac_n_mode seq)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode_150x_data_temp(char *pdata, ac_n_mode seq)
+INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
 {
 
     char buf[16] = {0};
@@ -82,7 +82,7 @@ INT8 parse_nmode_150x_data_temp(char *pdata, ac_n_mode seq)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode_150x_pos(char *buf, ac_n_mode index)
+INT8 parse_nmode_pos(char *buf, ac_n_mode index)
 {
     UINT16 i = 0;
     char data[64] = {0};
@@ -110,17 +110,17 @@ INT8 parse_nmode_150x_pos(char *buf, ac_n_mode index)
     }
     if (buf[0] == 'S')
     {
-        parse_nmode_150x_data_speed(data, index);
+        parse_nmode_data_speed(data, index);
     }
     else 
     {
-        parse_nmode_150x_data_temp(data, index);
+        parse_nmode_data_temp(data, index);
     }
 
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode_150x(struct tag_head *tag, ac_n_mode index)
+INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
 {
     UINT16 i = 0;
     UINT16 preindex = 0;
@@ -145,13 +145,13 @@ INT8 parse_nmode_150x(struct tag_head *tag, ac_n_mode index)
         {
             irda_memcpy(buf, tag->pdata + preindex, i - preindex);
             preindex = i + 1;
-            parse_nmode_150x_pos(buf, index);
+            parse_nmode_pos(buf, index);
             irda_memset(buf, 0, 64);
         }
 
     }
     irda_memcpy(buf, tag->pdata + preindex, i - preindex);
-    parse_nmode_150x_pos(buf, index);
+    parse_nmode_pos(buf, index);
     irda_memset(buf, 0, 64);
     return IR_DECODE_SUCCEEDED;
 }

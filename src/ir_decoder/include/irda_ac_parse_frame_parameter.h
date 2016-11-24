@@ -33,23 +33,23 @@ extern "C"
 /*
  * public function declaration
  */
-extern INT8 parse_bootcode_300(struct tag_head *tag);
+extern INT8 parse_bootcode(struct tag_head *tag);
 
-extern INT8 parse_zero_301(struct tag_head *tag);
+extern INT8 parse_zero(struct tag_head *tag);
 
-extern INT8 parse_one_302(struct tag_head *tag);
+extern INT8 parse_one(struct tag_head *tag);
 
-extern INT8 parse_delaycode_303(struct tag_head *tag);
+extern INT8 parse_delaycode(struct tag_head *tag);
 
-extern INT8 parse_framelen_304(struct tag_head *tag, UINT16 len);
+extern INT8 parse_framelen(struct tag_head *tag, UINT16 len);
 
-extern INT8 parse_endian_306(struct tag_head *tag);
+extern INT8 parse_endian(struct tag_head *tag);
 
-extern INT8 parse_lastbit_307(struct tag_head *tag);
+extern INT8 parse_lastbit(struct tag_head *tag);
 
-extern INT8 parse_repeat_times_1508(struct tag_head *tag);
+extern INT8 parse_repeat_times(struct tag_head *tag);
 
-extern INT8 parse_bitnum_1509(struct tag_head *tag);
+extern INT8 parse_bitnum(struct tag_head *tag);
 
 #ifdef __cplusplus
 	}
