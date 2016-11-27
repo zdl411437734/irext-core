@@ -118,7 +118,7 @@ def printProtocol(file):
                 else:
                     mode = 1
 
-                print "{%d, \"%s\", %d, %d, %s}" % (index, i.getAttribute('bits'), \
+                print "{%d, \"%s\", %d, %d, %s}" % (index, i.getAttribute('bits'),\
                                                     lsb, mode, i.firstChild.data)
                 flag = IRDAData(int(i.getAttribute('bits')), lsb, mode, int(i.firstChild.data))
                 irda_frame.append(flag)

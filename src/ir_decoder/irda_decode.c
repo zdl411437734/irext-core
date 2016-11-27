@@ -64,6 +64,13 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
     apply_swing
 };
 
+const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
+{
+    1, 2, 3, 4, 5, 6, 7,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+    41, 42, 43, 44, 45, 46, 47, 48
+};
+
 #if defined BOARD_PC
 void free_pirda(void);
 #endif
