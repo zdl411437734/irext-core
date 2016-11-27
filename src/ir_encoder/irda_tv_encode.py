@@ -7,6 +7,8 @@ import sys
 import xml.dom.minidom
 import struct
 
+keymap_dict_empty = ()
+
 keymap_dict_ac = ()
 
 keymap_dict_tv = ("POWER", "MUTE", "UP", "DOWN", "LEFT", "RIGHT", "OK", "VOL+", "VOL-", "BACK", "INPUT", "MENU", "HOME",
@@ -36,15 +38,19 @@ keymap_dict_projector = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "OK", "VOL+", "
 keymap_dict_light = ("POWER", "COLOR_1", "COLOR_2", "COLOR_3", "COLOR_4", "COLOR_0", "BRIGHT", "DARK", "POWER_ON",
                      "RAINBOW", "POWER_OFF", "BACK", "HOME", "MENU", "SWITCH")
 
+keymap_dict_bstb = ("POWER", "MUTE", "UP", "DOWN", "LEFT", "RIGHT", "OK", "VOL+", "VOL-", "BACK", "INPUT", "MENU",
+                    "UP_PAGE", "DOWN_PAGE", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+
 keymap_dict_clean_robot = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "START", "PLUS", "MINUS", "AUTO", "SPOT", "SPEED",
                            "TIMING", "CHARGE", "PLAN", "SWITCH")
 
 keymap_dict_air_cleaner = ("POWER", "UP", "DOWN", "LEFT", "RIGHT", "ION", "PLUS", "MINUS", "AUTO", "SPEED", "MODE",
                            "TIMING", "LIGHT", "FORCE", "SWITCH")
 
-keymap_dicts = [keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
-                keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_clean_robot,
-                keymap_dict_ac]
+keymap_dicts = [keymap_dict_empty,
+                keymap_dict_ac, keymap_dict_tv, keymap_dict_stb, keymap_dict_nw, keymap_dict_iptv, keymap_dict_dvd,
+                keymap_dict_fan, keymap_dict_stereo, keymap_dict_projector, keymap_dict_light, keymap_dict_bstb,
+                keymap_dict_clean_robot, keymap_dict_ac]
 
 class CKeyMap:
     def __init__(self, name, value):
