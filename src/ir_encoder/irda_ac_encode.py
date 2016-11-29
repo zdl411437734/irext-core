@@ -58,7 +58,7 @@ def create_binary(ac_device):
     offset = 0
 
     f_content = open(sys.argv[2] + str(ac_device.device_id) + "_tmp.bin", "wb")
-    f_head = open(sys.argv[2] + "ykir_new_ac_" + str(ac_device.device_id) + ".bin", "wb")
+    f_head = open(sys.argv[2] + "irda_new_ac_" + str(ac_device.device_id) + ".bin", "wb")
     f_head.write(struct.pack("B", 29))
     for i in range(len(alltags)):
         find = 0
