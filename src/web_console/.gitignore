@@ -1,0 +1,12 @@
+backup/
+.idea/
+logs/
+tools/
+
+.idea/workspace.xml
+*.DS_Store
+nohup.out
+node_modules/
+bower_components
+
+configuration/system_configs.js

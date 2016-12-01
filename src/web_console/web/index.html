@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-cmn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="description" content="index page of IRext">
+    <meta name="author" content="strawmanbobi">
+    <link rel="icon" href="../favicon.ico">
+    <title>IRext</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./public_js/bower_components/toastr/toastr.min.css">
+    <link rel="stylesheet" href="css/cover.css">
+</head>
+
+<body>
+    <div class="navbar container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">主页</a></li>
+                    <li role="presentation"><a href="#" onclick="onSignIn();">控制台</a></li>
+                    <li role="presentation"><a href="#">文档</a></li>
+                    <li role="presentation"><a href="https://github.com/strawmanbobi/irext">Github</a></li>
+                </ul>
+            </nav>
+            <h3>IRext</h3>
+        </div>
+    </div>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="background: #3FAF7F">
+        <div class="container">
+            <h1 style="text-shadow: none; color: #FFF;">IRext</h1>
+            <p class="lead" style="text-shadow: none; color: #FFF;">开源家用电器红外的编码、解码和索引方案.</p>
+            <br>
+            <p><a class="btn btn-default" style="color: #000;" href="#" role="button">看看数据先</a></p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row marketing">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>红外编码</h2>
+                    <p>基于XML的编码输入语言</p>
+                    <p>支持远程录入</p>
+                    <p>支持红外分析仪插件</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>红外解码</h2>
+                    <p>支持多种平台下的解码</p>
+                    <p>极小的内存开销</p>
+                    <p>高性能解码</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>码库索引</h2>
+                    <p>利用Web控制台录入码库</p>
+                    <p>规范的码库审核和发布流程</p>
+                    <p>支持协议扩充</p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>码库支持</h2>
+                    <p>支持13种电器类型</p>
+                    <p>支持数百个品牌</p>
+                    <p>支持上万种型号家电</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>扩展功能</h2>
+                    <p>支持基于开源硬件的IR学习</p>
+                    <p>提供远程编码服务</p>
+                    <p>代码完全开源</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>易于上手</h2>
+                    <p>仅需几步就能移植到您的项目</p>
+                    <p>Web服务接口文档</p>
+                    <p>提供开放式控制台和示例代码</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Strawmanbobi, 2016</p>
+        </footer>
+    </div>
+
+    <!-- dialogs -->
+    <div class="modal fade" id="signin_dialog" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="color: #000; text-shadow: none;">登入控制台</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-signin">
+                        <label for="user_name" class="sr-only">邮件地址</label>
+                        <input type="email" id="user_name" class="form-control" placeholder="邮件地址" required autofocus>
+                        <label for="password" class="sr-only">密码</label>
+                        <input type="password" id="password" class="form-control" placeholder="密码" required>
+                        <div class="checkbox">
+                            <label>
+                                <input id="remember_me" type="checkbox" checked="true">
+                                <div style="font-size: 12px; color: #000; text-decoration: none; text-shadow: none;">
+                                    记住我
+                                </div>
+                            </label>
+                        </div>
+                        <button class="btn btn-normal btn-success" onclick="signIn();">确定</button>
+                        <button class="btn btn-normal btn-primary" onclick="onChangePassword();">忘记密码</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changepw_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="color: #000;">更改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="changepw_hint" style="color: #000;">系统会自动为你挑选一个6位随机数的新密码，并发送到你的邮件，确认更改密码？</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="changePassword();">确定</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="./public_js/bower_components/toastr/toastr.min.js"></script>
+<script src="./public_js/utils/ciphering.js"></script>
+<script src="./js/index.js"></script>
+</html>
