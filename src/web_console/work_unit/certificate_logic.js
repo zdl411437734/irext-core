@@ -7,7 +7,7 @@ var Constants = require('../mini_poem/configuration/constants');
 
 var Admin = require('../model/admin_dao.js');
 var AdminAuth = require('../authority/admin_auth.js');
-var MD5 = require('../mini_poem/security/md5.js');
+var MD5 = require('../mini_poem/crypto/md5.js');
 var StringUtils = require('../mini_poem/utils/string_utils.js');
 var nodemailer = require('nodemailer');
 

@@ -3,7 +3,7 @@
  * 2015-01-24
  */
 
-require('../minipoem/configuration/constants');
+require('../mini_poem/configuration/constants');
 var Cache = require('../mini_poem/cache/redis.js');
 var Enums = require('../constants/enums');
 var ErrorCode = require('../constants/error_code');

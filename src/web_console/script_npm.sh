@@ -44,4 +44,13 @@ npm install nodemailer@0.7
 echo "npm install node-mysql"
 npm install mysql
 
+echo "npm install redis"
+npm install redis
+
 echo "npm install done"
+
+echo "create logging directory"
+mkdir -p logs
+mkdir -p logs/production
+mkdir -p logs/dev
+mkdir -p logs/user_debug

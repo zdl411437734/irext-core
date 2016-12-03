@@ -3,7 +3,7 @@
 echo "running script of bower install needed by irext..."
 
 echo "npm install bower -g"
-npm install bower -g
+sudo npm install bower -g
 
 echo "bower install toastr"
 bower install toastr --allow-root
