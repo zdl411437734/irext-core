@@ -3,17 +3,17 @@
  * 2016-11-27
  */
 
-var Constants = require('../../../Infrastructure/BackEnd/configuration/constants');
+var Constants = require('../mini_poem/configuration/constants');
 
 var Admin = require('../model/admin_dao.js');
 var AdminAuth = require('../authority/admin_auth.js');
-var MD5 = require('../../../Infrastructure/BackEnd/security/md5.js');
-var StringUtils = require('../../../Infrastructure/BackEnd/utils/string_utils.js');
+var MD5 = require('../mini_poem/security/md5.js');
+var StringUtils = require('../mini_poem/utils/string_utils.js');
 var nodemailer = require('nodemailer');
 
 var Enums = require('../constants/enums.js');
 var ErrorCode = require('../constants/error_code.js');
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var logger = require('../mini_poem/logging/logger4js').helper;
 
 var enums = new Enums();
 var errorCode = new ErrorCode();

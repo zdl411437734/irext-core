@@ -4,9 +4,9 @@
  */
 
 // global inclusion
-var orm = require('../../../Infrastructure/BackEnd/node_modules/orm');
-var dbOrm = require('../../../Infrastructure/BackEnd/db/mysql/mysql_connection').mysqlDB;
-var logger = require('../../../Infrastructure/BackEnd/logging/logger4js').helper;
+var orm = require('../mini_poem/node_modules/orm');
+var dbOrm = require('../mini_poem/db/mysql/mysql_connection').mysqlDB;
+var logger = require('../mini_poem/logging/logger4js').helper;
 
 // local inclusion
 var ErrorCode = require('../constants/error_code');
