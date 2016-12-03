@@ -3,9 +3,9 @@
  * 2014-09-22
  */
 
-require('../../configuration/constants');
 var orm = require('orm');
 var logger = require('../../logging/logger4js').helper;
+require('../../configuration/constants');
 
 var ormOpt;
 

@@ -4,7 +4,7 @@
  */
 
 // global inclusion
-var orm = require('../mini_poem/node_modules/orm');
+var orm = require('orm');
 var dbOrm = require('../mini_poem/db/mysql/mysql_connection').mysqlDB;
 var logger = require('../mini_poem/logging/logger4js').helper;
 var dateUtils = require('../mini_poem/utils/date_utils.js');
@@ -27,7 +27,7 @@ var Category = dbOrm.define('category',
     }
 );
 
-Category.createCategory = function(category, callback) {
+Category.createCategory = function (category, callback) {
     var date = dateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
     var newCategory = new Category({
         name: category.name,
@@ -36,8 +36,8 @@ Category.createCategory = function(category, callback) {
         name_en: category.name_en,
         name_tw: category.name_tw
     });
-    newCategory.save(function(error, createdCategory) {
-        if(error) {
+    newCategory.save(function (error, createdCategory) {
+        if (error) {
             logger.error('failed to create category : ' + error);
             callback(errorCode.FAILED, null);
         } else {
@@ -47,7 +47,7 @@ Category.createCategory = function(category, callback) {
     });
 };
 
-Category.findCategoryByConditions = function(conditions, callback) {
+Category.findCategoryByConditions = function (conditions, callback) {
     Category.find(conditions)
         .run(function (error, categories) {
             if (error) {
@@ -60,8 +60,8 @@ Category.findCategoryByConditions = function(conditions, callback) {
         });
 };
 
-Category.listCategories = function(conditions, from, count, sortField, callback) {
-    if("id" == sortField && 0 != from) {
+Category.listCategories = function (conditions, from, count, sortField, callback) {
+    if ("id" == sortField && 0 != from) {
         conditions.id = orm.gt(from);
         Category.find(conditions).limit(parseInt(count)).orderRaw("?? ASC", [sortField])
             .run(function (listCategoriesErr, categories) {
@@ -88,8 +88,8 @@ Category.listCategories = function(conditions, from, count, sortField, callback)
 
 };
 
-Category.getCategoryByID = function(categoryID, callback) {
-    Category.get(categoryID, function(error, category) {
+Category.getCategoryByID = function (categoryID, callback) {
+    Category.get(categoryID, function (error, category) {
         if (error) {
             logger.error("get category by ID error : " + error);
             callback(errorCode.FAILED, null);
@@ -101,8 +101,8 @@ Category.getCategoryByID = function(categoryID, callback) {
 };
 
 /* For internal use only */
-Category.listRemoteCategories = function(conditions, from, count, sortField, callback) {
-    if("id" == sortField && 0 != from) {
+Category.listRemoteCategories = function (conditions, from, count, sortField, callback) {
+    if ("id" == sortField && 0 != from) {
         conditions.id = orm.gt(from);
         Category.find(conditions).limit(parseInt(count)).orderRaw("?? ASC", [sortField])
             .run(function (listCategoriesErr, categories) {

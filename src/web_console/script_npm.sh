@@ -44,4 +44,7 @@ npm install aliyun-sdk
 echo "npm install nodemailer"
 npm install nodemailer@0.7
 
+echo "npm install ali-oss"
+npm install ali-oss
+
 echo "npm install done"

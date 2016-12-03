@@ -8,7 +8,7 @@ fs = require('fs');
 var crypto = require('crypto');
 
 // global inclusion
-var orm = require('../mini_poem/node_modules/orm');
+var orm = require('orm');
 var Constants = require('../mini_poem/configuration/constants');
 var PythonCaller = require('../mini_poem/external/python_caller');
 var OSS = require('../mini_poem/data_set/ali_oss.js');

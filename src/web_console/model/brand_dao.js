@@ -4,7 +4,7 @@
  */
 
 // global inclusion
-var orm = require('../mini_poem/node_modules/orm');
+var orm = require('orm');
 var dbOrm = require('../mini_poem/db/mysql/mysql_connection').mysqlDB;
 var logger = require('../mini_poem/logging/logger4js').helper;
 var dateUtils = require('../mini_poem/utils/date_utils.js');
