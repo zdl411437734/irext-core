@@ -11,7 +11,6 @@ var crypto = require('crypto');
 var orm = require('orm');
 var Constants = require('../mini_poem/configuration/constants');
 var PythonCaller = require('../mini_poem/external/python_caller');
-var OSS = require('../mini_poem/data_set/ali_oss.js');
 
 var Category = require('../model/category_dao.js');
 var Brand = require('../model/brand_dao.js');

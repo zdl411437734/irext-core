@@ -29,9 +29,6 @@ npm install orm
 echo "npm install python-shell"
 npm install python-shell
 
-echo "npm install oss-client"
-npm install oss-client
-
 echo "npm install request"
 npm install request
 
@@ -44,7 +41,7 @@ npm install aliyun-sdk
 echo "npm install nodemailer"
 npm install nodemailer@0.7
 
-echo "npm install ali-oss"
-npm install ali-oss
+echo "npm install node-mysql"
+npm install mysql
 
 echo "npm install done"
