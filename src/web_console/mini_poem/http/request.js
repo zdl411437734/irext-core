@@ -8,7 +8,6 @@ var queryString = require('querystring');
 var http = require('http');
 var request = require('request');
 
-
 // local inclusion
 var Map = require('../mem/map.js');
 var ErrorCode = require('../configuration/error_code.js');
@@ -62,8 +61,9 @@ Request.prototype.sendGetRequest = function(options, callback) {
 
     if(options.https) {
         request(
-            { method: 'GET'
-                , uri: url
+            {
+                method: 'GET',
+                uri: url
             }, function (error, response, body) {
                 if(!error && response.statusCode == '200') {
                     callback(errorCode.SUCCESS, JSON.parse(body));
@@ -127,6 +127,26 @@ Request.prototype.sendPostRequest = function(bodyData, callback) {
     } catch(e) {
         console.error("exception occurred in http request : " + e);
     }
+};
+
+// post simple file to HTTP server
+Request.prototype.postSimpleFile = function(fileName, fileContent, contentType, options, callback) {
+    var httpTag = options.https ? "https://" : "http://";
+    var url = httpTag + this.host + ":" + this.port + this.service +
+        this.urlizeQueryParams();
+
+    var req = request.post(url, function (err, resp, body) {
+        if (err) {
+            callback(errorCode.FAILED, resp);
+        } else {
+            callback(errorCode.SUCCESS, resp);
+        }
+    });
+    var form = req.form();
+    form.append('file', fileContent, {
+        filename: fileName,
+        contentType: contentType
+    });
 };
 
 module.exports = Request;

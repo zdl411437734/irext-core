@@ -32,6 +32,9 @@ npm install python-shell
 echo "npm install request"
 npm install request
 
+echo "npm install form-data"
+npm install form-data
+
 echo "npm install async"
 npm install async
 

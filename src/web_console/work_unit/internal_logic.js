@@ -8,8 +8,8 @@ fs = require('fs');
 var crypto = require('crypto');
 
 // global inclusion
+require('../mini_poem/configuration/constants');
 var orm = require('orm');
-var Constants = require('../mini_poem/configuration/constants');
 var PythonCaller = require('../mini_poem/external/python_caller');
 
 var Category = require('../model/category_dao.js');
@@ -35,11 +35,6 @@ var async = require('async');
 // relative XML file path
 var PROTOCOL_PATH = "protocol";
 
-var DEBUG_BUCKET_NAME = "irext-debug";
-var USER_DEBUG_BUCKET_NAME = "irext-userdebug";
-var RELEASE_BUCKET_NAME = "irext-release";
-var PROTOCOL_BUCKET_NAME = "irext-protocol";
-
 // out going HTTP request parameters
 // var PRIMARY_SERVER_ADDRESS = "irext.net";
 var PRIMARY_SERVER_ADDRESS = "127.0.0.1";
@@ -49,6 +44,7 @@ var REQUEST_APP_KEY = "d6119900556c4c1e629fd92d";
 var REQUEST_APP_TOKEN = "fcac5496cba7a12b3bae34abf061f526";
 
 var PUBLISH_BRAND_SERVICE = "/irext/remote/publish_brands";
+var UPLOAD_BINARY_SERVICE = "/irext/remote/upload_binary";
 var PUBLISH_REMOTE_INDEX_SERVICE = "/irext/remote/publish_remote_indexes";
 var DELETE_REMOTE_INDEX_SERVICE = "/irext/remote/delete_remote_index";
 
@@ -212,7 +208,6 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
     var protocolPath;
     var outputPath;
     var outputFilePath;
-    var outputFileName;
     var newRemoteIndex;
     var newACRemoteNumber;
     var tagType;
@@ -272,7 +267,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                 userArgs.push(remoteXMLFilePath);
                 // set the xml directory as output path
                 userArgs.push(fileDir + "/");
-                var pythonCaller = new PythonCaller();
+                pythonCaller = new PythonCaller();
                 try {
                     pythonCaller.call(pythonRuntimeDir, pythonFile, userArgs, function(remoteGenErr, genResult) {
                         if (errorCode.SUCCESS.code == remoteGenErr) {
@@ -656,13 +651,12 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
             async.eachSeries(remoteIndexes, function (remoteIndex, innerCallback) {
                 var remoteName = remoteIndex.remote;
                 var protocolName = remoteIndex.protocol;
-                var binFileName = fileDir + "/irda_" + protocolName + "_" + remoteName + ".bin";
+                var binFileName = "irda_" + protocolName + "_" + remoteName + ".bin";
                 logger.info("binary file name = " + binFileName);
+
                 // step 2, copy file to transfer path
-                sourceFileName = FILE_TEMP_PATH + "/irda_" + protocolName + "_" +
-                    remoteName + ".bin";
-                targetFileName = FILE_TEMP_PATH + "/binary_transfer" + "/irda_" + protocolName + "_" +
-                    remoteName + ".bin";
+                sourceFileName = fileDir + "/" + binFileName;
+                targetFileName = fileDir + "/binary_transfer/" + binFileName;
                 var readStream = fs.createReadStream(sourceFileName);
                 var writeStream = fs.createWriteStream(targetFileName);
                 readStream.pipe(writeStream);
@@ -673,8 +667,28 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
                         innerCallback();
                     } else {
                         logger.info("read remote binary file successfully, file size = " + fileData.length);
-                        // TODO: send HTTP post request to release server
+                        var queryParams = new Map();
+                        queryParams.put("app_key", REQUEST_APP_KEY);
+                        queryParams.put("app_token", REQUEST_APP_TOKEN);
 
+                        var requestSender =
+                            new RequestSender(PRIMARY_SERVER_ADDRESS,
+                                PRIMARY_SERVER_PORT,
+                                UPLOAD_BINARY_SERVICE,
+                                queryParams);
+                        var options = {
+                            https: false
+                        };
+                        requestSender.postSimpleFile(binFileName, fileData, 'application/octet-stream',
+                            options, function(errorCode, response) {
+                                if (errorCode.SUCCESS.code == errorCode.code) {
+                                    logger.info("upload file successfully to primary server");
+                                    uploadedRIIds.push(remoteIndex.id);
+                                } else {
+                                    logger.info("upload file failed to primary server");
+                                }
+                                innerCallback();
+                            });
                     }
                 });
             }, function(err) {
@@ -696,7 +710,6 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
                     if (errorCode.SUCCESS.code == findRemoteIndexesErr.code &&
                         undefined != remoteIndexes && null != remoteIndexes && remoteIndexes.length > 0) {
                         // send out going HTTP request to primary server
-
                         var queryParams = new Map();
                         queryParams.put("app_key", REQUEST_APP_KEY);
                         queryParams.put("app_token", REQUEST_APP_TOKEN);
@@ -872,43 +885,31 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
                                 callback(errorCode.FAILED);
                             } else {
                                 logger.info("read protocol binary successfully, file size = " + fileData.length);
+                                //////////////////////////////////////
+                                // step 4, try register protocol to db
+                                var newProtocol = {
+                                    name: protocolName,
+                                    status: enums.ITEM_VALID,
+                                    type: protocolType
+                                };
 
-                                var aliOss = new OSS(OSS_HOST, PROTOCOL_BUCKET_NAME, OSS_APP_ID, OSS_APP_SECRET);
-                                remoteProtocolFile = protocolName + ".bin";
-                                aliOss.saveObjectFromBinary(remoteProtocolFile, fileData,
-                                    "application/octet-stream",
-                                    function (createObjectErr, objectID) {
-                                        if (errorCode.SUCCESS.code == createObjectErr) {
-                                            //////////////////////////////////////
-                                            // step 4, try register protocol to db
-                                            var newProtocol = {
-                                                name: protocolName,
-                                                status: enums.ITEM_VALID,
-                                                type: protocolType
-                                            };
+                                var conditions = {
+                                    name: protocolName
+                                };
 
-                                            var conditions = {
-                                                name: protocolName
-                                            };
-
-                                            logger.info("irda_tv_protocol.py called successfully, create protocol in DB");
-                                            IRProtocol.findIRProtocolByConditions(conditions, function(findIRProtocolErr, IRProtocols) {
-                                                if(errorCode.SUCCESS.code == findIRProtocolErr.code &&
-                                                    null != IRProtocols &&
-                                                    IRProtocols.length > 0) {
-                                                    logger.info("protocol " + protocolName + " already exists, nothing to be updated");
-                                                    callback(errorCode.SUCCESS);
-                                                } else {
-                                                    IRProtocol.createIRProtocol(newProtocol, function(createIRProtocolErr, createdIRProtocol) {
-                                                        callback(createIRProtocolErr);
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            logger.error("upload protocol binary file failed");
-                                            callback(errorCode.FAILED);
-                                        }
-                                    });
+                                logger.info("irda_tv_protocol.py called successfully, create protocol in DB");
+                                IRProtocol.findIRProtocolByConditions(conditions, function(findIRProtocolErr, IRProtocols) {
+                                    if(errorCode.SUCCESS.code == findIRProtocolErr.code &&
+                                        null != IRProtocols &&
+                                        IRProtocols.length > 0) {
+                                        logger.info("protocol " + protocolName + " already exists, nothing to be updated");
+                                        callback(errorCode.SUCCESS);
+                                    } else {
+                                        IRProtocol.createIRProtocol(newProtocol, function(createIRProtocolErr, createdIRProtocol) {
+                                            callback(createIRProtocolErr);
+                                        });
+                                    }
+                                });
                             }
                         });
                     } else {
