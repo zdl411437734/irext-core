@@ -26,7 +26,7 @@ exports.setupEnvironment = function () {
         REDIS_HOST = "localhost";
         REDIS_PORT = "6379";
         REDIS_PASSWORD = "";
-        EXTERNAL_SERVER_ADDRESS = "irext.net"
+        EXTERNAL_SERVER_ADDRESS = "irext.net";
         EXTERNAL_SERVER_PORT = "80"
     } else if (enums.APP_DEVELOPMENT_MODE == env) {
         MYSQL_DB_SERVER_ADDRESS = "localhost";
@@ -40,7 +40,7 @@ exports.setupEnvironment = function () {
         REDIS_HOST = "localhost";
         REDIS_PORT = "6379";
         REDIS_PASSWORD = "";
-        EXTERNAL_SERVER_ADDRESS = "irext.net"
+        EXTERNAL_SERVER_ADDRESS = "irext.net";
         EXTERNAL_SERVER_PORT = "80"
     } else if (enums.APP_USERDEBUG_MODE == env) {
         MYSQL_DB_SERVER_ADDRESS = "localhost";
@@ -54,7 +54,7 @@ exports.setupEnvironment = function () {
         REDIS_HOST = "localhost";
         REDIS_PORT = "6379";
         REDIS_PASSWORD = "";
-        EXTERNAL_SERVER_ADDRESS = "irext.net"
+        EXTERNAL_SERVER_ADDRESS = "irext.net";
         EXTERNAL_SERVER_PORT = "80"
     }
 };

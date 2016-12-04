@@ -151,8 +151,7 @@ exports.downloadRemoteBinCachedWorkUnit = function(remoteIndexID, callback) {
     RemoteIndex.getRemoteIndexByID(remoteIndexID, function(getRemoteIndexErr, remoteIndex) {
         if (errorCode.SUCCESS.code == getRemoteIndexErr.code && null != remoteIndex) {
             var fileName = "irda_" + remoteIndex.protocol + "_" + remoteIndex.remote + ".bin";
-            var remoteBinaryPath = FILE_TEMP_PATH;
-            var localBinFileName = remoteBinaryPath + "/cache/" + fileName;
+            var localBinFileName = FILE_TEMP_PATH + "/" + fileName;
 
             var error = errorCode.SUCCESS;
 

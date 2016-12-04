@@ -141,7 +141,6 @@ function loadRemoteList(isSearch, remoteMap) {
         url: url,
         cache: false,
         height: 600,
-        striped: true,
         pagination: true,
         pageSize: 50,
         pageList: [10, 25, 50, 100, 200],
@@ -209,7 +208,7 @@ function loadRemoteList(isSearch, remoteMap) {
             clickToSelect: true
         }, {
             field: 'contributor',
-            title: '来源',
+            title: '贡献者',
             align: 'left',
             valign: 'middle',
             sortable: true,
@@ -268,7 +267,7 @@ function rowStyle(row, index) {
         };
     } else if (row.status == '重复') {
         style = {
-            classes: 'danger'
+            classes: 'warning'
         };
     } else {
         style = {
@@ -415,16 +414,16 @@ function fallbackRemote() {
         timeout: 20000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#verify_confirm_dialog").modal("hide");
+                $("#fallback_confirm_dialog").modal("hide");
                 popUpHintDialog("已成功回退索引");
                 loadRemoteList();
             } else {
-                $("#verify_confirm_dialog").modal("hide");
+                $("#fallback_confirm_dialog").modal("hide");
                 popUpHintDialog("回退索引操作失败");
             }
         },
         error: function () {
-            $("#verify_confirm_dialog").modal("hide");
+            $("#fallback_confirm_dialog").modal("hide");
             popUpHintDialog("回退索引操作失败");
         }
     });
