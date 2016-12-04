@@ -269,7 +269,6 @@ exports.createRemoteIndex = function (req, res) {
     var contentType;
 
     var adminID = req.query.id;
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
     form.on('file', function(field, file) {
         // rename the incoming file to the file's name
@@ -296,7 +295,7 @@ exports.createRemoteIndex = function (req, res) {
             // set MIME to octet-stream as there might not be any contentType passed from the front-end form
             contentType = files.type || "application/octet-stream";
             logger.info("remoteIndex.kk_remote_number = " + remoteIndex.kk_remote_number);
-            internalLogic.createRemoteIndexWorkUnit(remoteIndex, filePath, contentType, ip, adminID,
+            internalLogic.createRemoteIndexWorkUnit(remoteIndex, filePath, contentType, adminID,
                 function (createRemoteIndexErr) {
                 if(errorCode.SUCCESS.code == createRemoteIndexErr.code) {
                     res.send("<html>" +
@@ -399,10 +398,8 @@ exports.createBrand = function (req, res) {
     var brand = req.body;
     var adminID = req.query.id;
 
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
     var serviceResponse = new ServiceResponse();
-    internalLogic.createBrandWorkUnit(brand, ip, adminID, function (createBrandErr) {
+    internalLogic.createBrandWorkUnit(brand, adminID, function (createBrandErr) {
         serviceResponse.status = createBrandErr;
         res.send(serviceResponse);
         res.end();

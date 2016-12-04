@@ -192,7 +192,7 @@ exports.listIRProtocolsWorkUnit = function (from, count, callback) {
     });
 };
 
-exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType, ip, adminID, callback) {
+exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType, adminID, callback) {
     //////////////////////////////////////
     // step 1, rename input remote xml file
     var find = '\\\\';
@@ -211,7 +211,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
     var newRemoteIndex;
     var newACRemoteNumber;
     var tagType;
-    var inputSource = "";
+    var contributor = "";
     var protocolFileName = "";
     var localProtocolFileName = "";
 
@@ -222,7 +222,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
     // verify admin
     Admin.getAdminByID(adminID, function(getAdminErr, admin) {
         if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            inputSource = admin.user_name + "-" + ip;
+            contributor = admin.user_name;
 
             // begin creating remote index
             switch(parseInt(categoryID)) {
@@ -322,7 +322,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                                                     category_name_tw: remoteIndex.category_name_tw,
                                                     brand_name_tw: remoteIndex.brand_name_tw,
                                                     binary_md5: fileHash,
-                                                    input_source: inputSource
+                                                    contributor: contributor
                                                 };
 
                                                 // see if this remote index is already in database
@@ -468,7 +468,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                                                             city_name_tw: remoteIndex.city_name_tw,
                                                             operator_name_tw: remoteIndex.operator_name_tw,
                                                             binary_md5: fileHash,
-                                                            input_source: inputSource
+                                                            contributor: contributor
                                                         }
                                                     } else {
                                                         newRemoteIndex = {
@@ -486,7 +486,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                                                             category_name_tw: remoteIndex.category_name_tw,
                                                             brand_name_tw: remoteIndex.brand_name_tw,
                                                             binary_md5: fileHash,
-                                                            input_source: inputSource
+                                                            contributor: contributor
                                                         }
                                                     }
 
@@ -546,7 +546,7 @@ exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
     Admin.getAdminByID(adminID, function(getAdminErr, admin) {
         if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
             if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if(remoteIndex.input_source.indexOf(admin.user_name) == -1) {
+                if(remoteIndex.contributor.indexOf(admin.user_name) == -1) {
                     logger.info("this admin " + admin.user_name + " could not change this remote index");
                     callback(errorCode.FAILED);
                     return;
@@ -586,7 +586,7 @@ exports.verifyRemoteIndexWorkUnit = function (remoteIndex, pass, adminID, callba
     Admin.getAdminByID(adminID, function(getAdminErr, admin) {
         if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
             if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if (remoteIndex.input_source.indexOf(admin.user_name) == -1) {
+                if (remoteIndex.contributor.indexOf(admin.user_name) == -1) {
                     logger.info("this admin " + admin.user_name + " could not change this remote index");
                     callback(errorCode.FAILED);
                     return;
@@ -607,7 +607,7 @@ exports.fallbackRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) 
     Admin.getAdminByID(adminID, function(getAdminErr, admin) {
         if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
             if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if (remoteIndex.input_source.indexOf(admin.user_name) == -1) {
+                if (remoteIndex.contributor.indexOf(admin.user_name) == -1) {
                     logger.info("this admin " + admin.user_name + " could not change this remote index");
                     callback(errorCode.FAILED);
                     return;
@@ -751,7 +751,7 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
     });
 };
 
-exports.createBrandWorkUnit = function (brand, ip, adminID, callback) {
+exports.createBrandWorkUnit = function (brand, adminID, callback) {
     var conditions = {
         category_id: brand.category_id,
         name: brand.name,
@@ -766,7 +766,7 @@ exports.createBrandWorkUnit = function (brand, ip, adminID, callback) {
                 return;
             }
 
-            brand.input_source = admin.user_name + "-" + ip;
+            brand.contributor = admin.user_name;
             Brand.findBrandByConditions(conditions, function(findBrandErr, brands) {
                 if(errorCode.SUCCESS.code == findBrandErr.code && null != brands && brands.length > 0) {
                     logger.info("brand already exists");
@@ -833,13 +833,13 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
     var unixFilePath = filePath.replace(re, '/');
     var lios = unixFilePath.lastIndexOf('/');
     var fileDir = unixFilePath.substring(0, lios);
+    var contributor;
 
     var protocolName = protocol.protocol_name_b;
     var srcFile = fileDir + "/" + protocolName + ".xml";
     var destFile = fileDir + "/" + protocolName + ".bin";
     var protocolType = protocol.protocol_type;
     var localProtocolFile = "";
-    var remoteProtocolFile = "";
 
     var pythonRuntimeDir = fileDir,
         pythonFile = "irda_tv_protocol.py",
@@ -853,6 +853,7 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
 
     Admin.getAdminByID(adminID, function(getAdminErr, admin) {
         if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
+            contributor = admin.user_name;
 
             logger.info("get admin error code = " + JSON.stringify(getAdminErr) + ", admin = " + JSON.stringify(admin));
 
@@ -890,7 +891,8 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
                                 var newProtocol = {
                                     name: protocolName,
                                     status: enums.ITEM_VALID,
-                                    type: protocolType
+                                    type: protocolType,
+                                    contributor: contributor
                                 };
 
                                 var conditions = {
@@ -898,14 +900,17 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
                                 };
 
                                 logger.info("irda_tv_protocol.py called successfully, create protocol in DB");
-                                IRProtocol.findIRProtocolByConditions(conditions, function(findIRProtocolErr, IRProtocols) {
+                                IRProtocol.findIRProtocolByConditions(conditions,
+                                    function(findIRProtocolErr, IRProtocols) {
                                     if(errorCode.SUCCESS.code == findIRProtocolErr.code &&
                                         null != IRProtocols &&
                                         IRProtocols.length > 0) {
-                                        logger.info("protocol " + protocolName + " already exists, nothing to be updated");
+                                        logger.info("protocol " + protocolName + " already exists, " +
+                                            "nothing to be updated");
                                         callback(errorCode.SUCCESS);
                                     } else {
-                                        IRProtocol.createIRProtocol(newProtocol, function(createIRProtocolErr, createdIRProtocol) {
+                                        IRProtocol.createIRProtocol(newProtocol,
+                                            function(createIRProtocolErr, createdIRProtocol) {
                                             callback(createIRProtocolErr);
                                         });
                                     }

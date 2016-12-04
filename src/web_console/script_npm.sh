@@ -23,6 +23,12 @@ npm install log4js
 echo "npm install formidable"
 npm install formidable
 
+echo "npm install mysql"
+npm install mysql
+
+echo "npm install redis"
+npm install redis
+
 echo "npm install orm"
 npm install orm
 
@@ -38,17 +44,8 @@ npm install form-data
 echo "npm install async"
 npm install async
 
-echo "npm install aliyun-sdk"
-npm install aliyun-sdk
-
 echo "npm install nodemailer"
 npm install nodemailer@0.7
-
-echo "npm install node-mysql"
-npm install mysql
-
-echo "npm install redis"
-npm install redis
 
 echo "npm install done"
 

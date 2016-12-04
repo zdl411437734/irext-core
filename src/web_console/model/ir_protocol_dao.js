@@ -22,7 +22,8 @@ var IRProtocol = dbOrm.define('ir_protocol',
         name: String,
         type: Number,
         status: Number,
-        update_time: String
+        update_time: String,
+        contributor: String
     },
     {
         cache: false
@@ -35,7 +36,8 @@ IRProtocol.createIRProtocol = function(protocol, callback) {
         name: protocol.name,
         status: protocol.status,
         type: protocol.type,
-        update_time: date
+        update_time: date,
+        contributor: protocol.contributor
     });
     newProtocol.save(function(error, createdProtocol) {
         if(error) {

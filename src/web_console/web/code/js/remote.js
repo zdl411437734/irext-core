@@ -208,7 +208,7 @@ function loadRemoteList(isSearch, remoteMap) {
             sortable: true,
             clickToSelect: true
         }, {
-            field: 'input_source',
+            field: 'contributor',
             title: '来源',
             align: 'left',
             valign: 'middle',

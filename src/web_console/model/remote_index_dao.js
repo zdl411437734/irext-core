@@ -39,7 +39,7 @@ var RemoteIndex = dbOrm.define('remote_index',
         brand_name_tw: String,
         city_name_tw: String,
         binary_md5: String,
-        input_source: String,
+        contributor: String,
         update_time: String
     },
     {
@@ -72,7 +72,7 @@ RemoteIndex.createRemoteIndex = function(remoteIndex, callback) {
         brand_name_tw: remoteIndex.brand_name_tw,
         city_name_tw: remoteIndex.city_name_tw,
         binary_md5: remoteIndex.binary_md5,
-        input_source: remoteIndex.input_source,
+        contributor: remoteIndex.contributor,
         update_time: date
     });
     newRemoteIndex.save(function(error, createdRemoteIndex) {
@@ -185,7 +185,7 @@ RemoteIndex.updateRemoteIndex = function(remoteIndexID, newRemoteIndex, callback
             remoteIndex.brand_name_tw = newRemoteIndex.brand_name_tw;
             remoteIndex.city_name_tw = newRemoteIndex.city_name_tw;
             remoteIndex.binary_md5 = newRemoteIndex.binary_md5;
-            remoteIndex.input_source = newRemoteIndex.input_source;
+            remoteIndex.contributor = newRemoteIndex.contributor;
             remoteIndex.update_time = newRemoteIndex.update_time;
 
             remoteIndex.save(function(error, updatedRemoteIndex) {

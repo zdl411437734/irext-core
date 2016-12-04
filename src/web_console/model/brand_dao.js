@@ -26,7 +26,8 @@ var Brand = dbOrm.define('brand',
         update_time: String,
         priority: Number,
         name_en: String,
-        name_tw: String
+        name_tw: String,
+        contributor: String
     },
     {
         cache: false
@@ -43,7 +44,8 @@ Brand.createBrand = function(brand, callback) {
         update_time: date,
         priority: brand.priority,
         name_en: brand.name_en,
-        name_tw: brand.name_tw
+        name_tw: brand.name_tw,
+        contributor: brand.contributor
     });
     newBrand.save(function(error, createdBrand) {
         if(error) {
@@ -122,6 +124,7 @@ Brand.updateBrandByID = function(brandID, newBrand, callback) {
             brand.priority = newBrand.priority;
             brand.name_en = newBrand.name_en;
             brand.name_tw = newBrand.name_tw;
+            brand.contributor = newBrand.contributor;
             brand.save(function(error, createdBrand) {
                 if(error) {
                     logger.error('failed to create brand in update brand : ' + error);

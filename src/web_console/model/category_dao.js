@@ -20,7 +20,8 @@ var Category = dbOrm.define('category',
         status: Number,
         update_time: String,
         name_en: String,
-        name_tw: String
+        name_tw: String,
+        contributor: String
     },
     {
         cache: false
@@ -34,7 +35,8 @@ Category.createCategory = function (category, callback) {
         status: 1,
         update_time: date,
         name_en: category.name_en,
-        name_tw: category.name_tw
+        name_tw: category.name_tw,
+        contributor: category.contributor
     });
     newCategory.save(function (error, createdCategory) {
         if (error) {
