@@ -54,3 +54,4 @@ mkdir -p logs
 mkdir -p logs/production
 mkdir -p logs/dev
 mkdir -p logs/user_debug
+
