@@ -2,11 +2,8 @@ backup/
 .idea/
 logs/
 tools/
-
-.idea/workspace.xml
+node_modules/
+bower_components/
+configuration/
 *.DS_Store
 nohup.out
-node_modules/
-bower_components
-
-configuration/system_configs.js
