@@ -1,5 +1,6 @@
 /**
- * Created by Strawmanbobi on 2015-12-21.
+ * Created by Strawmanbobi
+ * 2016-12-01
  */
 
 var id, token;

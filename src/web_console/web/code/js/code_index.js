@@ -1,10 +1,10 @@
 /**
  * Created by strawmanbobi
- * 2015-07-30.
+ * 2016-11-30
  */
 
-var LS_KEY_ID = "user_name";
-var LS_KEY_TOKEN = "token";
+var LS_KEY_ID = 'user_name';
+var LS_KEY_TOKEN = 'token';
 var id = "";
 var token = "";
 var client = null;
@@ -73,12 +73,12 @@ var remoteIndexesToPublish = [];
 
 ///////////////////////////// Initialization /////////////////////////////
 
-$("#menu_toggle").click(function(e) {
+$('#menu_toggle').click(function(e) {
     if (null != client && client == 'console') {
         return;
     }
     e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
+    $('#wrapper').toggleClass('toggled');
 });
 
 $(document).ready(function() {
@@ -90,19 +90,19 @@ $(document).ready(function() {
         hideSidebar();
     }
 
-    showMenu(id, token, "remote");
+    // showMenu(id, token, 'remote');
     initializeSelectors();
 
-    $("#remote_file").change(function() {
+    $('#remote_file').change(function() {
         var filePath = $(this).val();
         var fileName = filePath.substring(filePath.lastIndexOf('\\') + 1, filePath.lastIndexOf('.'));
-        $("#remote_name").val(fileName);
+        $('#remote_name').val(fileName);
     });
 
-    $("#protocol_file").change(function() {
+    $('#protocol_file').change(function() {
         var filePath = $(this).val();
         var fileName = filePath.substring(filePath.lastIndexOf('\\') + 1, filePath.lastIndexOf('.'));
-        $("#protocol_name_b").val(fileName);
+        $('#protocol_name_b').val(fileName);
     });
 
 });
@@ -122,16 +122,18 @@ function loadRemoteList(isSearch, remoteMap) {
     var url;
 
     if (isSearch && remoteMap) {
-        url = "/irext/int/search_remote_indexes?remote_map="+remoteMap+"&from=0&count=2000&id="+id+"&token="+token;
+        url = '/irext/int/search_remote_indexes?remote_map='+remoteMap+'&from=0&count=2000&id='+id+'&token='+token;
     } else {
         if(currentFilterCategory.id == 3) {
-            url = "/irext/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&city_code="+currentFilterCity.code+
-                "&from=0&count=100&id="+id+"&token="+token;
+            url = '/irext/int/list_remote_indexes?category_id='+currentFilterCategory.id+'&city_code='+currentFilterCity.code+
+                '&from=0&count=100&id='+id+'&token='+token;
         } else {
-            url = "/irext/int/list_remote_indexes?category_id="+currentFilterCategory.id+"&brand_id="+currentFilterBrand.id+
-                "&from=0&count=100&id="+id+"&token="+token;
+            url = '/irext/int/list_remote_indexes?category_id='+currentFilterCategory.id+'&brand_id='+currentFilterBrand.id+
+                '&from=0&count=100&id='+id+'&token='+token;
         }
     }
+
+    console.log(url);
 
     $('#remote_table_container').empty();
     $('#remote_table_container').append('<table id="remote_table" data-row-style="rowStyle"></table>');
@@ -287,25 +289,25 @@ function createRemote() {
     var versionPatten = new RegExp('[0-9]\\.[0-9]\\.[0-9]');
 
     if (!remoteName || "" == remoteName) {
-        popUpHintDialog("请输入编码名称");
+        popUpHintDialog('请输入编码名称');
         return;
     }
 
     if (!remoteFile || "" == remoteFile) {
-        popUpHintDialog("请输入控制码源文件");
+        popUpHintDialog('请输入控制码源文件');
         return;
     }
 
-    console.log("categoryID = " + currentCategory.id + ", categoryName = " + currentCategory.name + ", " + currentCategory.name_en +
-        ", " + currentCategory.name_tw + ", brandID = " + currentBrand.id +
-        ", brandName = " + currentBrand.name + ", " + currentBrand.name_en + ", " + currentBrand.name_tw +
-        ", cityCode = " + currentCity.code + ", cityName = " + currentCity.name + ", " + currentCity.name_tw +
-        ", opID = " + currentOperator.operator_id + ", opName = " + currentOperator.operator_name + ", " + currentOperator.operator_name_tw + ", subCate = " + subCate +
-        ", protocolID = " + currentProtocol.id + ", protocolName = " + currentProtocol.name +
-        ", remoteName = " +remoteName + ", remoteFile = " + remoteFile + ", remoteNumber = " + remoteNumber);
+    console.log('categoryID = ' + currentCategory.id + ', categoryName = ' + currentCategory.name + ', ' + currentCategory.name_en +
+        ', ' + currentCategory.name_tw + ', brandID = ' + currentBrand.id +
+        ', brandName = ' + currentBrand.name + ', ' + currentBrand.name_en + ', ' + currentBrand.name_tw +
+        ', cityCode = ' + currentCity.code + ', cityName = ' + currentCity.name + ', ' + currentCity.name_tw +
+        ', opID = ' + currentOperator.operator_id + ', opName = ' + currentOperator.operator_name + ', ' + currentOperator.operator_name_tw + ', subCate = ' + subCate +
+        ', protocolID = ' + currentProtocol.id + ', protocolName = ' + currentProtocol.name +
+        ', remoteName = ' +remoteName + ', remoteFile = ' + remoteFile + ', remoteNumber = ' + remoteNumber);
 
     var form = $('#remote_upload_form');
-    form.attr('action', '/irext/int/create_remote_index?id='+id+"&token="+token);
+    form.attr('action', '/irext/int/create_remote_index?id='+id+'&token='+token);
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
@@ -323,8 +325,8 @@ function createRemote() {
     $('#operator_name_tw').val(currentOperator.name_tw);
 
     form.submit();
-    $("#create_remote_dialog").modal('hide');
-    $("#uploading_dialog").modal();
+    $('#create_remote_dialog').modal('hide');
+    $('#uploading_dialog').modal();
 }
 
 function deleteRemote() {
@@ -354,28 +356,31 @@ function deleteRemote() {
             break;
     }
 
+    remoteToDelete.admin_id = id;
+    remoteToDelete.token = token;
+
     $.ajax({
-        url: "/irext/int/delete_remote_index?id="+id+"&token="+token,
-        type: "POST",
-        dataType: "json",
+        url: '/irext/int/delete_remote_index',
+        type: 'POST',
+        dataType: 'json',
         data: remoteToDelete,
         timeout: 20000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#delete_confirm_dialog").modal('hide');
-                popUpHintDialog("已成功删除索引");
+                $('#delete_confirm_dialog').modal('hide');
+                popUpHintDialog('已成功删除索引');
                 loadRemoteList();
-                $("#delete_confirm_dialog").modal("hide");
+                $('#delete_confirm_dialog').modal('hide');
             } else {
-                $("#delete_confirm_dialog").modal('hide');
-                popUpHintDialog("删除索引操作失败");
-                $("#delete_confirm_dialog").modal("hide");
+                $('#delete_confirm_dialog').modal('hide');
+                popUpHintDialog('删除索引操作失败');
+                $('#delete_confirm_dialog').modal('hide');
             }
         },
         error: function () {
-            $("#delete_confirm_dialog").modal('hide');
-            popUpHintDialog("删除索引操作失败");
-            $("#delete_confirm_dialog").modal("hide");
+            $('#delete_confirm_dialog').modal('hide');
+            popUpHintDialog('删除索引操作失败');
+            $('#delete_confirm_dialog').modal('hide');
         }
     });
 }
@@ -406,37 +411,41 @@ function fallbackRemote() {
             remoteToFallback.status = 0;
             break;
     }
+
+    remoteToFallback.admin_id = id;
+    remoteToFallback.token = token;
+
     $.ajax({
-        url: "/irext/int/fallback_remote_index?id="+id+"&token="+token,
-        type: "POST",
-        dataType: "json",
+        url: '/irext/int/fallback_remote_index',
+        type: 'POST',
+        dataType: 'json',
         data: remoteToFallback,
         timeout: 20000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#fallback_confirm_dialog").modal("hide");
-                popUpHintDialog("已成功回退索引");
+                $('#fallback_confirm_dialog').modal('hide');
+                popUpHintDialog('已成功回退索引');
                 loadRemoteList();
             } else {
-                $("#fallback_confirm_dialog").modal("hide");
-                popUpHintDialog("回退索引操作失败");
+                $('#fallback_confirm_dialog').modal('hide');
+                popUpHintDialog('回退索引操作失败');
             }
         },
         error: function () {
-            $("#fallback_confirm_dialog").modal("hide");
-            popUpHintDialog("回退索引操作失败");
+            $('#fallback_confirm_dialog').modal('hide');
+            popUpHintDialog('回退索引操作失败');
         }
     });
 }
 
 function searchRemote() {
-    var remoteMap = $("#remote_map").val();
+    var remoteMap = $('#remote_map').val();
 
     if (null != remoteMap && "" != remoteMap && remoteMap.length > 5) {
         loadRemoteList(true, remoteMap);
-        $("#search_dialog").modal('hide');
+        $('#search_dialog').modal('hide');
     } else {
-        popUpHintDialog("编码映射格式不正确");
+        popUpHintDialog('编码映射格式不正确');
     }
 }
 
@@ -466,127 +475,144 @@ function verifyRemote() {
             remoteToVerify.status = 0;
             break;
     }
+
+    remoteToVerify.admin_id = id;
+    remoteToVerify.token = token;
+
     $.ajax({
-        url: "/irext/int/verify_remote_index?pass="+pass+"&id="+id+"&token="+token,
-        type: "POST",
-        dataType: "json",
+        url: '/irext/int/verify_remote_index',
+        type: 'POST',
+        dataType: 'json',
         data: remoteToVerify,
         timeout: 20000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#verify_confirm_dialog").modal("hide");
-                popUpHintDialog("已成功更新索引");
+                $('#verify_confirm_dialog').modal('hide');
+                popUpHintDialog('已成功更新索引');
                 loadRemoteList();
             } else {
-                $("#verify_confirm_dialog").modal("hide");
-                popUpHintDialog("更新索引操作失败");
+                $('#verify_confirm_dialog').modal('hide');
+                popUpHintDialog('更新索引操作失败');
             }
         },
         error: function () {
-            $("#verify_confirm_dialog").modal("hide");
-            popUpHintDialog("更新索引操作失败");
+            $('#verify_confirm_dialog').modal('hide');
+            popUpHintDialog('更新索引操作失败');
         }
     });
 }
 
 function publishUnpublished() {
-    var date = formatDate(new Date(), "yyyy-MM-dd");
-    JSONToCSVConvertor(brandsToPublish, "Unpublihshed Brand " + date, true);
-    JSONToCSVConvertor(remoteIndexesToPublish, "Unpublihshed Remote " + date, true);
+    var date = formatDate(new Date(), 'yyyy-MM-dd');
+    // JSONToCSVConvertor(brandsToPublish, 'Unpublihshed Brand ' + date, true);
+    // JSONToCSVConvertor(remoteIndexesToPublish, 'Unpublihshed Remote ' + date, true);
 }
 
 function publishBrands() {
-    $("#publish_hint").empty();
-    $("#publish_hint").append('正在发布新增品牌，请稍候...');
+    $('#publish_hint').empty();
+    $('#publish_hint').append('正在发布新增品牌，请稍候...');
+
     $.ajax({
-        url: "/irext/int/publish_brands?id="+id+"&token="+token,
-        type: "POST",
+        url: '/irext/int/publish_brands',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            admin_id : id,
+            token : token
+        },
         timeout: 200000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#publish_hint").empty();
-                $("#publish_hint").append('正在发布新增编码，请稍候...');
+                $('#publish_hint').empty();
+                $('#publish_hint').append('正在发布新增编码，请稍候...');
                 publishRemoteIndexes();
                 // loadRemoteList();
-                // $("#publish_dialog").modal("hide");
+                // $('#publish_dialog').modal('hide');
             } else {
-                popUpHintDialog("发布编码表操作失败");
-                $("#publish_dialog").modal("hide");
+                popUpHintDialog('发布编码表操作失败');
+                $('#publish_dialog').modal('hide');
             }
         },
         error: function () {
-            popUpHintDialog("发布编码表操作失败");
-            $("#publish_dialog").modal("hide");
+            popUpHintDialog('发布编码表操作失败');
+            $('#publish_dialog').modal('hide');
         }
     });
 }
 
 function publishRemoteIndexes() {
     $.ajax({
-        url: "/irext/int/publish_remote_index?id="+id+"&token="+token,
-        type: "POST",
+        url: '/irext/int/publish_remote_index',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            admin_id : id,
+            token : token
+        },
         timeout: 200000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#publish_dialog").modal('hide');
-                popUpHintDialog("已成功发布编码表");
+                $('#publish_dialog').modal('hide');
+                popUpHintDialog('已成功发布编码表');
                 loadRemoteList();
             } else {
-                $("#publish_dialog").modal('hide');
-                popUpHintDialog("发布编码表操作失败");
+                $('#publish_dialog').modal('hide');
+                popUpHintDialog('发布编码表操作失败');
             }
         },
         error: function () {
-            $("#publish_dialog").modal('hide');
-            popUpHintDialog("发布编码表操作失败");
+            $('#publish_dialog').modal('hide');
+            popUpHintDialog('发布编码表操作失败');
         }
     });
 }
 
 function createBrand() {
-    var newName = $("#brand_name_b").val();
-    var newNameEn = $("#brand_name_en_b").val();
-    var newNameTw = $("#brand_name_tw_b").val();
-    var brandPriority = $("#brand_priority").val();
+    var newName = $('#brand_name_b').val();
+    var newNameEn = $('#brand_name_en_b').val();
+    var newNameTw = $('#brand_name_tw_b').val();
+    var brandPriority = $('#brand_priority').val();
 
     if (null == newName || "" == newName ||
         null == newNameEn || "" == newNameEn ||
         null == newNameTw) {
-        popUpHintDialog("请填写名称");
+        popUpHintDialog('请填写名称');
         return;
     }
 
     if (isBrandExists(newName)) {
-        popUpHintDialog("这个品牌已经存在");
+        popUpHintDialog('这个品牌已经存在');
         return;
     }
 
 
     $.ajax({
-        url: "/irext/int/create_brand?id="+id+"&token="+token,
-        type: "POST",
+        url: '/irext/int/create_brand',
+        type: 'POST',
         data: {
             category_id : currentCategory.id,
             category_name : currentCategory.name,
             name : newName,
             name_en : newNameEn,
             name_tw : newNameTw,
-            priority: brandPriority
+            priority : brandPriority,
+            admin_id : id,
+            token : token
         },
         timeout: 20000,
         success: function (response) {
             if(response.status.code == 0) {
-                $("#create_brand_dialog").modal("hide");
-                popUpHintDialog("已成功添加品牌");
+                $('#create_brand_dialog').modal('hide');
+                popUpHintDialog('已成功添加品牌');
                 initializeBrands();
             } else {
-                $("#create_brand_dialog").modal("hide");
-                popUpHintDialog("品牌添加的操作失败");
+                $('#create_brand_dialog').modal('hide');
+                popUpHintDialog('品牌添加的操作失败');
             }
         },
         error: function () {
-            $("#create_brand_dialog").modal("hide");
-            popUpHintDialog("品牌添加的操作失败");
+            $('#create_brand_dialog').modal('hide');
+            popUpHintDialog('品牌添加的操作失败');
         }
     });
 }
@@ -597,34 +623,34 @@ function createProtocol() {
     var protocolType = $('#protocol_type').val();
 
     if(!protocolName || "" == protocolName) {
-        popUpHintDialog("请输入协议名称");
+        popUpHintDialog('请输入协议名称');
         return;
     }
 
     if(!protocolFile || "" == protocolFile) {
-        popUpHintDialog("请输入协议XML文件");
+        popUpHintDialog('请输入协议XML文件');
         return;
     }
 
-    console.log("protocolName = " + protocolName + ", protocolFile = " + protocolFile +
-        ", protocolType = " + protocolType);
+    console.log('protocolName = ' + protocolName + ', protocolFile = ' + protocolFile +
+        ', protocolType = ' + protocolType);
 
     var form = $('#protocol_upload_form');
-    form.attr('action', '/irext/int/create_protocol?id='+id+"&token="+token);
+    form.attr('action', '/irext/int/create_protocol');
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
 
     form.submit();
-    $("#create_protocol_dialog").modal("hide");
-    $("#creating_protocol_dialog").modal();
+    $('#create_protocol_dialog').modal('hide');
+    $('#creating_protocol_dialog').modal();
     initializeProtocols();
 }
 
 function createBleTestInfo() {
-    var bleRemoteIndexInfo = $("#ble_test_info").val();
-    $("#ble_remote_index").val(bleRemoteIndexInfo);
-    $("#create_ble_test_dialog").modal("hide");
+    var bleRemoteIndexInfo = $('#ble_test_info').val();
+    $('#ble_remote_index').val(bleRemoteIndexInfo);
+    $('#create_ble_test_dialog').modal('hide');
 }
 
 ///////////////////////////// Data process /////////////////////////////
@@ -636,9 +662,15 @@ function initializeSubCates() {
 
 function initializeProtocols() {
     $.ajax({
-        url: "/irext/int/list_ir_protocols?from=0&count=200&id="+id+"&token="+token,
+        url: '/irext/int/list_ir_protocols',
         dataType: 'JSON',
-        type: 'GET',
+        type: 'POST',
+        data: {
+            from : 0,
+            count : 200,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -663,9 +695,15 @@ function initializeProtocols() {
 
 function initializeCategories() {
     $.ajax({
-        url: "/irext/int/list_categories?from=0&count=200&id="+id+"&token="+token,
+        url: '/irext/int/list_categories',
         dataType: 'JSON',
-        type: 'GET',
+        type: 'POST',
+        data: {
+            from : 0,
+            count : 200,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -696,9 +734,13 @@ function initializeCategories() {
 
 function initializeProvince() {
     $.ajax({
-        url: "/irext/int/list_provinces?id="+id+"&token="+token,
+        url: '/irext/int/list_provinces',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            admin_id : id,
+            token : token
+        },
+        type: 'POST',
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -726,9 +768,14 @@ function initializeProvince() {
 function initializeCity() {
     var provincePrefix = currentProvince.code.substring(0, 2);
     $.ajax({
-        url: "/irext/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
+        url: '/irext/int/list_cities',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            province_prefix : provincePrefix,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -769,9 +816,16 @@ function initializeCity() {
 
 function initializeOperator() {
     $.ajax({
-        url: "/irext/int/list_operators?city_code="+currentCity.code+"&from=0&count=50&id="+id+"&token="+token,
+        url: '/irext/int/list_operators',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            city_code : currentCity.code,
+            from : 0,
+            count : 200,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -811,9 +865,16 @@ function initializeOperator() {
 
 function initializeBrands() {
     $.ajax({
-        url: "/irext/int/list_brands?category_id="+currentCategory.id+"&from=0&count=300&id="+id+"&token="+token,
+        url: '/irext/int/list_brands',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            category_id : currentCategory.id,
+            from : 0,
+            count : 300,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -842,9 +903,15 @@ function initializeBrands() {
 
 function initializeFilterCategories() {
     $.ajax({
-        url: "/irext/int/list_categories?from=0&count=200&id="+id+"&token="+token,
+        url: '/irext/int/list_categories',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            from : 0,
+            count : 200,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -871,9 +938,13 @@ function initializeFilterCategories() {
 
 function initializeFilterProvince() {
     $.ajax({
-        url: "/irext/int/list_provinces?id="+id+"&token="+token,
+        url: '/irext/int/list_provinces',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -901,9 +972,14 @@ function initializeFilterProvince() {
 function initializeFilterCity() {
     var provincePrefix = currentFilterProvince.code.substring(0, 2);
     $.ajax({
-        url: "/irext/int/list_cities?province_prefix="+provincePrefix+"&id="+id+"&token="+token,
+        url: '/irext/int/list_cities',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            province_prefix : provincePrefix,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -931,9 +1007,16 @@ function initializeFilterCity() {
 
 function initializeFilterBrands() {
     $.ajax({
-        url: "/irext/int/list_brands?category_id="+currentFilterCategory.id+"&from=0&count=300&id="+id+"&token="+token,
+        url: '/irext/int/list_brands',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            category_id : currentFilterCategory.id,
+            from : 0,
+            count : 300,
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -947,7 +1030,7 @@ function initializeFilterBrands() {
                     }
                 }
                 if(currentFilterCategory.id != 3) {
-                    console.log("reload remote table after brand is refreshed");
+                    console.log('reload remote table after brand is refreshed');
                     loadRemoteList();
                 }
             } else {
@@ -963,7 +1046,7 @@ function initializeFilterBrands() {
 ///////////////////////////// Event handler /////////////////////////////
 
 function onCreateRemote() {
-    $("#create_remote_dialog").modal();
+    $('#create_remote_dialog').modal();
 }
 
 function onProtocolChange() {
@@ -975,7 +1058,7 @@ function onProtocolChange() {
 
 function onRadioTypeChange() {
     currentRadioType = $('#radio_type').val();
-    console.log("update current radio type to " + currentRadioType);
+    console.log('update current radio type to ' + currentRadioType);
 
     switch (parseInt(currentRadioType)) {
         case RADIO_TYPE_IRDA:
@@ -993,12 +1076,12 @@ function onRadioTypeChange() {
 
 function onSubCateChange() {
     currentSubCate = $('#sub_cate').val();
-    console.log("update current sub category type to " + currentSubCate);
+    console.log('update current sub category type to ' + currentSubCate);
 }
 
 function onProtocolTypeChange() {
     currentProtocolType = $('#protocol_type').val();
-    console.log("update current protocol type to " + currentProtocolType);
+    console.log('update current protocol type to ' + currentProtocolType);
 }
 
 function onCategoryChange() {
@@ -1077,7 +1160,7 @@ function switchCategory() {
             showProtocolSelector(true);
             break;
         default:
-            console.log("Wrong category : " + currentCategory.id);
+            console.log('Wrong category : ' + currentCategory.id);
             break;
     }
 }
@@ -1145,7 +1228,7 @@ function onOperatorChange() {
     var currentOperatorID = $('#operator_id').val();
 
     currentOperator = getStbOperatorByID(currentOperatorID);
-    console.log("currentOperator = " + JSON.stringify(currentOperator));
+    console.log('currentOperator = ' + JSON.stringify(currentOperator));
 }
 
 function discoverCityCode() {
@@ -1158,7 +1241,7 @@ function onFilterCategoryChange() {
         name: $('#filter_category_id option:selected').text()
     };
 
-    console.log("onFilterCategoryChange, id = " + currentFilterCategory.id);
+    console.log('onFilterCategoryChange, id = ' + currentFilterCategory.id);
 
     switch(parseInt(currentFilterCategory.id)) {
         case CATEGORY_AC:
@@ -1231,7 +1314,7 @@ function onFilterCityChange() {
 }
 
 function onCreateBrand() {
-    $("#category_name_b").val(currentCategory.name);
+    $('#category_name_b').val(currentCategory.name);
     $('#create_brand_dialog').modal({backdrop: 'static', keyboard: false});
 }
 
@@ -1262,9 +1345,9 @@ function onFallbackRemote() {
             selectedRemote.protocol + ' ' + selectedRemote.remote + ' 吗?';
     }
 
-    $("#fallback_hint").empty();
-    $("#fallback_hint").append(hintText);
-    $("#fallback_confirm_dialog").modal();
+    $('#fallback_hint').empty();
+    $('#fallback_hint').append(hintText);
+    $('#fallback_confirm_dialog').modal();
 }
 
 function onDeleteRemote() {
@@ -1281,9 +1364,9 @@ function onDeleteRemote() {
             selectedRemote.protocol + ' ' + selectedRemote.remote + ' 吗?';
     }
 
-    $("#delete_hint").empty();
-    $("#delete_hint").append(hintText);
-    $("#delete_confirm_dialog").modal();
+    $('#delete_hint').empty();
+    $('#delete_hint').append(hintText);
+    $('#delete_confirm_dialog').modal();
 }
 
 function onSearchRemote() {
@@ -1306,9 +1389,9 @@ function onVerifyRemote(isPass) {
             selectedRemote.protocol + ' ' + selectedRemote.remote + ' 吗?';
     }
 
-    $("#verify_hint").empty();
-    $("#verify_hint").append(hintText);
-    $("#verify_confirm_dialog").modal();
+    $('#verify_hint').empty();
+    $('#verify_hint').append(hintText);
+    $('#verify_confirm_dialog').modal();
 }
 
 function onPublishRemote() {
@@ -1317,9 +1400,13 @@ function onPublishRemote() {
 
 function getUnpublishedBrands() {
     $.ajax({
-        url: "/irext/int/list_unpublished_brands?id="+id+"&token="+token,
+        url: '/irext/int/list_unpublished_brands',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -1337,9 +1424,13 @@ function getUnpublishedBrands() {
 
 function getUnpublishedRemoteIndexes() {
     $.ajax({
-        url: "/irext/int/list_unpublished_remote_indexes?id="+id+"&token="+token,
+        url: '/irext/int/list_unpublished_remote_indexes',
+        type: 'POST',
         dataType: 'JSON',
-        type: 'GET',
+        data: {
+            admin_id : id,
+            token : token
+        },
         timeout: 20000,
         success: function(response) {
             if(response.status.code == 0) {
@@ -1361,9 +1452,9 @@ function downloadBin() {
         popUpHintDialog('请先选中一个索引');
         return;
     }
-    downloadURL = "/irext/int/download_remote_index?remote_index_id="+selectedRemote.id+"&id="+id+"&token="+token;
+    downloadURL = '/irext/int/download_remote_index?remote_index_id='+selectedRemote.id+'&id='+id+'&token='+token;
 
-    if (null != client && client == "console") {
+    if (null != client && client == 'console') {
         // directly download binary to remote via serial port
     } else {
         window.open(
@@ -1375,9 +1466,9 @@ function downloadBin() {
 
 function showPublishDialog() {
     var hintText = '共有 <font color="#FF0000">' + brandsToPublish.length + '</font> 个新增品牌，以及 <font color="#FF0000">' + remoteIndexesToPublish.length + '</font> 个新增编码待发布，请确认';
-    $("#publish_hint").empty();
-    $("#publish_hint").append(hintText);
-    $("#publish_dialog").modal();
+    $('#publish_hint').empty();
+    $('#publish_hint').append(hintText);
+    $('#publish_dialog').modal();
 }
 
 ///////////////////////////// UI functions /////////////////////////////
@@ -1598,9 +1689,9 @@ function showBleRemoteInfo(show) {
 }
 
 function popUpHintDialog(hint) {
-    $("#text_hint").empty();
-    $("#text_hint").append(hint);
-    $("#hint_dialog").modal();
+    $('#text_hint').empty();
+    $('#text_hint').append(hint);
+    $('#hint_dialog').modal();
 }
 
 ///////////////////////////// Utilities /////////////////////////////
@@ -1656,7 +1747,7 @@ function getStbOperatorByID(operatorID) {
 }
 
 function translateToTC(textID, targetTextID) {
-    var val = $("#" + textID).val();
+    var val = $('#' + textID).val();
     var tcVal = "";
     Chinese.prototype.loaded.onkeep(function() {
         var chinese = new Chinese();
@@ -1664,10 +1755,10 @@ function translateToTC(textID, targetTextID) {
         if (null == tcVal) {
             tcVal = val;
         }
-        $("#" + targetTextID).val(tcVal);
+        $('#' + targetTextID).val(tcVal);
     });
 }
 
 function gotoIndex() {
-    window.location = "../index.html?id="+id+"&token="+token;
+    window.location = '../index.html?id='+id+'&token='+token;
 }

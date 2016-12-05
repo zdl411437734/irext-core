@@ -1,13 +1,10 @@
 /**
  * Created by Strawmanbobi
- * 2015-11-13
+ * 2016-11-13
  */
 
 var LS_KEY_ID = "user_name";
 var LS_KEY_TOKEN = "token";
-var id = "";
-var token = "";
-var client = null;
 
 $("#document").ready(function() {
 
@@ -37,6 +34,29 @@ function popUpHintDialog(hint) {
     $("#text_hint").empty();
     $("#text_hint").append(hint);
     $("#hint_dialog").modal();
+}
+
+function navigateToPage(page, id, token) {
+    var form = $("<form method='post'></form>"),
+        input;
+    form.attr({"action" : "/irext/nav/nav_to_url"});
+
+    input = $("<input type='hidden'>");
+    input.attr({"name": "admin_id"});
+    input.val(id);
+    form.append(input);
+
+    input = $("<input type='hidden'>");
+    input.attr({"name": "token"});
+    input.val(token);
+    form.append(input);
+
+    input = $("<input type='hidden'>");
+    input.attr({"name": "page"});
+    input.val(page);
+    form.append(input);
+
+    form.submit();
 }
 
 function changePassword() {
@@ -95,28 +115,10 @@ function doSignIn(userName, password) {
                 if (null == index) {
                     window.location = "./error/auth_error.html";
                 } else {
-                    /*
-                    switch (parseInt(index)) {
-                        case 0:
-                            page = "./code/index.html";
-                            break;
-                        case 1:
-                            page = "./doc/index.html";
-                            break;
-                        case 2:
-                            page = "./version/index.html";
-                            break;
-                    }
-                    */
-                    page = "./code/index.html";
-                    page += "?id="+adminID+"&token="+token;
-
-                    if (undefined != client && null != client && client == "console") {
-                        page += "&client="+client;
-                    }
+                    page = "code";
                 }
                 setTimeout(function() {
-                    window.location = page;
+                    navigateToPage(page, adminID, token);
                 }, 3000);
                 if($("#remember_me").is(":checked")) {
                     localStorage.setItem(LS_KEY_ID, adminID);
@@ -131,53 +133,3 @@ function doSignIn(userName, password) {
         }
     });
 }
-
-function verifyToken(id, token) {
-    $.ajax({
-        url: "/irext/certificate/token_verify",
-        type: "POST",
-        data: JSON.stringify({id: id, token: token}),
-        contentType: "application/json; charset=utf-8",
-        timeout: 20000,
-        success: function(response) {
-            if(response.status.code == 0) {
-                toastr.success("登入成功，3秒后自动进入控制台");
-                // make console entry according to the content of token
-                var permission = token.substring(token.indexOf(",") + 1);
-                var index = null;
-                var page = "";
-                if (null != permission && permission != "") {
-                    index = permission.substring(0, 1);
-                }
-                if (null == index) {
-                    window.location = "./error/auth_error.html";
-                } else {
-                    /*
-                    switch (parseInt(index)) {
-                        case 0:
-                            page = "./code/index.html";
-                            break;
-                        case 1:
-                            page = "./doc/index.html";
-                            break;
-                        case 2:
-                            page = "./version/index.html";
-                            break;
-                    }
-                    */
-                    page = "./welcome/index.html";
-                    page += "?id="+id+"&token="+token;
-                }
-                setTimeout(function() {
-                    window.location = page;
-                }, 3000);
-            } else {
-                toastr.error("自动登入失败，请输入邮件地址和密码手动登入");
-            }
-        },
-        error: function() {
-            toastr.error("自动登入失败，请输入邮件地址和密码手动登入");
-        }
-    });
-}
-

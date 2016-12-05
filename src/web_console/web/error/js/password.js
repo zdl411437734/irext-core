@@ -1,6 +1,6 @@
 /**
  * Created by Strawmanbobi
- * 2015-12-22
+ * 2016-12-02
  */
 
 var LS_KEY_ID = "user_name";

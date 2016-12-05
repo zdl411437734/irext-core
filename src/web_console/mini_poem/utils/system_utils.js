@@ -1,6 +1,6 @@
-/*
+/**
  * Created by Strawmanbobi
- * 2015-03-02
+ * 2016-12-02
  */
 
 var dateUtils = require('./date_utils');

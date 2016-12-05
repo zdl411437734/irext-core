@@ -45,24 +45,32 @@ require('./routes');
 var certificateLogic = require('./work_unit/certificate_logic.js');
 
 // kick start the engine
-System.startup(app, serverListenPort, "irext Console V0.0.2");
+System.startup(app, serverListenPort, "irext Console V0.0.3");
 
-////////////////// middleware //////////////////
+////////////////// authentication middleware //////////////////
 function tokenValidation (req, res, next) {
-    var menu0 = req.url.indexOf("code/index.html");
-    var menu1 = req.url.indexOf("doc/index.html");
-    var menu2 = req.url.indexOf("version/index.html");
-    var menu3 = req.url.indexOf("stat/index.html");
-    var menu4 = req.url.indexOf("push/index.html");
+    var bodyParam;
+    var adminID = null;
+    var token = null;
+    bodyParam = req.body;
 
+    if (null != bodyParam) {
+        adminID = bodyParam.admin_id;
+        token = bodyParam.token;
+    }
+
+    if (req.url.indexOf("/irext/int/list_remote_indexes") != -1) {
+        // override for get method
+        adminID = req.query.id;
+        token = req.query.token;
+    }
     if (req.url.indexOf("/irext/int") != -1) {
         var contentType = req.get("content-type");
         if (null != contentType && contentType.indexOf("multipart/form-data") != -1) {
+            // request of content type of multipart/form-data would be validated inside each service
             next();
         } else {
-            var id = req.query.id;
-            var token = req.query.token;
-            certificateLogic.verifyTokenWorkUnit(id, token, function(validateTokenErr) {
+            certificateLogic.verifyTokenWorkUnit(adminID, token, function(validateTokenErr) {
                 if(errorCode.SUCCESS.code != validateTokenErr.code) {
                     var fakeResponse = {
                         status: validateTokenErr,
@@ -75,29 +83,24 @@ function tokenValidation (req, res, next) {
                 }
             });
         }
-    } else if (menu0 != -1 || menu1 != -1 || menu2 != -1 || menu3 != -1 || menu4 != -1) {
-        var id = req.query.id;
-        var token = req.query.token;
+    } else if (req.url.indexOf("/irext/nav/nav_to_url") != -1) {
+        var page = bodyParam.page;
+        var pageCode = page.indexOf("code");
+        var pageDoc = page.indexOf("doc");
+        var pageStat = page.indexOf("stat");
+
         var permissions = "";
 
-        if (-1 != menu0) {
+        if (-1 != pageCode) {
             permissions = ",0";
-        } else if (-1 != menu1) {
+        } else if (-1 != pageDoc) {
             permissions = ",1";
-        } else if (-1 != menu2) {
+        } else if (-1 != pageStat) {
             permissions = ",2";
-        } else if (-1 != menu3) {
-            permissions = ",3";
-        } else if (-1 != menu4) {
-            permissions = ",4";
         }
 
-        certificateLogic.verifyTokenWithPermissionWorkUnit(id, token, permissions, function(validateTokenErr) {
+        certificateLogic.verifyTokenWithPermissionWorkUnit(adminID, token, permissions, function(validateTokenErr) {
             if(errorCode.SUCCESS.code != validateTokenErr.code) {
-                var fakeResponse = {
-                    status: validateTokenErr,
-                    entity: null
-                };
                 res.redirect("/error/auth_error.html");
             } else {
                 next();
