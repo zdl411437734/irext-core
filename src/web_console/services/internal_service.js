@@ -266,7 +266,7 @@ exports.createRemoteIndex = function (req, res) {
     var filePath;
     var contentType;
 
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     form.on('file', function(field, file) {
         // rename the incoming file to the file's name
@@ -327,7 +327,7 @@ exports.createRemoteIndex = function (req, res) {
  */
 exports.deleteRemoteIndex = function (req, res) {
     var remoteIndex = req.body;
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     var serviceResponse = new ServiceResponse();
     internalLogic.deleteRemoteIndexWorkUnit(remoteIndex, adminID, function (deleteRemoteErr) {
@@ -346,7 +346,7 @@ exports.deleteRemoteIndex = function (req, res) {
 exports.verifyRemoteIndex = function (req, res) {
     var remoteIndex = req.body;
     var pass = req.body.pass;
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     var serviceResponse = new ServiceResponse();
     internalLogic.verifyRemoteIndexWorkUnit(remoteIndex, pass, adminID, function (verifyRemoteErr) {
@@ -363,7 +363,7 @@ exports.verifyRemoteIndex = function (req, res) {
  */
 exports.fallbackRemoteIndex = function (req, res) {
     var remoteIndex = req.body;
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     var serviceResponse = new ServiceResponse();
     internalLogic.fallbackRemoteIndexWorkUnit(remoteIndex, adminID, function (fallbackRemoteErr) {
@@ -394,7 +394,7 @@ exports.publishRemoteIndex = function (req, res) {
  */
 exports.createBrand = function (req, res) {
     var brand = req.body;
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     var serviceResponse = new ServiceResponse();
     internalLogic.createBrandWorkUnit(brand, adminID, function (createBrandErr) {
@@ -430,7 +430,7 @@ exports.createProtocol = function (req, res) {
     var protocol;
     var filePath;
     var contentType;
-    var adminID = req.body.id;
+    var adminID = req.body.admin_id;
 
     form.on('file', function(field, file) {
         fs.rename(file.path, form.uploadDir + "/" + file.name);

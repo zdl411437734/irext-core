@@ -478,6 +478,7 @@ function verifyRemote() {
 
     remoteToVerify.admin_id = id;
     remoteToVerify.token = token;
+    remoteToVerify.pass = pass;
 
     $.ajax({
         url: '/irext/int/verify_remote_index',
