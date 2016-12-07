@@ -39,20 +39,26 @@ exports.adminLoginWorkUnit = function (userName, password, callback) {
     requestSender.sendPostRequest(signinInfo,
         function(signInRequestErr, signInResponse) {
             if (signInRequestErr == errorCode.SUCCESS.code && null != signInResponse) {
-                var admin = JSON.parse(signInResponse).entity;
-                var userID,
-                    token,
-                    key,
-                    ttl = 24 * 60 * 60 * 14,
-                    timeStamp;
-                timeStamp = new Date().getTime();
-                token = MD5.MD5(password  + timeStamp);
-                token += "," + admin.permissions;
-                key = "admin_" + admin.id;
-                adminAuth.setAuthInfo(key, token, ttl, function(setAdminAuthErr) {
-                    admin.token = token;
-                    callback(setAdminAuthErr, admin);
-                });
+                var resp = JSON.parse(signInResponse);
+                if (undefined != resp.entity) {
+                    var admin = resp.entity;
+                    var userID,
+                        token,
+                        key,
+                        ttl = 24 * 60 * 60 * 14,
+                        timeStamp;
+                    timeStamp = new Date().getTime();
+                    token = MD5.MD5(password  + timeStamp);
+                    token += "," + admin.permissions;
+                    key = "admin_" + admin.id;
+                    adminAuth.setAuthInfo(key, token, ttl, function(setAdminAuthErr) {
+                        admin.token = token;
+                        callback(setAdminAuthErr, admin);
+                    });
+                } else {
+                    callback(errorCode.FAILED, null);
+                }
+
             } else {
                 logger.error("admin sign in failed");
                 callback(errorCode.FAILED, null);
@@ -107,7 +113,12 @@ exports.sendChangePwMailWorkUnit = function (userName, callback) {
     requestSender.sendPostRequest(userInfo,
         function(changePwRequestErr, changePwResponse) {
             if (changePwRequestErr == errorCode.SUCCESS.code && null != changePwResponse) {
-                callback(errorCode.SUCCESS);
+                var resp = JSON.parse(changePwResponse);
+                if (undefined != resp.status && errorCode.SUCCESS == resp.status) {
+                    callback(errorCode.SUCCESS);
+                } else {
+                    callback(errorCode.FAILED);
+                }
             } else {
                 callback(errorCode.FAILED);
             }
