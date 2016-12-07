@@ -35,11 +35,6 @@ var async = require('async');
 // relative XML file path
 var PROTOCOL_PATH = "protocol";
 
-// out going HTTP request parameters
-// var PRIMARY_SERVER_ADDRESS = "irext.net";
-var PRIMARY_SERVER_ADDRESS = "127.0.0.1";
-var PRIMARY_SERVER_PORT = "8200";
-
 var REQUEST_APP_KEY = "d6119900556c4c1e629fd92d";
 var REQUEST_APP_TOKEN = "fcac5496cba7a12b3bae34abf061f526";
 

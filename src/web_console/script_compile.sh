@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 SOURCE="."
 TARGET="$POEM_APPLICATION/irext_console"
 MODULE_API="./web/api_doc/js/"

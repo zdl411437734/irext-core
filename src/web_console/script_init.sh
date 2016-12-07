@@ -44,9 +44,6 @@ npm install form-data
 echo "npm install async"
 npm install async
 
-echo "npm install nodemailer"
-npm install nodemailer@0.7
-
 echo "npm install done"
 
 echo "create logging directory"

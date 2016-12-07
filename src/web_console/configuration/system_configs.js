@@ -40,8 +40,8 @@ exports.setupEnvironment = function () {
         REDIS_HOST = "localhost";
         REDIS_PORT = "6379";
         REDIS_PASSWORD = "";
-        EXTERNAL_SERVER_ADDRESS = "irext.net";
-        EXTERNAL_SERVER_PORT = "80"
+        EXTERNAL_SERVER_ADDRESS = "www.strawmanbobi.com";
+        EXTERNAL_SERVER_PORT = "8200"
     } else if (enums.APP_USERDEBUG_MODE == env) {
         MYSQL_DB_SERVER_ADDRESS = "localhost";
         MYSQL_DB_NAME = "irext";
@@ -54,7 +54,7 @@ exports.setupEnvironment = function () {
         REDIS_HOST = "localhost";
         REDIS_PORT = "6379";
         REDIS_PASSWORD = "";
-        EXTERNAL_SERVER_ADDRESS = "irext.net";
-        EXTERNAL_SERVER_PORT = "80"
+        EXTERNAL_SERVER_ADDRESS = "www.strawmanbobi.com";
+        EXTERNAL_SERVER_PORT = "8200"
     }
 };
