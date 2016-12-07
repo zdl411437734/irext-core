@@ -39,13 +39,12 @@ exports.adminLoginWorkUnit = function (userName, password, callback) {
     requestSender.sendPostRequest(signinInfo,
         function(signInRequestErr, signInResponse) {
             if (signInRequestErr == errorCode.SUCCESS.code && null != signInResponse) {
-                var admin = signInResponse;
+                var admin = JSON.parse(signInResponse).entity;
                 var userID,
                     token,
                     key,
                     ttl = 24 * 60 * 60 * 14,
-                    timeStamp,
-                    admin;
+                    timeStamp;
                 timeStamp = new Date().getTime();
                 token = MD5.MD5(password  + timeStamp);
                 token += "," + admin.permissions;

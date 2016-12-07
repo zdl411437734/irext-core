@@ -20,23 +20,6 @@ CREATE database `irext`;
 use `irext`;
 
 --
--- Table structure for table `admin`
---
-
-DROP TABLE IF EXISTS `admin`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(64) NOT NULL,
-  `password` varchar(32) DEFAULT NULL,
-  `permissions` varchar(64) DEFAULT NULL,
-  `admin_type` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `admin`
 --
 
