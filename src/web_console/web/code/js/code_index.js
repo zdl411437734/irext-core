@@ -122,14 +122,14 @@ function loadRemoteList(isSearch, remoteMap) {
     var url;
 
     if (isSearch && remoteMap) {
-        url = '/irext/int/search_remote_indexes?remote_map='+remoteMap+'&from=0&count=2000&id='+id+'&token='+token;
+        url = '/irext/int/search_remote_indexes?remote_map='+remoteMap+'&from=0&count=2000&admin_id='+id+'&token='+token;
     } else {
         if(currentFilterCategory.id == 3) {
             url = '/irext/int/list_remote_indexes?category_id='+currentFilterCategory.id+'&city_code='+currentFilterCity.code+
-                '&from=0&count=100&id='+id+'&token='+token;
+                '&from=0&count=100&admin_id='+id+'&token='+token;
         } else {
             url = '/irext/int/list_remote_indexes?category_id='+currentFilterCategory.id+'&brand_id='+currentFilterBrand.id+
-                '&from=0&count=100&id='+id+'&token='+token;
+                '&from=0&count=100&admin_id='+id+'&token='+token;
         }
     }
 
@@ -307,7 +307,7 @@ function createRemote() {
         ', remoteName = ' +remoteName + ', remoteFile = ' + remoteFile + ', remoteNumber = ' + remoteNumber);
 
     var form = $('#remote_upload_form');
-    form.attr('action', '/irext/int/create_remote_index?id='+id+'&token='+token);
+    form.attr('action', '/irext/int/create_remote_index');
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
@@ -323,6 +323,7 @@ function createRemote() {
     $('#brand_name_tw').val(currentBrand.name_tw);
     $('#city_name_tw').val(currentCity.name_tw);
     $('#operator_name_tw').val(currentOperator.name_tw);
+    $('#admin_id').val(id);
 
     form.submit();
     $('#create_remote_dialog').modal('hide');
@@ -641,6 +642,7 @@ function createProtocol() {
     //form.attr('method', 'post');
     //form.attr('encoding', 'multipart/form-data');
     //form.attr('enctype', 'multipart/form-data');
+    $('#protocol_admin_id').val(id);
 
     form.submit();
     $('#create_protocol_dialog').modal('hide');
@@ -1453,7 +1455,7 @@ function downloadBin() {
         popUpHintDialog('请先选中一个索引');
         return;
     }
-    downloadURL = '/irext/int/download_remote_index?remote_index_id='+selectedRemote.id+'&id='+id+'&token='+token;
+    downloadURL = '/irext/int/download_remote_index?remote_index_id='+selectedRemote.id+'&admin_id='+id+'&token='+token;
 
     if (null != client && client == 'console') {
         // directly download binary to remote via serial port
@@ -1761,5 +1763,5 @@ function translateToTC(textID, targetTextID) {
 }
 
 function gotoIndex() {
-    window.location = '../index.html?id='+id+'&token='+token;
+    window.location = '../index.html?admin_id='+id+'&token='+token;
 }

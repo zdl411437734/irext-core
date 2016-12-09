@@ -10,6 +10,7 @@ var crypto = require('crypto');
 // global inclusion
 require('../mini_poem/configuration/constants');
 var orm = require('orm');
+var AdminAuth = require('../authority/admin_auth.js');
 var PythonCaller = require('../mini_poem/external/python_caller');
 
 var Category = require('../model/category_dao.js');
@@ -30,6 +31,8 @@ var enums = new Enums();
 var errorCode = new ErrorCode();
 
 var async = require('async');
+
+var adminAuth = new AdminAuth(REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, null);
 
 // relative XML file path
 var PROTOCOL_PATH = "protocol";
@@ -213,9 +216,10 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
         userArgs = [];
 
     // verify admin
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            contributor = admin.user_name;
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+            contributor = result;
 
             // begin creating remote index
             switch(parseInt(categoryID)) {
@@ -536,14 +540,13 @@ exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
     queryParams.put("app_key", REQUEST_APP_KEY);
     queryParams.put("app_token", REQUEST_APP_TOKEN);
 
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if(remoteIndex.contributor.indexOf(admin.user_name) == -1) {
-                    logger.info("this admin " + admin.user_name + " could not change this remote index");
-                    callback(errorCode.FAILED);
-                    return;
-                }
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+            if(remoteIndex.contributor.indexOf(result) == -1) {
+                logger.info("the admin " + result + " could not change this remote index");
+                callback(errorCode.FAILED);
+                return;
             }
             var requestSender =
                 new RequestSender(PRIMARY_SERVER_ADDRESS,
@@ -576,14 +579,13 @@ exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
 };
 
 exports.verifyRemoteIndexWorkUnit = function (remoteIndex, pass, adminID, callback) {
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if (remoteIndex.contributor.indexOf(admin.user_name) == -1) {
-                    logger.info("this admin " + admin.user_name + " could not change this remote index");
-                    callback(errorCode.FAILED);
-                    return;
-                }
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+            if(remoteIndex.contributor.indexOf(result) == -1) {
+                logger.info("the admin " + result + " could not change this remote index");
+                callback(errorCode.FAILED);
+                return;
             }
             var status = 0 == pass ? enums.ITEM_PASS : enums.ITEM_FAILED;
 
@@ -597,18 +599,17 @@ exports.verifyRemoteIndexWorkUnit = function (remoteIndex, pass, adminID, callba
 };
 
 exports.fallbackRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                if (remoteIndex.contributor.indexOf(admin.user_name) == -1) {
-                    logger.info("this admin " + admin.user_name + " could not change this remote index");
-                    callback(errorCode.FAILED);
-                    return;
-                }
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+            if (remoteIndex.contributor.indexOf(result) == -1) {
+                logger.info("the admin " + result + " could not change this remote index");
+                callback(errorCode.FAILED);
+                return;
             }
             var status = enums.ITEM_VERIFY;
 
-            RemoteIndex.fallbackRemoteIndex(remoteIndex.id, status, function(updateRemoteIndexErr) {
+            RemoteIndex.fallbackRemoteIndex(remoteIndex.id, status, function (updateRemoteIndexErr) {
                 callback(updateRemoteIndexErr);
             });
         } else {
@@ -751,15 +752,11 @@ exports.createBrandWorkUnit = function (brand, adminID, callback) {
         status: enums.ITEM_VERIFY
     };
 
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                logger.info("this admin " + admin.user_name + " could not change this remote index");
-                callback(errorCode.FAILED);
-                return;
-            }
-
-            brand.contributor = admin.user_name;
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (getAdminAuthErr.code == errorCode.SUCCESS.code &&
+            null != result) {
+            brand.contributor = result;
             Brand.findBrandByConditions(conditions, function(findBrandErr, brands) {
                 if(errorCode.SUCCESS.code == findBrandErr.code && null != brands && brands.length > 0) {
                     logger.info("brand already exists");
@@ -771,7 +768,6 @@ exports.createBrandWorkUnit = function (brand, adminID, callback) {
                 }
             });
         } else {
-            logger.info("invalid admin ID, return directly");
             callback(errorCode.FAILED, null);
         }
     });
@@ -837,26 +833,19 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
     var pythonRuntimeDir = fileDir,
         pythonFile = "irda_tv_protocol.py",
         userArgs = [];
-    
-    if (enums.PROTOCOL_TYPE_G2_QUATERNARY == protocolType) {
-        pythonFile = "irda_tv_protocol.py";
-    } else if (enums.PROTOCOL_TYPE_G2_HEXDECIMAL == protocolType) {
-        pythonFile = "irda_tv_protocol_hex.py";
-    }
 
-    Admin.getAdminByID(adminID, function(getAdminErr, admin) {
-        if (errorCode.SUCCESS.code == getAdminErr.code && null != admin) {
-            contributor = admin.user_name;
-
-            logger.info("get admin error code = " + JSON.stringify(getAdminErr) + ", admin = " + JSON.stringify(admin));
-
-            if (admin.admin_type == enums.ADMIN_TYPE_EXTERNAL) {
-                logger.info("this admin " + admin.user_name + " could not create protocol");
-                callback(errorCode.FAILED);
-                return;
+    /////////////////////////////////////
+    // step 2, get admin name as contributor
+    var key = "admin_name_" + adminID;
+    adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+        if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+            contributor = result;
+            if (enums.PROTOCOL_TYPE_G2_QUATERNARY == protocolType) {
+                pythonFile = "irda_tv_protocol.py";
+            } else if (enums.PROTOCOL_TYPE_G2_HEXDECIMAL == protocolType) {
+                pythonFile = "irda_tv_protocol_hex.py";
             }
-            //////////////////////////////////////
-            // step 2, parse python run-time path, python file name and user arguments
+
             logger.info("prepare to parse protocol");
             userArgs.length = 0;
             // python s_$category.py [remote_xml_file_abs_file] [remote_xml_file_name] [remote_xml_dir_abs_path]
@@ -895,19 +884,19 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
                                 logger.info("irda_tv_protocol.py called successfully, create protocol in DB");
                                 IRProtocol.findIRProtocolByConditions(conditions,
                                     function(findIRProtocolErr, IRProtocols) {
-                                    if(errorCode.SUCCESS.code == findIRProtocolErr.code &&
-                                        null != IRProtocols &&
-                                        IRProtocols.length > 0) {
-                                        logger.info("protocol " + protocolName + " already exists, " +
-                                            "nothing to be updated");
-                                        callback(errorCode.SUCCESS);
-                                    } else {
-                                        IRProtocol.createIRProtocol(newProtocol,
-                                            function(createIRProtocolErr, createdIRProtocol) {
-                                            callback(createIRProtocolErr);
-                                        });
-                                    }
-                                });
+                                        if(errorCode.SUCCESS.code == findIRProtocolErr.code &&
+                                            null != IRProtocols &&
+                                            IRProtocols.length > 0) {
+                                            logger.info("protocol " + protocolName + " already exists, " +
+                                                "nothing to be updated");
+                                            callback(errorCode.SUCCESS);
+                                        } else {
+                                            IRProtocol.createIRProtocol(newProtocol,
+                                                function(createIRProtocolErr, createdIRProtocol) {
+                                                    callback(createIRProtocolErr);
+                                                });
+                                        }
+                                    });
                             }
                         });
                     } else {
@@ -920,7 +909,6 @@ exports.createProtocolWorkUnit = function(protocol, filePath, contentType, admin
                 callback(errorCode.FAILED);
             }
         } else {
-            logger.error('failed to check admin type');
             callback(errorCode.FAILED);
         }
     });

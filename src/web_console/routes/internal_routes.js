@@ -12,8 +12,6 @@ app.post('/irext/int/list_operators', intService.listOperators);
 app.post('/irext/int/list_categories', intService.listCategories);
 app.post('/irext/int/list_brands', intService.listBrands);
 app.post('/irext/int/list_ir_protocols', intService.listIRProtocols);
-app.post('/irext/int/search_remote_indexes', intService.searchRemoteIndexes);
-app.post('/irext/int/download_remote_index', intService.downloadRemoteIndex);
 
 app.post('/irext/int/list_unpublished_brands', intService.listUnpublishedBrands);
 app.post('/irext/int/list_unpublished_remote_indexes', intService.listUnpublishedRemoteIndexes);
@@ -30,3 +28,5 @@ app.post('/irext/int/publish_brands', intService.publishBrands);
 app.post('/irext/int/create_protocol', intService.createProtocol);
 
 app.get('/irext/int/list_remote_indexes', intService.listRemoteIndexes);
+app.get('/irext/int/search_remote_indexes', intService.searchRemoteIndexes);
+app.get('/irext/int/download_remote_index', intService.downloadRemoteIndex);

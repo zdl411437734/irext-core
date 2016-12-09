@@ -61,7 +61,17 @@ function tokenValidation (req, res, next) {
 
     if (req.url.indexOf("/irext/int/list_remote_indexes") != -1) {
         // override for get method
-        adminID = req.query.id;
+        adminID = req.query.admin_id;
+        token = req.query.token;
+    }
+    if (req.url.indexOf("/irext/int/search_remote_indexes") != -1) {
+        // override for get method
+        adminID = req.query.admin_id;
+        token = req.query.token;
+    }
+    if (req.url.indexOf("/irext/int/download_remote_index") != -1) {
+        // override for get method
+        adminID = req.query.admin_id;
         token = req.query.token;
     }
     if (req.url.indexOf("/irext/int") != -1) {

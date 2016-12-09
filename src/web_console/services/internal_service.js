@@ -202,9 +202,9 @@ exports.listRemoteIndexes = function (req, res) {
  * return :     Remote Index List
  */
 exports.searchRemoteIndexes = function (req, res) {
-    var remoteMap = req.body.remote_map;
-    var from = req.body.from;
-    var count = req.body.count;
+    var remoteMap = req.query.remote_map;
+    var from = req.query.from;
+    var count = req.query.count;
 
     internalLogic.searchRemoteIndexesWorkUnit(remoteMap, from, count,
         function (listRemoteIndexesErr, remoteIndexes) {
@@ -221,7 +221,7 @@ exports.searchRemoteIndexes = function (req, res) {
  * return :     Redirect to binary download
  */
 exports.downloadRemoteIndex = function (req, res) {
-    var remoteIndexID = req.body.remote_index_id;
+    var remoteIndexID = req.query.remote_index_id;
 
     internalLogic.downloadRemoteBinCachedWorkUnit(remoteIndexID, function (serveBinErr, filePath) {
         if (errorCode.SUCCESS.code == serveBinErr.code) {
@@ -265,8 +265,7 @@ exports.createRemoteIndex = function (req, res) {
     var remoteIndex;
     var filePath;
     var contentType;
-
-    var adminID = req.body.admin_id;
+    var adminID;
 
     form.on('file', function(field, file) {
         // rename the incoming file to the file's name
@@ -289,6 +288,7 @@ exports.createRemoteIndex = function (req, res) {
         } else {
             logger.info("remote index form submitted successfully");
             remoteIndex = fields;
+            adminID = remoteIndex.admin_id;
             filePath = files.remote_file.path;
             // set MIME to octet-stream as there might not be any contentType passed from the front-end form
             contentType = files.type || "application/octet-stream";
@@ -430,7 +430,7 @@ exports.createProtocol = function (req, res) {
     var protocol;
     var filePath;
     var contentType;
-    var adminID = req.body.admin_id;
+    var adminID;
 
     form.on('file', function(field, file) {
         fs.rename(file.path, form.uploadDir + "/" + file.name);
@@ -450,6 +450,7 @@ exports.createProtocol = function (req, res) {
         } else {
             logger.info("protocol form submitted successfully");
             protocol = fields;
+            adminID = protocol.admin_id;
             filePath = files.protocol_file.path;
             // set MIME to octet-stream as there might not be any contentType passed from the front-end form
             contentType = files.type || "application/octet-stream";

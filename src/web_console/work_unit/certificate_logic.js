@@ -40,23 +40,30 @@ exports.adminLoginWorkUnit = function (userName, password, callback) {
                 var resp = JSON.parse(signInResponse);
                 if (undefined != resp.entity) {
                     var admin = resp.entity;
-                    var userID,
-                        token,
+                    var token,
                         key,
                         ttl = 24 * 60 * 60 * 14,
-                        timeStamp;
+                        timeStamp,
+                        name;
                     timeStamp = new Date().getTime();
                     token = MD5.MD5(password  + timeStamp);
                     token += "," + admin.permissions;
                     key = "admin_" + admin.id;
                     adminAuth.setAuthInfo(key, token, ttl, function(setAdminAuthErr) {
-                        admin.token = token;
-                        callback(setAdminAuthErr, admin);
+                        if (errorCode.SUCCESS.code == setAdminAuthErr.code) {
+                            key = "admin_name_" + admin.id;
+                            name = admin.user_name;
+                            adminAuth.setAuthInfo(key, name, ttl, function(setAdminNameErr) {
+                                if (errorCode.SUCCESS.code == setAdminNameErr.code) {
+                                    admin.token = token;
+                                }
+                                callback(setAdminNameErr, admin);
+                            });
+                        }
                     });
                 } else {
                     callback(errorCode.FAILED, null);
                 }
-
             } else {
                 logger.error("admin sign in failed");
                 callback(errorCode.FAILED, null);
