@@ -69,33 +69,12 @@ exports.verifyToken = function (req, res) {
 exports.changePassword = function (req, res) {
     var bodyParam = req.body;
     var userName = bodyParam.user_name;
+    var callbackURL = bodyParam.callback_url;
 
     var serviceResponse = new ServiceResponse();
-    certificateLogic.sendChangePwMailWorkUnit(userName, function (changePWErr) {
+    certificateLogic.sendChangePwMailWorkUnit(userName, callbackURL, function (changePWErr) {
         serviceResponse.status = changePWErr;
         res.send(serviceResponse);
         res.end();
-    });
-};
-
-/*
- * function :   Confirm password change
- * parameter :  id of Adminstrator
- *              new password fetch ID
- * return :     redirection to irext data center
- */
-exports.confirmPassword = function (req, res) {
-    var id = req.query.id;
-    var fetchKey = req.query.key;
-    var password = req.query.password;
-
-    var serviceResponse = new ServiceResponse();
-    certificateLogic.confirmPasswordWorkUnit(id, fetchKey, function (confirmPWErr) {
-        if (errorCode.SUCCESS.code == confirmPWErr.code) {
-            res.redirect("http://"+MAIN_SERVER_ADDRESS+":"+MAIN_SERVER_PORT+"/error/confirm_pw.html?password="+
-                    password+"&result=1");
-        } else {
-            res.redirect("http://"+MAIN_SERVER_ADDRESS+":"+MAIN_SERVER_PORT+"/error/confirm_pw.html?result=0");
-        }
     });
 };

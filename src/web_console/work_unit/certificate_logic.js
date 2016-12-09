@@ -3,12 +3,10 @@
  * 2016-11-27
  */
 
-var Constants = require('../mini_poem/configuration/constants');
+require('../mini_poem/configuration/constants');
 
-var Admin = require('../model/admin_dao.js');
 var AdminAuth = require('../authority/admin_auth.js');
 var MD5 = require('../mini_poem/crypto/md5.js');
-var StringUtils = require('../mini_poem/utils/string_utils.js');
 var RequestSender = require('../mini_poem/http/request.js');
 
 var Enums = require('../constants/enums.js');
@@ -98,7 +96,7 @@ exports.verifyTokenWithPermissionWorkUnit = function (id, token, permissions, ca
     });
 };
 
-exports.sendChangePwMailWorkUnit = function (userName, callback) {
+exports.sendChangePwMailWorkUnit = function (userName, callbackURL, callback) {
     var queryParams = new Map();
 
     var requestSender =
@@ -108,7 +106,8 @@ exports.sendChangePwMailWorkUnit = function (userName, callback) {
             queryParams);
 
     var userInfo = {
-        user_name : userName
+        user_name : userName,
+        callback_url :callbackURL
     };
     requestSender.sendPostRequest(userInfo,
         function(changePwRequestErr, changePwResponse) {
@@ -123,18 +122,4 @@ exports.sendChangePwMailWorkUnit = function (userName, callback) {
                 callback(errorCode.FAILED);
             }
         });
-};
-
-exports.confirmPasswordWorkUnit = function(id, fetchKey, callback) {
-    adminAuth.getAuthInfo(fetchKey, function(getAuthInfoErr, result) {
-        if (errorCode.SUCCESS.code == getAuthInfoErr.code) {
-            logger.info("succeeded to fetch ciphered password value " + result);
-            Admin.updatePasswordByID(id, result, function(updateAdminErr, updatedAdmin) {
-                callback(updateAdminErr);
-            });
-        } else {
-            logger.info("failed to fetch ciphered password value");
-            callback(errorCode.FAILED);
-        }
-    });
 };

@@ -69,7 +69,8 @@ function changePassword() {
         url: "/irext/certificate/change_pw",
         type: "POST",
         data: {
-            user_name : userName
+            user_name : userName,
+            callback_url : window.location.hostname
         },
         timeout: 20000,
         success: function (response) {
