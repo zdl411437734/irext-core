@@ -19,15 +19,6 @@ DROP database IF EXISTS `irext`;
 CREATE database `irext`;
 use `irext`;
 
---
--- Dumping data for table `admin`
---
-
-LOCK TABLES `admin` WRITE;
-/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES (1,'strawmanbobi@irext.net','8654CC19DF98DEBB2E8BAA4034C59C27','0,1,2,3,4,99',1);
-/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `brand`
