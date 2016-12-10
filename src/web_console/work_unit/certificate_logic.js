@@ -46,8 +46,7 @@ exports.adminLoginWorkUnit = function (userName, password, callback) {
                         timeStamp,
                         name;
                     timeStamp = new Date().getTime();
-                    token = MD5.MD5(password  + timeStamp);
-                    token += "," + admin.permissions;
+                    token = admin.token;
                     key = "admin_" + admin.id;
                     adminAuth.setAuthInfo(key, token, ttl, function(setAdminAuthErr) {
                         if (errorCode.SUCCESS.code == setAdminAuthErr.code) {

@@ -121,10 +121,8 @@ function doSignIn(userName, password) {
                 setTimeout(function() {
                     navigateToPage(page, adminID, token);
                 }, 3000);
-                if($("#remember_me").is(":checked")) {
-                    localStorage.setItem(LS_KEY_ID, adminID);
-                    localStorage.setItem(LS_KEY_TOKEN, token);
-                }
+                localStorage.setItem(LS_KEY_ID, adminID);
+                localStorage.setItem(LS_KEY_TOKEN, token);
             } else {
                 toastr.error("登入失败，请确认密码是否正确");
             }

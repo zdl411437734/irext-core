@@ -1760,5 +1760,5 @@ function translateToTC(textID, targetTextID) {
 }
 
 function gotoIndex() {
-    window.location = '../index.html?admin_id='+id+'&token='+token;
+    window.location = '../';
 }
