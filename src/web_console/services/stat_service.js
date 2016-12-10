@@ -5,6 +5,8 @@
 
 // system inclusion
 var constants = require('../mini_poem/configuration/constants');
+var logger = require('../mini_poem/logging/logger4js').helper;
+
 var formidable = require('formidable');
 var fs = require('fs');
 
@@ -13,7 +15,6 @@ var ServiceResponse = require('../response/service_response.js');
 var StatResponse = require('../response/stat_response.js');
 var IntegerResponse = require('../response/integer_response');
 
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 var statLogic = require('../work_unit/stat_logic.js');
 

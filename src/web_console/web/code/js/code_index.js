@@ -86,9 +86,6 @@ $(document).ready(function() {
     id = localStorage.getItem(LS_KEY_ID);
     token = localStorage.getItem(LS_KEY_TOKEN);
     client = getParameter('client');
-    if (null != client && client == 'console') {
-        hideSidebar();
-    }
 
     // showMenu(id, token, 'remote');
     initializeSelectors();

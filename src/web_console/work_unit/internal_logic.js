@@ -537,8 +537,6 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
 exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
     // delete remote information from release server first
     var queryParams = new Map();
-    queryParams.put("app_key", REQUEST_APP_KEY);
-    queryParams.put("app_token", REQUEST_APP_TOKEN);
 
     var key = "admin_name_" + adminID;
     adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
@@ -548,9 +546,11 @@ exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
                 callback(errorCode.FAILED);
                 return;
             }
+
+            remoteIndex.admin_id = adminID;
             var requestSender =
-                new RequestSender(PRIMARY_SERVER_ADDRESS,
-                    PRIMARY_SERVER_PORT,
+                new RequestSender(EXTERNAL_SERVER_ADDRESS,
+                    EXTERNAL_SERVER_PORT,
                     DELETE_REMOTE_INDEX_SERVICE,
                     queryParams);
 

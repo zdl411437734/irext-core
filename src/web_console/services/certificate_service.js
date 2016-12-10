@@ -5,12 +5,12 @@
 
 // system inclusion
 var constants = require('../mini_poem/configuration/constants');
+var logger = require('../mini_poem/logging/logger4js').helper;
 
 // local inclusion
 var ServiceResponse = require('../response/service_response.js');
 var LoginResponse = require('../response/login_response.js');
 
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 var certificateLogic = require('../work_unit/certificate_logic.js');
 
