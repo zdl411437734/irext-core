@@ -80,6 +80,7 @@ function tokenValidation (req, res, next) {
             // request of content type of multipart/form-data would be validated inside each service
             next();
         } else {
+            console.log("adminID = " + adminID + ", token = " + token);
             certificateLogic.verifyTokenWorkUnit(adminID, token, function(validateTokenErr) {
                 if(errorCode.SUCCESS.code != validateTokenErr.code) {
                     var fakeResponse = {

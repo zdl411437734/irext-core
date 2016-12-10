@@ -5,6 +5,8 @@
 
 // system inclusion
 var constants = require('../mini_poem/configuration/constants');
+var logger = require('../mini_poem/logging/logger4js').helper;
+
 var formidable = require('formidable');
 var fs = require('fs');
 
@@ -16,8 +18,6 @@ var ProtocolResponse = require('../response/protocol_response.js');
 var CityResponse = require('../response/city_response.js');
 var OperatorResponse = require('../response/operator_response.js');
 var RemoteIndexResponse = require('../response/remote_index_response.js');
-
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 var internalLogic = require('../work_unit/internal_logic.js');
 
@@ -437,7 +437,7 @@ exports.createProtocol = function (req, res) {
     }).on('error', function(err) {
         logger.error("formidable parse form error : " + err);
         res.send("<html>" +
-            "<body> " +
+            "<body>" +
             "<div style='width: 100%; text-align: center; color: #FF0000'>协议文件提交失败</div>" +
             "</body>" +
             "</html>");
@@ -458,18 +458,19 @@ exports.createProtocol = function (req, res) {
             internalLogic.createProtocolWorkUnit(protocol, filePath, contentType, adminID, function (createProtocolErr) {
                 if(errorCode.SUCCESS.code == createProtocolErr.code) {
                     res.send("<html>" +
-                        "<body> " +
+                        "<body>" +
                         "<div style='width: 100%; text-align: center;'>协议文件提交成功</div>" +
                         "</body>" +
                         "</html>");
+                    res.end();
                 } else {
                     res.send("<html>" +
-                        "<body> " +
+                        "<body>" +
                         "<div style='width: 100%; text-align: center; color: #FF0000'>协议文件提交失败</div>" +
                         "</body>" +
                         "</html>");
+                    res.end();
                 }
-                res.end();
             });
         }
     });

@@ -28,7 +28,7 @@ var Category = dbOrm.define('category',
     }
 );
 
-Category.createCategory = function (category, callback) {
+Category.createCategory = function(category, callback) {
     var date = dateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
     var newCategory = new Category({
         name: category.name,
@@ -49,7 +49,7 @@ Category.createCategory = function (category, callback) {
     });
 };
 
-Category.findCategoryByConditions = function (conditions, callback) {
+Category.findCategoryByConditions = function(conditions, callback) {
     Category.find(conditions)
         .run(function (error, categories) {
             if (error) {
@@ -62,8 +62,8 @@ Category.findCategoryByConditions = function (conditions, callback) {
         });
 };
 
-Category.listCategories = function (conditions, from, count, sortField, callback) {
-    if ("id" == sortField && 0 != from) {
+Category.listCategories = function(conditions, from, count, sortField, callback) {
+    if("id" == sortField && 0 != from) {
         conditions.id = orm.gt(from);
         Category.find(conditions).limit(parseInt(count)).orderRaw("?? ASC", [sortField])
             .run(function (listCategoriesErr, categories) {
@@ -90,8 +90,8 @@ Category.listCategories = function (conditions, from, count, sortField, callback
 
 };
 
-Category.getCategoryByID = function (categoryID, callback) {
-    Category.get(categoryID, function (error, category) {
+Category.getCategoryByID = function(categoryID, callback) {
+    Category.get(categoryID, function(error, category) {
         if (error) {
             logger.error("get category by ID error : " + error);
             callback(errorCode.FAILED, null);
@@ -103,8 +103,8 @@ Category.getCategoryByID = function (categoryID, callback) {
 };
 
 /* For internal use only */
-Category.listRemoteCategories = function (conditions, from, count, sortField, callback) {
-    if ("id" == sortField && 0 != from) {
+Category.listRemoteCategories = function(conditions, from, count, sortField, callback) {
+    if("id" == sortField && 0 != from) {
         conditions.id = orm.gt(from);
         Category.find(conditions).limit(parseInt(count)).orderRaw("?? ASC", [sortField])
             .run(function (listCategoriesErr, categories) {

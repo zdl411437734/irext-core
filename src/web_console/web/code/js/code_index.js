@@ -86,9 +86,6 @@ $(document).ready(function() {
     id = localStorage.getItem(LS_KEY_ID);
     token = localStorage.getItem(LS_KEY_TOKEN);
     client = getParameter('client');
-    if (null != client && client == 'console') {
-        hideSidebar();
-    }
 
     // showMenu(id, token, 'remote');
     initializeSelectors();
@@ -1763,5 +1760,5 @@ function translateToTC(textID, targetTextID) {
 }
 
 function gotoIndex() {
-    window.location = '../index.html?admin_id='+id+'&token='+token;
+    window.location = '../';
 }

@@ -7,12 +7,12 @@
 require('../mini_poem/configuration/constants');
 var RequestSender = require('../mini_poem/http/request.js');
 var Map = require('../mini_poem/mem/map.js');
+var logger = require('../mini_poem/logging/logger4js').helper;
 
 // local inclusion
 
 var Enums = require('../constants/enums.js');
 var ErrorCode = require('../constants/error_code.js');
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 var enums = new Enums();
 var errorCode = new ErrorCode();
