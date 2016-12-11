@@ -37,13 +37,10 @@ var adminAuth = new AdminAuth(REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, null);
 // relative XML file path
 var PROTOCOL_PATH = "protocol";
 
-var REQUEST_APP_KEY = "d6119900556c4c1e629fd92d";
-var REQUEST_APP_TOKEN = "fcac5496cba7a12b3bae34abf061f526";
-
-var PUBLISH_BRAND_SERVICE = "/irext/remote/publish_brands";
-var UPLOAD_BINARY_SERVICE = "/irext/remote/upload_binary";
-var PUBLISH_REMOTE_INDEX_SERVICE = "/irext/remote/publish_remote_indexes";
-var DELETE_REMOTE_INDEX_SERVICE = "/irext/remote/delete_remote_index";
+var publishBrandService = "/irext/int/publish_brands";
+var uploadBinaryService = "/irext/int/upload_binary";
+var publishRemoteIndexService = "/int/remote/publish_remote_indexes";
+var deleteRemoteIndexService = "/irext/int/delete_remote_index";
 
 exports.listCategoriesWorkUnit = function (from, count, callback) {
     var conditions = {
@@ -535,9 +532,6 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
 };
 
 exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
-    // delete remote information from release server first
-    var queryParams = new Map();
-
     var key = "admin_name_" + adminID;
     adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
         if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
@@ -546,31 +540,32 @@ exports.deleteRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) {
                 callback(errorCode.FAILED);
                 return;
             }
+            key = "admin_" + adminID;
+            adminAuth.getAuthInfo(key, function(getAdminAuthErr, result) {
+                if (errorCode.SUCCESS.code == getAdminAuthErr.code && null != result) {
+                    remoteIndex.admin_id = adminID;
+                    remoteIndex.token = result;
+                    var queryParams = new Map();
+                    var requestSender =
+                        new RequestSender(EXTERNAL_SERVER_ADDRESS,
+                            EXTERNAL_SERVER_PORT,
+                            deleteRemoteIndexService,
+                            queryParams);
 
-            remoteIndex.admin_id = adminID;
-            var requestSender =
-                new RequestSender(EXTERNAL_SERVER_ADDRESS,
-                    EXTERNAL_SERVER_PORT,
-                    DELETE_REMOTE_INDEX_SERVICE,
-                    queryParams);
-
-            requestSender.sendPostRequest(remoteIndex,
-                function(deleteRemoteIndexesRequestErr, deleteRemoteIndexesResponse) {
-                /*
-                 if(errorCode.SUCCESS.code == deleteRemoteIndexesRequestErr &&
-                 JSON.parse(deleteRemoteIndexesResponse).status.code == errorCode.SUCCESS.code) {
-                 RemoteIndex.deleteRemoteIndex(remoteIndex.id, function(deleteRemoteIndexErr) {
-                 callback(deleteRemoteIndexErr);
-                 });
-                 } else {
-                 logger.error("failed to delete remote index from main server");
-                 callback(errorCode.FAILED);
-                 }
-                 */
-                // perform delete action accordingly despite the result of remote deletion
-                RemoteIndex.deleteRemoteIndex(remoteIndex.id, function(deleteRemoteIndexErr) {
-                    callback(deleteRemoteIndexErr);
-                });
+                    requestSender.sendPostRequest(remoteIndex,
+                        function(deleteRemoteIndexesRequestErr, deleteRemoteIndexesResponse) {
+                            // perform delete action accordingly despite the result of remote deletion
+                            logger.info(deleteRemoteIndexesRequestErr);
+                            /*
+                            RemoteIndex.deleteRemoteIndex(remoteIndex.id, function(deleteRemoteIndexErr) {
+                                callback(deleteRemoteIndexErr);
+                            });
+                            */
+                            callback(errorCode.SUCCESS);
+                        });
+                } else {
+                    callback(errorCode.FAILED);
+                }
             });
         } else {
             callback(errorCode.FAILED);
@@ -668,7 +663,7 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
                         var requestSender =
                             new RequestSender(PRIMARY_SERVER_ADDRESS,
                                 PRIMARY_SERVER_PORT,
-                                UPLOAD_BINARY_SERVICE,
+                                uploadBinaryService,
                                 queryParams);
                         var options = {
                             https: false
@@ -711,7 +706,7 @@ exports.publishRemoteIndexWorkUnit = function (callback) {
                         var requestSender =
                             new RequestSender(PRIMARY_SERVER_ADDRESS,
                                 PRIMARY_SERVER_PORT,
-                                PUBLISH_REMOTE_INDEX_SERVICE,
+                                publishRemoteIndexService,
                                 queryParams);
 
                         requestSender.sendPostRequest(remoteIndexes,
@@ -787,7 +782,7 @@ exports.publishBrandsWorkUnit = function (callback) {
             queryParams.put("app_token", REQUEST_APP_TOKEN);
 
             var requestSender =
-                new RequestSender(PRIMARY_SERVER_ADDRESS, PRIMARY_SERVER_PORT, PUBLISH_BRAND_SERVICE, queryParams);
+                new RequestSender(PRIMARY_SERVER_ADDRESS, PRIMARY_SERVER_PORT, publishBrandService, queryParams);
 
             requestSender.sendPostRequest(brands, function(publishBrandRequestErr, publishBrandsResponse) {
                 if(errorCode.SUCCESS.code == publishBrandRequestErr &&
