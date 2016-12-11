@@ -12,9 +12,10 @@ var methodOverride = require('method-override');
 // global inclusion
 require('./mini_poem/configuration/constants');
 var System = require('./mini_poem/utils/system_utils');
-var systemConfig = require('./configuration/system_configs');
+var dbConn = require('./mini_poem/db/mysql/mysql_connection');
 
 // local inclusion
+var systemConfig = require('./configuration/system_configs');
 var Enums = require('./constants/enums');
 var ErrorCode = require('./constants/error_code');
 var enums = new Enums();
@@ -35,7 +36,6 @@ app.use("/", express.static(__dirname + '/web/'));
 systemConfig.setupEnvironment();
 serverListenPort = LISTEN_PORT;
 
-var dbConn = require('./mini_poem/db/mysql/mysql_connection');
 
 console.log("initializing MySQL connection to : " + MYSQL_DB_SERVER_ADDRESS + ":" + MYSQL_DB_NAME);
 dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
@@ -80,7 +80,6 @@ function tokenValidation (req, res, next) {
             // request of content type of multipart/form-data would be validated inside each service
             next();
         } else {
-            console.log("adminID = " + adminID + ", token = " + token);
             certificateLogic.verifyTokenWorkUnit(adminID, token, function(validateTokenErr) {
                 if(errorCode.SUCCESS.code != validateTokenErr.code) {
                     var fakeResponse = {
