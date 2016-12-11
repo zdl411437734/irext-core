@@ -7,6 +7,8 @@ src/ir_decoder/libs
 src/ir_decoder/obj
 src/ir_encoder/source
 src/ir_decoder/cmake-build-debug
+src/ir_decoder/libs
+src/ir_decoder/obj
 files/
 files/*
 .DS_Store

@@ -191,7 +191,7 @@ JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetT
 
     temperature_range = (*env)->NewObject(env, temperature_range_class, temperature_range_mid);
 
-    get_temperature_range((UINT8)ac_mode, (UINT8*)&tempMin, (UINT8*)&tempMax);
+    get_temperature_range((UINT8)ac_mode, (INT8*)&tempMin, (INT8*)&tempMax);
 
     (*env)->SetIntField(env, temperature_range, min_temp_fid, tempMin);
     (*env)->SetIntField(env, temperature_range, max_temp_fid, tempMax);
