@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "console of irext",
   "scripts": {
+    "dev": "supervisor -w . -i ./web irext_console.js",
     "server": "bash bin/script_run.sh",
-    "log": "bash bin/script_init.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "log": "bash bin/script_init.sh"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
     "redis": "^2.6.3",
     "request": "^2.79.0",
     "ua-parser-js": "^0.7.12"
+  },
+  "devDependencies": {
+    "supervisor": "^0.12.0"
   }
 }
