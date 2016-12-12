@@ -7,8 +7,6 @@
 var constants = require('../mini_poem/configuration/constants');
 var formidable = require('formidable');
 
-// local inclusion
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 /*
  * function :   Navigation to certain URL

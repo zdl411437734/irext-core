@@ -19,7 +19,7 @@ var CityResponse = require('../response/city_response.js');
 var OperatorResponse = require('../response/operator_response.js');
 var RemoteIndexResponse = require('../response/remote_index_response.js');
 
-var internalLogic = require('../work_unit/internal_logic.js');
+var internalLogic = require('../work_unit/code_manage_logic.js');
 
 var Enums = require('../constants/enums');
 var ErrorCode = require('../constants/error_code');
@@ -379,8 +379,10 @@ exports.fallbackRemoteIndex = function (req, res) {
  * return :     ServiceResponse
  */
 exports.publishRemoteIndex = function (req, res) {
+    var adminID = req.body.admin_id;
+
     var serviceResponse = new ServiceResponse();
-    internalLogic.publishRemoteIndexWorkUnit(function (publishRemoteErr) {
+    internalLogic.publishRemoteIndexWorkUnit(adminID, function (publishRemoteErr) {
         serviceResponse.status = publishRemoteErr;
         res.send(serviceResponse);
         res.end();
@@ -410,8 +412,10 @@ exports.createBrand = function (req, res) {
  * return :     Service response
  */
 exports.publishBrands = function (req, res) {
+    var adminID = req.body.admin_id;
+
     var serviceResponse = new ServiceResponse();
-    internalLogic.publishBrandsWorkUnit(function (publishBrandsErr) {
+    internalLogic.publishBrandsWorkUnit(adminID, function (publishBrandsErr) {
         serviceResponse.status = publishBrandsErr;
         res.send(serviceResponse);
         res.end();

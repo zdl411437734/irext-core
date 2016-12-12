@@ -4,7 +4,7 @@
  */
 
 var app = require('../irext_console.js');
-var intService = require('../services/internal_service.js');
+var intService = require('../services/code_manage_service.js');
 
 app.post('/irext/int/list_provinces', intService.listProvinces);
 app.post('/irext/int/list_cities', intService.listCities);
@@ -29,4 +29,5 @@ app.post('/irext/int/create_protocol', intService.createProtocol);
 
 app.get('/irext/int/list_remote_indexes', intService.listRemoteIndexes);
 app.get('/irext/int/search_remote_indexes', intService.searchRemoteIndexes);
+
 app.get('/irext/int/download_remote_index', intService.downloadRemoteIndex);

@@ -5,13 +5,13 @@
 
 require('../mini_poem/configuration/constants');
 var Cache = require('../mini_poem/cache/redis.js');
+var logger = require('../mini_poem/logging/logger4js').helper;
 var Enums = require('../constants/enums');
 var ErrorCode = require('../constants/error_code');
 
 var enums = new Enums();
 var errorCode = new ErrorCode();
 
-var logger = require('../mini_poem/logging/logger4js').helper;
 
 var AdminAuth = function(_cacheHost, _cachePort, _cacheAdmin, _cachePassword) {
     this.cache = new Cache(_cacheHost, _cachePort, _cacheAdmin, _cachePassword);
