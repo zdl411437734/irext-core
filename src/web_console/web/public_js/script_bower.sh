@@ -20,4 +20,7 @@ bower install select2 --allow-root
 echo "bower install bootstrap-spinner"
 bower install bootstrap-spinner --allow-root
 
+echo "bower install highcharts"
+bower install highcharts
+
 echo "bower install done"

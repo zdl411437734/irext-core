@@ -87,7 +87,6 @@ Category.listCategories = function(conditions, from, count, sortField, callback)
                 }
             });
     }
-
 };
 
 Category.getCategoryByID = function(categoryID, callback) {
