@@ -18,4 +18,4 @@
     npm run dev
     ```
     
-Open [http://localhost:8300](http://localhost:8300)
+Open [http://localhost](http://localhost)
