@@ -12,4 +12,4 @@ src/ir_decoder/obj
 files/
 files/*
 .DS_Store
-
+external/
