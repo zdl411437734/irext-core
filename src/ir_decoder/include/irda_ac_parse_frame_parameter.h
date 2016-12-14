@@ -9,11 +9,6 @@ Revision log:
 * 2016-10-11: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-#include "irda_decode.h"
-
 #ifndef _IRDA_PARSE_FRAME_PARAMETER_H_
 #define _IRDA_PARSE_FRAME_PARAMETER_H_
 
@@ -22,17 +17,8 @@ extern "C"
 {
 #endif
 
-/*
- * public macros
- */
+#include "irda_decode.h"
 
-/*
- * public type definition
- */
-
-/*
- * public function declaration
- */
 extern INT8 parse_bootcode(struct tag_head *tag);
 
 extern INT8 parse_zero(struct tag_head *tag);

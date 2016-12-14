@@ -8,6 +8,11 @@ Description:    This file provides algorithms for IR frame build
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
+
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <stdio.h>
 
 #include "include/irda_ac_build_frame.h"

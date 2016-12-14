@@ -12,6 +12,11 @@ Revision log:
 /*
  *inclusion
  */
+
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

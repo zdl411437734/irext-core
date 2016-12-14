@@ -4,4 +4,9 @@ obj/
 .idea/
 cmake-build-debug/
 cmake-build-release/
+Debug/
+Release/
+*.sdf
+*.opensdf
 .DS_Store
+.vs

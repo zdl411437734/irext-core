@@ -8,9 +8,14 @@ Description:    This file provides methods for AC IR applying functionalities
 Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
+
 /*
  *inclusion
  */
+
+#if defined WIN32
+#include "stdafx.h"
+#endif
 
 #include "include/irda_utils.h"
 #include "include/irda_ac_apply.h"

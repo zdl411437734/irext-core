@@ -9,11 +9,6 @@ Revision log:
 * 2016-10-05: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-#include "irda_decode.h"
-
 #ifndef _IRDA_PARSE_PARSE_H_
 #define _IRDA_PARSE_PARSE_H_
 
@@ -22,21 +17,12 @@ extern "C"
 {
 #endif
 
-/*
- * public macros
- */
+#include "irda_decode.h"
 
-/*
- * public type definition
- */
-
-/*
- * public function declaration
- */
-extern INT8 parse_nmode(struct tag_head *tag, ac_n_mode index);
+	extern INT8 parse_nmode(struct tag_head *tag, ac_n_mode index);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 #endif // _IRDA_PARSE_PARSE_H_

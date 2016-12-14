@@ -8,8 +8,6 @@ Description:    This file provides generic utils for IRDA algorithms
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
-#include "irda_defs.h"
-#include "irda_decode.h"
 
 #ifndef _IRDA_UTILS_H_
 #define _IRDA_UTILS_H_
@@ -18,6 +16,9 @@ Revision log:
 extern "C"
 {
 #endif
+
+#include "irda_defs.h"
+#include "irda_decode.h"
 
 #include <stdio.h>
 

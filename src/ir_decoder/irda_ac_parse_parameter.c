@@ -8,9 +8,15 @@ Description:    This file provides algorithms for IR decode for AC functionality
 Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
+
 /*
  *inclusion
  */
+
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

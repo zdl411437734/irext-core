@@ -9,11 +9,6 @@ Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-#include "irda_decode.h"
-
 #ifndef _IRDA_APPLY_H_
 #define _IRDA_APPLY_H_
 
@@ -22,19 +17,11 @@ extern "C"
 {
 #endif
 
-/*
- * public macros
- */
+#include "irda_decode.h"
+
 #define MIN_TAG_LENGTH_TYPE_1   4
 #define MIN_TAG_LENGTH_TYPE_2   6
 
-/*
- * public type definition
- */
-
-/*
- * public function declaration
- */
 extern INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status);
 
 extern INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status);

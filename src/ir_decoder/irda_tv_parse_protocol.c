@@ -13,6 +13,10 @@ Revision log:
  *                                            INCLUDES
  **************************************************************************************************/
 
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <string.h>
 
 #include "include/irda_defs.h"

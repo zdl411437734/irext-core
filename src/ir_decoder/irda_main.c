@@ -9,9 +9,17 @@ Revision log:
 * 2016-11-05: created by strawmanbobi
 **************************************************************************************************/
 
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
+
+#if !defined WIN32
 #include <unistd.h>
+#endif
+
 #include <errno.h>
 
 #include "include/irda_defs.h"
@@ -27,7 +35,12 @@ INT8 irda_tv_file_open(const char* file_name);
 
 INT8 irda_ac_file_open(const char* file_name)
 {
+#if !defined WIN32
     FILE *stream = fopen(file_name, "rb");
+#else
+	FILE *stream;
+	fopen_s(&stream, file_name, "rb");
+#endif
     if (NULL == stream)
     {
         IR_PRINTF("\nfile open failed : %d\n", errno);
@@ -209,7 +222,13 @@ INT8 decode_as_ac(const char* file_name)
 INT8 irda_tv_file_open(const char* file_name)
 {
     int print_index = 0;
+
+#if !defined WIN32
     FILE *stream = fopen(file_name, "rb");
+#else
+	FILE *stream;
+	fopen_s(&stream, file_name, "rb");
+#endif
 
     IR_PRINTF("file name = %s\n", file_name);
 

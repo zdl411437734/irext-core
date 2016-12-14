@@ -8,6 +8,11 @@ Description:    This file provides algorithms for IR decode (status type)
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
+
+#if defined WIN32
+#include "stdafx.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -905,7 +910,7 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
 }
 
 UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
-                           UINT8 change_wind_direction)
+                           BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
     UINT8 i = 0;

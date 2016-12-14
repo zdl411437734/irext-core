@@ -8,8 +8,14 @@ Description:    This file provides algorithms for IR decode
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
+
 #ifndef _IRDA_DECODE_H_
 #define _IRDA_DECODE_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <stdio.h>
 #include "irda_defs.h"
@@ -572,5 +578,9 @@ extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
 INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _IRDA_DECODE_H_

@@ -11,19 +11,13 @@ Revision log:
 
 #ifndef _IRDA_LIB_H_
 #define _IRDA_LIB_H_
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-/*
- * inclusions
- */
+
 #include "irda_defs.h"
-
-
-/*
- * macros and constants
- */
 
 #define STB_CHANNEL_OFFSET              14
 

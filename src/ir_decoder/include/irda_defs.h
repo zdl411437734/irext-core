@@ -9,16 +9,17 @@ Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 
-#if defined BOARD_ANDROID
-#include <android/log.h>
-#define LOG_TAG "irda_decode"
-#endif
-
 #ifndef PARSE_IR_DEFS_H
 #define PARSE_IR_DEFS_H
+
 #ifdef __cplusplus
 extern "C"
 {
+#endif
+
+#if defined BOARD_ANDROID
+#include <android/log.h>
+#define LOG_TAG "irda_decode"
 #endif
 
 #define TRUE    1
@@ -28,7 +29,7 @@ typedef unsigned char UINT8;
 typedef signed char INT8;
 typedef unsigned short UINT16;
 typedef signed short INT16;
-typedef unsigned char BOOL;
+typedef int BOOL;
 
 #define irda_malloc(A) malloc(A)
 #define irda_free(A) free(A)

@@ -9,11 +9,6 @@ Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-#include "irda_decode.h"
-
 #ifndef _IRDA_PARSE_AC_PARAMETER_H_
 #define _IRDA_PARSE_AC_PARAMETER_H_
 
@@ -22,17 +17,7 @@ extern "C"
 {
 #endif
 
-/*
- * public macros
- */
-
-/*
- * public type definition
- */
-
-/*
- * public function declaration
- */
+#include "irda_decode.h"
 
 extern INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_end, UINT8 type);
 

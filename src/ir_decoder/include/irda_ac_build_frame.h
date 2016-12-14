@@ -8,7 +8,6 @@ Description:    This file provides generic utils for IR frame build
 Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
-#include "irda_defs.h"
 
 #ifndef _IRDA_IRFRAME_H_
 #define _IRDA_IRFRAME_H_
@@ -17,6 +16,8 @@ Revision log:
 extern "C"
 {
 #endif
+
+#include "irda_defs.h"
 
 extern UINT16 create_ir_frame();
 
