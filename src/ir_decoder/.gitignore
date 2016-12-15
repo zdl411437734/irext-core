@@ -2,6 +2,7 @@ out/
 libs/
 obj/
 .idea/
+ipch/
 cmake-build-debug/
 cmake-build-release/
 Debug/

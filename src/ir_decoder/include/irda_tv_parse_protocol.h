@@ -194,12 +194,10 @@ typedef struct irda_data_tv
 } irda_data_tv_t;
 
 
-/*
- * export functions
- */
-
 extern INT8 tv_lib_open(UINT8* binary, UINT16 binary_length);
+
 extern BOOL tv_lib_parse(UINT8 encode_type);
+
 extern UINT16 tv_lib_control(UINT8 key, UINT16 *user_data);
 
 #ifdef __cplusplus

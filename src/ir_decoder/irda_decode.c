@@ -324,6 +324,7 @@ INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length)
 
 INT8 irda_context_init()
 {
+	IR_PRINTF("init context");
     irda_memset(context, 0, sizeof(protocol));
     return IR_DECODE_SUCCEEDED;
 }
@@ -1027,6 +1028,11 @@ void irda_ac_lib_close()
         tags = NULL;
     }
     free_ac_context();
+
+	if (NULL != binary_content)
+	{
+		free(binary_content);
+	}
     return;
 }
 
