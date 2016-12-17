@@ -42,10 +42,9 @@ UINT16 tv_bin_length = 0;
 UINT8 tag_count = 0;
 UINT16 tag_head_offset = 0;
 
-UINT8 byteArray[PROTOCOL_SIZE] = {0};
-UINT16 user_data[USER_DATA_SIZE] = {0};
-UINT8 tv_bin[EXPECTED_MEM_SIZE] = {0};
-remote_ac_status_t ac_status;
+UINT8 byteArray[PROTOCOL_SIZE] = { 0 };
+UINT8 tv_bin[EXPECTED_MEM_SIZE] = { 0 };
+
 
 // 2016-10-09 updated by strawmanbobi, change global data context to array pointer
 protocol *context = (protocol *) byteArray;
@@ -1029,10 +1028,6 @@ void irda_ac_lib_close()
     }
     free_ac_context();
 
-	if (NULL != binary_content)
-	{
-		free(binary_content);
-	}
     return;
 }
 
@@ -1203,7 +1198,7 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
 {
     UINT16 print_index = 0;
     UINT16 irda_code_length = 0;
-    memset(user_data, 0x00, USER_DATA_SIZE);
+    memset(l_user_data, 0x00, USER_DATA_SIZE);
     irda_code_length = tv_lib_control(key, l_user_data);
 
     // have some debug
@@ -1211,7 +1206,7 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
     IR_PRINTF("length of IRDA code = %d\n", irda_code_length);
     for(print_index = 0; print_index < irda_code_length; print_index++)
     {
-        IR_PRINTF("%d ", user_data[print_index]);
+        IR_PRINTF("%d ", l_user_data[print_index]);
     }
     IR_PRINTF("\n=============================\n\n");
 

@@ -434,6 +434,7 @@ extern protocol* context;
 extern remote_ac_status_t ac_status;
 extern UINT16 user_data[];
 
+
 /* exported functions */
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
 /*
@@ -515,7 +516,7 @@ extern INT8 irda_tv_lib_parse(UINT8 irda_hex_encode);
  *
  * return: length of wave code array
  */
-extern UINT16 irda_tv_lib_control(UINT8 key_code, UINT16 * l_user_data);
+extern UINT16 irda_tv_lib_control(UINT8 key_code, UINT16* user_data);
 
 /*
  * function irda_tv_lib_close
@@ -575,7 +576,7 @@ extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
+extern INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////
 

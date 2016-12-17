@@ -29,6 +29,8 @@ Revision log:
 // global variable definition
 long binary_length = 0;
 UINT8 *binary_content = NULL;
+remote_ac_status_t ac_status;
+UINT16 user_data[USER_DATA_SIZE];
 
 INT8 irda_ac_file_open(const char* file_name);
 INT8 irda_tv_file_open(const char* file_name);

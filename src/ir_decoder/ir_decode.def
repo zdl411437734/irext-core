@@ -16,5 +16,3 @@ get_supported_mode @11
 get_supported_wind_speed @12
 get_supported_swing @13
 get_supported_wind_direction @14
-irda_ac_file_open @15
-irda_tv_file_open @16
