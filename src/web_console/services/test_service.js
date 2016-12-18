@@ -11,8 +11,8 @@ var ffi = require('ffi');
  * return :
  */
 exports.testFFI = function(req, res) {
-    var libm = ffi.Library('./irda_decoder/libirda_decoder', {
-        'irda_context_init': [ 'int', null ]
+    var libm = ffi.Library('./irda_decoder/libirda_decoder_x64', {
+        'irda_context_init': [ 'uint8', [] ]
     });
     libm.irda_context_init();
     res.end();

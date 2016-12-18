@@ -3,6 +3,7 @@ libs/
 obj/
 .idea/
 ipch/
+x64/
 cmake-build-debug/
 cmake-build-release/
 Debug/
