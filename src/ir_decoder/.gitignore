@@ -11,3 +11,4 @@ Release/
 *.opensdf
 .DS_Store
 .vs
+ir_decoder.vcxproj.user
