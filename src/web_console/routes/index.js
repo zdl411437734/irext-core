@@ -8,4 +8,3 @@ var server = require('../irext_console.js');
 require('./navigation_routes.js');
 require('./code_manage_routes.js');
 require('./certificate_routes.js');
-require('./test_routes.js');
