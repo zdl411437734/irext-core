@@ -27,51 +27,12 @@ Revision log:
 #include "include/irda_main.h"
 
 // global variable definition
-long binary_length = 0;
-UINT8 *binary_content = NULL;
 remote_ac_status_t ac_status;
 UINT16 user_data[USER_DATA_SIZE];
 
-INT8 irda_ac_file_open(const char* file_name);
+
 INT8 irda_tv_file_open(const char* file_name);
 
-INT8 irda_ac_file_open(const char* file_name)
-{
-#if !defined WIN32
-    FILE *stream = fopen(file_name, "rb");
-#else
-	FILE *stream;
-	fopen_s(&stream, file_name, "rb");
-#endif
-    if (NULL == stream)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    binary_length = ftell(stream);
-    binary_content = (UINT8*) irda_malloc(binary_length);
-
-    if (NULL == binary_content)
-    {
-        IR_PRINTF("\nfailed to alloc memory for binary\n");
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
-    fclose(stream);
-
-    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
-    {
-        irda_free(binary_content);
-        binary_length = 0;
-        return IR_DECODE_FAILED;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
 
 INT8 decode_as_ac(const char* file_name)
 {
@@ -214,49 +175,6 @@ INT8 decode_as_ac(const char* file_name)
 
     irda_ac_lib_close();
 
-    // free binary buffer
-    irda_free(binary_content);
-    binary_length = 0;
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-INT8 irda_tv_file_open(const char* file_name)
-{
-    int print_index = 0;
-
-#if !defined WIN32
-    FILE *stream = fopen(file_name, "rb");
-#else
-	FILE *stream;
-	fopen_s(&stream, file_name, "rb");
-#endif
-
-    IR_PRINTF("file name = %s\n", file_name);
-
-    if (stream == NULL)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    binary_length = ftell(stream);
-    IR_PRINTF("length of binary = %d\n", (int)binary_length);
-
-    binary_content = (UINT8*) irda_malloc(binary_length);
-
-    fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
-    fclose(stream);
-
-    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
-    {
-        irda_free(binary_content);
-        binary_length = 0;
-        return IR_DECODE_FAILED;
-    }
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -298,10 +216,6 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
             // do nothing
         }
     } while('Q' != in_char);
-
-    // free binary buffer
-    irda_free(binary_content);
-    binary_length = 0;
 
     return IR_DECODE_SUCCEEDED;
 }

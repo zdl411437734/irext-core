@@ -45,6 +45,8 @@ UINT16 tag_head_offset = 0;
 UINT8 byteArray[PROTOCOL_SIZE] = { 0 };
 UINT8 tv_bin[EXPECTED_MEM_SIZE] = { 0 };
 
+long binary_length = 0;
+UINT8 *binary_content = NULL;
 
 // 2016-10-09 updated by strawmanbobi, change global data context to array pointer
 protocol *context = (protocol *) byteArray;
@@ -76,7 +78,7 @@ const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
 };
 
 #if defined BOARD_PC
-void free_pirda(void);
+void irda_lib_free_inner_buffer();
 #endif
 
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
@@ -306,6 +308,44 @@ INT8 free_ac_context()
     {
         irda_free(context->checksum.checksum_data);
         context->checksum.checksum_data = NULL;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 irda_ac_file_open(const char* file_name)
+{
+#if !defined WIN32
+    FILE *stream = fopen(file_name, "rb");
+#else
+    FILE *stream;
+	fopen_s(&stream, file_name, "rb");
+#endif
+    if (NULL == stream)
+    {
+        IR_PRINTF("\nfile open failed\n");
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    if (NULL == binary_content)
+    {
+        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
     }
 
     return IR_DECODE_SUCCEEDED;
@@ -699,7 +739,7 @@ INT8 irda_ac_lib_parse()
     // or make global buffer shared in extreme memory case
     /* in case of running with test - begin */
 #if defined BOARD_PC
-    free_pirda();
+    irda_lib_free_inner_buffer();
 #endif
     /* in case of running with test - end */
 
@@ -707,11 +747,13 @@ INT8 irda_ac_lib_parse()
 }
 
 #if defined BOARD_PC
-void free_pirda(void)
+void irda_lib_free_inner_buffer()
 {
-    irda_free(pirda_buffer->data);
-    pirda_buffer->len = 0;
-    pirda_buffer->offset = 0;
+    if (NULL != pirda_buffer->data) {
+        irda_free(pirda_buffer->data);
+        pirda_buffer->len = 0;
+        pirda_buffer->offset = 0;
+    }
 }
 #endif
 
@@ -1176,6 +1218,45 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 ///////////////////////////////////////////////// AC End //////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
+INT8 irda_tv_file_open(const char* file_name)
+{
+    int print_index = 0;
+
+#if !defined WIN32
+    FILE *stream = fopen(file_name, "rb");
+#else
+    FILE *stream;
+	fopen_s(&stream, file_name, "rb");
+#endif
+
+    IR_PRINTF("file name = %s\n", file_name);
+
+    if (stream == NULL)
+    {
+        IR_PRINTF("\nfile open failed\n");
+        return IR_DECODE_FAILED;
+    }
+
+    fseek(stream, 0, SEEK_END);
+    binary_length = ftell(stream);
+    IR_PRINTF("length of binary = %d\n", (int)binary_length);
+
+    binary_content = (UINT8*) irda_malloc(binary_length);
+
+    fseek(stream, 0, SEEK_SET);
+    fread(binary_content, binary_length, 1, stream);
+    fclose(stream);
+
+    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
+    {
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
 INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     return tv_lib_open(binary, binary_length);
@@ -1215,7 +1296,9 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
 
 INT8 irda_tv_lib_close()
 {
-    // no need to close tv binary
+#if defined BOARD_PC
+    irda_lib_free_inner_buffer();
+#endif
     return IR_DECODE_SUCCEEDED;
 }
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////

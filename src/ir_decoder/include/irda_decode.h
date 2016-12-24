@@ -447,6 +447,15 @@ extern UINT16 user_data[];
 extern INT8 irda_context_init();
 
 /*
+ * function irda_ac_file_open
+ *
+ * parameters:  file name of remote binary
+ *
+ * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
+ */
+extern INT8 irda_ac_file_open(const char* file_name);
+
+/*
  * function irda_ac_lib_open
  *
  * parameters:  binary (in) binary content
@@ -489,6 +498,15 @@ extern void irda_ac_lib_close();
 ///////////////////////////////////////////////// AC End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
+/*
+ * function irda_tv_file_open
+ *
+ * parameters:  file name of remote binary
+ *
+ * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
+ */
+INT8 irda_tv_file_open(const char* file_name);
+
 /*
  * function irda_tv_lib_open
  *
