@@ -335,6 +335,7 @@ INT8 irda_ac_file_open(const char* file_name)
     if (NULL == binary_content)
     {
         IR_PRINTF("\nfailed to alloc memory for binary\n");
+        fclose(stream);
         return IR_DECODE_FAILED;
     }
 
@@ -759,10 +760,9 @@ INT8 irda_ac_lib_parse()
 #if defined BOARD_PC
 void irda_lib_free_inner_buffer()
 {
-    if (NULL != pirda_buffer->data) {
-        irda_free(pirda_buffer->data);
-        pirda_buffer->len = 0;
-        pirda_buffer->offset = 0;
+    if (NULL != binary_content) {
+        irda_free(binary_content);
+        binary_content = NULL;
     }
 }
 #endif
@@ -1252,6 +1252,12 @@ INT8 irda_tv_file_open(const char* file_name)
     IR_PRINTF("length of binary = %d\n", (int)binary_length);
 
     binary_content = (UINT8*) irda_malloc(binary_length);
+    if (NULL == binary_content)
+    {
+        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        fclose(stream);
+        return IR_DECODE_FAILED;
+    }
 
     fseek(stream, 0, SEEK_SET);
     ret = fread(binary_content, binary_length, 1, stream);
