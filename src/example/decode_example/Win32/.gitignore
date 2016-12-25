@@ -3,6 +3,7 @@ Debug/
 Release/
 DecodeTestWin/Debug/
 DecodeTestWin/Release/
+ipch/
 *.sdf
 *.opensdf
 .vs
