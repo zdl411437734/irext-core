@@ -315,6 +315,7 @@ INT8 free_ac_context()
 
 INT8 irda_ac_file_open(const char* file_name)
 {
+    int ret = 0;
 #if !defined WIN32
     FILE *stream = fopen(file_name, "rb");
 #else
@@ -338,7 +339,16 @@ INT8 irda_ac_file_open(const char* file_name)
     }
 
     fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
+    ret = fread(binary_content, binary_length, 1, stream);
+
+    if (ret <= 0)
+    {
+        fclose(stream);
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
     fclose(stream);
 
     if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
@@ -1220,7 +1230,7 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
 INT8 irda_tv_file_open(const char* file_name)
 {
-    int print_index = 0;
+    int ret = 0;
 
 #if !defined WIN32
     FILE *stream = fopen(file_name, "rb");
@@ -1244,7 +1254,15 @@ INT8 irda_tv_file_open(const char* file_name)
     binary_content = (UINT8*) irda_malloc(binary_length);
 
     fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
+    ret = fread(binary_content, binary_length, 1, stream);
+    if (ret <= 0)
+    {
+        fclose(stream);
+        irda_free(binary_content);
+        binary_length = 0;
+        return IR_DECODE_FAILED;
+    }
+
     fclose(stream);
 
     if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
