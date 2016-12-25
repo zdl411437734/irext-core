@@ -132,14 +132,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 return IR_DECODE_FAILED;
             }
 
-            // have some debug
-            IR_PRINTF("seg[%d].len = %d : \n", seg_index, comp_data[seg_index].seg_len);
-            for(i = 0; i < comp_data[seg_index].seg_len; i++)
-            {
-                IR_PRINTF("[%02X] ", comp_data[seg_index].segment[i]);
-            }
-            IR_PRINTF("\n");
-
             if (trav_offset >= hex_len)
             {
                 break;
@@ -156,14 +148,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
                 hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
-
-            // have some debug
-            IR_PRINTF("seg[%d].len = %d : \n", seg_index, comp_data[seg_index].seg_len);
-            for(i = 0; i < comp_data[seg_index].seg_len; i++)
-            {
-                IR_PRINTF("[%02X] ", comp_data[seg_index].segment[i]);
-            }
-            IR_PRINTF("\n");
 
             if (trav_offset >= hex_len)
             {
@@ -209,7 +193,6 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     {
         return IR_DECODE_FAILED;
     }
-    // IR_PRINTF("\n============\n%s\n", __func__);
 
     hex_len = tag->len >> 1;
     hex_data = (UINT8 *) irda_malloc(hex_len);
@@ -232,10 +215,6 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-
-        // have some debug
-        // IR_PRINTF("power_seg[%d].len = %d : \n", seg_index, power1->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
 
         // prevent from buffer over flowing
         if (trav_offset >= hex_len)
@@ -316,14 +295,6 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
                 return IR_DECODE_FAILED;
             }
 
-            // have some debug
-            IR_PRINTF("seg[%d].len = %d : \n", seg_index, temp1->comp_data[seg_index].seg_len);
-            for(i = 0; i < temp1->comp_data[seg_index].seg_len; i++)
-            {
-                IR_PRINTF("[%02X] ", temp1->comp_data[seg_index].segment[i]);
-            }
-            IR_PRINTF("\n");
-
             if (trav_offset >= hex_len)
             {
                 break;
@@ -347,7 +318,6 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     {
         return IR_DECODE_FAILED;
     }
-    // IR_PRINTF("\n============\n%s\n", __func__);
 
     hex_len = tag->len >> 1;
     hex_data = (UINT8 *) irda_malloc(hex_len);
@@ -370,10 +340,6 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-
-        // have some debug
-        // IR_PRINTF("mode_seg[%d].len = %d : \n", seg_index, mode1->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
 
         if (trav_offset >= hex_len)
         {
@@ -398,7 +364,6 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     {
         return IR_DECODE_FAILED;
     }
-    // IR_PRINTF("\n============\n%s\n", __func__);
 
     hex_len = tag->len >> 1;
     hex_data = (UINT8 *) irda_malloc(hex_len);
@@ -421,10 +386,6 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-
-        // have some debug
-        // IR_PRINTF("speed_seg[%d].len = %d : \n", seg_index, speed1->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
 
         if (trav_offset >= hex_len)
         {
@@ -449,7 +410,6 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     {
         return IR_DECODE_FAILED;
     }
-    // IR_PRINTF("\n============\n%s\n", __func__);
 
     hex_len = tag->len >> 1;
     hex_data = (UINT8 *) irda_malloc(hex_len);
@@ -480,10 +440,6 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-
-        // have some debug
-        // IR_PRINTF("swing_seg[%d].len = %d : \n", seg_index, swing1->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
 
         if (trav_offset >= hex_len)
         {
@@ -611,14 +567,6 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
 
     string_to_hex_common(buf, hex_data, hex_len);
 
-    UINT8 i = 0;
-    IR_PRINTF("hex len = %d\n", hex_len);
-    for(i = 0; i < hex_len; i++)
-    {
-        IR_PRINTF("[%02X] ", hex_data[i]);
-    }
-    IR_PRINTF("\n");
-
     if (length != hex_data[0] + 1)
     {
         irda_free(hex_data);
@@ -712,21 +660,6 @@ INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
                                                (i - preindex) >> 1))
     {
         return IR_DECODE_FAILED;
-    }
-
-    UINT8 j = 0;
-    for(i = 0; i < checksum->count; i++)
-    {
-        IR_PRINTF("checksum[%d].len = 1 + %d :\n", i, checksum->checksum_data[i].len);
-        for(j = 0; j <= checksum->checksum_data[i].len; j++)
-        {
-            IR_PRINTF("[%02X] ", *(((UINT8*)&checksum->checksum_data[i]) + j));
-            if(j == 0)
-            {
-                IR_PRINTF(" ");
-            }
-        }
-        IR_PRINTF("\n");
     }
 
     return IR_DECODE_SUCCEEDED;
@@ -910,14 +843,6 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
                 // for this second type (TAG 30) temperature update, apply the change in run time.
                 temp2->comp_data[seg_index].segment[i] = hex_data[i + 1] * seg_index;
             }
-
-            // have some debug
-            IR_PRINTF("seg[%d].len = %d : \n", seg_index, temp2->comp_data[seg_index].seg_len);
-            for(i = 0; i < temp2->comp_data[seg_index].seg_len; i++)
-            {
-                IR_PRINTF("[%02X] ", temp2->comp_data[seg_index].segment[i]);
-            }
-            IR_PRINTF("\n");
         }
     }
     else
@@ -953,7 +878,6 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     UINT16 seg_index = 0;
     UINT8 *hex_data = NULL;
 
-    // IR_PRINTF("\n============\n%s\n", __func__);
     if (NULL == tag)
     {
         return IR_DECODE_FAILED;
@@ -986,10 +910,6 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
             return IR_DECODE_FAILED;
         }
 
-        // have some debug
-        // IR_PRINTF("mode_seg[%d].len = %d : \n", seg_index, mode2->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
-
         if (trav_offset >= hex_len)
         {
             break;
@@ -1009,7 +929,6 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     UINT16 seg_index = 0;
     UINT8 *hex_data = NULL;
 
-    // IR_PRINTF("\n============\n%s\n", __func__);
     if (NULL == tag)
     {
         return IR_DECODE_FAILED;
@@ -1042,10 +961,6 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
             return IR_DECODE_FAILED;
         }
 
-        // have some debug
-        // IR_PRINTF("speed_seg[%d].len = %d : \n", seg_index, speed2->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
-
         if (trav_offset >= hex_len)
         {
             break;
@@ -1065,7 +980,6 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     UINT16 seg_index = 0;
     UINT8 *hex_data = NULL;
 
-    // IR_PRINTF("\n============\n%s\n", __func__);
     if (NULL == tag)
     {
         return IR_DECODE_FAILED;
@@ -1105,10 +1019,6 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-
-        // have some debug
-        // IR_PRINTF("swing_seg[%d].len = %d : \n", seg_index, swing2->comp_data[seg_index].seg_len);
-        // IR_PRINTF("\n");
 
         if (trav_offset >= hex_len)
         {
@@ -1310,7 +1220,7 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
 
     if(hex_len > AC_FUNCTION_MAX)
     {
-        IR_PRINTF("solo function code exceeded!!\n");
+        IR_PRINTF("\nsolo function code exceeded!!\n");
         return IR_DECODE_FAILED;
     }
 

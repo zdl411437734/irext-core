@@ -22,7 +22,7 @@ Revision log:
 #include <string.h>
 
 #include "include/irda_utils.h"
-#include "include/irda_ac_parse_frame_parameter.h"
+#include "include/irda_ac_parse_frame_info.h"
 
 /*
  * global vars

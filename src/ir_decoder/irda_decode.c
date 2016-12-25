@@ -20,7 +20,7 @@ Revision log:
 
 #include "include/irda_decode.h"
 #include "include/irda_utils.h"
-#include "include/irda_ac_parse_frame_parameter.h"
+#include "include/irda_ac_parse_frame_info.h"
 #include "include/irda_ac_parse_parameter.h"
 #include "include/irda_ac_parse_forbidden_info.h"
 #include "include/irda_ac_build_frame.h"

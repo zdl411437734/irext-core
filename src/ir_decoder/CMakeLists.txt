@@ -18,8 +18,8 @@ set(SOURCE_FILES_EXECUTABLE
         include/irda_ac_parse_parameter.h
         irda_ac_parse_forbidden_info.c
         include/irda_ac_parse_forbidden_info.h
-        irda_ac_parse_frame_parameter.c
-        include/irda_ac_parse_frame_parameter.h
+        irda_ac_parse_frame_info.c
+        include/irda_ac_parse_frame_info.h
         irda_utils.c
         include/irda_utils.h
         irda_main.c
@@ -39,8 +39,8 @@ set(SOURCE_FILES_SHARED_LIB
         include/irda_ac_parse_parameter.h
         irda_ac_parse_forbidden_info.c
         include/irda_ac_parse_forbidden_info.h
-        irda_ac_parse_frame_parameter.c
-        include/irda_ac_parse_frame_parameter.h
+        irda_ac_parse_frame_info.c
+        include/irda_ac_parse_frame_info.h
         irda_utils.c
         include/irda_utils.h)
 
