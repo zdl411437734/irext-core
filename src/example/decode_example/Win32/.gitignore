@@ -1,0 +1,10 @@
+x64/
+Debug/
+Release/
+DecodeTestWin/Debug/
+DecodeTestWin/Release/
+*.sdf
+*.opensdf
+.vs
+DecodeTestWin.VC.db
+DecodeTestWin.sdf

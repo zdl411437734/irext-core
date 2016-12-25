@@ -34,7 +34,7 @@ UINT16 user_data[USER_DATA_SIZE];
 INT8 irda_tv_file_open(const char* file_name);
 
 
-INT8 decode_as_ac(const char* file_name)
+INT8 decode_as_ac(char* file_name)
 {
     // keyboard input
     int in_char = 0;

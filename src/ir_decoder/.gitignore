@@ -14,3 +14,5 @@ Release/
 .vs
 ir_decoder.vcxproj.user
 irda_decoder.exe.stackdump
+ir_decoder.VC.db
+ir_decoder.VC.VC.opendb
