@@ -23,7 +23,7 @@ set(SOURCE_FILES_EXECUTABLE
         irda_utils.c
         include/irda_utils.h
         irda_main.c
-        include/irda_main.h)
+        )
 
 set(SOURCE_FILES_SHARED_LIB
         irda_decode.c

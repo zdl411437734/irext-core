@@ -14,17 +14,13 @@ Revision log:
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #if !defined WIN32
 #include <unistd.h>
 #endif
 
-#include <errno.h>
-
 #include "include/irda_defs.h"
 #include "include/irda_decode.h"
-#include "include/irda_main.h"
 
 // global variable definition
 remote_ac_status_t ac_status;
