@@ -1,0 +1,24 @@
+{
+  "name": "irext",
+  "version": "0.0.1",
+  "description": "console of irext",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/strawmanbobi/irext_console"
+  },
+  "keywords": [
+    "IRDA"
+  ],
+  "author": "strawmanbobi",
+  "license": "GPL",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-multiselect": "^0.9.13",
+    "bootstrap-spinner": "^1.1.1",
+    "bootstrap-table": "^1.11.0",
+    "highcharts": "^5.0.6",
+    "jquery": "^2.2.4",
+    "select2": "^4.0.3",
+    "toastr": "^2.1.3"
+  }
+}
