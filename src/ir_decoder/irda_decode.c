@@ -77,8 +77,8 @@ const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
     41, 42, 43, 44, 45, 46, 47, 48
 };
 
-#if defined BOARD_PC
-void irda_lib_free_inner_buffer();
+#if (defined BOARD_PC || defined BOARD_PC_DLL)
+static void irda_lib_free_inner_buffer();
 #endif
 
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
@@ -151,6 +151,7 @@ INT8 binary_parse_len()
 
 void binary_tags_info()
 {
+#if defined BOARD_PC
     UINT16 i = 0;
     for (i = 0; i < tag_count; i++)
     {
@@ -160,6 +161,7 @@ void binary_tags_info()
         }
         IR_PRINTF("tag(%d).len = %d\n", tags[i].tag, tags[i].len);
     }
+#endif
 }
 
 INT8 binary_parse_data()
@@ -374,7 +376,6 @@ INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length)
 
 INT8 irda_context_init()
 {
-	IR_PRINTF("init context");
     irda_memset(context, 0, sizeof(protocol));
     return IR_DECODE_SUCCEEDED;
 }
@@ -447,7 +448,9 @@ INT8 irda_ac_lib_parse()
             UINT16 swing_space_size = 0;
             if (tags[i].tag == TAG_AC_SWING_1)
             {
+#if defined BOARD_PC
                 IR_PRINTF("\nparse swing 1\n");
+#endif
                 context->swing1.count = context->si.mode_count;
                 context->swing1.len = tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
@@ -468,7 +471,9 @@ INT8 irda_ac_lib_parse()
             }
             else if (tags[i].tag == TAG_AC_SWING_2)
             {
+#if defined BOARD_PC
                 IR_PRINTF("\nparse swing 2\n");
+#endif
                 context->swing2.count = context->si.mode_count;
                 context->swing2.len = tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
@@ -490,7 +495,9 @@ INT8 irda_ac_lib_parse()
 
         if (tags[i].tag == TAG_AC_DEFAULT_CODE) // default code TAG
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse default\n");
+#endif
             context->default_code.data = (UINT8 *) irda_malloc((tags[i].len - 2) >> 1);
             if (NULL == context->default_code.data)
             {
@@ -503,7 +510,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_POWER_1) // power tag
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse power 1\n");
+#endif
             context->power1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->power1.comp_data,
@@ -515,7 +524,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_TEMP_1) // temperature tag type 1
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse temperature 1\n");
+#endif
             if (IR_DECODE_FAILED == parse_temp_1(&tags[i], &(context->temp1)))
             {
                 return IR_DECODE_FAILED;
@@ -523,7 +534,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_MODE_1) // mode tag
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse mode 1\n");
+#endif
             context->mode1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->mode1.comp_data,
@@ -535,7 +548,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SPEED_1) // wind speed tag
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse speed 1\n");
+#endif
             context->speed1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->speed1.comp_data,
@@ -547,7 +562,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_CHECKSUM_TYPE)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse checksum\n");
+#endif
             if (IR_DECODE_FAILED == parse_checksum(&tags[i], &(context->checksum)))
             {
                 return IR_DECODE_FAILED;
@@ -555,7 +572,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_MODE_2)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse mode 2\n");
+#endif
             context->mode2.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED ==
                     parse_common_ac_parameter(&tags[i],
@@ -566,7 +585,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SPEED_2)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse speed 2\n");
+#endif
             context->speed2.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED ==
                     parse_common_ac_parameter(&tags[i],
@@ -577,7 +598,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_TEMP_2)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse temperature 2\n");
+#endif
             if (IR_DECODE_FAILED == parse_temp_2(&tags[i], &(context->temp2)))
             {
                 return IR_DECODE_FAILED;
@@ -585,7 +608,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SOLO_FUNCTION)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse solo functions\n");
+#endif
             if (IR_DECODE_FAILED == parse_solo_code(&tags[i], &(context->sc)))
             {
                 return IR_DECODE_FAILED;
@@ -602,7 +627,9 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_FUNCTION_2)
         {
+#if defined BOARD_PC
             IR_PRINTF("\nparse function 2\n");
+#endif
             if (IR_DECODE_FAILED == parse_function_2_tag34(&tags[i], &(context->function2)))
             {
                 return IR_DECODE_FAILED;
@@ -749,7 +776,7 @@ INT8 irda_ac_lib_parse()
     // it is strongly recommended that we free pirda_buffer
     // or make global buffer shared in extreme memory case
     /* in case of running with test - begin */
-#if defined BOARD_PC
+#if (defined BOARD_PC || defined BOARD_PC_DLL)
     irda_lib_free_inner_buffer();
 #endif
     /* in case of running with test - end */
@@ -757,8 +784,8 @@ INT8 irda_ac_lib_parse()
     return IR_DECODE_SUCCEEDED;
 }
 
-#if defined BOARD_PC
-void irda_lib_free_inner_buffer()
+#if (defined BOARD_PC || defined BOARD_PC_DLL)
+static void irda_lib_free_inner_buffer()
 {
     if (NULL != binary_content) {
         irda_free(binary_content);
@@ -1057,6 +1084,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
     // checksum should always be applied
     apply_checksum(context);
 
+#if defined BOARD_PC
     // have some debug
     IR_PRINTF("==============================\n");
     for(i = 0; i < ir_hex_len; i++)
@@ -1064,6 +1092,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
         IR_PRINTF("[%02X] ", ir_hex_code[i]);
     }
     IR_PRINTF("\n");
+#endif
 
     time_length = create_ir_frame();
 
@@ -1239,8 +1268,6 @@ INT8 irda_tv_file_open(const char* file_name)
 	fopen_s(&stream, file_name, "rb");
 #endif
 
-    IR_PRINTF("file name = %s\n", file_name);
-
     if (stream == NULL)
     {
         IR_PRINTF("\nfile open failed\n");
@@ -1249,7 +1276,6 @@ INT8 irda_tv_file_open(const char* file_name)
 
     fseek(stream, 0, SEEK_END);
     binary_length = ftell(stream);
-    IR_PRINTF("length of binary = %d\n", (int)binary_length);
 
     binary_content = (UINT8*) irda_malloc(binary_length);
     if (NULL == binary_content)
@@ -1295,7 +1321,6 @@ INT8 irda_tv_lib_parse(UINT8 irda_hex_encode)
         tv_bin_length = 0;
         return IR_DECODE_FAILED;
     }
-    IR_PRINTF("parse irda binary successfully\n");
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -1306,6 +1331,7 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
     memset(l_user_data, 0x00, USER_DATA_SIZE);
     irda_code_length = tv_lib_control(key, l_user_data);
 
+#if defined BOARD_PC
     // have some debug
     IR_PRINTF("=============================\n");
     IR_PRINTF("length of IRDA code = %d\n", irda_code_length);
@@ -1314,13 +1340,14 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
         IR_PRINTF("%d ", l_user_data[print_index]);
     }
     IR_PRINTF("\n=============================\n\n");
+#endif
 
     return irda_code_length;
 }
 
 INT8 irda_tv_lib_close()
 {
-#if defined BOARD_PC
+#if (defined BOARD_PC || defined BOARD_PC_DLL)
     irda_lib_free_inner_buffer();
 #endif
     return IR_DECODE_SUCCEEDED;
