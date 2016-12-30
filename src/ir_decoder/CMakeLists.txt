@@ -22,7 +22,7 @@ set(SOURCE_FILES_EXECUTABLE
         include/irda_ac_parse_frame_info.h
         irda_utils.c
         include/irda_utils.h
-        irda_main.c
+        irda_test_main.c
         )
 
 set(SOURCE_FILES_SHARED_LIB
