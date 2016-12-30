@@ -448,9 +448,6 @@ INT8 irda_ac_lib_parse()
             UINT16 swing_space_size = 0;
             if (tags[i].tag == TAG_AC_SWING_1)
             {
-#if defined BOARD_PC
-                IR_PRINTF("\nparse swing 1\n");
-#endif
                 context->swing1.count = context->si.mode_count;
                 context->swing1.len = tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
@@ -471,9 +468,6 @@ INT8 irda_ac_lib_parse()
             }
             else if (tags[i].tag == TAG_AC_SWING_2)
             {
-#if defined BOARD_PC
-                IR_PRINTF("\nparse swing 2\n");
-#endif
                 context->swing2.count = context->si.mode_count;
                 context->swing2.len = tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
@@ -495,9 +489,6 @@ INT8 irda_ac_lib_parse()
 
         if (tags[i].tag == TAG_AC_DEFAULT_CODE) // default code TAG
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse default\n");
-#endif
             context->default_code.data = (UINT8 *) irda_malloc((tags[i].len - 2) >> 1);
             if (NULL == context->default_code.data)
             {
@@ -510,9 +501,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_POWER_1) // power tag
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse power 1\n");
-#endif
             context->power1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->power1.comp_data,
@@ -524,9 +512,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_TEMP_1) // temperature tag type 1
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse temperature 1\n");
-#endif
             if (IR_DECODE_FAILED == parse_temp_1(&tags[i], &(context->temp1)))
             {
                 return IR_DECODE_FAILED;
@@ -534,9 +519,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_MODE_1) // mode tag
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse mode 1\n");
-#endif
             context->mode1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->mode1.comp_data,
@@ -548,9 +530,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SPEED_1) // wind speed tag
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse speed 1\n");
-#endif
             context->speed1.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                               context->speed1.comp_data,
@@ -562,9 +541,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_CHECKSUM_TYPE)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse checksum\n");
-#endif
             if (IR_DECODE_FAILED == parse_checksum(&tags[i], &(context->checksum)))
             {
                 return IR_DECODE_FAILED;
@@ -572,9 +548,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_MODE_2)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse mode 2\n");
-#endif
             context->mode2.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED ==
                     parse_common_ac_parameter(&tags[i],
@@ -585,9 +558,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SPEED_2)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse speed 2\n");
-#endif
             context->speed2.len = tags[i].len >> 1;
             if (IR_DECODE_FAILED ==
                     parse_common_ac_parameter(&tags[i],
@@ -598,9 +568,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_TEMP_2)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse temperature 2\n");
-#endif
             if (IR_DECODE_FAILED == parse_temp_2(&tags[i], &(context->temp2)))
             {
                 return IR_DECODE_FAILED;
@@ -608,9 +575,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_SOLO_FUNCTION)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse solo functions\n");
-#endif
             if (IR_DECODE_FAILED == parse_solo_code(&tags[i], &(context->sc)))
             {
                 return IR_DECODE_FAILED;
@@ -627,9 +591,6 @@ INT8 irda_ac_lib_parse()
         }
         else if (tags[i].tag == TAG_AC_FUNCTION_2)
         {
-#if defined BOARD_PC
-            IR_PRINTF("\nparse function 2\n");
-#endif
             if (IR_DECODE_FAILED == parse_function_2_tag34(&tags[i], &(context->function2)))
             {
                 return IR_DECODE_FAILED;
