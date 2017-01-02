@@ -20,7 +20,6 @@ Revision log:
 extern protocol* context;
 
 
-
 INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
 {
     char buf[16] = {0};
@@ -35,9 +34,9 @@ INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
             index++;
         }
         irda_memcpy(buf, pdata + pos, index - pos);
-        pos = index + 1;
+        pos = (UINT16)(index + 1);
         index = pos;
-        context->n_mode[seq].speed[cnt++] = atoi(buf);
+        context->n_mode[seq].speed[cnt++] = (UINT8)atoi(buf);
         context->n_mode[seq].speed_cnt = (UINT8)cnt;
         irda_memset(buf, 0, 16);
     }
@@ -60,9 +59,9 @@ INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
             index++;
         }
         irda_memcpy(buf, pdata + pos, index - pos);
-        pos = index + 1;
+        pos = (UINT16)(index + 1);
         index = pos;
-        context->n_mode[seq].temp[cnt++] = atoi(buf) - 16;
+        context->n_mode[seq].temp[cnt++] = (UINT8)(atoi(buf) - 16);
         context->n_mode[seq].temp_cnt = (UINT8)cnt;
         irda_memset(buf, 0, 16);
     }
@@ -131,7 +130,7 @@ INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
         if (tag->pdata[i] == '|')
         {
             irda_memcpy(buf, tag->pdata + preindex, i - preindex);
-            preindex = i + 1;
+            preindex = (UINT16)(i + 1);
             parse_nmode_pos(buf, index);
             irda_memset(buf, 0, 64);
         }

@@ -200,7 +200,7 @@ INT8 ir_ac_lib_parse() {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_FRAME_LENGTH) {
-            if (IR_DECODE_FAILED == parse_framelen(&tags[i], tags[i].len)) {
+            if (IR_DECODE_FAILED == parse_frame_len(&tags[i], tags[i].len)) {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_ZERO) {
@@ -212,7 +212,7 @@ INT8 ir_ac_lib_parse() {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_BOOT_CODE) {
-            if (IR_DECODE_FAILED == parse_bootcode(&tags[i])) {
+            if (IR_DECODE_FAILED == parse_boot_code(&tags[i])) {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_REPEAT_TIMES) {
@@ -220,7 +220,7 @@ INT8 ir_ac_lib_parse() {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_BITNUM) {
-            if (IR_DECODE_FAILED == parse_bitnum(&tags[i])) {
+            if (IR_DECODE_FAILED == parse_bit_num(&tags[i])) {
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_ENDIAN) {
@@ -255,7 +255,7 @@ INT8 ir_ac_lib_parse() {
             continue;
         }
         if (tags[i].tag == TAG_AC_DELAY_CODE) {
-            if (IR_DECODE_FAILED == parse_delaycode(&tags[i])) {
+            if (IR_DECODE_FAILED == parse_delay_code(&tags[i])) {
                 return IR_DECODE_FAILED;
             }
         }

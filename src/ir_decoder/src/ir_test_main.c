@@ -11,10 +11,6 @@ Revision log:
 
 #include <stdio.h>
 
-#if !defined WIN32
-#include <unistd.h>
-#endif
-
 #include "../include/ir_defs.h"
 #include "../include/ir_decode.h"
 

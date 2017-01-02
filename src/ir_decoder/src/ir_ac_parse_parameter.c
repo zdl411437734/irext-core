@@ -72,7 +72,6 @@ INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
 INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_end, UINT8 type)
 {
     UINT16 hex_len = 0;
-    UINT16 i = 0;
     UINT16 trav_offset = 0;
     UINT16 seg_index = 0;
     UINT8 *hex_data = NULL;
@@ -106,7 +105,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
             if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &comp_data[seg_index]))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
 
@@ -123,7 +121,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
             if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &comp_data[seg_index]))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
 
@@ -135,7 +132,6 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -190,7 +186,6 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &power1->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -202,7 +197,6 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -246,7 +240,6 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
             if (NULL == temp1->comp_data[seg_index].segment)
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
 
@@ -255,7 +248,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
                 temp1->comp_data[seg_index].segment[i - 1] = hex_data[i];
 
                 // get the default value of temperature
-                temp1->comp_data[seg_index].segment[i] = hex_data[i + 1] * seg_index;
+                temp1->comp_data[seg_index].segment[i] = (UINT8)(hex_data[i + 1] * seg_index);
             }
         }
     }
@@ -269,7 +262,6 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
             if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &temp1->comp_data[seg_index]))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
 
@@ -280,7 +272,6 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
         }
     }
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -315,7 +306,6 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &mode1->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -326,7 +316,6 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -361,7 +350,6 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &speed1->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -372,7 +360,6 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -406,7 +393,6 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     if (NULL == swing1->comp_data)
     {
         irda_free(hex_data);
-        hex_data = NULL;
         return IR_DECODE_FAILED;
     }
 
@@ -415,7 +401,6 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &swing1->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -426,7 +411,6 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -478,7 +462,7 @@ INT8 parse_checksum_spec_half_byte_typed(UINT8 *csdata, tag_checksum_data *check
      * Thus the specified half byte checksum only affects 4 bits of a position
      * of half byte specified by check_sum_byte_pos property.
      */
-    UINT16 spec_pos_size = len - 4;
+    UINT16 spec_pos_size = (UINT16)(len - 4);
 
     checksum->checksum_byte_pos = csdata[2];
     checksum->checksum_plus = csdata[3];
@@ -507,8 +491,8 @@ INT8 parse_checksum_malloc(struct tag_head *tag, tchecksum *checksum)
         }
     }
 
-    checksum->len = (tag->len - cnt) >> 1;
-    checksum->count = cnt + 1;
+    checksum->len = (UINT8)((tag->len - cnt) >> 1);
+    checksum->count = (UINT16)(cnt + 1);
     checksum->checksum_data = (tag_checksum_data*) irda_malloc(sizeof(tag_checksum_data) * checksum->count);
 
     if (NULL == checksum->checksum_data)
@@ -548,7 +532,6 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
     if (length != hex_data[0] + 1)
     {
         irda_free(hex_data);
-        hex_data = NULL;
         return IR_DECODE_FAILED;
     }
 
@@ -561,7 +544,6 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
             if (IR_DECODE_FAILED == parse_checksum_byte_typed(hex_data, checksum, hex_len))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
             break;
@@ -570,7 +552,6 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
             if (IR_DECODE_FAILED == parse_checksum_half_byte_typed(hex_data, checksum, hex_len))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
             break;
@@ -581,19 +562,15 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
             if (IR_DECODE_FAILED == parse_checksum_spec_half_byte_typed(hex_data, checksum, hex_len))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
             break;
         default:
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
-            break;
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -624,18 +601,18 @@ INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
         {
             if(IR_DECODE_FAILED == parse_checksum_data(tag->pdata + preindex,
                                                        checksum->checksum_data + num,
-                                                       (i - preindex) >> 1))
+                                                       (UINT8)(i - preindex) >> 1))
             {
                 return IR_DECODE_FAILED;
             }
-            preindex = i + 1;
+            preindex = (UINT16)(i + 1);
             num++;
         }
     }
 
     if(IR_DECODE_FAILED == parse_checksum_data(tag->pdata + preindex,
                                                checksum->checksum_data + num,
-                                               (i - preindex) >> 1))
+                                               (UINT8)(i - preindex) >> 1))
     {
         return IR_DECODE_FAILED;
     }
@@ -667,7 +644,7 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     (*trav_offset)++;
 
     // function id starts from 1 (POWER)
-    UINT8 function_id = data[*trav_offset] - 1;
+    UINT8 function_id = (UINT8)(data[*trav_offset] - 1);
 
     if (function_id > AC_FUNCTION_MAX - 1)
     {
@@ -697,13 +674,13 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
 
     if (TRUE == valid_function_id)
     {
-        mode_seg[function_id].seg_len = seg_len - 1;
-        mode_seg[function_id].segment = (UINT8 *) irda_malloc(seg_len - 1);
+        mode_seg[function_id].seg_len = (UINT8)(seg_len - 1);
+        mode_seg[function_id].segment = (UINT8 *) irda_malloc((size_t)(seg_len - 1));
         if (NULL == mode_seg[function_id].segment)
         {
             return IR_DECODE_FAILED;
         }
-        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], seg_len - 1);
+        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
     }
     *trav_offset += seg_len - 1;
 
@@ -743,16 +720,17 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
     // seg_index in TAG only refers to functional count
     for (seg_index = AC_FUNCTION_POWER; seg_index < AC_FUNCTION_MAX; seg_index++)
     {
-        int fid = parse_function_1(hex_data, &trav_offset, &function1->comp_data[0]);
+        INT8 fid = parse_function_1(hex_data, &trav_offset, &function1->comp_data[0]);
 
-        /*
+        /** WARNING: for strict mode only **/
+        /**
         if (fid > AC_FUNCTION_MAX - 1)
         {
             irda_free(hex_data);
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-        */
+        **/
 
         if (trav_offset >= hex_len)
         {
@@ -761,7 +739,6 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -810,7 +787,6 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
             if (NULL == temp2->comp_data[seg_index].segment)
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
             for (i = 2; i < seg_len; i += 3)
@@ -819,7 +795,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
                 temp2->comp_data[seg_index].segment[i - 1] = hex_data[i];
 
                 // for this second type (TAG 30) temperature update, apply the change in run time.
-                temp2->comp_data[seg_index].segment[i] = hex_data[i + 1] * seg_index;
+                temp2->comp_data[seg_index].segment[i] = (UINT8)(hex_data[i + 1] * seg_index);
             }
         }
     }
@@ -833,7 +809,6 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
             if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &temp2->comp_data[seg_index]))
             {
                 irda_free(hex_data);
-                hex_data = NULL;
                 return IR_DECODE_FAILED;
             }
 
@@ -844,7 +819,6 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
         }
     }
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -884,7 +858,6 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &mode2->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -895,7 +868,6 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -935,7 +907,6 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &speed2->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -946,7 +917,6 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -985,7 +955,6 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     if (NULL == swing2->comp_data)
     {
         irda_free(hex_data);
-        hex_data = NULL;
         return IR_DECODE_FAILED;
     }
 
@@ -994,7 +963,6 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &swing2->comp_data[seg_index]))
         {
             irda_free(hex_data);
-            hex_data = NULL;
             return IR_DECODE_FAILED;
         }
 
@@ -1005,7 +973,6 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -1034,7 +1001,7 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     (*trav_offset)++;
 
     // function id starts from 1 (POWER)
-    UINT8 function_id = data[*trav_offset] - 1;
+    UINT8 function_id = (UINT8)(data[*trav_offset] - 1);
     if (function_id > AC_FUNCTION_MAX - 1)
     {
         // ignore unsupported function ID
@@ -1063,15 +1030,15 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
 
     if (TRUE == valid_function_id)
     {
-        mode_seg[function_id].seg_len = seg_len - 1;
-        mode_seg[function_id].segment = (UINT8 *) irda_malloc(seg_len - 1);
+        mode_seg[function_id].seg_len = (UINT8)(seg_len - 1);
+        mode_seg[function_id].segment = (UINT8 *) irda_malloc((size_t)(seg_len - 1));
 
         if (NULL == mode_seg[function_id].segment)
         {
             return IR_DECODE_FAILED;
         }
 
-        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], seg_len - 1);
+        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
     }
     *trav_offset += seg_len - 1;
 
@@ -1111,16 +1078,17 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
     // seg_index in TAG only refers to functional count
     for (seg_index = AC_FUNCTION_POWER; seg_index < AC_FUNCTION_MAX; seg_index++)
     {
-        UINT8 fid = parse_function_2(hex_data, &trav_offset, &function2->comp_data[0]);
+        INT8 fid = parse_function_2(hex_data, &trav_offset, &function2->comp_data[0]);
 
-        /*
+        /** WARNING: for strict mode only **/
+        /**
         if (fid > AC_FUNCTION_MAX - 1)
         {
             irda_free(hex_data);
             hex_data = NULL;
             return IR_DECODE_FAILED;
         }
-        */
+        **/
 
         if (trav_offset >= hex_len)
         {
@@ -1129,7 +1097,6 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -1173,7 +1140,7 @@ INT8 parse_swing_info(struct tag_head *tag, swing_info *si)
      */
     // count how many swing types are there
     si->type = SWING_TYPE_NORMAL;
-    si->mode_count = (tag->len + 1) >> 1;
+    si->mode_count = (UINT8)((tag->len + 1) >> 1);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -1212,7 +1179,7 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
 
     // parse hex data to mode1 data structure
     sc->len = (UINT8)hex_len;
-    sc->solo_func_count = hex_len - 1;
+    sc->solo_func_count = (UINT8)(hex_len - 1);
 
     // per each function takes just 1 byte of length
     sc->solo_func_count = hex_data[0];
@@ -1222,6 +1189,5 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
     }
 
     irda_free(hex_data);
-    hex_data = NULL;
     return IR_DECODE_SUCCEEDED;
 }

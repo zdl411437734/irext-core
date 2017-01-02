@@ -15,11 +15,11 @@ UINT8 char_to_hex(char chr)
 {
     UINT8 value = 0;
     if (chr >= '0' && chr <= '9')
-        value = chr - '0';
+        value = (UINT8)(chr - '0');
     if (chr >= 'a' && chr <= 'f')
-        value = chr - 'a' + 10;
+        value = (UINT8)(chr - 'a' + 10);
     if (chr >= 'A' && chr <= 'F')
-        value = chr - 'A' + 10;
+        value = (UINT8)(chr - 'A' + 10);
     return value;
 }
 
@@ -61,11 +61,11 @@ char hex_half_byte_to_single_char(UINT8 length, UINT8 half_byte)
     }
     if (half_byte >= 10 && half_byte < 16)
     {
-        return (half_byte - 10 + 0x41);
+        return (char)(half_byte - 10 + 0x41);
     }
     else
     {
-        return half_byte + 0x30;
+        return (char)(half_byte + 0x30);
     }
 }
 
@@ -77,8 +77,8 @@ void hex_byte_to_double_char(char* dest, UINT8 length, UINT8 src)
     {
         return;
     }
-    hi_num = (src >> 4) & 0x0F;
-    lo_num = src & 0x0F;
+    hi_num = (UINT8)((src >> 4) & 0x0F);
+    lo_num = (UINT8)(src & 0x0F);
 
     dest[0] = hex_half_byte_to_single_char(1, hi_num);
     dest[1] = hex_half_byte_to_single_char(1, lo_num);

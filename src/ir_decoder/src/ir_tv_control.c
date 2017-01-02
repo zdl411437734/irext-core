@@ -327,7 +327,7 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
     UINT8 bit_num = data->bits / valid_bits;
     UINT8 valid_value = 0;
 
-    valid_value = (valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1);
+    valid_value = (UINT8)((valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1));
 
     if (data->lsb == IRDA_LSB)
     {

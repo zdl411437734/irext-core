@@ -19,15 +19,15 @@ extern "C"
 
 #include "ir_decode.h"
 
-extern INT8 parse_bootcode(struct tag_head *tag);
+extern INT8 parse_boot_code(struct tag_head *tag);
 
 extern INT8 parse_zero(struct tag_head *tag);
 
 extern INT8 parse_one(struct tag_head *tag);
 
-extern INT8 parse_delaycode(struct tag_head *tag);
+extern INT8 parse_delay_code(struct tag_head *tag);
 
-extern INT8 parse_framelen(struct tag_head *tag, UINT16 len);
+extern INT8 parse_frame_len(struct tag_head *tag, UINT16 len);
 
 extern INT8 parse_endian(struct tag_head *tag);
 
@@ -35,7 +35,7 @@ extern INT8 parse_lastbit(struct tag_head *tag);
 
 extern INT8 parse_repeat_times(struct tag_head *tag);
 
-extern INT8 parse_bitnum(struct tag_head *tag);
+extern INT8 parse_bit_num(struct tag_head *tag);
 
 #ifdef __cplusplus
 	}

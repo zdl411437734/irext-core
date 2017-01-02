@@ -9,8 +9,6 @@ Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 
-#include <stdio.h>
-
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_decode.h"
 
@@ -98,7 +96,7 @@ UINT16 create_ir_frame()
 
     context->code_cnt = 0;
 
-    //bootcode
+    // boot code
     for (i = 0; i < context->bootcode.len; i++)
     {
         context->time[context->code_cnt++] = context->bootcode.data[i];
@@ -108,13 +106,12 @@ UINT16 create_ir_frame()
     for (i = 0; i < ir_hex_len; i++)
     {
         bitnum = bits_per_byte((UINT8)i);
-        //IR_PRINTF("bitnum:%d\n", bitnum);
         for (j = 0; j < bitnum; j++)
         {
-            if (context->endian == 0) //BIg Endian
-                mask = (1 << (bitnum - 1)) >> j;
+            if (context->endian == 0)
+                mask = (UINT8)((1 << (bitnum - 1)) >> j);
             else
-                mask = 1 << j; //Little Endian
+                mask = (UINT8)(1 << j);
 
             if (irdata[i] & mask)
             {
