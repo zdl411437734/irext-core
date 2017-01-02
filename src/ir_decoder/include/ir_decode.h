@@ -431,42 +431,40 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 extern UINT8* ir_hex_code;
 extern UINT8 ir_hex_len;
 extern protocol* context;
-extern remote_ac_status_t ac_status;
-extern UINT16 user_data[];
 
 
 /* exported functions */
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
 /*
- * function irda_ac_file_open
+ * function ir_ac_file_open
  *
  * parameters:  file name of remote binary
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_ac_file_open(const char* file_name);
+extern INT8 ir_ac_file_open(const char *file_name);
 
 /*
- * function irda_ac_lib_open
+ * function ir_ac_lib_open
  *
  * parameters:  binary (in) binary content
  *              binary_length (in) length of binary content
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length);
+extern INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length);
 
 /*
- * function irda_ac_lib_parse
+ * function ir_ac_lib_parse
  *
  * parameters:
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_ac_lib_parse();
+extern INT8 ir_ac_lib_parse();
 
 /*
- * function irda_ac_lib_control
+ * function ir_ac_lib_control
  *
  * parameters:  ac_status (in) indicates the current status of air conditioner to be controlled
  *              user_data (out) wave code array to be transmitted
@@ -475,66 +473,66 @@ extern INT8 irda_ac_lib_parse();
  *
  * return: length of wave code array
  */
-extern UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
-                                  BOOL change_wind_direction);
+extern UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+                                BOOL change_wind_direction);
 
 /*
- * function irda_ac_lib_close
+ * function ir_ac_lib_close
  *
  * parameters:
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern void irda_ac_lib_close();
+extern void ir_ac_lib_close();
 ///////////////////////////////////////////////// AC End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
 /*
- * function irda_tv_file_open
+ * function ir_tv_file_open
  *
  * parameters:  file name of remote binary
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-INT8 irda_tv_file_open(const char* file_name);
+INT8 ir_tv_file_open(const char *file_name);
 
 /*
- * function irda_tv_lib_open
+ * function ir_tv_lib_open
  *
  * parameters:  binary (in) binary content
  *              binary_length (in) length of binary content
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length);
+INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length);
 
 /*
- * function irda_tv_lib_parse
+ * function ir_tv_lib_parse
  *
  * parameters:
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_tv_lib_parse(UINT8 irda_hex_encode);
+extern INT8 ir_tv_lib_parse(UINT8 irda_hex_encode);
 
 /*
- * function irda_tv_lib_control
+ * function ir_tv_lib_control
  *
  * parameters:  key_code (in) indicates the number of pressed key
  *              user_data (out) wave code array to be transmitted
  *
  * return: length of wave code array
  */
-extern UINT16 irda_tv_lib_control(UINT8 key_code, UINT16* user_data);
+extern UINT16 ir_tv_lib_control(UINT8 key_code, UINT16 *user_data);
 
 /*
- * function irda_tv_lib_close
+ * function ir_tv_lib_close
  *
  * parameters:
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 irda_tv_lib_close();
+extern INT8 ir_tv_lib_close();
 ///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// Utils Begin /////////////////////////////////////////////////

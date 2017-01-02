@@ -1,5 +1,5 @@
 ﻿/**************************************************************************************************
-Filename:       irda_decode_jni.c
+Filename:       ir_decode_jni.c
 Revised:        Date: 2016-03-21
 Revision:       Revision: 1.0
 
@@ -12,97 +12,28 @@ Revision log:
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include "../include/irda_decode_jni.h"
-#include "../include/irda_defs.h"
-#include "../include/irda_decode.h"
+#include "ir_decode_jni.h"
+#include "../include/ir_defs.h"
+#include "../include/ir_decode.h"
 
 // global variable definition
-UINT16 binary_length = 0;
-UINT8 *binary_content = NULL;
+extern size_t binary_length;
+extern UINT8 *binary_content;
 
-INT8 irda_ac_file_open(const char* file_name)
-{
-    FILE *stream = fopen(file_name, "rb");
-    if (NULL == stream)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    binary_length = ftell(stream);
-    binary_content = (UINT8*) irda_malloc(binary_length);
-
-    if (NULL == binary_content)
-    {
-        IR_PRINTF("\nfailed to alloc memory for binary\n");
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
-    fclose(stream);
-
-    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, binary_length))
-    {
-        irda_free(binary_content);
-        binary_length = 0;
-        return IR_DECODE_FAILED;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-INT8 irda_tv_file_open(const char* file_name)
-{
-    int print_index = 0;
-    FILE *stream = fopen(file_name, "rb");
-
-    IR_PRINTF("file name = %s\n", file_name);
-
-    if (stream == NULL)
-    {
-        IR_PRINTF("\nfile open failed : %d\n", errno);
-        return IR_DECODE_FAILED;
-    }
-
-    fseek(stream, 0, SEEK_END);
-    binary_length = ftell(stream);
-    IR_PRINTF("length of binary = %d\n", binary_length);
-
-    binary_content = (UINT8*) irda_malloc(binary_length);
-
-    fseek(stream, 0, SEEK_SET);
-    fread(binary_content, binary_length, 1, stream);
-    fclose(stream);
-
-    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, binary_length))
-    {
-        irda_free(binary_content);
-        binary_length = 0;
-        return IR_DECODE_FAILED;
-    }
-
-    return IR_DECODE_SUCCEEDED;
-}
-
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
-    if (IR_DECODE_FAILED == irda_ac_file_open(n_file_name))
+    if (IR_DECODE_FAILED == ir_ac_file_open(n_file_name))
     {
-        irda_ac_lib_close();
+        ir_ac_lib_close();
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
     }
 
-    // no need to verify return value
-    irda_context_init();
-
-    if (IR_DECODE_FAILED == irda_ac_lib_parse())
+    if (IR_DECODE_FAILED == ir_ac_lib_parse())
     {
-        irda_ac_lib_close();
+        ir_ac_lib_close();
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
     }
@@ -111,11 +42,13 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaACControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACControl
           (JNIEnv *env, jobject this_obj, jobject jni_ac_status, jint function_code, jint change_wind_direction)
 {
+	UINT16 user_data[USER_DATA_SIZE];
     int i = 0;
     int copy_array[USER_DATA_SIZE] = {0};
+	remote_ac_status_t ac_status;
 
     jclass n_ac_status = (*env)->GetObjectClass(env, jni_ac_status);
     jfieldID ac_power_fid = (*env)->GetFieldID(env, n_ac_status, "acPower", "I");
@@ -150,7 +83,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaACCo
     ac_status.acWindDir = i_ac_wind_dir;
     ac_status.acWindSpeed = i_ac_wind_speed;
 
-    int wave_code_length = irda_ac_lib_control(ac_status, user_data, function_code, change_wind_direction);
+    int wave_code_length = ir_ac_lib_control(ac_status, user_data, function_code, change_wind_direction);
 
     IR_PRINTF("\nsize of wave code = %d\n", wave_code_length);
 
@@ -166,18 +99,18 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaACCo
     (*env)->SetIntArrayRegion(env, result, 0, wave_code_length, copy_array);
 
     // temporary solution, close ac lib here in order to release memory
-    // irda_ac_lib_close();
+    // ir_ac_lib_close();
 
     return result;
 }
 
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irACLibClose
           (JNIEnv *env, jobject this_obj)
 {
-    irda_ac_lib_close();
+    ir_ac_lib_close();
 }
 
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetTemperatureRange
+JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTemperatureRange
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int tempMin = 0;
@@ -199,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetT
     return temperature_range;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedMode
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedMode
           (JNIEnv *env, jobject this_obj)
 {
     int supported_mode = 0;
@@ -207,7 +140,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupp
     return supported_mode;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindSpeed
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindSpeed
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_wind_speed = 0;
@@ -215,7 +148,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupp
     return supported_wind_speed;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedSwing
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedSwing
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_swing = 0;
@@ -223,7 +156,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupp
     return supported_swing;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindDirection
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindDirection
           (JNIEnv *env, jobject this_obj)
 {
     int supported_wind_direction = 0;
@@ -231,18 +164,18 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupp
     return supported_wind_direction;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibOpen
-          (JNIEnv *env, jobject this_obj, jstring file_name, jint j_irda_hex_encode)
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
+          (JNIEnv *env, jobject this_obj, jstring file_name, jint j_ir_hex_encode)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
 
-    if (IR_DECODE_FAILED == irda_tv_file_open(n_file_name))
+    if (IR_DECODE_FAILED == ir_tv_file_open(n_file_name))
     {
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == irda_tv_lib_parse(j_irda_hex_encode))
+    if (IR_DECODE_FAILED == ir_tv_lib_parse(j_ir_hex_encode))
     {
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
@@ -252,12 +185,13 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaTVControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVControl
           (JNIEnv *env, jobject this_obj, jint key_number)
 {
+    UINT16 user_data[USER_DATA_SIZE];
     int i = 0;
     int copy_array[USER_DATA_SIZE] = {0};
-    int wave_code_length = irda_tv_lib_control(key_number, user_data);
+    int wave_code_length = ir_tv_lib_control(key_number, user_data);
 
     IR_PRINTF("\nsize of wave code = %d\n", wave_code_length);
 
@@ -275,7 +209,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaTVCo
     return result;
 }
 
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irTVLibClose
           (JNIEnv *env, jobject this_obj)
 {
     // do nothing

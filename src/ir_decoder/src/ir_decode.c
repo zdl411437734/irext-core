@@ -68,7 +68,7 @@ void irda_lib_free_inner_buffer();
 
 
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
-INT8 irda_ac_file_open(const char* file_name)
+INT8 ir_ac_file_open(const char *file_name)
 {
     size_t ret = 0;
 #if !defined WIN32
@@ -107,7 +107,7 @@ INT8 irda_ac_file_open(const char* file_name)
 
     fclose(stream);
 
-    if (IR_DECODE_FAILED == irda_ac_lib_open(binary_content, (UINT16)binary_length))
+    if (IR_DECODE_FAILED == ir_ac_lib_open(binary_content, (UINT16) binary_length))
     {
         irda_free(binary_content);
         binary_length = 0;
@@ -117,7 +117,7 @@ INT8 irda_ac_file_open(const char* file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length)
+INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     // it is recommended that the parameter binary pointing to
     // a global memory block in embedded platform environment
@@ -127,8 +127,8 @@ INT8 irda_ac_lib_open(UINT8 *binary, UINT16 binary_length)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
-                           BOOL change_wind_direction)
+UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+                         BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
     UINT8 i = 0;
@@ -236,7 +236,7 @@ UINT16 irda_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT
     return time_length;
 }
 
-void irda_ac_lib_close()
+void ir_ac_lib_close()
 {
     // free context
     if (NULL != tags)
@@ -394,7 +394,7 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 ///////////////////////////////////////////////// AC End //////////////////////////////////////////////////
 
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
-INT8 irda_tv_file_open(const char* file_name)
+INT8 ir_tv_file_open(const char *file_name)
 {
     size_t ret = 0;
 
@@ -434,7 +434,7 @@ INT8 irda_tv_file_open(const char* file_name)
 
     fclose(stream);
 
-    if (IR_DECODE_FAILED == irda_tv_lib_open(binary_content, (UINT16)binary_length))
+    if (IR_DECODE_FAILED == ir_tv_lib_open(binary_content, (UINT16) binary_length))
     {
         irda_free(binary_content);
         binary_length = 0;
@@ -444,12 +444,12 @@ INT8 irda_tv_file_open(const char* file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 irda_tv_lib_open(UINT8 *binary, UINT16 binary_length)
+INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     return tv_lib_open(binary, binary_length);
 }
 
-INT8 irda_tv_lib_parse(UINT8 irda_hex_encode)
+INT8 ir_tv_lib_parse(UINT8 irda_hex_encode)
 {
     if (FALSE == tv_lib_parse(irda_hex_encode))
     {
@@ -460,7 +460,7 @@ INT8 irda_tv_lib_parse(UINT8 irda_hex_encode)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
+UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
 {
     UINT16 print_index = 0;
     UINT16 irda_code_length = 0;
@@ -481,7 +481,7 @@ UINT16 irda_tv_lib_control(UINT8 key, UINT16* l_user_data)
     return irda_code_length;
 }
 
-INT8 irda_tv_lib_close()
+INT8 ir_tv_lib_close()
 {
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
     irda_lib_free_inner_buffer();

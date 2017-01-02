@@ -27,7 +27,7 @@ remote_ac_status_t ac_status;
 UINT16 user_data[USER_DATA_SIZE];
 
 
-INT8 irda_tv_file_open(const char* file_name);
+INT8 ir_tv_file_open(const char *file_name);
 
 
 INT8 decode_as_ac(char* file_name)
@@ -57,16 +57,16 @@ INT8 decode_as_ac(char* file_name)
     ac_status.acWindDir = AC_SWING_ON;
     ac_status.acWindSpeed = AC_WS_AUTO;
 
-    if (IR_DECODE_FAILED == irda_ac_file_open(file_name))
+    if (IR_DECODE_FAILED == ir_ac_file_open(file_name))
     {
-        irda_ac_lib_close();
+        ir_ac_lib_close();
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == irda_ac_lib_parse())
+    if (IR_DECODE_FAILED == ir_ac_lib_parse())
     {
         IR_PRINTF("\nac lib parse failed\n");
-        irda_ac_lib_close();
+        ir_ac_lib_close();
         return IR_DECODE_FAILED;
     }
     do
@@ -173,11 +173,11 @@ INT8 decode_as_ac(char* file_name)
                       ac_status.acWindDir
             );
 
-            irda_ac_lib_control(ac_status, user_data, function_code, TRUE);
+            ir_ac_lib_control(ac_status, user_data, function_code, TRUE);
         }
     } while('0' != in_char);
 
-    irda_ac_lib_close();
+    ir_ac_lib_close();
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -188,12 +188,12 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
     int in_char = 0;
     int key_code = 0;
 
-    if (IR_DECODE_FAILED == irda_tv_file_open(file_name))
+    if (IR_DECODE_FAILED == ir_tv_file_open(file_name))
     {
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == irda_tv_lib_parse(irda_hex_encode))
+    if (IR_DECODE_FAILED == ir_tv_lib_parse(irda_hex_encode))
     {
         return IR_DECODE_FAILED;
     }
@@ -203,16 +203,16 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
         if (in_char >= '0' && in_char <= '9')
         {
             key_code = in_char - '0';
-            irda_tv_lib_control((UINT8)key_code, user_data);
+            ir_tv_lib_control((UINT8) key_code, user_data);
         }
         else if (in_char >= 'a' && in_char <= 'f')
         {
             key_code = 10 + (in_char - 'a');
-            irda_tv_lib_control((UINT8)key_code, user_data);
+            ir_tv_lib_control((UINT8) key_code, user_data);
         }
         else if (in_char == 'q')
         {
-            irda_tv_lib_close();
+            ir_tv_lib_close();
         }
         else
         {

@@ -18,7 +18,7 @@ extern "C"
 
 #include "ir_defs.h"
 
-extern INT8 irda_ac_lib_parse();
+extern INT8 ir_ac_lib_parse();
 
 extern INT8 free_ac_context();
 

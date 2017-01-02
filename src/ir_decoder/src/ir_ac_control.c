@@ -25,20 +25,20 @@ Revision log:
 extern struct tag_head *tags;
 extern INT tag_count;
 
-static INT8 irda_context_init();
+static INT8 ir_context_init();
 
 
-static INT8 irda_context_init()
+static INT8 ir_context_init()
 {
     irda_memset(context, 0, sizeof(protocol));
     return IR_DECODE_SUCCEEDED;
 }
 
 
-INT8 irda_ac_lib_parse() {
+INT8 ir_ac_lib_parse() {
     UINT8 i = 0;
     // suggest not to call init function here for de-couple purpose
-    irda_context_init();
+    ir_context_init();
 
     if (IR_DECODE_FAILED == binary_parse_offset()) {
         return IR_DECODE_FAILED;

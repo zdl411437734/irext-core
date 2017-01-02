@@ -57,90 +57,90 @@ extern "C" {
 #define net_irext_remote_service_DecodeService_START_STICKY_COMPATIBILITY 0L
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACLibOpen
+ * Method:    irACLibOpen
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
   (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACControl
+ * Method:    irACControl
  * Signature: (Lcom/irext/remote/bean/jnibean/JNIACStatus;II)[I
  */
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaACControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACControl
   (JNIEnv *, jobject, jobject, jint, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACLibClose
+ * Method:    irACLibClose
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaACLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irACLibClose
   (JNIEnv *, jobject);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACGetTemperatureRange
+ * Method:    irACGetTemperatureRange
  * Signature: (I)Lcom/irext/remote/bean/jnibean/JNITemperatureRange;
  */
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetTemperatureRange
+JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTemperatureRange
   (JNIEnv *, jobject, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACGetSupportedMode
+ * Method:    irACGetSupportedMode
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedMode
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedMode
   (JNIEnv *, jobject);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACGetSupportedWindSpeed
+ * Method:    irACGetSupportedWindSpeed
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindSpeed
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindSpeed
   (JNIEnv *, jobject, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACGetSupportedSwing
+ * Method:    irACGetSupportedSwing
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedSwing
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedSwing
   (JNIEnv *, jobject, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaACGetSupportedWindDirection
+ * Method:    irACGetSupportedWindDirection
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaACGetSupportedWindDirection
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindDirection
   (JNIEnv *, jobject);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaTVLibOpen
+ * Method:    irTVLibOpen
  * Signature: (Ljava/lang/String;I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
   (JNIEnv *, jobject, jstring, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaTVControl
+ * Method:    irTVControl
  * Signature: (I)[I
  */
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irdaTVControl
+JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVControl
   (JNIEnv *, jobject, jint);
 
 /*
  * Class:     net_irext_remote_service_DecodeService
- * Method:    irdaTVLibClose
+ * Method:    irTVLibClose
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irdaTVLibClose
+JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irTVLibClose
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus
