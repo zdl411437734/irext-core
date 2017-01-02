@@ -17,11 +17,11 @@ extern "C"
 {
 #endif
 
-#include "irda_decode.h"
+#include "ir_decode.h"
 
 extern INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_end, UINT8 type);
 
-extern INT8 parse_defaultcode(struct tag_head *tag, ac_hex *default_code);
+extern INT8 parse_default_code(struct tag_head *tag, ac_hex *default_code);
 
 extern INT8 parse_power_1(struct tag_head *tag, power_1 *power1);
 

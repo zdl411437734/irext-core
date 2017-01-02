@@ -17,9 +17,9 @@ extern "C"
 {
 #endif
 
-#include "irda_decode.h"
+#include "ir_decode.h"
 
-	extern INT8 parse_nmode(struct tag_head *tag, ac_n_mode index);
+extern INT8 parse_nmode(struct tag_head *tag, ac_n_mode index);
 
 #ifdef __cplusplus
 }

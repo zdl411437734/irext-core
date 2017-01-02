@@ -21,8 +21,8 @@ Revision log:
 #include <stdio.h>
 #include <string.h>
 
-#include "include/irda_utils.h"
-#include "include/irda_ac_parse_parameter.h"
+#include "../include/ir_utils.h"
+#include "../include/ir_ac_parse_parameter.h"
 
 /*
  * global vars
@@ -162,7 +162,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_defaultcode(struct tag_head *tag, ac_hex *default_code)
+INT8 parse_default_code(struct tag_head *tag, ac_hex *default_code)
 {
     UINT16 byteLen = 0;
 

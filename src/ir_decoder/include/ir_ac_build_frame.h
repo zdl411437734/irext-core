@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#include "irda_defs.h"
+#include "ir_defs.h"
 
 extern UINT16 create_ir_frame();
 

@@ -13,7 +13,7 @@ Revision log:
 #include "stdafx.h"
 #endif
 
-#include "include/irda_utils.h"
+#include "../include/ir_utils.h"
 
 UINT8 char_to_hex(char chr)
 {

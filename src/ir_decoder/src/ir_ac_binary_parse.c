@@ -1,0 +1,114 @@
+/**************************************************************************************************
+Filename:       irda_ac_binary_parse.c
+Revised:        Date: 2017-01-03
+Revision:       Revision: 1.0
+
+Description:    This file provides methods for AC binary parse
+
+Revision log:
+* 2017-01-03: created by strawmanbobi
+**************************************************************************************************/
+
+#include <stdlib.h>
+
+#include "../include/ir_ac_binary_parse.h"
+#include "../include/ir_decode.h"
+
+UINT16 tag_head_offset = 0;
+
+extern struct ir_bin_buffer *p_ir_buffer;
+extern struct tag_head *tags;
+extern INT tag_count;
+extern const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL];
+
+INT8 binary_parse_offset()
+{
+    int i = 0;
+    UINT16 *phead = (UINT16 *) &p_ir_buffer->data[1];
+
+    tag_count = p_ir_buffer->data[0];
+    if(TAG_COUNT_FOR_PROTOCOL != tag_count)
+    {
+        return IR_DECODE_FAILED;
+    }
+
+    tag_head_offset = (UINT16)((tag_count << 1) + 1);
+
+    tags = (t_tag_head *) irda_malloc(tag_count * sizeof(t_tag_head));
+    if (NULL == tags)
+    {
+        return IR_DECODE_FAILED;
+    }
+
+    for (i = 0; i < tag_count; i++)
+    {
+        tags[i].tag = tag_index[i];
+        tags[i].offset = *(phead + i);
+        if (tags[i].offset == TAG_INVALID)
+        {
+            tags[i].len = 0;
+        }
+    }
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 binary_parse_len()
+{
+    UINT16 i = 0, j = 0;
+    for (i = 0; i < (tag_count - 1); i++)
+    {
+        if (tags[i].offset == TAG_INVALID)
+        {
+            continue;
+        }
+
+        for (j = (UINT16)(i + 1); j < tag_count; j++)
+        {
+            if (tags[j].offset != TAG_INVALID)
+            {
+                break;
+            }
+        }
+        if (j < tag_count)
+        {
+            tags[i].len = tags[j].offset - tags[i].offset;
+        }
+        else
+        {
+            tags[i].len = p_ir_buffer->len - tags[i].offset - tag_head_offset;
+            return IR_DECODE_SUCCEEDED;
+        }
+    }
+    if (tags[tag_count - 1].offset != TAG_INVALID)
+    {
+        tags[tag_count - 1].len = p_ir_buffer->len - tag_head_offset - tags[tag_count - 1].offset;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+void binary_tags_info()
+{
+#if defined BOARD_PC
+    UINT16 i = 0;
+    for (i = 0; i < tag_count; i++)
+    {
+        if (tags[i].len == 0)
+        {
+            continue;
+        }
+        IR_PRINTF("tag(%d).len = %d\n", tags[i].tag, tags[i].len);
+    }
+#endif
+}
+
+INT8 binary_parse_data()
+{
+    UINT16 i = 0;
+    for (i = 0; i < tag_count; i++)
+    {
+        tags[i].pdata = p_ir_buffer->data + tags[i].offset + tag_head_offset;
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}

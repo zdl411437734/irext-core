@@ -19,8 +19,8 @@ Revision log:
 #include <unistd.h>
 #endif
 
-#include "include/irda_defs.h"
-#include "include/irda_decode.h"
+#include "../include/ir_defs.h"
+#include "../include/ir_decode.h"
 
 // global variable definition
 remote_ac_status_t ac_status;
@@ -34,8 +34,7 @@ INT8 decode_as_ac(char* file_name)
 {
     // keyboard input
     int in_char = 0;
-    int count = 0;
-    BOOL op_match = TRUE;
+    BOOL op_match;
     UINT8 function_code = AC_FUNCTION_MAX;
 
     // get status
@@ -44,8 +43,9 @@ INT8 decode_as_ac(char* file_name)
     INT8 max_temperature = 0;
     UINT8 supported_speed = 0x00;
     UINT8 supported_swing = 0x00;
+    UINT8 supported_wind_direction = 0x00;
 
-    BOOL need_control = TRUE;
+    BOOL need_control;
 
     // init air conditioner status
     ac_status.acDisplay = 0;
@@ -79,12 +79,12 @@ INT8 decode_as_ac(char* file_name)
             case 'w':
             case 'W':
                 // temperature plus
-                ac_status.acTemp = (ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1);
+                ac_status.acTemp = (UINT8)((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
                 function_code = AC_FUNCTION_TEMPERATURE_UP;
                 break;
             case 's':
             case 'S':
-                ac_status.acTemp = (ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1);
+                ac_status.acTemp = (UINT8)((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
                 function_code = AC_FUNCTION_TEMPERATURE_DOWN;
                 // temperature minus
                 break;
@@ -97,7 +97,7 @@ INT8 decode_as_ac(char* file_name)
                 break;
             case 'd':
             case 'D':
-                ac_status.acWindDir = (ac_status.acWindDir == 0) ? 1 : 0;
+                ac_status.acWindDir = (UINT8)((ac_status.acWindDir == 0) ? 1 : 0);
                 function_code = AC_FUNCTION_WIND_SWING;
                 // wind swing loop
                 break;
@@ -150,6 +150,14 @@ INT8 decode_as_ac(char* file_name)
                 need_control = FALSE;
                 break;
 
+            case '7':
+                if (IR_DECODE_SUCCEEDED == get_supported_wind_direction(&supported_wind_direction))
+                {
+                    IR_PRINTF("\nsupported wind direction = %02X\n", supported_wind_direction);
+                }
+                need_control = FALSE;
+                break;
+
             default:
                 op_match = FALSE;
                 break;
@@ -178,8 +186,7 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
 {
     // keyboard input
     int in_char = 0;
-    int key_code = -1;
-    int count = 0;
+    int key_code = 0;
 
     if (IR_DECODE_FAILED == irda_tv_file_open(file_name))
     {
@@ -196,12 +203,12 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
         if (in_char >= '0' && in_char <= '9')
         {
             key_code = in_char - '0';
-            irda_tv_lib_control(key_code, user_data);
+            irda_tv_lib_control((UINT8)key_code, user_data);
         }
         else if (in_char >= 'a' && in_char <= 'f')
         {
             key_code = 10 + (in_char - 'a');
-            irda_tv_lib_control(key_code, user_data);
+            irda_tv_lib_control((UINT8)key_code, user_data);
         }
         else if (in_char == 'q')
         {

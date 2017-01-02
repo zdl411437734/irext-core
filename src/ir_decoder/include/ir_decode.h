@@ -18,7 +18,7 @@ extern "C"
 #endif
 
 #include <stdio.h>
-#include "irda_defs.h"
+#include "ir_defs.h"
 
 #define TAG_COUNT_FOR_PROTOCOL       29
 
@@ -438,15 +438,6 @@ extern UINT16 user_data[];
 /* exported functions */
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
 /*
- * function irda_context_init
- *
- * parameters:
- *
- * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
- */
-extern INT8 irda_context_init();
-
-/*
  * function irda_ac_file_open
  *
  * parameters:  file name of remote binary
@@ -595,6 +586,11 @@ extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
 extern INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
+
+// private extern function
+#if (defined BOARD_PC || defined BOARD_PC_DLL)
+extern void irda_lib_free_inner_buffer();
+#endif
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////
 

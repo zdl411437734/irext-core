@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#include "irda_decode.h"
+#include "ir_decode.h"
 
 extern INT8 parse_bootcode(struct tag_head *tag);
 

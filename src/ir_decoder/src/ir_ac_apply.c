@@ -1,5 +1,5 @@
 /**************************************************************************************************
-Filename:       irda_apply.c
+Filename:       irda_ac_apply.c
 Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
@@ -17,8 +17,8 @@ Revision log:
 #include "stdafx.h"
 #endif
 
-#include "include/irda_utils.h"
-#include "include/irda_ac_apply.h"
+#include "../include/ir_utils.h"
+#include "../include/ir_ac_apply.h"
 
 /*
  * global vars
@@ -31,6 +31,17 @@ Revision log:
 /*
  * function declaration
  */
+static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status);
+
+static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status);
+
+static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temperature);
+
+static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed);
+
+static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_status);
+
+static UINT8 has_function(struct ac_protocol *protocol, UINT8 function);
 
 /*
  * function definition
@@ -141,7 +152,7 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status)
+static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status)
 {
     UINT16 i = 0;
     if (0 == protocol->power1.len)
@@ -161,7 +172,7 @@ INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
+static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
 {
     UINT16 i = 0;
 
@@ -203,7 +214,7 @@ INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
+static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
 {
     UINT16 i = 0;
 
@@ -245,7 +256,7 @@ INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
+static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
 {
     UINT16 i = 0;
 
@@ -302,7 +313,7 @@ INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
+static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
 {
     UINT16 i = 0;
 
@@ -356,51 +367,7 @@ INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_function(struct ac_protocol *protocol, UINT8 function)
-{
-    UINT16 i = 0;
-
-    // function index starts from 1 (AC_FUNCTION_POWER), do -1 operation at first
-    if (0 == protocol->function1.len)
-    {
-        goto try_applying_function2;
-    }
-
-    if (0 == protocol->function1.comp_data[function - 1].seg_len)
-    {
-        // force to apply function in any case
-        return IR_DECODE_SUCCEEDED;
-    }
-
-    for (i = 0; i < protocol->function1.comp_data[function - 1].seg_len; i += 2)
-    {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), i, FALSE);
-    }
-
-    // get return here since function 1 is already applied
-    return IR_DECODE_SUCCEEDED;
-
-    try_applying_function2:
-    if (0 == protocol->function2.len)
-    {
-        return IR_DECODE_SUCCEEDED;
-    }
-
-    if (0 == protocol->function2.comp_data[function - 1].seg_len)
-    {
-        return IR_DECODE_SUCCEEDED;
-    }
-
-    for (i = 0; i < protocol->function2.comp_data[function - 1].seg_len; i += 3)
-    {
-        apply_ac_parameter_type_2(ir_hex_code,
-                                  &(protocol->function2.comp_data[function - 1]),
-                                  i, FALSE);
-    }
-    return IR_DECODE_SUCCEEDED;
-}
-
-INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 checksum = 0x00;
@@ -432,7 +399,7 @@ INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 checksum = 0x00;
@@ -464,7 +431,7 @@ INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 apply_byte_pos = 0;
@@ -518,7 +485,7 @@ INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 apply_byte_pos = 0;
@@ -560,6 +527,71 @@ INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL
     IR_PRINTF("checksum value = %02X\n", checksum);
     IR_PRINTF("checksum byte pos = %d\n", apply_byte_pos);
 
+    return IR_DECODE_SUCCEEDED;
+}
+
+static UINT8 has_function(struct ac_protocol *protocol, UINT8 function)
+{
+    if (0 != protocol->function1.len)
+    {
+        if(0 != protocol->function1.comp_data[function - 1].seg_len)
+        {
+            return TRUE;
+        }
+    }
+
+    if(0 != protocol->function2.len)
+    {
+        if(0 != protocol->function2.comp_data[function - 1].seg_len)
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
+{
+    UINT16 i = 0;
+
+    // function index starts from 1 (AC_FUNCTION_POWER), do -1 operation at first
+    if (0 == protocol->function1.len)
+    {
+        goto try_applying_function2;
+    }
+
+    if (0 == protocol->function1.comp_data[function - 1].seg_len)
+    {
+        // force to apply function in any case
+        return IR_DECODE_SUCCEEDED;
+    }
+
+    for (i = 0; i < protocol->function1.comp_data[function - 1].seg_len; i += 2)
+    {
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), i, FALSE);
+    }
+
+    // get return here since function 1 is already applied
+    return IR_DECODE_SUCCEEDED;
+
+    try_applying_function2:
+    if (0 == protocol->function2.len)
+    {
+        return IR_DECODE_SUCCEEDED;
+    }
+
+    if (0 == protocol->function2.comp_data[function - 1].seg_len)
+    {
+        return IR_DECODE_SUCCEEDED;
+    }
+
+    for (i = 0; i < protocol->function2.comp_data[function - 1].seg_len; i += 3)
+    {
+        apply_ac_parameter_type_2(ir_hex_code,
+                                  &(protocol->function2.comp_data[function - 1]),
+                                  i, FALSE);
+    }
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -613,5 +645,173 @@ INT8 apply_checksum(struct ac_protocol *protocol)
         }
     }
 
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 apply_power(remote_ac_status_t ac_status, UINT8 function_code)
+{
+    apply_ac_power(context, ac_status.acPower);
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 apply_mode(remote_ac_status_t ac_status, UINT8 function_code)
+{
+    if (IR_DECODE_FAILED == apply_ac_mode(context, ac_status.acMode))
+    {
+        // do not implement this mechanism since mode, temperature, wind
+        // speed would have unspecified function
+        //if(FALSE == has_function(context, AC_FUNCTION_MODE))
+        {
+            return IR_DECODE_FAILED;
+        }
+    }
+
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
+{
+    if (FALSE == context->n_mode[ac_status.acMode].allspeed)
+    {
+        // if this level is not in black list
+        if(!isin(context->n_mode[ac_status.acMode].speed,
+                 ac_status.acWindSpeed,
+                 context->n_mode[ac_status.acMode].speed_cnt))
+        {
+            if(IR_DECODE_FAILED == apply_ac_wind_speed(context, ac_status.acWindSpeed) &&
+               function_code == AC_FUNCTION_WIND_SPEED)
+            {
+                // do not implement this mechanism since mode, temperature, wind
+                // speed would have unspecified function
+                //if(FALSE == has_function(context, AC_FUNCTION_WIND_SPEED))
+                {
+                    return IR_DECODE_FAILED;
+                }
+            }
+        }
+        else
+        {
+            // if this level is in black list, do not send IR wave if user want to apply this function
+            if(function_code == AC_FUNCTION_WIND_SPEED)
+            {
+                // do not implement this mechanism since mode, temperature, wind
+                // speed would have unspecified function
+                //if(FALSE == has_function(context, AC_FUNCTION_WIND_SPEED))
+                {
+                    return IR_DECODE_FAILED;
+                }
+            }
+        }
+    }
+    else
+    {
+        // if this level is in black list, do not send IR wave if user want to apply this function
+        if(function_code == AC_FUNCTION_WIND_SPEED)
+        {
+            // do not implement this mechanism since mode, temperature, wind
+            // speed would have unspecified function
+            //if(FALSE == has_function(context, AC_FUNCTION_WIND_SPEED))
+            {
+                return IR_DECODE_FAILED;
+            }
+        }
+    }
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
+{
+    if(function_code == AC_FUNCTION_WIND_FIX)
+    {
+        // adjust fixed wind direction according to current status
+        if(context->si.type == SWING_TYPE_NORMAL && context->si.mode_count > 1)
+        {
+            if (TRUE == context->change_wind_direction)
+            {
+                context->si.dir_index++;
+            }
+
+            if(context->si.dir_index == context->si.mode_count)
+            {
+                // reset dir index
+                context->si.dir_index = 1;
+            }
+            context->swing_status = context->si.dir_index;
+        }
+    }
+    else if(function_code == AC_FUNCTION_WIND_SWING)
+    {
+        context->swing_status = 0;
+    }
+    else
+    {
+        // do nothing
+    }
+
+    if(IR_DECODE_FAILED == apply_ac_swing(context, context->swing_status))
+    {
+        if(function_code == AC_FUNCTION_WIND_SWING && FALSE == has_function(context, AC_FUNCTION_WIND_SWING))
+        {
+            return IR_DECODE_FAILED;
+        }
+        else if(function_code == AC_FUNCTION_WIND_FIX && FALSE == has_function(context, AC_FUNCTION_WIND_FIX))
+        {
+            return IR_DECODE_FAILED;
+        }
+    }
+    return IR_DECODE_SUCCEEDED;
+}
+
+INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
+{
+    if (FALSE == context->n_mode[ac_status.acMode].alltemp)
+    {
+        if(!isin(context->n_mode[ac_status.acMode].temp,
+                 ac_status.acTemp,
+                 context->n_mode[ac_status.acMode].temp_cnt))
+        {
+            if(IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.acTemp))
+            {
+                if(function_code == AC_FUNCTION_TEMPERATURE_UP
+                    /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+                {
+                    return IR_DECODE_FAILED;
+                }
+                else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+                    /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+                {
+                    return IR_DECODE_FAILED;
+                }
+            }
+        }
+        else
+        {
+            // if this level is in black list, do not send IR wave if user want to apply this function
+            if(function_code == AC_FUNCTION_TEMPERATURE_UP
+                /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+            {
+                return IR_DECODE_FAILED;
+            }
+            else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+                /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+            {
+                return IR_DECODE_FAILED;
+            }
+        }
+    }
+    else
+    {
+        // if this level is in black list, do not send IR wave if user want to apply this function
+        if(function_code == AC_FUNCTION_TEMPERATURE_UP
+            /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
+        {
+            return IR_DECODE_FAILED;
+        }
+        else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+            /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
+        {
+            return IR_DECODE_FAILED;
+        }
+    }
     return IR_DECODE_SUCCEEDED;
 }

@@ -15,8 +15,8 @@ Revision log:
 
 #include <stdio.h>
 
-#include "include/irda_ac_build_frame.h"
-#include "include/irda_decode.h"
+#include "../include/ir_ac_build_frame.h"
+#include "../include/ir_decode.h"
 
 extern protocol* context;
 
@@ -144,12 +144,6 @@ UINT16 create_ir_frame()
             context->time[context->code_cnt++] = context->time[j];
         }
     }
-
-    for (i = 0; i < context->code_cnt; i++)
-    {
-        IR_PRINTF("%d,", context->time[i]);
-    }
-    IR_PRINTF("\n");
 
     return context->code_cnt;
 }

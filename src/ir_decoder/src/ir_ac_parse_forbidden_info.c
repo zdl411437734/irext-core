@@ -21,8 +21,8 @@ Revision log:
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/irda_decode.h"
-#include "include/irda_ac_parse_forbidden_info.h"
+#include "../include/ir_decode.h"
+#include "../include/ir_ac_parse_forbidden_info.h"
 /*
  * global vars
  */

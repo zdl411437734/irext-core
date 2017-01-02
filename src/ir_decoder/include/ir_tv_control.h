@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#include "irda_defs.h"
+#include "ir_defs.h"
 
 #define STB_CHANNEL_OFFSET              14
 

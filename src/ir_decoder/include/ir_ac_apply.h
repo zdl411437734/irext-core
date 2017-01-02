@@ -1,5 +1,5 @@
 /**************************************************************************************************
-Filename:       irda_apply.h
+Filename:       irda_ac_apply.h
 Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
@@ -17,24 +17,24 @@ extern "C"
 {
 #endif
 
-#include "irda_decode.h"
+#include "ir_decode.h"
 
 #define MIN_TAG_LENGTH_TYPE_1   4
 #define MIN_TAG_LENGTH_TYPE_2   6
 
-extern INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status);
+INT8 apply_power(remote_ac_status_t ac_status, UINT8 function_code);
 
-extern INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status);
+INT8 apply_mode(remote_ac_status_t ac_status, UINT8 function_code);
 
-extern INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temperature);
+INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code);
 
-extern INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed);
+INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code);
 
-extern INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_status);
+INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code);
 
-extern INT8 apply_ac_function(struct ac_protocol *protocol, UINT8 function);
+INT8 apply_function(struct ac_protocol *protocol, UINT8 function);
 
-extern INT8 apply_checksum(struct ac_protocol *protocol);
+INT8 apply_checksum(struct ac_protocol *protocol);
 
 #ifdef __cplusplus
 }

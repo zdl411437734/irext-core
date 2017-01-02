@@ -17,8 +17,8 @@ extern "C"
 {
 #endif
 
-#include "irda_defs.h"
-#include "irda_decode.h"
+#include "ir_defs.h"
+#include "ir_decode.h"
 
 #include <stdio.h>
 

@@ -29,6 +29,8 @@ typedef unsigned char UINT8;
 typedef signed char INT8;
 typedef unsigned short UINT16;
 typedef signed short INT16;
+typedef signed int INT;
+typedef unsigned int UINT;
 typedef int BOOL;
 
 #define irda_malloc(A) malloc(A)

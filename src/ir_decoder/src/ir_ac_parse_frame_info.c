@@ -21,8 +21,8 @@ Revision log:
 #include <stdio.h>
 #include <string.h>
 
-#include "include/irda_utils.h"
-#include "include/irda_ac_parse_frame_info.h"
+#include "../include/ir_utils.h"
+#include "../include/ir_ac_parse_frame_info.h"
 
 /*
  * global vars
