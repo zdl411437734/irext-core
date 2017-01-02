@@ -147,15 +147,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\irda_ac_apply.h" />
-    <ClInclude Include="include\irda_ac_build_frame.h" />
-    <ClInclude Include="include\irda_ac_parse_forbidden_info.h" />
-    <ClInclude Include="include\irda_ac_parse_frame_info.h" />
-    <ClInclude Include="include\irda_ac_parse_parameter.h" />
-    <ClInclude Include="include\irda_decode.h" />
-    <ClInclude Include="include\irda_defs.h" />
-    <ClInclude Include="include\irda_tv_parse_protocol.h" />
-    <ClInclude Include="include\irda_utils.h" />
+    <ClInclude Include="include\ir_ac_apply.h" />
+    <ClInclude Include="include\ir_ac_binary_parse.h" />
+    <ClInclude Include="include\ir_ac_build_frame.h" />
+    <ClInclude Include="include\ir_ac_control.h" />
+    <ClInclude Include="include\ir_ac_parse_forbidden_info.h" />
+    <ClInclude Include="include\ir_ac_parse_frame_info.h" />
+    <ClInclude Include="include\ir_ac_parse_parameter.h" />
+    <ClInclude Include="include\ir_decode.h" />
+    <ClInclude Include="include\ir_defs.h" />
+    <ClInclude Include="include\ir_tv_control.h" />
+    <ClInclude Include="include\ir_utils.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -174,14 +176,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="irda_ac_apply.c" />
-    <ClCompile Include="irda_ac_build_frame.c" />
-    <ClCompile Include="irda_ac_parse_forbidden_info.c" />
-    <ClCompile Include="irda_ac_parse_frame_info.c" />
-    <ClCompile Include="irda_ac_parse_parameter.c" />
-    <ClCompile Include="irda_decode.c" />
-    <ClCompile Include="irda_tv_parse_protocol.c" />
-    <ClCompile Include="irda_utils.c" />
+    <ClCompile Include="src\ir_ac_apply.c" />
+    <ClCompile Include="src\ir_ac_binary_parse.c" />
+    <ClCompile Include="src\ir_ac_build_frame.c" />
+    <ClCompile Include="src\ir_ac_control.c" />
+    <ClCompile Include="src\ir_ac_parse_forbidden_info.c" />
+    <ClCompile Include="src\ir_ac_parse_frame_info.c" />
+    <ClCompile Include="src\ir_ac_parse_parameter.c" />
+    <ClCompile Include="src\ir_decode.c" />
+    <ClCompile Include="src\ir_test_main.c" />
+    <ClCompile Include="src\ir_tv_control.c" />
+    <ClCompile Include="src\ir_utils.c" />
     <ClCompile Include="stdafx.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

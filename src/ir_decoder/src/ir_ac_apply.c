@@ -9,28 +9,10 @@ Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include "../include/ir_utils.h"
 #include "../include/ir_ac_apply.h"
 
-/*
- * global vars
- */
 
-/*
- * external vars
- */
-
-/*
- * function declaration
- */
 static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status);
 
 static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status);
@@ -43,9 +25,6 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_status);
 
 static UINT8 has_function(struct ac_protocol *protocol, UINT8 function);
 
-/*
- * function definition
- */
 
 INT8 apply_ac_parameter_type_1(UINT8 *dc_data, tag_comp *comp_data, UINT8 current_seg, UINT8 is_temp)
 {
@@ -167,7 +146,7 @@ static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status)
     }
     for (i = 0; i < protocol->power1.comp_data[power_status].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->power1.comp_data[power_status]), i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->power1.comp_data[power_status]), (UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -188,7 +167,7 @@ static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
 
     for (i = 0; i < protocol->mode1.comp_data[mode_status].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->mode1.comp_data[mode_status]), i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->mode1.comp_data[mode_status]), (UINT8)i, FALSE);
     }
 
     // get return here since wind mode 1 is already applied
@@ -208,8 +187,8 @@ static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
     for (i = 0; i < protocol->mode2.comp_data[mode_status].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-                                  &(protocol->mode2.comp_data[mode_status]),
-                                  i, FALSE);
+			&(protocol->mode2.comp_data[mode_status]),
+			(UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -230,7 +209,7 @@ static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
 
     for (i = 0; i < protocol->speed1.comp_data[wind_speed].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->speed1.comp_data[wind_speed]), i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->speed1.comp_data[wind_speed]), (UINT8)i, FALSE);
     }
 
     // get return here since wind speed 1 is already applied
@@ -250,8 +229,8 @@ static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
     for (i = 0; i < protocol->speed2.comp_data[wind_speed].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-                                  &(protocol->speed2.comp_data[wind_speed]),
-                                  i, FALSE);
+			&(protocol->speed2.comp_data[wind_speed]),
+			(UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -274,11 +253,11 @@ static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
     {
         if (TEMP_TYPE_DYNAMIC == protocol->temp1.type)
         {
-            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), i, TRUE);
+            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8)i, TRUE);
         }
         else if (TEMP_TYPE_STATIC == protocol->temp1.type)
         {
-            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), i, FALSE);
+            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8)i, FALSE);
         }
     }
 
@@ -302,11 +281,11 @@ static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
         {
             if (TEMP_TYPE_DYNAMIC == protocol->temp2.type)
             {
-                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), i, TRUE);
+                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8)i, TRUE);
             }
             else if (TEMP_TYPE_STATIC == protocol->temp2.type)
             {
-                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), i, FALSE);
+                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8)i, FALSE);
             }
         }
     }
@@ -335,7 +314,7 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
 
     for (i = 0; i < protocol->swing1.comp_data[swing_mode].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->swing1.comp_data[swing_mode]), i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->swing1.comp_data[swing_mode]), (UINT8)i, FALSE);
     }
 
     // get return here since temperature 1 is already applied
@@ -361,8 +340,8 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
     for (i = 0; i < protocol->swing2.comp_data[swing_mode].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-                                  &(protocol->swing2.comp_data[swing_mode]),
-                                  i, FALSE);
+			&(protocol->swing2.comp_data[swing_mode]),
+			(UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -569,7 +548,7 @@ INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
 
     for (i = 0; i < protocol->function1.comp_data[function - 1].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), (UINT8)i, FALSE);
     }
 
     // get return here since function 1 is already applied
@@ -589,8 +568,8 @@ INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
     for (i = 0; i < protocol->function2.comp_data[function - 1].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-                                  &(protocol->function2.comp_data[function - 1]),
-                                  i, FALSE);
+			&(protocol->function2.comp_data[function - 1]),
+			(UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }

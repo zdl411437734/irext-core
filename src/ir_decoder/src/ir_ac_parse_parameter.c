@@ -9,14 +9,6 @@ Revision log:
 * 2016-10-12: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,21 +16,7 @@ Revision log:
 #include "../include/ir_utils.h"
 #include "../include/ir_ac_parse_parameter.h"
 
-/*
- * global vars
- */
 
-/*
- * external vars
- */
-
-/*
- * function declaration
- */
-
-/*
- * function definition
- */
 INT8 parse_comp_data_type_1(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
 {
     UINT8 seg_len = data[*trav_offset];
@@ -205,7 +183,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to power1 data structure
-    power1->len = hex_len;
+    power1->len = (UINT8)hex_len;
 
     for (seg_index = AC_POWER_ON; seg_index < AC_POWER_MAX; seg_index++)
     {
@@ -257,7 +235,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
     {
         // dynamic temperature tag
         temp1->type = TEMP_TYPE_DYNAMIC;
-        temp1->len = hex_len;
+        temp1->len = (UINT8)hex_len;
         UINT8 seg_len = hex_data[0];
 
         for (seg_index = AC_TEMP_16; seg_index < AC_TEMP_MAX; seg_index++)
@@ -284,7 +262,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
     else
     {
         // static temperature tag
-        temp1->len = hex_len;
+        temp1->len = (UINT8)hex_len;
         temp1->type = TEMP_TYPE_STATIC;
         for (seg_index = AC_TEMP_16; seg_index < AC_TEMP_MAX; seg_index++)
         {
@@ -330,7 +308,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
-    mode1->len = hex_len;
+    mode1->len = (UINT8)hex_len;
 
     for (seg_index = AC_MODE_COOL; seg_index < AC_MODE_MAX; seg_index++)
     {
@@ -376,7 +354,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to speed1 data structure
-    speed1->len = hex_len;
+    speed1->len = (UINT8)hex_len;
 
     for (seg_index = AC_WS_AUTO; seg_index < AC_WS_MAX; seg_index++)
     {
@@ -423,7 +401,7 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
 
     // parse hex data to swing1 data structure
     swing1->count = swing_count;
-    swing1->len = hex_len;
+    swing1->len = (UINT8)hex_len;
     swing1->comp_data = (tag_comp *) irda_malloc(sizeof(tag_comp) * swing_count);
     if (NULL == swing1->comp_data)
     {
@@ -760,7 +738,7 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
-    function1->len = hex_len;
+    function1->len = (UINT8)hex_len;
 
     // seg_index in TAG only refers to functional count
     for (seg_index = AC_FUNCTION_POWER; seg_index < AC_FUNCTION_MAX; seg_index++)
@@ -821,7 +799,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
     {
         // dynamic temperature tag
         temp2->type = TEMP_TYPE_DYNAMIC;
-        temp2->len = hex_len;
+        temp2->len = (UINT8)hex_len;
         UINT8 seg_len = hex_data[0];
 
         for (seg_index = AC_TEMP_16; seg_index < AC_TEMP_MAX; seg_index++)
@@ -848,7 +826,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
     else
     {
         // static temperature tag
-        temp2->len = hex_len;
+        temp2->len = (UINT8)hex_len;
         temp2->type = TEMP_TYPE_STATIC;
         for (seg_index = AC_TEMP_16; seg_index < AC_TEMP_MAX; seg_index++)
         {
@@ -899,7 +877,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
-    mode2->len = hex_len;
+    mode2->len = (UINT8)hex_len;
 
     for (seg_index = AC_MODE_COOL; seg_index < AC_MODE_MAX; seg_index++)
     {
@@ -950,7 +928,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to speed1 data structure
-    speed2->len = hex_len;
+    speed2->len = (UINT8)hex_len;
 
     for (seg_index = AC_WS_AUTO; seg_index < AC_WS_MAX; seg_index++)
     {
@@ -1002,7 +980,7 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
 
     // parse hex data to swing2 data structure
     swing2->count = swing_count;
-    swing2->len = hex_len;
+    swing2->len = (UINT8)hex_len;
     swing2->comp_data = (tag_comp *) irda_malloc(sizeof(tag_comp) * swing_count);
     if (NULL == swing2->comp_data)
     {
@@ -1128,7 +1106,7 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
-    function2->len = hex_len;
+    function2->len = (UINT8)hex_len;
 
     // seg_index in TAG only refers to functional count
     for (seg_index = AC_FUNCTION_POWER; seg_index < AC_FUNCTION_MAX; seg_index++)
@@ -1233,7 +1211,7 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
     string_to_hex_common(tag->pdata, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
-    sc->len = hex_len;
+    sc->len = (UINT8)hex_len;
     sc->solo_func_count = hex_len - 1;
 
     // per each function takes just 1 byte of length

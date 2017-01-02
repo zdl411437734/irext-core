@@ -9,10 +9,6 @@ Revision log:
 * 2016-10-21: created by strawmanbobi
 **************************************************************************************************/
 
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <string.h>
 
 #include "../include/ir_defs.h"

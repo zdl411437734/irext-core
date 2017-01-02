@@ -9,14 +9,6 @@ Revision log:
 * 2016-10-11: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,22 +16,7 @@ Revision log:
 #include "../include/ir_utils.h"
 #include "../include/ir_ac_parse_frame_info.h"
 
-/*
- * global vars
- */
 
-/*
- * external vars
- */
-
-/*
- * function declaration
- */
-
-
-/*
- * function definition
- */
 INT8 parse_bootcode(struct tag_head *tag)
 {
     UINT8 buf[16] = {0};

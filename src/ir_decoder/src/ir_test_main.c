@@ -9,10 +9,6 @@ Revision log:
 * 2016-11-05: created by strawmanbobi
 **************************************************************************************************/
 
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 
 #if !defined WIN32

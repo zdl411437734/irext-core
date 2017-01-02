@@ -2,20 +2,19 @@ LIBRARY
 
 EXPORTS
 
-irda_context_init @1
-irda_ac_file_open @2
-irda_ac_lib_open @3
-irda_ac_lib_parse @4
-irda_ac_lib_control @5
-irda_ac_lib_close @6
+ir_ac_file_open @1
+ir_ac_lib_open @2
+ir_ac_lib_parse @3
+ir_ac_lib_control @4
+ir_ac_lib_close @5
 
-irda_tv_file_open @7
-irda_tv_lib_open @8
-irda_tv_lib_parse @9
-irda_tv_lib_control @10
-irda_tv_lib_close @11
-get_temperature_range @12
-get_supported_mode @13
-get_supported_wind_speed @14
-get_supported_swing @15
-get_supported_wind_direction @16
+ir_tv_file_open @6
+ir_tv_lib_open @7
+ir_tv_lib_parse @8
+ir_tv_lib_control @9
+ir_tv_lib_close @19
+get_temperature_range @11
+get_supported_mode @12
+get_supported_wind_speed @13
+get_supported_swing @14
+get_supported_wind_direction @15

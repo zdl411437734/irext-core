@@ -9,16 +9,13 @@ Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_decode.h"
 
 extern protocol* context;
+
 
 //return bit number per byte,default value is 8
 UINT8 bits_per_byte(UINT8 index)
@@ -32,12 +29,12 @@ UINT8 bits_per_byte(UINT8 index)
     if (context->bitnum_cnt >= MAX_BITNUM)
         size = MAX_BITNUM;
     else
-        size = context->bitnum_cnt;
+        size = (UINT8)context->bitnum_cnt;
 
     for (i = 0; i < size; i++)
     {
         if (context->bitnum[i].pos == index)
-            return context->bitnum[i].bits;
+            return (UINT8)context->bitnum[i].bits;
         if (context->bitnum[i].pos > index)
             return 8;
     }
@@ -53,7 +50,7 @@ UINT16 add_delaycode(UINT8 index)
 
     if(context->dc_cnt != 0)
     {
-        size = context->dc_cnt;
+        size = (UINT8)context->dc_cnt;
 
         for (i = 0; i < size; i++)
         {
@@ -110,7 +107,7 @@ UINT16 create_ir_frame()
 
     for (i = 0; i < ir_hex_len; i++)
     {
-        bitnum = bits_per_byte(i);
+        bitnum = bits_per_byte((UINT8)i);
         //IR_PRINTF("bitnum:%d\n", bitnum);
         for (j = 0; j < bitnum; j++)
         {
@@ -132,7 +129,7 @@ UINT16 create_ir_frame()
                 context->time[context->code_cnt++] = context->zero.high;
             }
         }
-        add_delaycode(i);
+        add_delaycode((UINT8)i);
     }
 
     framelen = context->code_cnt;

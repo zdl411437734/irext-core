@@ -9,36 +9,18 @@ Revision log:
 * 2016-10-05: created by strawmanbobi
 **************************************************************************************************/
 
-/*
- *inclusion
- */
-
-#if defined WIN32
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../include/ir_decode.h"
 #include "../include/ir_ac_parse_forbidden_info.h"
-/*
- * global vars
- */
 
-/*
- * external vars
- */
+
 extern protocol* context;
 
-/*
- * function declaration
- */
 
-/*
- * function definition
- */
+
 INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
 {
     char buf[16] = {0};
@@ -56,7 +38,7 @@ INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
         pos = index + 1;
         index = pos;
         context->n_mode[seq].speed[cnt++] = atoi(buf);
-        context->n_mode[seq].speed_cnt = cnt;
+        context->n_mode[seq].speed_cnt = (UINT8)cnt;
         irda_memset(buf, 0, 16);
     }
 
@@ -81,7 +63,7 @@ INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
         pos = index + 1;
         index = pos;
         context->n_mode[seq].temp[cnt++] = atoi(buf) - 16;
-        context->n_mode[seq].temp_cnt = cnt;
+        context->n_mode[seq].temp_cnt = (UINT8)cnt;
         irda_memset(buf, 0, 16);
     }
     return IR_DECODE_SUCCEEDED;

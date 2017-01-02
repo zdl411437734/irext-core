@@ -9,10 +9,6 @@ Revision log:
 * 2016-10-01: created by strawmanbobi
 **************************************************************************************************/
 
-#ifdef WIN32
-#include "stdafx.h"
-#endif
-
 #include "../include/ir_utils.h"
 
 UINT8 char_to_hex(char chr)
