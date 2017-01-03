@@ -44,6 +44,7 @@ void string_to_hex(UINT8 *p, ac_hex *pac_hex, UINT16 len)
 {
     UINT8 i = 0;
 
+    IR_PRINTF("string to hex");
     pac_hex->len = chars_to_hex(p);
     p = p + 2;
     for (i = 0; i < pac_hex->len; i++)
