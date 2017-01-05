@@ -29,8 +29,6 @@ struct tag_head *tags;
 UINT8* ir_hex_code = NULL;
 UINT8 ir_hex_len = 0;
 
-UINT8 tag_count = 0;
-
 UINT8 byteArray[PROTOCOL_SIZE] = { 0 };
 UINT8 tv_bin[EXPECTED_MEM_SIZE] = { 0 };
 
@@ -51,13 +49,6 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
     apply_swing
 };
 
-const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
-{
-    1, 2, 3, 4, 5, 6, 7,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-    41, 42, 43, 44, 45, 46, 47, 48
-};
-
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
 void irda_lib_free_inner_buffer();
 #endif
@@ -66,6 +57,7 @@ void irda_lib_free_inner_buffer();
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
 INT8 ir_ac_file_open(const char *file_name)
 {
+#if !defined NO_FS
     size_t ret = 0;
 #if !defined WIN32
     FILE *stream = fopen(file_name, "rb");
@@ -109,7 +101,7 @@ INT8 ir_ac_file_open(const char *file_name)
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
-
+#endif
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -127,7 +119,9 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
                          BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
+#if defined BOARD_PC
     UINT8 i = 0;
+#endif
 
     if (0 == context->default_code.len)
     {
@@ -392,6 +386,7 @@ INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
 ///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
 INT8 ir_tv_file_open(const char *file_name)
 {
+#if !defined NO_FS
     size_t ret = 0;
 
 #if !defined WIN32
@@ -436,7 +431,7 @@ INT8 ir_tv_file_open(const char *file_name)
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
-
+#endif
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -458,7 +453,9 @@ INT8 ir_tv_lib_parse(UINT8 irda_hex_encode)
 
 UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
 {
+#if defined BOARD_PC
     UINT16 print_index = 0;
+#endif
     UINT16 irda_code_length = 0;
     memset(l_user_data, 0x00, USER_DATA_SIZE);
     irda_code_length = tv_lib_control(key, l_user_data);

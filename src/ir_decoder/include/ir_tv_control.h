@@ -73,14 +73,18 @@ typedef struct irda_data
     UINT8 index;
 }  irda_data_t;
 
+#if !defined BOARD_51
 #pragma pack(1)
+#endif
 typedef struct irda_cycles
 {
     UINT8 flag;
     UINT16 mask;
     UINT16 space;
 } irda_cycles_t;
+#if !defined BOARD_51
 #pragma pack()
+#endif
 
 typedef enum tv_key_value
 {

@@ -18,8 +18,14 @@ UINT16 tag_head_offset = 0;
 
 extern struct ir_bin_buffer *p_ir_buffer;
 extern struct tag_head *tags;
-extern INT tag_count;
-extern const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL];
+
+UINT8 tag_count = 0;
+const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
+{
+    1, 2, 3, 4, 5, 6, 7,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+    41, 42, 43, 44, 45, 46, 47, 48
+};
 
 INT8 binary_parse_offset()
 {

@@ -23,7 +23,7 @@ Revision log:
 
 
 extern struct tag_head *tags;
-extern INT tag_count;
+extern UINT8 tag_count;
 
 static INT8 ir_context_init();
 
