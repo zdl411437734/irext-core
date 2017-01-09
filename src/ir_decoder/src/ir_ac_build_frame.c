@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_irframe.c
+/**************************************************************************************
+Filename:       ir_irframe.c
 Revised:        Date: 2016-10-01
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides algorithms for IR frame build
 
 Revision log:
 * 2016-10-01: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_decode.h"

@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_ac_control.h
+/**************************************************************************************
+Filename:       ir_ac_control.h
 Revised:        Date: 2016-12-31
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides methods for AC IR control
 
 Revision log:
 * 2016-10-12: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 #ifndef IRDA_DECODER_IR_AC_CONTROL_H
 #define IRDA_DECODER_IR_AC_CONTROL_H
 

@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_parse_forbidden_info.c
+/**************************************************************************************
+Filename:       ir_parse_forbidden_info.c
 Revised:        Date: 2016-10-05
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides algorithms for forbidden area of AC code
 
 Revision log:
 * 2016-10-05: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>

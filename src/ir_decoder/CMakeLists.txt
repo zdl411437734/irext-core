@@ -51,5 +51,5 @@ set(SOURCE_FILES_SHARED_LIB
         src/ir_decode.c
         include/ir_decode.h)
 
-# add_executable(irda_decoder ${SOURCE_FILES_EXECUTABLE})
-add_library(irda_decoder SHARED ${SOURCE_FILES_SHARED_LIB})
+add_executable(irda_decoder ${SOURCE_FILES_EXECUTABLE})
+# add_library(irda_decoder SHARED ${SOURCE_FILES_SHARED_LIB})

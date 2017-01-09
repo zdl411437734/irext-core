@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_ac_binary_parse.h
+/**************************************************************************************
+Filename:       ir_ac_binary_parse.h
 Revised:        Date: 2017-01-03
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides methods for AC binary parse
 
 Revision log:
 * 2017-01-03: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 
 #ifndef IRDA_DECODER_IR_AC_BINARY_PARSE_H
 #define IRDA_DECODER_IR_AC_BINARY_PARSE_H

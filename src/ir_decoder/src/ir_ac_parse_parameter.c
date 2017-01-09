@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_parse_ac_parameter.c
+/**************************************************************************************
+Filename:       ir_parse_ac_parameter.c
 Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides algorithms for IR decode for AC functionality
 
 Revision log:
 * 2016-10-12: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>

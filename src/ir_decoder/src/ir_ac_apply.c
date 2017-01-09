@@ -1,5 +1,5 @@
-/**************************************************************************************************
-Filename:       irda_ac_apply.c
+/**************************************************************************************
+Filename:       ir_ac_apply.c
 Revised:        Date: 2016-10-12
 Revision:       Revision: 1.0
 
@@ -7,7 +7,7 @@ Description:    This file provides methods for AC IR applying functionalities
 
 Revision log:
 * 2016-10-12: created by strawmanbobi
-**************************************************************************************************/
+**************************************************************************************/
 
 #include "../include/ir_utils.h"
 #include "../include/ir_ac_apply.h"
