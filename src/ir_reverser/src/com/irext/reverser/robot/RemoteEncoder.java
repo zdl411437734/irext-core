@@ -3,12 +3,12 @@
  * 2016-08-01
  */
 
-package com.yuekong.sirius.ircoderobot.robot;
+package com.irext.reverser.robot;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
-import com.yuekong.sirius.ircoderobot.model.KeyInstance;
-import com.yuekong.sirius.ircoderobot.model.RemoteInstance;
+import com.irext.reverser.model.KeyInstance;
+import com.irext.reverser.model.RemoteInstance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,14 +51,14 @@ public class RemoteEncoder {
     private static final String NODE_REMOTE_KEY_ID = "id";
     private static final String NODE_REMOTE_KEY_PULSE = "pulse";
 
-    private static final String EX_NODE_UCON_DOCUMENT = "DOCUMENT";
-    private static final String EX_NODE_UCON_REMOTE = "remote_controller";
-    private static final String EX_NODE_UCON_ID = "id";
-    private static final String EX_NODE_UCON_EXTS = "exts";
-    private static final String EX_NODE_UCON_EXT = "ext";
-    private static final String EX_NODE_UCON_TAG = "tag";
-    private static final String EX_NODE_UCON_TAG_VALUE = "value";
-    private static final String EX_NODE_UCON_TAG_TYPE = "type";
+    private static final String EX_NODE_IREXT_DOCUMENT = "DOCUMENT";
+    private static final String EX_NODE_IREXT_REMOTE = "remote_controller";
+    private static final String EX_NODE_IREXT_ID = "id";
+    private static final String EX_NODE_IREXT_EXTS = "exts";
+    private static final String EX_NODE_IREXT_EXT = "ext";
+    private static final String EX_NODE_IREXT_TAG = "tag";
+    private static final String EX_NODE_IREXT_TAG_VALUE = "value";
+    private static final String EX_NODE_IREXT_TAG_TYPE = "type";
 
     // connection and data source base
     private String sourceXmlFileBasePath;
@@ -205,29 +205,29 @@ public class RemoteEncoder {
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document remoteDocument = builder.newDocument();
                 remoteDocument.setXmlVersion("1.0");
-                Element remoteRoot = remoteDocument.createElement(EX_NODE_UCON_DOCUMENT);
+                Element remoteRoot = remoteDocument.createElement(EX_NODE_IREXT_DOCUMENT);
                 remoteDocument.appendChild(remoteRoot);
 
-                Element remoteControllerElement = remoteDocument.createElement(EX_NODE_UCON_REMOTE);
+                Element remoteControllerElement = remoteDocument.createElement(EX_NODE_IREXT_REMOTE);
                 remoteRoot.appendChild(remoteControllerElement);
 
-                Element idElement = remoteDocument.createElement(EX_NODE_UCON_ID);
+                Element idElement = remoteDocument.createElement(EX_NODE_IREXT_ID);
                 idElement.setTextContent(String.valueOf(remoteInstance.getmRemoteTemplateID()));
                 remoteControllerElement.appendChild(idElement);
 
-                Element extsElement = remoteDocument.createElement(EX_NODE_UCON_EXTS);
+                Element extsElement = remoteDocument.createElement(EX_NODE_IREXT_EXTS);
                 remoteControllerElement.appendChild(extsElement);
 
                 List<KeyInstance> keyInstanceList = remoteInstance.getmKeyInstanceList();
                 if (null != keyInstanceList) {
                     System.out.println("Will add " + keyInstanceList.size() + " keys to this remote");
                     for (KeyInstance keyInstance : keyInstanceList) {
-                        Element extElement = remoteDocument.createElement(EX_NODE_UCON_EXT);
-                        Element tagElement = remoteDocument.createElement(EX_NODE_UCON_TAG);
+                        Element extElement = remoteDocument.createElement(EX_NODE_IREXT_EXT);
+                        Element tagElement = remoteDocument.createElement(EX_NODE_IREXT_TAG);
                         tagElement.setTextContent(String.valueOf(keyInstance.getmKeyTemplateID()));
-                        Element tagValueElement = remoteDocument.createElement(EX_NODE_UCON_TAG_VALUE);
+                        Element tagValueElement = remoteDocument.createElement(EX_NODE_IREXT_TAG_VALUE);
                         tagValueElement.setTextContent(String.valueOf(keyInstance.getmKeyValue()));
-                        Element tagTypeElement = remoteDocument.createElement(EX_NODE_UCON_TAG_TYPE);
+                        Element tagTypeElement = remoteDocument.createElement(EX_NODE_IREXT_TAG_TYPE);
                         tagTypeElement.setTextContent(String.valueOf(keyInstance.getmKeyType()));
 
                         extElement.appendChild(tagElement);
@@ -257,7 +257,7 @@ public class RemoteEncoder {
 
             ////////// step 5 - compress key-tag files into binary with dynamic python encoder //////////
             // collect output files
-            // NOTE: skip step 5 for UCON SIRIUS
+            // NOTE: skip step 5 for IREXT SIRIUS
             /*
             System.out.println("collecting output xml files...");
             getXMLSourceFiles(outputXmlFileBasePath);

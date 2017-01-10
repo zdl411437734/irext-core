@@ -3,7 +3,7 @@
  * 2016-07-20
  */
 
-package com.yuekong.sirius.ircoderobot.model;
+package com.irext.reverser.model;
 
 public class RemoteIndex {
 

@@ -3,7 +3,7 @@
  * 2016-07-22
  */
 
-package com.yuekong.sirius.ircoderobot.model;
+package com.irext.reverser.model;
 
 import java.util.List;
 

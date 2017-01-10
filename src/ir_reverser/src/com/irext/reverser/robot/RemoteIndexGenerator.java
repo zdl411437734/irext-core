@@ -3,12 +3,12 @@
  * 2016-07-20
  */
 
-package com.yuekong.sirius.ircoderobot.robot;
+package com.irext.reverser.robot;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.ResultSet;
-import com.yuekong.sirius.ircoderobot.model.*;
+import com.irext.reverser.model.*;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -100,9 +100,9 @@ public class RemoteIndexGenerator {
     private static final String NODE_REMOTE_KEY_ID = "id";
     private static final String NODE_REMOTE_KEY_PULSE = "pulse";
 
-    // kookong-ucon cateogry mapping
-    // the index of array indicates kookong device type ID while the value of array indicates UCONs'
-    // NOTE: IPTV in UCON remote index system is separated from STB, so it should not be in this table
+    // kookong-irext cateogry mapping
+    // the index of array indicates kookong device type ID while the value of array indicates IREXTs'
+    // NOTE: IPTV in IREXT remote index system is separated from STB, so it should not be in this table
     private static final int[] catetoryMapping = {
             3, // STB
             5, // IPTV
@@ -834,14 +834,14 @@ public class RemoteIndexGenerator {
                                 brandRemoteRel.getmKookongBrandID())) {
 
                             // count this brand only if it hasn't been counted yet
-                            int uconCategoryID = getUCONCategoryIDFromCategory(category.getmKookongCategoryID());
-                            String uconCategoryName = getUCONCategoryNameFromCategory(category.getmKookongCategoryID());
-                            System.out.println(uconCategoryID + ", " + uconCategoryName + ", " +
+                            int irextCategoryID = getIREXTCategoryIDFromCategory(category.getmKookongCategoryID());
+                            String irextCategoryName = getIREXTCategoryNameFromCategory(category.getmKookongCategoryID());
+                            System.out.println(irextCategoryID + ", " + irextCategoryName + ", " +
                                     brand.getmBrandName() + ", rank = " + brandRemoteRel.getmPriority());
 
                             // insert this brand into brand table
                             String sqlString = "SELECT * FROM brand WHERE brand_id = " +
-                                    "'" + brand.getmKookongBrandID() + "' AND category_id = '" + uconCategoryID + "';";
+                                    "'" + brand.getmKookongBrandID() + "' AND category_id = '" + irextCategoryID + "';";
                             PreparedStatement statement = (PreparedStatement) mConnection.prepareStatement(sqlString);
                             ResultSet resultSet = (ResultSet) statement.executeQuery();
                             if(resultSet.next()) {
@@ -860,8 +860,8 @@ public class RemoteIndexGenerator {
                                         (PreparedStatement) mConnection.prepareStatement(innerSqlString);
                                 innerStatement.setInt(1, brand.getmKookongBrandID());
                                 innerStatement.setString(2, brand.getmBrandName());
-                                innerStatement.setInt(3, uconCategoryID);
-                                innerStatement.setString(4, uconCategoryName);
+                                innerStatement.setInt(3, irextCategoryID);
+                                innerStatement.setString(4, irextCategoryName);
                                 innerStatement.setInt(5, 1);
                                 innerStatement.setString(6, "2016-07-26 17:00:00");
                                 innerStatement.setInt(7, brandRemoteRel.getmPriority());
@@ -912,7 +912,7 @@ public class RemoteIndexGenerator {
                 int priority = spStbRel.getmPriority();
                 String appliedVersion = "V0.0.0";
                 String bannedVersion = "V99.0.0";
-                String inputSource = "CodeRobot_V1.0@ucon";
+                String inputSource = "CodeRobot_V1.0@irext";
 
                 String sqlString = "SELECT * FROM remote_index WHERE category_id = 3 AND city_code = '" + cityCode +
                         "' AND operator_id = '" + operatorID + "' AND remote_template_id = '" + remoteTemplateID + "';";
@@ -985,9 +985,9 @@ public class RemoteIndexGenerator {
                     int priority = (remoteIndexCountForIPTVperBrand + 1) * 10;
                     String appliedVersion = "V0.0.0";
                     String bannedVersion = "V99.0.0";
-                    String inputSource = "CodeRobot_V1.0@ucon";
+                    String inputSource = "CodeRobot_V1.0@irext";
 
-                    // NOTE: brandID in remote_index table indicates the id of UCON brand
+                    // NOTE: brandID in remote_index table indicates the id of IREXT brand
                     String sqlString = "SELECT * FROM remote_index WHERE category_id = 5 AND brand_id = '" + brandID +
                             "' AND remote_template_id = '" + remoteTemplateID + "';";
                     PreparedStatement statement = (PreparedStatement) mConnection.prepareStatement(sqlString);
@@ -1054,12 +1054,12 @@ public class RemoteIndexGenerator {
                 int remoteTemplateID = brandRemoteRel.getmKookongRemoteID();
                 if (5 == kookongCategoryID) {
                     if (false == isInIntArray(mValidACIDList, remoteTemplateID, mValidACIDList.length)) {
-                        System.out.println("This AC is invalid for UCON : " + remoteTemplateID);
+                        System.out.println("This AC is invalid for IREXT : " + remoteTemplateID);
                         continue;
                     }
                 }
-                int categoryID = getUCONCategoryIDFromCategory(kookongCategoryID);
-                String categoryName = getUCONCategoryNameFromCategory(kookongCategoryID);
+                int categoryID = getIREXTCategoryIDFromCategory(kookongCategoryID);
+                String categoryName = getIREXTCategoryNameFromCategory(kookongCategoryID);
                 int kookongBrandID = brandRemoteRel.getmKookongBrandID();
                 String brandName = "";
                 int brandID = 0;
@@ -1078,9 +1078,9 @@ public class RemoteIndexGenerator {
                 int priority = brandRemoteRel.getmPriority();
                 String appliedVersion = "V0.0.0";
                 String bannedVersion = "V99.0.0";
-                String inputSource = "CodeRobot_V1.0@ucon";
+                String inputSource = "CodeRobot_V1.0@irext";
 
-                // NOTE: brandID in remote_index table indicates the id of UCON brand
+                // NOTE: brandID in remote_index table indicates the id of IREXT brand
                 String sqlString = "SELECT * FROM remote_index WHERE category_id = '" + categoryID +"'" +
                         " AND brand_id = '" + brandID + "' AND remote_template_id = '" + remoteTemplateID + "';";
                 PreparedStatement statement = (PreparedStatement) mConnection.prepareStatement(sqlString);
@@ -1263,7 +1263,7 @@ public class RemoteIndexGenerator {
                     }
                 }
                 System.out.println(remoteIndexCount + " remote index found by category " +
-                        getUCONCategoryNameFromCategory(categoryID));
+                        getIREXTCategoryNameFromCategory(categoryID));
 
                 // have some debug on key hits
                 for (KeyTemplate keyTemplate : mKeyTemplateList) {
@@ -1380,11 +1380,11 @@ public class RemoteIndexGenerator {
         return false;
     }
 
-    private int getUCONCategoryIDFromCategory(int kookongCategoryID) {
+    private int getIREXTCategoryIDFromCategory(int kookongCategoryID) {
         return catetoryMapping[kookongCategoryID];
     }
 
-    private String getUCONCategoryNameFromCategory(int kookongCategoryID) {
+    private String getIREXTCategoryNameFromCategory(int kookongCategoryID) {
         return categoryNameMapping[kookongCategoryID];
     }
 

@@ -2,7 +2,7 @@
  * Created by Strawmanbobi on 2015-08-30.
  */
 
-package com.yuekong.sirius.ircoderobot.utils;
+package com.irext.reverser.utils;
 
 import java.text.*;
 import java.util.Calendar;

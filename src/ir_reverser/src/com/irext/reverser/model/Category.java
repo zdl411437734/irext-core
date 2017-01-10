@@ -3,7 +3,7 @@
  * 2015-07-18
  */
 
-package com.yuekong.sirius.ircoderobot.model;
+package com.irext.reverser.model;
 
 public class Category {
 

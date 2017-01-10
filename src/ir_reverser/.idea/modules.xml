@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/sirius_code_robot.iml" filepath="$PROJECT_DIR$/.idea/sirius_code_robot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/irext_reverser.iml" filepath="$PROJECT_DIR$/.idea/irext_reverser.iml" />
     </modules>
   </component>
 </project>

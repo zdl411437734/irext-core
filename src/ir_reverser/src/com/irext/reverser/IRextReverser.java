@@ -1,16 +1,16 @@
 /*
  * Created by strawmanbobi
- * 2016-07-18
+ * 2017-01-10
  *
- * Sirius IRDA code generating robot
+ * IR reverse engineering robot for IREXT
  */
 
-package com.yuekong.sirius.ircoderobot;
+package com.irext.reverser;
 
-import com.yuekong.sirius.ircoderobot.robot.RemoteEncoder;
-import com.yuekong.sirius.ircoderobot.robot.RemoteIndexGenerator;
+import com.irext.reverser.robot.RemoteEncoder;
+import com.irext.reverser.robot.RemoteIndexGenerator;
 
-public class SiriusCodeRobot {
+public class IRextReverser {
 
     private final static int FUNCTION_GENERATE_REMOTE_INDEX = 0;
     private final static int FUNCTION_GENERATE_REMOTE_BINARY = 1;
@@ -25,7 +25,7 @@ public class SiriusCodeRobot {
                 case FUNCTION_GENERATE_REMOTE_INDEX: {
                     if (7 != args.length) {
                         System.out.println("invalid parameter");
-                        System.out.println("Please call this method like SiriusCodeRobot [function_code = 0] " +
+                        System.out.println("Please call this method like IRextReverser [function_code = 0] " +
                                 "[source_xml_file_base] [ac_bin_file_base] [db_host] [db_name] [db_user] " +
                                 "[db_password]");
                         return;
@@ -47,7 +47,7 @@ public class SiriusCodeRobot {
                 case FUNCTION_GENERATE_REMOTE_BINARY: {
                     if (10 != args.length) {
                         System.out.println("invalid parameter");
-                        System.out.println("Please call this method like SiriusCodeRobot [function_code = 1] " +
+                        System.out.println("Please call this method like IRextReverser [function_code = 1] " +
                                 "[source_xml_file_base] [output_xml_file_base] [encoder_python_file] " +
                                 "[encoder_python_base] [output_bin_file_base] [db_host] [db_name] [db_user] " +
                                 "[db_password]");
