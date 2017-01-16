@@ -18,11 +18,11 @@ public class ReverseEngine {
     }
 
     public boolean reverse() throws IOException {
-        InputStream input = null;
+        InputStream input;
         BufferedReader reader = null;
         int srcCode[];
         try {
-            ////////// step 0 - prepare input file //////////
+            // step 0 - prepare input file
             input = new FileInputStream(mSrcCodeFilePath);
             reader = new BufferedReader(new InputStreamReader(input));
             StringBuilder out = new StringBuilder();
@@ -35,9 +35,18 @@ public class ReverseEngine {
             String strSrcCode[] = out.toString().split(",");
             srcCode = new int[strSrcCode.length];
 
-            if (false == buildSourceCode(srcCode, strSrcCode)) {
+            if (!parseSourceArray(srcCode, strSrcCode)) {
                 return false;
             }
+
+            // start analyzing
+            // step 1 - recognition of boot
+
+            // step 2 - resolve patterns
+
+            // step 3 - resolve key codes
+
+
         } catch (Exception e) {
             e.printStackTrace();
             if (null != reader) {
@@ -49,7 +58,7 @@ public class ReverseEngine {
     }
 
     // utils
-    boolean buildSourceCode(int[] dest, String[] src) {
+    private boolean parseSourceArray(int[] dest, String[] src) {
         try {
             for (int i = 0; i < src.length; i++) {
                 dest[i] = Integer.parseInt(src[i]);

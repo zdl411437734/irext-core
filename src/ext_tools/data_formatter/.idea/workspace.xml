@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94fe425f-648a-43eb-bc0a-533a6bc9a614" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../web_console/data/db/irext_private_diff_20170112.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/irext/reverser/robot/ReverseEngine.java" afterPath="$PROJECT_DIR$/src/com/irext/reverser/robot/ReverseEngine.java" />
-    </list>
-    <ignored path="code_robot.iws" />
-    <ignored path=".idea/workspace.xml" />
-    <ignored path=".idea/dataSources.local.xml" />
+    <list default="true" id="a9e2f17f-05f2-4c3c-8ce3-10b5e3515ca6" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,39 +13,29 @@
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
-  <component name="FavoritesManager">
-    <favorites_list name="code_robot" />
-  </component>
   <component name="FileEditorManager">
-    <leaf />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>com.yuekong.sirius.ircoderobot</find>
-      <find>yuekong</find>
-      <find>ucon</find>
-      <find>UCON</find>
-      <find>yk</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>com.irext.reverser</replace>
-      <replace>irext</replace>
-      <replace>IREXT</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>D:\Project\Github_Work\irext\src\ir_reverser\src\com\irext\reverser</dir>
-      <dir>D:\Project\Github_Work\irext\src\ir_reverser</dir>
-    </dirStrings>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <leaf>
+      <file leaf-file-name="IRextDataFormatter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/IRextDataFormatter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataFormatter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/robot/DataFormatter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="21" column="29" lean-forward="false" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -62,42 +45,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/Brand.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/BrandCategoryRel.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/CategoryBrandRel.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/City.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/Operator.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/Stb.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/ACIndexGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/BrandRemoteRel.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/StbCrawRobot.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/Key.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/KeyTemplate.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/KeyCodeStatRobot.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/RemoteTemplate.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/RemoteIndex.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/Category.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/SPStbRel.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/IPTV.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/CodeGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/KeyInstance.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/RemoteIndexGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/model/RemoteInstance.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/SiriusCodeRobot.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/dbmap/robot/RemoteEncoder.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/sirius/indexer/robot/RemoteEncoder.java" />
-        <option value="$PROJECT_DIR$/libs/jython-standalone-2.7.0.jar!/org/python/util/PythonInterpreter.class" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/SiriusCodeRobot.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/robot/RemoteEncoder.java" />
-        <option value="$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/robot/RemoteIndexGenerator.java" />
-        <option value="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/robot/RemoteIndexGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/model/KeyTemplate.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/robot/RemoteEncoder.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/robot/IrReverser.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/ReverseRobot.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/IRextReverser.java" />
-        <option value="$PROJECT_DIR$/src/com/irext/reverser/robot/ReverseEngine.java" />
+        <option value="$PROJECT_DIR$/src/com/irext/reverser/robot/DataFormatter.java" />
+        <option value="$PROJECT_DIR$/src/com/irext/reverser/IRextDataFormatter.java" />
       </list>
     </option>
   </component>
@@ -107,23 +56,12 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="Bundled (Maven 3)" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
-  <component name="MavenProjectNavigator">
-    <treeState />
-  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1065" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -139,44 +77,51 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ir_reverser" />
+              <option name="myItemId" value="data_formatter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ir_reverser" />
+              <option name="myItemId" value="data_formatter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data_formatter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data_formatter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
-    <property name="settings.editor.splitter.proportion" value="0.22890484" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="js.eslint.eslintPackage" value="" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Project\Lab_Work\sirius\sirius_code_extension\CodeRobot\code_robot\libs" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.irext_reverser">
+  <component name="RunManager" selected="Application.ir_data_formatter">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -223,7 +168,7 @@
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
       <option name="PREFERRED_AVD" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="DEBUGGER_TYPE" value="Java" />
@@ -237,10 +182,7 @@
         <option name="SUPPORT_LIB_ENABLED" value="true" />
         <option name="INSTRUMENTATION_ENABLED" value="true" />
       </Profilers>
-      <method>
-        <option name="Make" enabled="true" />
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
+      <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
@@ -265,7 +207,7 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
       <option name="arquillianRunConfiguration">
@@ -417,8 +359,6 @@
       <setting name="passParentEnv" value="true" />
       <setting name="launchBrowser" value="true" />
       <setting name="launchBrowserUrl" value="" />
-      <setting name="depsClasspath" value="false" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -481,7 +421,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="code_robot" />
+      <module name="data_formatter" />
       <envs />
       <method />
     </configuration>
@@ -540,12 +480,6 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -561,188 +495,79 @@
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
-    <configuration default="false" name="irext_reverser" type="Application" factoryName="Application">
+    <configuration default="false" name="ir_data_formatter" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="com.irext.reverser.IRextReverser" />
+      <option name="MAIN_CLASS_NAME" value="com.irext.reverser.IRextDataFormatter" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="0 D:\Project\Github_Work\irext\src\ir_reverser\test_src\ir_source.txt" />
+      <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="irext_reverser" />
+      <module name="data_formatter" />
       <envs />
       <method />
     </configuration>
     <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="Application.irext_reverser" />
+      <item index="0" class="java.lang.String" itemvalue="Application.ir_data_formatter" />
     </list>
-    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="" />
-      <option name="DEPLOY" value="true" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <Java />
-      <Profilers>
-        <option name="GAPID_DISABLE_PCS" value="false" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <method>
-        <option name="Make" enabled="true" />
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-  </component>
-  <component name="SbtLocalSettings">
-    <option name="externalProjectsViewState">
-      <projects_view />
-    </option>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="94fe425f-648a-43eb-bc0a-533a6bc9a614" name="Default" comment="" />
-      <created>1468825739065</created>
+      <changelist id="a9e2f17f-05f2-4c3c-8ce3-10b5e3515ca6" name="Default" comment="" />
+      <created>1484572516370</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1468825739065</updated>
-      <workItem from="1468825740482" duration="4125000" />
-      <workItem from="1468831028638" duration="2350000" />
-      <workItem from="1468890276314" duration="621000" />
-      <workItem from="1468977141205" duration="27258000" />
-      <workItem from="1469069633815" duration="8962000" />
-      <workItem from="1469152486312" duration="18001000" />
-      <workItem from="1469236622781" duration="13651000" />
-      <workItem from="1469329292438" duration="1027000" />
-      <workItem from="1469339585047" duration="9732000" />
-      <workItem from="1469362687116" duration="2581000" />
-      <workItem from="1469408407990" duration="20259000" />
-      <workItem from="1469490061650" duration="5681000" />
-      <workItem from="1469504631243" duration="14409000" />
-      <workItem from="1469531817087" duration="249000" />
-      <workItem from="1469581032377" duration="3358000" />
-      <workItem from="1469587945120" duration="6000" />
-      <workItem from="1469599083082" duration="1242000" />
-      <workItem from="1469601854785" duration="1616000" />
-      <workItem from="1469604959063" duration="6214000" />
-      <workItem from="1469615530180" duration="11000" />
-      <workItem from="1469667398548" duration="6854000" />
-      <workItem from="1469682716862" duration="10528000" />
-      <workItem from="1469763320737" duration="1496000" />
-      <workItem from="1469841761545" duration="6186000" />
-      <workItem from="1470042707511" duration="903000" />
-      <workItem from="1470297744803" duration="2008000" />
-      <workItem from="1470358307770" duration="123000" />
-      <workItem from="1470358504782" duration="15864000" />
-      <workItem from="1470446156277" duration="5818000" />
-      <workItem from="1470465690183" duration="2925000" />
-      <workItem from="1470555399048" duration="1332000" />
-      <workItem from="1470618005509" duration="2648000" />
-      <workItem from="1470641789114" duration="9000" />
-      <workItem from="1470715487579" duration="2586000" />
-      <workItem from="1470724195040" duration="4253000" />
-      <workItem from="1470735590926" duration="1415000" />
-      <workItem from="1470746136322" duration="3149000" />
-      <workItem from="1470789907160" duration="12630000" />
-      <workItem from="1470877200047" duration="1050000" />
-      <workItem from="1470879007749" duration="631000" />
-      <workItem from="1470897953646" duration="359000" />
-      <workItem from="1470898341082" duration="590000" />
-      <workItem from="1470899743395" duration="2765000" />
-      <workItem from="1470962070046" duration="1433000" />
-      <workItem from="1470983328928" duration="1242000" />
-      <workItem from="1471085126648" duration="1801000" />
-      <workItem from="1471319727266" duration="4593000" />
-      <workItem from="1471404321480" duration="780000" />
-      <workItem from="1471405239226" duration="2749000" />
-      <workItem from="1471481282900" duration="14000" />
-      <workItem from="1471481530437" duration="3681000" />
-      <workItem from="1475029516424" duration="656000" />
-      <workItem from="1475142577543" duration="1480000" />
-      <workItem from="1475144710787" duration="1758000" />
-      <workItem from="1475310366059" duration="117000" />
-      <workItem from="1475318038931" duration="672000" />
-      <workItem from="1476064765134" duration="1528000" />
-      <workItem from="1476175941887" duration="9895000" />
-      <workItem from="1479778012262" duration="15000" />
-      <workItem from="1479874241240" duration="18000" />
-      <workItem from="1479874953534" duration="117000" />
-      <workItem from="1479993533008" duration="278000" />
-      <workItem from="1480403573630" duration="74000" />
-      <workItem from="1484047018105" duration="2569000" />
-      <workItem from="1484217059553" duration="2711000" />
-      <workItem from="1484377868315" duration="9000" />
-      <workItem from="1484572405969" duration="57000" />
+      <updated>1484572516370</updated>
+      <workItem from="1484572517822" duration="523000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="265722000" />
+    <option name="totallyTimeSpent" value="523000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1065" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7334071" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23226544" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964602" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18550107" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23977901" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17217484" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32853982" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20022884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
-  </component>
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -756,72 +581,19 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandCategoryRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/KeyTemplate.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Operator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/model/Stb.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/City.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandRemoteRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Category.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Brand.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/SiriusCodeRobot.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandCategoryRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/KeyTemplate.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Operator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/model/Stb.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/City.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandRemoteRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Category.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Brand.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/SiriusCodeRobot.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandCategoryRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/City.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandRemoteRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Category.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Brand.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/model/CategoryBrandRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/model/Stb.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/robot/ACIndexGenerator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandRemoteRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/City.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/dbmap/robot/StbCrawRobot.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Brand.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/BrandCategoryRel.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_51/src.zip!/org/w3c/dom/Node.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Operator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/Category.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/RemoteIndex.java" />
-    <entry file="jar://$PROJECT_DIR$/libs/mysql-connector-java-5.0.8-bin.jar!/com/mysql/jdbc/ResultSet.class" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/IPTV.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/SPStbRel.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/RemoteTemplate.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/KeyTemplate.java" />
-    <entry file="jar://$PROJECT_DIR$/libs/jython-standalone-2.7.0.jar!/org/python/util/PythonInterpreter.class" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/RemoteInstance.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/model/KeyInstance.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/SiriusCodeRobot.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/robot/RemoteIndexGenerator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yuekong/sirius/ircoderobot/robot/RemoteEncoder.java" />
-    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF">
+    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/robot/DataFormatter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+        <state relative-caret-position="336">
+          <caret line="21" column="29" lean-forward="false" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/robot/RemoteIndexGenerator.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/model/KeyTemplate.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/robot/ReverseEngine.java">
+    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/IRextDataFormatter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/irext/reverser/IRextReverser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="25" column="31" lean-forward="true" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+        <state relative-caret-position="128">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -865,7 +637,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>Android API 25 Platform</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -877,7 +649,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>sirius_code_robot</last-edited>
+          <last-edited>data_formatter</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -889,7 +661,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>Android API 22 Platform</last-edited>
+          <last-edited>Android API 25 Platform</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
