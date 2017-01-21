@@ -513,7 +513,7 @@ INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length);
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 ir_tv_lib_parse(UINT8 irda_hex_encode);
+extern INT8 ir_tv_lib_parse(UINT8 ir_hex_encode);
 
 /*
  * function ir_tv_lib_control
@@ -587,7 +587,7 @@ extern INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
 
 // private extern function
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-extern void irda_lib_free_inner_buffer();
+extern void ir_lib_free_inner_buffer();
 #endif
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////

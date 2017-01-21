@@ -40,7 +40,7 @@ enum
 /*
  * global type definitions
  */
-typedef enum irda_flags
+typedef enum ir_flags
 {
     IRDA_BOOT = 0,
     IRDA_STOP,
@@ -63,25 +63,25 @@ typedef enum irda_flags
     IRDA_E,
     IRDA_F,
     IRDA_MAX = 20,
-} irda_flags_t;
+} ir_flags_t;
 
-typedef struct irda_data
+typedef struct ir_data
 {
     UINT8 bits;
     UINT8 lsb;
     UINT8 mode;
     UINT8 index;
-}  irda_data_t;
+}  ir_data_t;
 
 #if !defined BOARD_51
 #pragma pack(1)
 #endif
-typedef struct irda_cycles
+typedef struct ir_cycles
 {
     UINT8 flag;
     UINT16 mask;
     UINT16 space;
-} irda_cycles_t;
+} ir_cycles_t;
 #if !defined BOARD_51
 #pragma pack()
 #endif
@@ -191,11 +191,11 @@ typedef enum cm_key_value
     CM_KEY_MAX,
 } cm_key_value_t;
 
-typedef struct irda_data_tv
+typedef struct ir_data_tv
 {
     char magic[4];
     UINT8 per_keycode_bytes;
-} irda_data_tv_t;
+} ir_data_tv_t;
 
 
 extern INT8 tv_lib_open(UINT8* binary, UINT16 binary_length);

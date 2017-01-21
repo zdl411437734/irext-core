@@ -30,7 +30,7 @@ static INT8 ir_context_init();
 
 static INT8 ir_context_init()
 {
-    irda_memset(context, 0, sizeof(protocol));
+    ir_memset(context, 0, sizeof(protocol));
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -62,9 +62,9 @@ INT8 ir_ac_lib_parse() {
         context->n_mode[i].enable = TRUE;
         context->n_mode[i].allspeed = FALSE;
         context->n_mode[i].alltemp = FALSE;
-        irda_memset(context->n_mode[i].speed, 0x00, AC_WS_MAX);
+        ir_memset(context->n_mode[i].speed, 0x00, AC_WS_MAX);
         context->n_mode[i].speed_cnt = 0;
-        irda_memset(context->n_mode[i].temp, 0x00, AC_TEMP_MAX);
+        ir_memset(context->n_mode[i].temp, 0x00, AC_TEMP_MAX);
         context->n_mode[i].temp_cnt = 0;
     }
 
@@ -92,12 +92,12 @@ INT8 ir_ac_lib_parse() {
                 context->swing1.count = context->si.mode_count;
                 context->swing1.len = (UINT8) tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
-                context->swing1.comp_data = (tag_comp *) irda_malloc(swing_space_size);
+                context->swing1.comp_data = (tag_comp *) ir_malloc(swing_space_size);
                 if (NULL == context->swing1.comp_data) {
                     return IR_DECODE_FAILED;
                 }
 
-                irda_memset(context->swing1.comp_data, 0x00, swing_space_size);
+                ir_memset(context->swing1.comp_data, 0x00, swing_space_size);
                 if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                                   context->swing1.comp_data,
                                                                   context->si.mode_count,
@@ -108,11 +108,11 @@ INT8 ir_ac_lib_parse() {
                 context->swing2.count = context->si.mode_count;
                 context->swing2.len = (UINT8) tags[i].len >> 1;
                 swing_space_size = sizeof(tag_comp) * context->si.mode_count;
-                context->swing2.comp_data = (tag_comp *) irda_malloc(swing_space_size);
+                context->swing2.comp_data = (tag_comp *) ir_malloc(swing_space_size);
                 if (NULL == context->swing2.comp_data) {
                     return IR_DECODE_FAILED;
                 }
-                irda_memset(context->swing2.comp_data, 0x00, swing_space_size);
+                ir_memset(context->swing2.comp_data, 0x00, swing_space_size);
                 if (IR_DECODE_FAILED == parse_common_ac_parameter(&tags[i],
                                                                   context->swing2.comp_data,
                                                                   context->si.mode_count,
@@ -124,7 +124,7 @@ INT8 ir_ac_lib_parse() {
 
         if (tags[i].tag == TAG_AC_DEFAULT_CODE) // default code TAG
         {
-            context->default_code.data = (UINT8 *) irda_malloc(((size_t)tags[i].len - 2) >> 1);
+            context->default_code.data = (UINT8 *) ir_malloc(((size_t)tags[i].len - 2) >> 1);
             if (NULL == context->default_code.data) {
                 return IR_DECODE_FAILED;
             }
@@ -192,7 +192,7 @@ INT8 ir_ac_lib_parse() {
             context->solo_function_mark = 1;
         } else if (tags[i].tag == TAG_AC_FUNCTION_1) {
             if (IR_DECODE_FAILED == parse_function_1_tag29(&tags[i], &(context->function1))) {
-                IR_PRINTF("\nfunction code parse error\n");
+                ir_printf("\nfunction code parse error\n");
                 return IR_DECODE_FAILED;
             }
         } else if (tags[i].tag == TAG_AC_FUNCTION_2) {
@@ -267,18 +267,18 @@ INT8 ir_ac_lib_parse() {
     }
 
     if (NULL != tags) {
-        irda_free(tags);
+        ir_free(tags);
         tags = NULL;
     }
 
-    ir_hex_code = (UINT8 *) irda_malloc(context->default_code.len);
+    ir_hex_code = (UINT8 *) ir_malloc(context->default_code.len);
     if (NULL == ir_hex_code) {
         // warning: this AC bin contains no default code
         return IR_DECODE_FAILED;
     }
 
     ir_hex_len = context->default_code.len;
-    irda_memset(ir_hex_code, 0x00, ir_hex_len);
+    ir_memset(ir_hex_code, 0x00, ir_hex_len);
 
     // pre-calculate solo function status after parse phase
     if (1 == context->solo_function_mark) {
@@ -295,7 +295,7 @@ INT8 ir_ac_lib_parse() {
     // or make global buffer shared in extreme memory case
     /* in case of running with test - begin */
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-    irda_lib_free_inner_buffer();
+    ir_lib_free_inner_buffer();
 #endif
     /* in case of running with test - end */
 
@@ -309,14 +309,14 @@ INT8 free_ac_context()
 
     if (ir_hex_code != NULL)
     {
-        irda_free(ir_hex_code);
+        ir_free(ir_hex_code);
         ir_hex_code = NULL;
     }
     ir_hex_len = 0;
 
     if (context->default_code.data != NULL)
     {
-        irda_free(context->default_code.data);
+        ir_free(context->default_code.data);
         context->default_code.data = NULL;
         context->default_code.len = 0;
     }
@@ -325,7 +325,7 @@ INT8 free_ac_context()
     {
         if (context->power1.comp_data[i].segment != NULL)
         {
-            irda_free(context->power1.comp_data[i].segment);
+            ir_free(context->power1.comp_data[i].segment);
             context->power1.comp_data[i].segment = NULL;
             context->power1.comp_data[i].seg_len = 0;
         }
@@ -335,13 +335,13 @@ INT8 free_ac_context()
     {
         if (context->temp1.comp_data[i].segment != NULL)
         {
-            irda_free(context->temp1.comp_data[i].segment);
+            ir_free(context->temp1.comp_data[i].segment);
             context->temp1.comp_data[i].segment = NULL;
             context->temp1.comp_data[i].seg_len = 0;
         }
         if (context->temp2.comp_data[i].segment != NULL)
         {
-            irda_free(context->temp2.comp_data[i].segment);
+            ir_free(context->temp2.comp_data[i].segment);
             context->temp2.comp_data[i].segment = NULL;
             context->temp2.comp_data[i].seg_len = 0;
         }
@@ -351,13 +351,13 @@ INT8 free_ac_context()
     {
         if (context->mode1.comp_data[i].segment != NULL)
         {
-            irda_free(context->mode1.comp_data[i].segment);
+            ir_free(context->mode1.comp_data[i].segment);
             context->mode1.comp_data[i].segment = NULL;
             context->mode1.comp_data[i].seg_len = 0;
         }
         if (context->mode2.comp_data[i].segment != NULL)
         {
-            irda_free(context->mode2.comp_data[i].segment);
+            ir_free(context->mode2.comp_data[i].segment);
             context->mode2.comp_data[i].segment = NULL;
             context->mode2.comp_data[i].seg_len = 0;
         }
@@ -366,13 +366,13 @@ INT8 free_ac_context()
     {
         if (context->speed1.comp_data[i].segment != NULL)
         {
-            irda_free(context->speed1.comp_data[i].segment);
+            ir_free(context->speed1.comp_data[i].segment);
             context->speed1.comp_data[i].segment = NULL;
             context->speed1.comp_data[i].seg_len = 0;
         }
         if (context->speed2.comp_data[i].segment != NULL)
         {
-            irda_free(context->speed2.comp_data[i].segment);
+            ir_free(context->speed2.comp_data[i].segment);
             context->speed2.comp_data[i].segment = NULL;
             context->speed2.comp_data[i].seg_len = 0;
         }
@@ -383,14 +383,14 @@ INT8 free_ac_context()
         if (context->swing1.comp_data != NULL &&
             context->swing1.comp_data[i].segment != NULL)
         {
-            irda_free(context->swing1.comp_data[i].segment);
+            ir_free(context->swing1.comp_data[i].segment);
             context->swing1.comp_data[i].segment = NULL;
             context->swing1.comp_data[i].seg_len = 0;
         }
         if (context->swing2.comp_data != NULL &&
             context->swing2.comp_data[i].segment != NULL)
         {
-            irda_free(context->swing2.comp_data[i].segment);
+            ir_free(context->swing2.comp_data[i].segment);
             context->swing2.comp_data[i].segment = NULL;
             context->swing2.comp_data[i].seg_len = 0;
         }
@@ -400,13 +400,13 @@ INT8 free_ac_context()
     {
         if (context->function1.comp_data[i].segment != NULL)
         {
-            irda_free(context->function1.comp_data[i].segment);
+            ir_free(context->function1.comp_data[i].segment);
             context->function1.comp_data[i].segment = NULL;
             context->function1.comp_data[i].seg_len = 0;
         }
         if (context->function2.comp_data[i].segment != NULL)
         {
-            irda_free(context->function2.comp_data[i].segment);
+            ir_free(context->function2.comp_data[i].segment);
             context->function2.comp_data[i].segment = NULL;
             context->function2.comp_data[i].seg_len = 0;
         }
@@ -415,12 +415,12 @@ INT8 free_ac_context()
     // free composite data for swing1 and swing 2
     if(context->swing1.comp_data != NULL)
     {
-        irda_free(context->swing1.comp_data);
+        ir_free(context->swing1.comp_data);
         context->swing1.comp_data = NULL;
     }
     if(context->swing2.comp_data != NULL)
     {
-        irda_free(context->swing2.comp_data);
+        ir_free(context->swing2.comp_data);
         context->swing2.comp_data = NULL;
     }
 
@@ -429,14 +429,14 @@ INT8 free_ac_context()
         if(context->checksum.checksum_data != NULL &&
            context->checksum.checksum_data[i].spec_pos != NULL)
         {
-            irda_free(context->checksum.checksum_data[i].spec_pos);
+            ir_free(context->checksum.checksum_data[i].spec_pos);
             context->checksum.checksum_data[i].len = 0;
             context->checksum.checksum_data[i].spec_pos = NULL;
         }
     }
     if(context->checksum.checksum_data != NULL)
     {
-        irda_free(context->checksum.checksum_data);
+        ir_free(context->checksum.checksum_data);
         context->checksum.checksum_data = NULL;
     }
 

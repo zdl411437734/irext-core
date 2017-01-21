@@ -57,7 +57,7 @@ INT8 decode_as_ac(char* file_name)
 
     if (IR_DECODE_FAILED == ir_ac_lib_parse())
     {
-        IR_PRINTF("\nac lib parse failed\n");
+        ir_printf("\nac lib parse failed\n");
         ir_ac_lib_close();
         return IR_DECODE_FAILED;
     }
@@ -113,7 +113,7 @@ INT8 decode_as_ac(char* file_name)
             case '3':
                 if (IR_DECODE_SUCCEEDED == get_supported_mode(&supported_mode))
                 {
-                    IR_PRINTF("\nsupported mode = %02X\n", supported_mode);
+                    ir_printf("\nsupported mode = %02X\n", supported_mode);
                 }
                 need_control = FALSE;
                 break;
@@ -121,14 +121,14 @@ INT8 decode_as_ac(char* file_name)
             case '4':
                 if (IR_DECODE_SUCCEEDED == get_supported_swing(ac_status.acMode, &supported_swing))
                 {
-                    IR_PRINTF("\nsupported swing in %d = %02X\n", ac_status.acMode, supported_swing);
+                    ir_printf("\nsupported swing in %d = %02X\n", ac_status.acMode, supported_swing);
                 }
                 need_control = FALSE;
                 break;
             case '5':
                 if (IR_DECODE_SUCCEEDED == get_supported_wind_speed(ac_status.acMode, &supported_speed))
                 {
-                    IR_PRINTF("\nsupported wind speed in %d = %02X\n", ac_status.acMode, supported_speed);
+                    ir_printf("\nsupported wind speed in %d = %02X\n", ac_status.acMode, supported_speed);
                 }
                 need_control = FALSE;
                 break;
@@ -136,7 +136,7 @@ INT8 decode_as_ac(char* file_name)
             case '6':
                 if (IR_DECODE_SUCCEEDED == get_temperature_range(ac_status.acMode, &min_temperature, &max_temperature))
                 {
-                    IR_PRINTF("\nsupported temperature range in mode %d = %d, %d\n",
+                    ir_printf("\nsupported temperature range in mode %d = %d, %d\n",
                               ac_status.acMode, min_temperature, max_temperature);
                 }
                 need_control = FALSE;
@@ -145,7 +145,7 @@ INT8 decode_as_ac(char* file_name)
             case '7':
                 if (IR_DECODE_SUCCEEDED == get_supported_wind_direction(&supported_wind_direction))
                 {
-                    IR_PRINTF("\nsupported wind direction = %02X\n", supported_wind_direction);
+                    ir_printf("\nsupported wind direction = %02X\n", supported_wind_direction);
                 }
                 need_control = FALSE;
                 break;
@@ -157,7 +157,7 @@ INT8 decode_as_ac(char* file_name)
 
         if(TRUE == op_match && TRUE == need_control)
         {
-            IR_PRINTF("switch AC to power = %d, mode = %d, temp = %d, speed = %d, swing = %d\n",
+            ir_printf("switch AC to power = %d, mode = %d, temp = %d, speed = %d, swing = %d\n",
                       ac_status.acPower,
                       ac_status.acMode,
                       ac_status.acTemp,
@@ -174,7 +174,7 @@ INT8 decode_as_ac(char* file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
+INT8 decode_as_tv(char *file_name, UINT8 ir_hex_encode)
 {
     // keyboard input
     int in_char = 0;
@@ -185,7 +185,7 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == ir_tv_lib_parse(irda_hex_encode))
+    if (IR_DECODE_FAILED == ir_tv_lib_parse(ir_hex_encode))
     {
         return IR_DECODE_FAILED;
     }
@@ -218,32 +218,32 @@ INT8 decode_as_tv(char *file_name, UINT8 irda_hex_encode)
 int main(int argc, char *argv[])
 {
     char function = '0';
-    UINT8 irda_hex_encode = 0;
+    UINT8 ir_hex_encode = 0;
 
     if (4 != argc)
     {
-        IR_PRINTF("number of args error !\n");
+        ir_printf("number of args error !\n");
         return -1;
     }
 
     function = argv[1][0];
-    irda_hex_encode = (UINT8)(argv[3][0] - '0');
-    IR_PRINTF("decode functionality = %c\n", function);
+    ir_hex_encode = (UINT8)(argv[3][0] - '0');
+    ir_printf("decode functionality = %c\n", function);
 
     switch (function)
     {
         case '0':
-            IR_PRINTF("decode binary file as AC\n");
+            ir_printf("decode binary file as AC\n");
             decode_as_ac(argv[2]);
             break;
 
         case '1':
-            IR_PRINTF("decode binary file as TV : %d\n", irda_hex_encode);
-            decode_as_tv(argv[2], irda_hex_encode);
+            ir_printf("decode binary file as TV : %d\n", ir_hex_encode);
+            decode_as_tv(argv[2], ir_hex_encode);
             break;
 
         default:
-            IR_PRINTF("decode functionality error !\n");
+            ir_printf("decode functionality error !\n");
             break;
     }
 }

@@ -40,7 +40,7 @@ INT8 binary_parse_offset()
 
     tag_head_offset = (UINT16)((tag_count << 1) + 1);
 
-    tags = (t_tag_head *) irda_malloc(tag_count * sizeof(t_tag_head));
+    tags = (t_tag_head *) ir_malloc(tag_count * sizeof(t_tag_head));
     if (NULL == tags)
     {
         return IR_DECODE_FAILED;
@@ -103,7 +103,7 @@ void binary_tags_info()
         {
             continue;
         }
-        IR_PRINTF("tag(%d).len = %d\n", tags[i].tag, tags[i].len);
+        ir_printf("tag(%d).len = %d\n", tags[i].tag, tags[i].len);
     }
 #endif
 }

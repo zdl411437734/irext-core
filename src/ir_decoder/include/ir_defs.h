@@ -19,7 +19,7 @@ extern "C"
 
 #if defined BOARD_ANDROID
 #include <android/log.h>
-#define LOG_TAG "irda_decode"
+#define LOG_TAG "ir_decode"
 #endif
 
 #define TRUE    1
@@ -33,12 +33,12 @@ typedef signed int INT;
 typedef unsigned int UINT;
 typedef int BOOL;
 
-#define irda_malloc(A) malloc(A)
-#define irda_free(A) free(A)
-#define irda_memcpy(A, B, C) memcpy(A, B, C)
-#define irda_memset(A, B, C) memset(A, B, C)
-#define irda_strlen(A) strlen(A)
-#define IR_PRINTF printf
+#define ir_malloc(A) malloc(A)
+#define ir_free(A) free(A)
+#define ir_memcpy(A, B, C) memcpy(A, B, C)
+#define ir_memset(A, B, C) memset(A, B, C)
+#define ir_strlen(A) strlen(A)
+#define ir_printf printf
 #define USER_DATA_SIZE 2048
 
 #ifdef __cplusplus

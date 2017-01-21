@@ -50,7 +50,7 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
 };
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-void irda_lib_free_inner_buffer();
+void ir_lib_free_inner_buffer();
 #endif
 
 
@@ -67,17 +67,17 @@ INT8 ir_ac_file_open(const char *file_name)
 #endif
     if (NULL == stream)
     {
-        IR_PRINTF("\nfile open failed\n");
+        ir_printf("\nfile open failed\n");
         return IR_DECODE_FAILED;
     }
 
     fseek(stream, 0, SEEK_END);
     binary_length = (size_t) ftell(stream);
-    binary_content = (UINT8*) irda_malloc(binary_length);
+    binary_content = (UINT8*) ir_malloc(binary_length);
 
     if (NULL == binary_content)
     {
-        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        ir_printf("\nfailed to alloc memory for binary\n");
         fclose(stream);
         return IR_DECODE_FAILED;
     }
@@ -88,7 +88,7 @@ INT8 ir_ac_file_open(const char *file_name)
     if (ret <= 0)
     {
         fclose(stream);
-        irda_free(binary_content);
+        ir_free(binary_content);
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
@@ -97,7 +97,7 @@ INT8 ir_ac_file_open(const char *file_name)
 
     if (IR_DECODE_FAILED == ir_ac_lib_open(binary_content, (UINT16) binary_length))
     {
-        irda_free(binary_content);
+        ir_free(binary_content);
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
@@ -125,7 +125,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
 
     if (0 == context->default_code.len)
     {
-        IR_PRINTF("\ndefault code is empty\n");
+        ir_printf("\ndefault code is empty\n");
         return 0;
     }
 
@@ -135,7 +135,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     context->time = user_data;
 
     // generate temp buffer for frame calculation
-    irda_memcpy(ir_hex_code, context->default_code.data, context->default_code.len);
+    ir_memcpy(ir_hex_code, context->default_code.data, context->default_code.len);
 
 #if defined USE_APPLY_TABLE
     if(ac_status.acPower != AC_POWER_OFF)
@@ -218,9 +218,9 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
 #if defined BOARD_PC
 	for (i = 0; i < context->code_cnt; i++)
 	{
-		IR_PRINTF("%d,", context->time[i]);
+		ir_printf("%d,", context->time[i]);
 	}
-	IR_PRINTF("\n");
+	ir_printf("\n");
 #endif
 
     return time_length;
@@ -231,7 +231,7 @@ void ir_ac_lib_close()
     // free context
     if (NULL != tags)
     {
-        irda_free(tags);
+        ir_free(tags);
         tags = NULL;
     }
     free_ac_context();
@@ -398,17 +398,17 @@ INT8 ir_tv_file_open(const char *file_name)
 
     if (stream == NULL)
     {
-        IR_PRINTF("\nfile open failed\n");
+        ir_printf("\nfile open failed\n");
         return IR_DECODE_FAILED;
     }
 
     fseek(stream, 0, SEEK_END);
     binary_length = (size_t)ftell(stream);
 
-    binary_content = (UINT8*) irda_malloc(binary_length);
+    binary_content = (UINT8*) ir_malloc(binary_length);
     if (NULL == binary_content)
     {
-        IR_PRINTF("\nfailed to alloc memory for binary\n");
+        ir_printf("\nfailed to alloc memory for binary\n");
         fclose(stream);
         return IR_DECODE_FAILED;
     }
@@ -418,7 +418,7 @@ INT8 ir_tv_file_open(const char *file_name)
     if (ret <= 0)
     {
         fclose(stream);
-        irda_free(binary_content);
+        ir_free(binary_content);
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
@@ -427,7 +427,7 @@ INT8 ir_tv_file_open(const char *file_name)
 
     if (IR_DECODE_FAILED == ir_tv_lib_open(binary_content, (UINT16) binary_length))
     {
-        irda_free(binary_content);
+        ir_free(binary_content);
         binary_length = 0;
         return IR_DECODE_FAILED;
     }
@@ -440,11 +440,11 @@ INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length)
     return tv_lib_open(binary, binary_length);
 }
 
-INT8 ir_tv_lib_parse(UINT8 irda_hex_encode)
+INT8 ir_tv_lib_parse(UINT8 ir_hex_encode)
 {
-    if (FALSE == tv_lib_parse(irda_hex_encode))
+    if (FALSE == tv_lib_parse(ir_hex_encode))
     {
-        IR_PRINTF("parse irda binary failed\n");
+        ir_printf("parse irda binary failed\n");
         memset(tv_bin, 0x00, EXPECTED_MEM_SIZE);
         return IR_DECODE_FAILED;
     }
@@ -456,28 +456,28 @@ UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
 #if defined BOARD_PC
     UINT16 print_index = 0;
 #endif
-    UINT16 irda_code_length = 0;
+    UINT16 ir_code_length = 0;
     memset(l_user_data, 0x00, USER_DATA_SIZE);
-    irda_code_length = tv_lib_control(key, l_user_data);
+    ir_code_length = tv_lib_control(key, l_user_data);
 
 #if defined BOARD_PC
     // have some debug
-    IR_PRINTF("=============================\n");
-    IR_PRINTF("length of IRDA code = %d\n", irda_code_length);
-    for(print_index = 0; print_index < irda_code_length; print_index++)
+    ir_printf("=============================\n");
+    ir_printf("length of IRDA code = %d\n", ir_code_length);
+    for(print_index = 0; print_index < ir_code_length; print_index++)
     {
-        IR_PRINTF("%d ", l_user_data[print_index]);
+        ir_printf("%d ", l_user_data[print_index]);
     }
-    IR_PRINTF("\n=============================\n\n");
+    ir_printf("\n=============================\n\n");
 #endif
 
-    return irda_code_length;
+    return ir_code_length;
 }
 
 INT8 ir_tv_lib_close()
 {
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-    irda_lib_free_inner_buffer();
+    ir_lib_free_inner_buffer();
 #endif
     return IR_DECODE_SUCCEEDED;
 }
@@ -485,10 +485,10 @@ INT8 ir_tv_lib_close()
 
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-void irda_lib_free_inner_buffer()
+void ir_lib_free_inner_buffer()
 {
     if (NULL != binary_content) {
-        irda_free(binary_content);
+        ir_free(binary_content);
         binary_content = NULL;
     }
 }

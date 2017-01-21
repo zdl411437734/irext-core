@@ -31,13 +31,13 @@ INT8 parse_comp_data_type_1(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
     }
 
     comp->seg_len = seg_len;
-    comp->segment = (UINT8 *) irda_malloc(seg_len);
+    comp->segment = (UINT8 *) ir_malloc(seg_len);
     if (NULL == comp->segment)
     {
         return IR_DECODE_FAILED;
     }
 
-    irda_memcpy(comp->segment, &data[*trav_offset], seg_len);
+    ir_memcpy(comp->segment, &data[*trav_offset], seg_len);
     *trav_offset += seg_len;
 
     return IR_DECODE_SUCCEEDED;
@@ -57,13 +57,13 @@ INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
     }
 
     comp->seg_len = seg_len;
-    comp->segment = (UINT8 *) irda_malloc(seg_len);
+    comp->segment = (UINT8 *) ir_malloc(seg_len);
     if (NULL == comp->segment)
     {
         return IR_DECODE_FAILED;
     }
 
-    irda_memcpy(comp->segment, &data[*trav_offset], seg_len);
+    ir_memcpy(comp->segment, &data[*trav_offset], seg_len);
     *trav_offset += seg_len;
 
     return IR_DECODE_SUCCEEDED;
@@ -87,7 +87,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
     if (NULL == hex_data)
     {
         return IR_DECODE_FAILED;
@@ -104,7 +104,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
         {
             if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &comp_data[seg_index]))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
 
@@ -120,7 +120,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
         {
             if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &comp_data[seg_index]))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
 
@@ -131,7 +131,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -169,7 +169,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -185,7 +185,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &power1->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -196,7 +196,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -215,7 +215,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -236,10 +236,10 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
         {
             // 020210 indicates set the 02nd byte to [default] +10, +11, +12, +...
             temp1->comp_data[seg_index].seg_len = seg_len;
-            temp1->comp_data[seg_index].segment = (UINT8 *) irda_malloc(seg_len);
+            temp1->comp_data[seg_index].segment = (UINT8 *) ir_malloc(seg_len);
             if (NULL == temp1->comp_data[seg_index].segment)
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
 
@@ -261,7 +261,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
         {
             if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &temp1->comp_data[seg_index]))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
 
@@ -271,7 +271,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
             }
         }
     }
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -289,7 +289,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -305,7 +305,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &mode1->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -315,7 +315,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -333,7 +333,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -349,7 +349,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &speed1->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -359,7 +359,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -377,7 +377,7 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -389,10 +389,10 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     // parse hex data to swing1 data structure
     swing1->count = swing_count;
     swing1->len = (UINT8)hex_len;
-    swing1->comp_data = (tag_comp *) irda_malloc(sizeof(tag_comp) * swing_count);
+    swing1->comp_data = (tag_comp *) ir_malloc(sizeof(tag_comp) * swing_count);
     if (NULL == swing1->comp_data)
     {
-        irda_free(hex_data);
+        ir_free(hex_data);
         return IR_DECODE_FAILED;
     }
 
@@ -400,7 +400,7 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_1(hex_data, &trav_offset, &swing1->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -410,7 +410,7 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -468,12 +468,12 @@ INT8 parse_checksum_spec_half_byte_typed(UINT8 *csdata, tag_checksum_data *check
     checksum->checksum_plus = csdata[3];
     checksum->start_byte_pos = 0;
     checksum->end_byte_pos = 0;
-    checksum->spec_pos = (UINT8 *) irda_malloc(spec_pos_size);
+    checksum->spec_pos = (UINT8 *) ir_malloc(spec_pos_size);
     if (NULL == checksum->spec_pos)
     {
         return IR_DECODE_FAILED;
     }
-    irda_memcpy(checksum->spec_pos, &csdata[4], spec_pos_size);
+    ir_memcpy(checksum->spec_pos, &csdata[4], spec_pos_size);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -493,13 +493,13 @@ INT8 parse_checksum_malloc(struct tag_head *tag, tchecksum *checksum)
 
     checksum->len = (UINT8)((tag->len - cnt) >> 1);
     checksum->count = (UINT16)(cnt + 1);
-    checksum->checksum_data = (tag_checksum_data*) irda_malloc(sizeof(tag_checksum_data) * checksum->count);
+    checksum->checksum_data = (tag_checksum_data*) ir_malloc(sizeof(tag_checksum_data) * checksum->count);
 
     if (NULL == checksum->checksum_data)
     {
         return IR_DECODE_FAILED;
     }
-    irda_memset(checksum->checksum_data, 0x00, sizeof(tag_checksum_data) * checksum->count);
+    ir_memset(checksum->checksum_data, 0x00, sizeof(tag_checksum_data) * checksum->count);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -520,7 +520,7 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
     }
 
     hex_len = length;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -531,7 +531,7 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
 
     if (length != hex_data[0] + 1)
     {
-        irda_free(hex_data);
+        ir_free(hex_data);
         return IR_DECODE_FAILED;
     }
 
@@ -543,7 +543,7 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
         case CHECKSUM_TYPE_BYTE_INVERSE:
             if (IR_DECODE_FAILED == parse_checksum_byte_typed(hex_data, checksum, hex_len))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
             break;
@@ -551,7 +551,7 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
         case CHECKSUM_TYPE_HALF_BYTE_INVERSE:
             if (IR_DECODE_FAILED == parse_checksum_half_byte_typed(hex_data, checksum, hex_len))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
             break;
@@ -561,16 +561,16 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
         case CHECKSUM_TYPE_SPEC_HALF_BYTE_INVERSE_ONE_BYTE:
             if (IR_DECODE_FAILED == parse_checksum_spec_half_byte_typed(hex_data, checksum, hex_len))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
             break;
         default:
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -649,7 +649,7 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     if (function_id > AC_FUNCTION_MAX - 1)
     {
         // ignore unsupported function ID
-        IR_PRINTF("\nunsupported function id : %d\n", function_id);
+        ir_printf("\nunsupported function id : %d\n", function_id);
         valid_function_id = FALSE;
     }
 
@@ -664,7 +664,7 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
 
             if (NULL != mode_seg[function_id].segment)
             {
-                irda_free(mode_seg[function_id].segment);
+                ir_free(mode_seg[function_id].segment);
                 mode_seg[function_id].segment = NULL;
             }
         }
@@ -675,12 +675,12 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     if (TRUE == valid_function_id)
     {
         mode_seg[function_id].seg_len = (UINT8)(seg_len - 1);
-        mode_seg[function_id].segment = (UINT8 *) irda_malloc((size_t)(seg_len - 1));
+        mode_seg[function_id].segment = (UINT8 *) ir_malloc((size_t)(seg_len - 1));
         if (NULL == mode_seg[function_id].segment)
         {
             return IR_DECODE_FAILED;
         }
-        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
+        ir_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
     }
     *trav_offset += seg_len - 1;
 
@@ -705,7 +705,7 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -738,7 +738,7 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -762,7 +762,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -783,10 +783,10 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
         {
             // 020210 indicates set the 02nd byte to [default] +10, +11, +12, +...
             temp2->comp_data[seg_index].seg_len = seg_len;
-            temp2->comp_data[seg_index].segment = (UINT8 *) irda_malloc(seg_len);
+            temp2->comp_data[seg_index].segment = (UINT8 *) ir_malloc(seg_len);
             if (NULL == temp2->comp_data[seg_index].segment)
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
             for (i = 2; i < seg_len; i += 3)
@@ -808,7 +808,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
         {
             if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &temp2->comp_data[seg_index]))
             {
-                irda_free(hex_data);
+                ir_free(hex_data);
                 return IR_DECODE_FAILED;
             }
 
@@ -818,7 +818,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
             }
         }
     }
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -841,7 +841,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -857,7 +857,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &mode2->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -867,7 +867,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -890,7 +890,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -906,7 +906,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &speed2->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -916,7 +916,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -939,7 +939,7 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -951,10 +951,10 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     // parse hex data to swing2 data structure
     swing2->count = swing_count;
     swing2->len = (UINT8)hex_len;
-    swing2->comp_data = (tag_comp *) irda_malloc(sizeof(tag_comp) * swing_count);
+    swing2->comp_data = (tag_comp *) ir_malloc(sizeof(tag_comp) * swing_count);
     if (NULL == swing2->comp_data)
     {
-        irda_free(hex_data);
+        ir_free(hex_data);
         return IR_DECODE_FAILED;
     }
 
@@ -962,7 +962,7 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     {
         if (IR_DECODE_FAILED == parse_comp_data_type_2(hex_data, &trav_offset, &swing2->comp_data[seg_index]))
         {
-            irda_free(hex_data);
+            ir_free(hex_data);
             return IR_DECODE_FAILED;
         }
 
@@ -972,7 +972,7 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -1005,7 +1005,7 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     if (function_id > AC_FUNCTION_MAX - 1)
     {
         // ignore unsupported function ID
-        IR_PRINTF("\nunsupported function id : %d\n", function_id);
+        ir_printf("\nunsupported function id : %d\n", function_id);
         valid_function_id = FALSE;
     }
 
@@ -1020,7 +1020,7 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
 
             if (NULL != mode_seg[function_id].segment)
             {
-                irda_free(mode_seg[function_id].segment);
+                ir_free(mode_seg[function_id].segment);
                 mode_seg[function_id].segment = NULL;
             }
         }
@@ -1031,14 +1031,14 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     if (TRUE == valid_function_id)
     {
         mode_seg[function_id].seg_len = (UINT8)(seg_len - 1);
-        mode_seg[function_id].segment = (UINT8 *) irda_malloc((size_t)(seg_len - 1));
+        mode_seg[function_id].segment = (UINT8 *) ir_malloc((size_t)(seg_len - 1));
 
         if (NULL == mode_seg[function_id].segment)
         {
             return IR_DECODE_FAILED;
         }
 
-        irda_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
+        ir_memcpy(mode_seg[function_id].segment, &data[*trav_offset], (size_t)(seg_len - 1));
     }
     *trav_offset += seg_len - 1;
 
@@ -1063,7 +1063,7 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
     }
 
     hex_len = tag->len >> 1;
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -1096,7 +1096,7 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
         }
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -1165,11 +1165,11 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
 
     if(hex_len > AC_FUNCTION_MAX)
     {
-        IR_PRINTF("\nsolo function code exceeded!!\n");
+        ir_printf("\nsolo function code exceeded!!\n");
         return IR_DECODE_FAILED;
     }
 
-    hex_data = (UINT8 *) irda_malloc(hex_len);
+    hex_data = (UINT8 *) ir_malloc(hex_len);
 
     if (NULL == hex_data)
     {
@@ -1188,6 +1188,6 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
         sc->solo_function_codes[i - 1] = hex_data[i];
     }
 
-    irda_free(hex_data);
+    ir_free(hex_data);
     return IR_DECODE_SUCCEEDED;
 }

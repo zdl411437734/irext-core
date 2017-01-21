@@ -21,32 +21,32 @@ struct buffer
     UINT8 *data;
     UINT16 len;
     UINT16 offset;
-} irda_file;
+} ir_file;
 
 
-static struct buffer *pbuffer = &irda_file;
+static struct buffer *pbuffer = &ir_file;
 
 //static UINT8 *prot_name = NULL;
 static UINT8 *prot_cycles_num = NULL;
-static irda_cycles_t *prot_cycles_data[IRDA_MAX];
+static ir_cycles_t *prot_cycles_data[IRDA_MAX];
 static UINT8 prot_items_cnt = 0;
-static irda_data_t *prot_items_data = NULL;
-static irda_data_tv_t *remote_p;
+static ir_data_t *prot_items_data = NULL;
+static ir_data_tv_t *remote_p;
 static UINT8 *remote_pdata = NULL;
 
 static UINT16 time_index = 0;
-static UINT8 irda_level = IRDA_LEVEL_LOW;
-static UINT8 irda_toggle_bit = FALSE;
-static UINT8 irda_decode_flag = IRDA_DECODE_1_BIT;
+static UINT8 ir_level = IRDA_LEVEL_LOW;
+static UINT8 ir_toggle_bit = FALSE;
+static UINT8 ir_decode_flag = IRDA_DECODE_1_BIT;
 static UINT8 cycles_num_size = 0;
 
 
-static BOOL get_irda_protocol(UINT8 encode_type);
-static BOOL get_irda_keymap(void);
-static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time);
-static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_bits, UINT16 *irda_time);
-static void convert_to_irda_time(UINT8 value, UINT16 *irda_time);
-static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time);
+static BOOL get_ir_protocol(UINT8 encode_type);
+static BOOL get_ir_keymap(void);
+static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time);
+static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time);
+static void convert_to_ir_time(UINT8 value, UINT16 *ir_time);
+static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time);
 
 
 INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
@@ -60,12 +60,12 @@ INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
 
 BOOL tv_lib_parse(UINT8 encode_type)
 {
-    if (FALSE == get_irda_protocol(encode_type))
+    if (FALSE == get_ir_protocol(encode_type))
     {
         return FALSE;
     }
 
-    return get_irda_keymap();
+    return get_ir_keymap();
 }
 
 UINT16 tv_lib_control(UINT8 key, UINT16 *user_data)
@@ -73,24 +73,24 @@ UINT16 tv_lib_control(UINT8 key, UINT16 *user_data)
     UINT16 i = 0;
 
     time_index = 0;
-    irda_level = IRDA_LEVEL_LOW;
+    ir_level = IRDA_LEVEL_LOW;
 
     for (i = 0; i < prot_items_cnt; i++)
     {
-        print_irda_time(&prot_items_data[i], key, user_data);
+        print_ir_time(&prot_items_data[i], key, user_data);
     }
 
     // next flip
     if (2 == prot_cycles_num[IRDA_FLIP])
     {
-        irda_toggle_bit = (irda_toggle_bit == FALSE) ? TRUE : FALSE;
+        ir_toggle_bit = (ir_toggle_bit == FALSE) ? TRUE : FALSE;
     }
 
     return time_index;
 }
 
 
-static BOOL get_irda_protocol(UINT8 encode_type)
+static BOOL get_ir_protocol(UINT8 encode_type)
 {
     UINT8 i = 0;
     UINT8 name_size = 20;
@@ -115,17 +115,17 @@ static BOOL get_irda_protocol(UINT8 encode_type)
         cycles_num_size = 8;      /* "BOOT", "STOP", "SEP", "ONE", "ZERO", "FLIP", "TWO", "THREE" */
         if (prot_cycles_num[IRDA_TWO] == 0 && prot_cycles_num[IRDA_THREE] == 0)
         {
-            irda_decode_flag = IRDA_DECODE_1_BIT;
+            ir_decode_flag = IRDA_DECODE_1_BIT;
         }
         else
         {
-            irda_decode_flag = IRDA_DECODE_2_BITS;
+            ir_decode_flag = IRDA_DECODE_2_BITS;
         }
     }
     else if (encode_type == 1)
     {
         cycles_num_size = IRDA_MAX;
-        irda_decode_flag = IRDA_DECODE_4_BITS;
+        ir_decode_flag = IRDA_DECODE_4_BITS;
     }
     else
     {
@@ -139,7 +139,7 @@ static BOOL get_irda_protocol(UINT8 encode_type)
     {
         if (0 != prot_cycles_num[i])
         {
-            prot_cycles_data[i] = (irda_cycles_t *) (&prot_cycles[sizeof(irda_cycles_t) * cycles_sum]);
+            prot_cycles_data[i] = (ir_cycles_t *) (&prot_cycles[sizeof(ir_cycles_t) * cycles_sum]);
         }
         else
         {
@@ -147,25 +147,25 @@ static BOOL get_irda_protocol(UINT8 encode_type)
         }
         cycles_sum += prot_cycles_num[i];
     }
-    pbuffer->offset += sizeof(irda_cycles_t) * cycles_sum;
+    pbuffer->offset += sizeof(ir_cycles_t) * cycles_sum;
 
     /* items count */
     prot_items_cnt = pbuffer->data[pbuffer->offset];
     pbuffer->offset += sizeof(UINT8);
 
     /* items data */
-    prot_items_data = (irda_data_t *) (pbuffer->data + pbuffer->offset);
-    pbuffer->offset += prot_items_cnt * sizeof(irda_data_t);
+    prot_items_data = (ir_data_t *) (pbuffer->data + pbuffer->offset);
+    pbuffer->offset += prot_items_cnt * sizeof(ir_data_t);
 
-    irda_toggle_bit = FALSE;
+    ir_toggle_bit = FALSE;
 
     return TRUE;
 }
 
-static BOOL get_irda_keymap(void)
+static BOOL get_ir_keymap(void)
 {
-    remote_p = (irda_data_tv_t *) (pbuffer->data + pbuffer->offset);
-    pbuffer->offset += sizeof(irda_data_tv_t);
+    remote_p = (ir_data_tv_t *) (pbuffer->data + pbuffer->offset);
+    pbuffer->offset += sizeof(ir_data_tv_t);
 
     if (strncmp(remote_p->magic, "irda", 4) == 0)
     {
@@ -176,14 +176,14 @@ static BOOL get_irda_keymap(void)
     return FALSE;
 }
 
-static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time)
+static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time)
 {
     UINT8 i = 0;
     UINT8 cycles_num = 0;
-    irda_cycles_t *pcycles = NULL;
+    ir_cycles_t *pcycles = NULL;
     UINT8 keycode = 0;
 
-    if (NULL == data || NULL == irda_time)
+    if (NULL == data || NULL == ir_time)
     {
         return;
     }
@@ -218,7 +218,7 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
         {
             if (cycles_num == 2 && data->index == IRDA_FLIP)
             {
-                if (irda_toggle_bit == TRUE)
+                if (ir_toggle_bit == TRUE)
                 {
                     pcycles += 1;
                 }
@@ -228,58 +228,58 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
             {
                 if (pcycles->flag == IRDA_FLAG_NORMAL)
                 {
-                    if (irda_level == IRDA_LEVEL_HIGH && time_index != 0)
+                    if (ir_level == IRDA_LEVEL_HIGH && time_index != 0)
                     {
                         time_index--;
-                        irda_time[time_index++] += pcycles->mask;
+                        ir_time[time_index++] += pcycles->mask;
                     }
-                    else if (irda_level == IRDA_LEVEL_LOW)
+                    else if (ir_level == IRDA_LEVEL_LOW)
                     {
-                        irda_time[time_index++] = pcycles->mask;
+                        ir_time[time_index++] = pcycles->mask;
                     }
-                    irda_time[time_index++] = pcycles->space;
-                    irda_level = IRDA_LEVEL_LOW;
+                    ir_time[time_index++] = pcycles->space;
+                    ir_level = IRDA_LEVEL_LOW;
                 }
                 else if (pcycles->flag == IRDA_FLAG_INVERSE)
                 {
-                    if (irda_level == IRDA_LEVEL_LOW && time_index != 0)
+                    if (ir_level == IRDA_LEVEL_LOW && time_index != 0)
                     {
                         time_index--;
-                        irda_time[time_index++] += pcycles->space;
+                        ir_time[time_index++] += pcycles->space;
                     }
-                    else if (irda_level == IRDA_LEVEL_HIGH)
+                    else if (ir_level == IRDA_LEVEL_HIGH)
                     {
-                        irda_time[time_index++] = pcycles->space;
+                        ir_time[time_index++] = pcycles->space;
                     }
-                    irda_time[time_index++] = pcycles->mask;
-                    irda_level = IRDA_LEVEL_HIGH;
+                    ir_time[time_index++] = pcycles->mask;
+                    ir_level = IRDA_LEVEL_HIGH;
                 }
             }
             else if (0 == pcycles->mask && 0 != pcycles->space)
             {
-                if (irda_level == IRDA_LEVEL_LOW && time_index != 0)
+                if (ir_level == IRDA_LEVEL_LOW && time_index != 0)
                 {
                     time_index--;
-                    irda_time[time_index++] += pcycles->space;
+                    ir_time[time_index++] += pcycles->space;
                 }
-                else if (irda_level == IRDA_LEVEL_HIGH)
+                else if (ir_level == IRDA_LEVEL_HIGH)
                 {
-                    irda_time[time_index++] = pcycles->space;
+                    ir_time[time_index++] = pcycles->space;
                 }
-                irda_level = IRDA_LEVEL_LOW;
+                ir_level = IRDA_LEVEL_LOW;
             }
             else if (0 == pcycles->space && 0 != pcycles->mask)
             {
-                if (irda_level == IRDA_LEVEL_HIGH && time_index != 0)
+                if (ir_level == IRDA_LEVEL_HIGH && time_index != 0)
                 {
                     time_index--;
-                    irda_time[time_index++] += pcycles->mask;
+                    ir_time[time_index++] += pcycles->mask;
                 }
-                else if (irda_level == IRDA_LEVEL_LOW)
+                else if (ir_level == IRDA_LEVEL_LOW)
                 {
-                    irda_time[time_index++] = pcycles->mask;
+                    ir_time[time_index++] = pcycles->mask;
                 }
-                irda_level = IRDA_LEVEL_HIGH;
+                ir_level = IRDA_LEVEL_HIGH;
             }
             else
             {
@@ -302,25 +302,25 @@ static void print_irda_time(irda_data_t *data, UINT8 keyindex, UINT16 *irda_time
         if (data->mode == 1)
             keycode = ~keycode;
 
-        if (irda_decode_flag == IRDA_DECODE_1_BIT)
+        if (ir_decode_flag == IRDA_DECODE_1_BIT)
         {
             // for binary formatted code
-            process_decode_number(keycode, data, 1, irda_time);
+            process_decode_number(keycode, data, 1, ir_time);
         }
-        else if (irda_decode_flag == IRDA_DECODE_2_BITS)
+        else if (ir_decode_flag == IRDA_DECODE_2_BITS)
         {
             // for quanternary formatted code
-            process_decode_number(keycode, data, 2, irda_time);
+            process_decode_number(keycode, data, 2, ir_time);
         }
-        else if (irda_decode_flag == IRDA_DECODE_4_BITS)
+        else if (ir_decode_flag == IRDA_DECODE_4_BITS)
         {
             // for hexadecimal formatted code
-            process_decode_number(keycode, data, 4, irda_time);
+            process_decode_number(keycode, data, 4, ir_time);
         }
     }
 }
 
-static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_bits, UINT16 *irda_time)
+static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time)
 {
     UINT8 i = 0;
     UINT8 value = 0;
@@ -334,7 +334,7 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (valid_bits * i)) & valid_value;
-            convert_to_irda_time(value, irda_time);
+            convert_to_ir_time(value, ir_time);
         }
     }
     else if (data->lsb == IRDA_MSB)
@@ -342,101 +342,101 @@ static void process_decode_number(UINT8 keycode, irda_data_t *data, UINT8 valid_
         for (i = 0; i < bit_num; i++)
         {
             value = (keycode >> (data->bits - valid_bits * (i + 1))) & valid_value;
-            convert_to_irda_time(value, irda_time);
+            convert_to_ir_time(value, ir_time);
         }
     }
 }
 
-static void convert_to_irda_time(UINT8 value, UINT16 *irda_time)
+static void convert_to_ir_time(UINT8 value, UINT16 *ir_time)
 {
     switch (value)
     {
         case 0:
-            replace_with(prot_cycles_data[IRDA_ZERO], irda_time);
+            replace_with(prot_cycles_data[IRDA_ZERO], ir_time);
             break;
         case 1:
-            replace_with(prot_cycles_data[IRDA_ONE], irda_time);
+            replace_with(prot_cycles_data[IRDA_ONE], ir_time);
             break;
         case 2:
-            replace_with(prot_cycles_data[IRDA_TWO], irda_time);
+            replace_with(prot_cycles_data[IRDA_TWO], ir_time);
             break;
         case 3:
-            replace_with(prot_cycles_data[IRDA_THREE], irda_time);
+            replace_with(prot_cycles_data[IRDA_THREE], ir_time);
             break;
         case 4:
-            replace_with(prot_cycles_data[IRDA_FOUR], irda_time);
+            replace_with(prot_cycles_data[IRDA_FOUR], ir_time);
             break;
         case 5:
-            replace_with(prot_cycles_data[IRDA_FIVE], irda_time);
+            replace_with(prot_cycles_data[IRDA_FIVE], ir_time);
             break;
         case 6:
-            replace_with(prot_cycles_data[IRDA_SIX], irda_time);
+            replace_with(prot_cycles_data[IRDA_SIX], ir_time);
             break;
         case 7:
-            replace_with(prot_cycles_data[IRDA_SEVEN], irda_time);
+            replace_with(prot_cycles_data[IRDA_SEVEN], ir_time);
             break;
         case 8:
-            replace_with(prot_cycles_data[IRDA_EIGHT], irda_time);
+            replace_with(prot_cycles_data[IRDA_EIGHT], ir_time);
             break;
         case 9:
-            replace_with(prot_cycles_data[IRDA_NINE], irda_time);
+            replace_with(prot_cycles_data[IRDA_NINE], ir_time);
             break;
         case 0x0A:
-            replace_with(prot_cycles_data[IRDA_A], irda_time);
+            replace_with(prot_cycles_data[IRDA_A], ir_time);
             break;
         case 0x0B:
-            replace_with(prot_cycles_data[IRDA_B], irda_time);
+            replace_with(prot_cycles_data[IRDA_B], ir_time);
             break;
         case 0x0C:
-            replace_with(prot_cycles_data[IRDA_C], irda_time);
+            replace_with(prot_cycles_data[IRDA_C], ir_time);
             break;
         case 0x0D:
-            replace_with(prot_cycles_data[IRDA_D], irda_time);
+            replace_with(prot_cycles_data[IRDA_D], ir_time);
             break;
         case 0x0E:
-            replace_with(prot_cycles_data[IRDA_E], irda_time);
+            replace_with(prot_cycles_data[IRDA_E], ir_time);
             break;
         case 0x0F:
-            replace_with(prot_cycles_data[IRDA_F], irda_time);
+            replace_with(prot_cycles_data[IRDA_F], ir_time);
             break;
         default:
             break;
     }
 }
 
-static void replace_with(irda_cycles_t *pcycles_num, UINT16 *irda_time)
+static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time)
 {
-    if (NULL == pcycles_num || NULL == irda_time)
+    if (NULL == pcycles_num || NULL == ir_time)
     {
         return;
     }
 
     if (pcycles_num->flag == IRDA_FLAG_NORMAL)
     {
-        if (irda_level == IRDA_LEVEL_HIGH && time_index != 0)
+        if (ir_level == IRDA_LEVEL_HIGH && time_index != 0)
         {
             time_index--;
-            irda_time[time_index++] += pcycles_num->mask;
+            ir_time[time_index++] += pcycles_num->mask;
         }
-        else if (irda_level == IRDA_LEVEL_LOW)
+        else if (ir_level == IRDA_LEVEL_LOW)
         {
-            irda_time[time_index++] = pcycles_num->mask;
+            ir_time[time_index++] = pcycles_num->mask;
         }
-        irda_time[time_index++] = pcycles_num->space;
-        irda_level = IRDA_LEVEL_LOW;
+        ir_time[time_index++] = pcycles_num->space;
+        ir_level = IRDA_LEVEL_LOW;
     }
     else if (pcycles_num->flag == IRDA_FLAG_INVERSE)
     {
-        if (irda_level == IRDA_LEVEL_LOW && time_index != 0)
+        if (ir_level == IRDA_LEVEL_LOW && time_index != 0)
         {
             time_index--;
-            irda_time[time_index++] += pcycles_num->space;
+            ir_time[time_index++] += pcycles_num->space;
         }
-        else if (irda_level == IRDA_LEVEL_HIGH)
+        else if (ir_level == IRDA_LEVEL_HIGH)
         {
-            irda_time[time_index++] = pcycles_num->space;
+            ir_time[time_index++] = pcycles_num->space;
         }
-        irda_time[time_index++] = pcycles_num->mask;
-        irda_level = IRDA_LEVEL_HIGH;
+        ir_time[time_index++] = pcycles_num->mask;
+        ir_level = IRDA_LEVEL_HIGH;
     }
 }

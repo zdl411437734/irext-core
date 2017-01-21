@@ -27,18 +27,18 @@ INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
     UINT16 pos = 0;
     UINT16 cnt = 0, index = 0;
 
-    while (index <= irda_strlen(pdata))
+    while (index <= ir_strlen(pdata))
     {
-        while ((index != irda_strlen(pdata)) && (*(p++) != ','))
+        while ((index != ir_strlen(pdata)) && (*(p++) != ','))
         {
             index++;
         }
-        irda_memcpy(buf, pdata + pos, index - pos);
+        ir_memcpy(buf, pdata + pos, index - pos);
         pos = (UINT16)(index + 1);
         index = pos;
         context->n_mode[seq].speed[cnt++] = (UINT8)atoi(buf);
         context->n_mode[seq].speed_cnt = (UINT8)cnt;
-        irda_memset(buf, 0, 16);
+        ir_memset(buf, 0, 16);
     }
 
     return IR_DECODE_SUCCEEDED;
@@ -52,18 +52,18 @@ INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
     UINT16 pos = 0;
     UINT16 cnt = 0, index = 0;
 
-    while (index <= irda_strlen(pdata))
+    while (index <= ir_strlen(pdata))
     {
-        while ((index != irda_strlen(pdata)) && (*(p++) != ','))
+        while ((index != ir_strlen(pdata)) && (*(p++) != ','))
         {
             index++;
         }
-        irda_memcpy(buf, pdata + pos, index - pos);
+        ir_memcpy(buf, pdata + pos, index - pos);
         pos = (UINT16)(index + 1);
         index = pos;
         context->n_mode[seq].temp[cnt++] = (UINT8)(atoi(buf) - 16);
         context->n_mode[seq].temp_cnt = (UINT8)cnt;
-        irda_memset(buf, 0, 16);
+        ir_memset(buf, 0, 16);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -73,7 +73,7 @@ INT8 parse_nmode_pos(char *buf, ac_n_mode index)
     UINT16 i = 0;
     char data[64] = {0};
     // char start[8] = {0};
-    if (irda_strlen(buf) == 1)
+    if (ir_strlen(buf) == 1)
     {
         if (buf[0] == 'S' || buf[0] == 's')
         {
@@ -86,11 +86,11 @@ INT8 parse_nmode_pos(char *buf, ac_n_mode index)
         return IR_DECODE_SUCCEEDED;
     }
 
-    for (i = 0; i < irda_strlen(buf); i++)
+    for (i = 0; i < ir_strlen(buf); i++)
     {
         if (buf[i] == '&')
         {
-            irda_memcpy(data, buf + i + 1, irda_strlen(buf) - i - 1);
+            ir_memcpy(data, buf + i + 1, ir_strlen(buf) - i - 1);
             break;
         }
     }
@@ -129,15 +129,15 @@ INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
     {
         if (tag->pdata[i] == '|')
         {
-            irda_memcpy(buf, tag->pdata + preindex, i - preindex);
+            ir_memcpy(buf, tag->pdata + preindex, i - preindex);
             preindex = (UINT16)(i + 1);
             parse_nmode_pos(buf, index);
-            irda_memset(buf, 0, 64);
+            ir_memset(buf, 0, 64);
         }
 
     }
-    irda_memcpy(buf, tag->pdata + preindex, i - preindex);
+    ir_memcpy(buf, tag->pdata + preindex, i - preindex);
     parse_nmode_pos(buf, index);
-    irda_memset(buf, 0, 64);
+    ir_memset(buf, 0, 64);
     return IR_DECODE_SUCCEEDED;
 }

@@ -115,13 +115,13 @@ UINT16 create_ir_frame()
 
             if (irdata[i] & mask)
             {
-                //IR_PRINTF("%d,%d,", context->one.low, context->one.high);
+                //ir_printf("%d,%d,", context->one.low, context->one.high);
                 context->time[context->code_cnt++] = context->one.low;
                 context->time[context->code_cnt++] = context->one.high;
             }
             else
             {
-                //IR_PRINTF("%d,%d,", context->zero.low, context->zero.high);
+                //ir_printf("%d,%d,", context->zero.low, context->zero.high);
                 context->time[context->code_cnt++] = context->zero.low;
                 context->time[context->code_cnt++] = context->zero.high;
             }
