@@ -119,7 +119,7 @@ extern void Board_writeStringValue(char *str, uint32_t value, uint8_t format,
                                    uint8_t line);
 
 
-extern void Draw_AmoMcu_Logo();
+extern void Draw_Logo();
 
 
 /*********************************************************************

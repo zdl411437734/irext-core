@@ -76,17 +76,13 @@
 #include "Board/board_lcd.h"
 #include "Board/board_key.h"
 #include "Board/board_led.h"
-
 #include "Board.h"
-
 #include "simpleBLEPeripheral.h"
 
 #include <ti/drivers/lcd/LCDDogm1286.h>
-
-#include "amomcu_buffer.h"
+#include "buffer.h"
 
 #include "driverlib/Aon_batmon.h"
-#include "..\profiles\batt\cc26xx\Battservice.h"
 
 /*********************************************************************
  * CONSTANTS
@@ -153,6 +149,105 @@
 #define SBC_KEY_CHANGE_EVT                    0x0010
 #define SBP_BUZZER_EVT                        0x0020
 #define SBP_UART_CHANGE_EVT                   0x0040
+#define SBP_IREXT_DECODE_EVT                  0x0080
+
+/* IREXT - begin */
+
+#include "./irext/include/ir_decode.h"
+
+#define IR_KEY_POWER 0
+#define IR_KEY_MUTE  1
+#define IR_KEY_VOL_PLUS 7
+#define IR_KEY_VOL_DOWN 8
+
+
+#define SAMPLE_TV_CODE_LENGTH 150
+#define SAMPLE_AC_CODE_LENGTH 568
+
+static ir_type_t ir_type = IR_TYPE_NONE;
+static ir_state_t ir_state = IR_STATE_NONE;
+
+// sample source code
+static uint8_t source_tv[1024] =
+{
+    0x74, 0x63, 0x39, 0x30, 0x31, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x94, 0x11, 0x94,
+    0x11, 0x00, 0x30, 0x02, 0x00, 0x00, 0x00, 0x30, 0x02, 0x9A, 0x06, 0x00, 0x30, 0x02, 0x30, 0x02,
+    0x06, 0x01, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00,
+    0x03, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0x00, 0x01, 0x69, 0x72, 0x64, 0x61, 0x03, 0x0A, 0x0A,
+    0x0B, 0x0A, 0x0A, 0x14, 0x0A, 0x0A, 0x10, 0x0A, 0x0A, 0x11, 0x0A, 0x0A, 0x12, 0x0A, 0x0A, 0x13,
+    0x0A, 0x0A, 0xFF, 0x0A, 0x0A, 0x13, 0x0A, 0x0A, 0x12, 0x0A, 0x0A, 0x3B, 0x0A, 0x0A, 0x0F, 0x0A,
+    0x0A, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0A, 0x09, 0x0A, 0x0A, 0x00, 0x0A, 0x0A,
+    0x01, 0x0A, 0x0A, 0x02, 0x0A, 0x0A, 0x03, 0x0A, 0x0A, 0x04, 0x0A, 0x0A, 0x05, 0x0A, 0x0A, 0x06,
+    0x0A, 0x0A, 0x07, 0x0A, 0x0A, 0x08
+};
+
+static uint8_t source_ac[1024] =
+{
+    0x1D, 0x00, 0x00, 0x09, 0x00, 0x10, 0x00, 0x18, 0x00, 0xFF, 0xFF, 0x33, 0x00, 0xFF, 0xFF, 0x34,
+    0x00, 0x58, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0x76, 0x00, 0x7E, 0x01, 0xA6, 0x01, 0xCC, 0x01, 0xFF, 0xFF, 0xDC, 0x01, 0xE9, 0x01, 0xF6,
+    0x01, 0xF8, 0x01, 0xFA, 0x01, 0xFC, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x33, 0x31, 0x30, 0x30, 0x2C,
+    0x39, 0x31, 0x30, 0x30, 0x35, 0x30, 0x30, 0x2C, 0x35, 0x30, 0x30, 0x35, 0x30, 0x30, 0x2C, 0x31,
+    0x35, 0x30, 0x30, 0x36, 0x26, 0x35, 0x36, 0x30, 0x2C, 0x32, 0x35, 0x30, 0x30, 0x2C, 0x33, 0x30,
+    0x30, 0x30, 0x2C, 0x39, 0x30, 0x30, 0x30, 0x7C, 0x2D, 0x31, 0x26, 0x35, 0x30, 0x30, 0x31, 0x30,
+    0x30, 0x31, 0x30, 0x30, 0x31, 0x42, 0x32, 0x30, 0x36, 0x43, 0x30, 0x30, 0x38, 0x33, 0x32, 0x30,
+    0x39, 0x41, 0x46, 0x30, 0x41, 0x37, 0x31, 0x30, 0x42, 0x30, 0x30, 0x30, 0x43, 0x31, 0x31, 0x30,
+    0x44, 0x43, 0x30, 0x30, 0x45, 0x30, 0x32, 0x39, 0x32, 0x30, 0x46, 0x30, 0x30, 0x30, 0x30, 0x30,
+    0x30, 0x46, 0x30, 0x30, 0x31, 0x31, 0x32, 0x41, 0x46, 0x37, 0x31, 0x30, 0x30, 0x31, 0x31, 0x46,
+    0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x30, 0x34, 0x43, 0x35,
+    0x30, 0x30, 0x46, 0x35, 0x38, 0x35, 0x43, 0x30, 0x32, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30,
+    0x46, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x33, 0x30, 0x39, 0x34,
+    0x30, 0x34, 0x34, 0x30, 0x30, 0x34, 0x43, 0x35, 0x30, 0x30, 0x46, 0x35, 0x38, 0x35, 0x43, 0x30,
+    0x34, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x46, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35,
+    0x38, 0x35, 0x43, 0x30, 0x35, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x46, 0x34, 0x43, 0x35,
+    0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x36, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30,
+    0x45, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x37, 0x30, 0x39, 0x34,
+    0x30, 0x34, 0x34, 0x30, 0x30, 0x34, 0x43, 0x35, 0x30, 0x30, 0x46, 0x35, 0x38, 0x35, 0x43, 0x30,
+    0x38, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x46, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35,
+    0x38, 0x35, 0x43, 0x30, 0x39, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x46, 0x34, 0x43, 0x35,
+    0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x41, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30,
+    0x45, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x42, 0x30, 0x39, 0x34,
+    0x30, 0x34, 0x34, 0x30, 0x46, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30,
+    0x43, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x45, 0x34, 0x43, 0x35, 0x30, 0x30, 0x45, 0x35,
+    0x38, 0x35, 0x43, 0x30, 0x44, 0x30, 0x39, 0x34, 0x30, 0x34, 0x34, 0x30, 0x45, 0x34, 0x43, 0x35,
+    0x30, 0x30, 0x45, 0x35, 0x38, 0x35, 0x43, 0x30, 0x45, 0x30, 0x33, 0x36, 0x30, 0x36, 0x34, 0x30,
+    0x31, 0x30, 0x33, 0x36, 0x30, 0x36, 0x34, 0x30, 0x34, 0x30, 0x33, 0x36, 0x30, 0x36, 0x34, 0x30,
+    0x30, 0x30, 0x33, 0x36, 0x30, 0x36, 0x34, 0x30, 0x33, 0x30, 0x33, 0x36, 0x30, 0x36, 0x34, 0x30,
+    0x32, 0x30, 0x33, 0x36, 0x34, 0x36, 0x38, 0x30, 0x31, 0x30, 0x33, 0x36, 0x34, 0x36, 0x38, 0x30,
+    0x35, 0x30, 0x36, 0x36, 0x34, 0x36, 0x38, 0x30, 0x39, 0x35, 0x38, 0x35, 0x43, 0x30, 0x38, 0x30,
+    0x33, 0x36, 0x34, 0x36, 0x38, 0x30, 0x42, 0x30, 0x33, 0x34, 0x38, 0x34, 0x43, 0x30, 0x41, 0x30,
+    0x33, 0x34, 0x38, 0x34, 0x43, 0x30, 0x46, 0x54, 0x26, 0x30, 0x2C, 0x31, 0x7C, 0x53, 0x26, 0x31,
+    0x2C, 0x32, 0x2C, 0x33, 0x54, 0x26, 0x30, 0x2C, 0x31, 0x7C, 0x53, 0x26, 0x31, 0x2C, 0x32, 0x2C,
+    0x33, 0x4E, 0x41, 0x4E, 0x41, 0x4E, 0x41, 0x31
+};
+
+static uint16_t user_data[USER_DATA_SIZE] = { 0 };
+
+uint16_t code_length_tv = SAMPLE_TV_CODE_LENGTH;
+uint16_t code_length_ac = SAMPLE_AC_CODE_LENGTH;
+uint16_t user_data_length = 0;
+
+static void debug_ir_code()
+{
+    uint16_t index = 0;
+
+    if (user_data_length > 0)
+    {
+        // have some debug
+        char debug[16] = { 0 };
+        for (index = 0; index < user_data_length; index++)
+        {
+            memset(debug, 0x00, 16);
+            sprintf(debug, "%d,", user_data[index]);
+            UART_WriteTransport((uint8_t*)debug, strlen(debug));
+            LCD_DLY_ms(10);
+        }
+        UART_WriteTransport((uint8_t*)"\n", 1);
+    }
+}
+
+/* IREXT - end */
 
 
 /*********************************************************************
@@ -270,7 +365,7 @@ static uint8_t advertData[] =
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple BLE Peripheral";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "IREXT_CC26XX";
 
 // Globals used for ATT Response retransmission
 static gattMsgEvent_t *pAttRsp = NULL;
@@ -366,12 +461,7 @@ void SimpleBLEPeripheral_createTask(void)
     Task_construct(&sbpTask, SimpleBLEPeripheral_taskFxn, &taskParams, NULL);
 }
 
-
-//uint8 g_UartRxBuff[320];
-//uint8 g_head;
-//uint8 g_tail;
-
-void  UartCallBack(uint16_t rxLen, uint16_t txLen)
+void UartCallBack(uint16_t rxLen, uint16_t txLen)
 {
     if(rxLen > 0)
     {
@@ -403,10 +493,10 @@ static void SimpleBLEPeripheral_init(void)
 
     // Hard code the BD Address till CC2650 board gets its own IEEE address
     //uint8 bdAddress[B_ADDR_LEN] = { 0xAD, 0xD0, 0x0A, 0xAD, 0xD0, 0x0A };
-    //HCI_EXT_SetBDADDRCmd(bdAddress);
+    // HCI_EXT_SetBDADDRCmd(bdAddress);
 
     // Set device's Sleep Clock Accuracy
-    //HCI_EXT_SetSCACmd(500);
+    // HCI_EXT_SetSCACmd(500);
 
     // Create an RTOS queue for message from profile to be sent to app.
     appMsgQueue = Util_constructQueue(&appMsg);
@@ -525,27 +615,24 @@ static void SimpleBLEPeripheral_init(void)
     Reset_addService();
 #endif //IMAGE_INVALIDATE
 
-
 #ifndef FEATURE_OAD
     // Setup the SimpleProfile Characteristic Values
-    {
-        uint8_t charValue1 = 1;
-        uint8_t charValue2 = 2;
-        uint8_t charValue3 = 3;
-        uint8_t charValue4 = 4;
-        uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
+    uint8_t charValue1 = 1;
+    uint8_t charValue2 = 2;
+    uint8_t charValue3 = 3;
+    uint8_t charValue4 = 4;
+    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
 
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
-                                   &charValue1);
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
-                                   &charValue2);
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
-                                   &charValue3);
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                                   &charValue4);
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
-                                   charValue5);
-    }
+    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
+                               &charValue1);
+    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
+                               &charValue2);
+    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
+                               &charValue3);
+    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
+                               &charValue4);
+    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
+                               charValue5);
 
     // Register callback with SimpleGATTprofile
     SimpleProfile_RegisterAppCBs(&SimpleBLEPeripheral_simpleProfileCBs);
@@ -570,10 +657,10 @@ static void SimpleBLEPeripheral_init(void)
     LCD_WRITE_STRING("BLE Peripheral B", LCD_PAGE0);
 #endif // HAL_IMAGE_A
 #else
-    LCD_WRITE_STRING("BLE Peripheral", LCD_PAGE0);
+    LCD_WRITE_STRING("IRext sample", LCD_PAGE0);
 #endif // FEATURE_OAD
-
-    // Uart_Init(UartCallBack);
+    LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
+    HalLedSet(HAL_LED_1, HAL_LED_MODE_OFF);
 }
 
 /*********************************************************************
@@ -759,7 +846,7 @@ static uint8_t SimpleBLEPeripheral_processStackMsg(ICall_Hdr *pMsg)
 
 static void SimpleBLEPeripheral_handleKeys(uint8_t shift, uint8_t keys)
 {
-    (void)shift;  // Intentionally unreferenced parameter
+    (void)shift;
 
     if((my_led_mode == TEST_LED_MODE_ALL_BLINK) || (my_led_mode == TEST_LED_MODE_ALL_FLOW) )
     {
@@ -767,18 +854,15 @@ static void SimpleBLEPeripheral_handleKeys(uint8_t shift, uint8_t keys)
         HalLedSet(HAL_LED_1 | HAL_LED_2 | HAL_LED_3 | HAL_LED_4, HAL_LED_MODE_OFF);
     }
 
-    //LCD_WRITE_STRING_VALUE("key: 0x", keys, 16, LCD_PAGE7);
     if (keys & (KEY_LEFT | KEY_UP | KEY_RIGHT | KEY_DOWN | KEY_SELECT))
     {
-        LCD_WRITE_STRING("\r\n", LCD_PAGE5);
         LCD_WRITE_STRING("\r\n", LCD_PAGE6);
         LCD_WRITE_STRING("\r\n", LCD_PAGE7);
         {
             static uint8_t v = 0;
             static uint8_t valueToCopy[SIMPLEPROFILE_CHAR6_LEN] = {0};
 
-            //memset(valueToCopy, v++, sizeof(valueToCopy));
-            for(int i = 0; i<sizeof(valueToCopy); i++)
+            for(int i = 0; i < sizeof(valueToCopy); i++)
             {
                 valueToCopy[i] = v + i;
             }
@@ -791,40 +875,123 @@ static void SimpleBLEPeripheral_handleKeys(uint8_t shift, uint8_t keys)
 
     if (keys & KEY_LEFT)
     {
-        LCD_WRITE_STRING("LEFT\r\n", LCD_PAGE6);
-        HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
-        //Draw_AmoMcu_Logo();
+        if (IR_STATE_PARSED == ir_state)
+        {
+            user_data_length = ir_tv_lib_control(IR_KEY_POWER, user_data);
+            if (user_data_length > 0)
+            {
+                LCD_WRITE_STRING("POWER", LCD_PAGE6);
+                debug_ir_code();
+            }
+            else
+            {
+                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+        }
         return;
     }
 
     if (keys & KEY_UP)
     {
-        LCD_WRITE_STRING("      UP\r\n", LCD_PAGE5);
-        HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
+        if (IR_STATE_PARSED == ir_state)
+        {
+            user_data_length = ir_tv_lib_control(IR_KEY_VOL_PLUS, user_data);
+            if (user_data_length > 0)
+            {
+                LCD_WRITE_STRING("VOL+", LCD_PAGE6);
+                debug_ir_code();
+            }
+            else
+            {
+                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+        }
         return;
     }
 
     if (keys & KEY_RIGHT)
     {
-        LCD_WRITE_STRING("          RIGHT\r\n", LCD_PAGE6);
-        HalLedSet(HAL_LED_4, HAL_LED_MODE_ON);
+        if (IR_STATE_PARSED == ir_state)
+        {
+            user_data_length = ir_tv_lib_control(IR_KEY_MUTE, user_data);
+            if (user_data_length > 0)
+            {
+                LCD_WRITE_STRING("MUTE", LCD_PAGE6);
+                debug_ir_code();
+            }
+            else
+            {
+                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+        }
         return;
     }
 
     if (keys & KEY_DOWN)
     {
-        LCD_WRITE_STRING("      DOWN\r\n", LCD_PAGE7);
-        HalLedSet(HAL_LED_3, HAL_LED_MODE_ON);
+        if (IR_STATE_PARSED == ir_state)
+        {
+            user_data_length = ir_tv_lib_control(IR_KEY_VOL_DOWN, user_data);
+            if (user_data_length > 0)
+            {
+                LCD_WRITE_STRING("VOL-", LCD_PAGE6);
+                debug_ir_code();
+            }
+            else
+            {
+                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+        }
         return;
     }
 
     if (keys & KEY_SELECT)
     {
-        LCD_WRITE_STRING("               SELECT\r\n", LCD_PAGE6);
-        HalLedSet(HAL_LED_1 | HAL_LED_2 | HAL_LED_3 | HAL_LED_4, HAL_LED_MODE_ON);
+        if (IR_STATE_NONE == ir_state)
+        {
+            if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(source_tv, SAMPLE_TV_CODE_LENGTH))
+            {
+                LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
+                HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
+                ir_state = IR_STATE_OPENED;
+            }
+        }
+        else if (IR_STATE_OPENED == ir_state)
+        {
+            if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
+            {
+                LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
+                HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
+                ir_state = IR_STATE_PARSED;
+            }
+        }
+        else if (IR_STATE_PARSED == ir_state)
+        {
+            if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
+            {
+                LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
+                HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
+                ir_state = IR_STATE_NONE;
+            }
+        }
         return;
     }
-
 }
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_processGATTMsg
@@ -1090,7 +1257,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
             SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
         }
         break;
-#endif //PLUS_BROADCASTER   
+#endif //PLUS_BROADCASTER
 
         case GAPROLE_CONNECTED:
         {
