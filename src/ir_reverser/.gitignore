@@ -3,3 +3,5 @@
 */.settings
 */.jar
 *.bin
+.idea
+.idea/
