@@ -66,20 +66,20 @@ PIN_Config ledPinsCfg[] =
 
 void Board_initLeds()
 {
-    // Initialize KEY pins. Enable int after callback registered
-    hledPins = PIN_open(&ledPins, ledPinsCfg);
+  // Initialize KEY pins. Enable int after callback registered
+  hledPins = PIN_open(&ledPins, ledPinsCfg);
 
 #ifdef POWER_SAVING
-    //Enable wakeup
+  //Enable wakeup
 #endif
 }
 
 void HalLedInit( void )
 {
-    if(NULL == hledPins)
-    {
-        Board_initLeds();
-    }
+  if(NULL == hledPins)
+  {
+    Board_initLeds();
+  }
 }
 
 uint8 HalLedSet( uint8 led, uint8 mode )
@@ -92,31 +92,31 @@ uint8 HalLedSet( uint8 led, uint8 mode )
         Board_initLeds();
     }
 
-    for(i= 0; i<=3; i++)
+    for(i = 0; i <= 3; i++)
     {
-        if(led & (0x1<<i))
+        if(led & (0x1 << i))
         {
             switch(mode)
             {
-                case HAL_LED_MODE_OFF:
-                    PIN_setOutputValue(hledPins, pin[i], 0);
-                    break;
-                case HAL_LED_MODE_ON:
-                    PIN_setOutputValue(hledPins, pin[i], 1);
-                    break;
-                case HAL_LED_MODE_FLASH:
+            case HAL_LED_MODE_OFF:
+                PIN_setOutputValue(hledPins, pin[i], 0);
+                break;
+            case HAL_LED_MODE_ON:
+                PIN_setOutputValue(hledPins, pin[i], 1);
+                break;
+            case HAL_LED_MODE_FLASH:
                     PIN_setOutputValue(hledPins, pin[i],  1);
-                    Task_sleep(10*1000/Clock_tickPeriod);
-                    PIN_setOutputValue(hledPins, pin[i], 0);
-                    break;
+                Task_sleep(10*1000/Clock_tickPeriod);
+                PIN_setOutputValue(hledPins, pin[i], 0);
+                break;
 
-                case HAL_LED_MODE_TOGGLE:
-                    PIN_setOutputValue(hledPins, pin[i],  !PIN_getOutputValue( pin[i]));
-                    break;
+            case HAL_LED_MODE_TOGGLE:
+                    PIN_setOutputValue(hledPins, pin[i], !PIN_getOutputValue(pin[i]));
+                break;
             }
         }
     }
-    return 0;
+     return 0;
 }
 
 

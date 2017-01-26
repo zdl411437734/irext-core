@@ -72,17 +72,21 @@
 #include "ICallBleAPIMSG.h"
 
 #include "util.h"
-#include "Board/Board_uart.h"
 #include "Board/board_lcd.h"
 #include "Board/board_key.h"
 #include "Board/board_led.h"
+#include "Board/Board_uart.h"
+
 #include "Board.h"
+
 #include "simpleBLEPeripheral.h"
 
 #include <ti/drivers/lcd/LCDDogm1286.h>
+
 #include "buffer.h"
 
 #include "driverlib/Aon_batmon.h"
+#include "..\profiles\batt\cc26xx\Battservice.h"
 
 /*********************************************************************
  * CONSTANTS
@@ -97,11 +101,11 @@
 #ifndef FEATURE_OAD
 // Minimum connection interval (units of 1.25ms, 80=100ms) if automatic
 // parameter update request is enabled
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     80
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     8
 
 // Maximum connection interval (units of 1.25ms, 800=1000ms) if automatic
 // parameter update request is enabled
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     800
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     8
 #else
 // Minimum connection interval (units of 1.25ms, 8=10ms) if automatic
 // parameter update request is enabled
@@ -155,9 +159,9 @@
 
 #include "./irext/include/ir_decode.h"
 
-#define IR_KEY_POWER 0
-#define IR_KEY_MUTE  1
-#define IR_KEY_VOL_PLUS 7
+#define IR_KEY_POWER    0
+#define IR_KEY_MUTE     1
+#define IR_KEY_VOL_UP   7
 #define IR_KEY_VOL_DOWN 8
 
 
@@ -228,23 +232,92 @@ uint16_t code_length_tv = SAMPLE_TV_CODE_LENGTH;
 uint16_t code_length_ac = SAMPLE_AC_CODE_LENGTH;
 uint16_t user_data_length = 0;
 
-static void debug_ir_code()
+static void IRext_uartDebug()
 {
+#if defined UART_DEBUG
     uint16_t index = 0;
 
     if (user_data_length > 0)
     {
-        // have some debug
+        // output to UART
         char debug[16] = { 0 };
         for (index = 0; index < user_data_length; index++)
         {
             memset(debug, 0x00, 16);
             sprintf(debug, "%d,", user_data[index]);
             UART_WriteTransport((uint8_t*)debug, strlen(debug));
-            LCD_DLY_ms(10);
+            UART_DLY_ms(10);
         }
         UART_WriteTransport((uint8_t*)"\n", 1);
     }
+#endif
+}
+
+static void IRext_processState()
+{
+    if (IR_STATE_NONE == ir_state)
+    {
+        if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(source_tv, SAMPLE_TV_CODE_LENGTH))
+        {
+            LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
+            HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
+            ir_state = IR_STATE_OPENED;
+        }
+    }
+    else if (IR_STATE_OPENED == ir_state)
+    {
+        if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
+        {
+            LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
+            HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
+            ir_state = IR_STATE_PARSED;
+        }
+    }
+    else if (IR_STATE_PARSED == ir_state)
+    {
+        if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
+        {
+            LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
+            HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
+            ir_state = IR_STATE_NONE;
+        }
+    }
+}
+
+static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
+{
+    if (IR_STATE_PARSED == ir_state)
+    {
+        user_data_length = ir_tv_lib_control(ir_key, user_data);
+        if (user_data_length > 0)
+        {
+            LCD_WRITE_STRING(key_display, LCD_PAGE6);
+            IRext_uartDebug();
+        }
+        else
+        {
+            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+        }
+    }
+    else
+    {
+        LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+    }
+}
+
+static void IRext_processUartMsg(uint8_t* data, uint16_t len)
+{
+    uint16_t index = 0;
+    char debug[8] = { 0 };
+
+    for (index = 0; index < len; index++)
+    {
+        memset(debug, 0x00, 8);
+        sprintf(debug, "%02X,", data[index]);
+        UART_WriteTransport((uint8_t*)debug, strlen(debug));
+        UART_DLY_ms(10);
+    }
+    UART_WriteTransport("\n", 1);
 }
 
 /* IREXT - end */
@@ -295,7 +368,6 @@ Char sbpTaskStack[SBP_TASK_STACK_SIZE];
 #define TEST_LED_MODE_KEY_CTRL    2
 #define TEST_LED_MODE_HOST_CTRL   3
 static uint8 my_led_mode = TEST_LED_MODE_ALL_BLINK;
-
 
 // Profile state and parameters
 //static gaprole_States_t gapProfileState = GAPROLE_INIT;
@@ -461,11 +533,11 @@ void SimpleBLEPeripheral_createTask(void)
     Task_construct(&sbpTask, SimpleBLEPeripheral_taskFxn, &taskParams, NULL);
 }
 
-void UartCallBack(uint16_t rxLen, uint16_t txLen)
+void  UartCallBack(uint16_t rxLen, uint16_t txLen)
 {
     if(rxLen > 0)
     {
-        qq_write(UART_GetRxBufferAddress(), rxLen);
+        queue_write(UART_GetRxBufferAddress(), rxLen);
         SimpleBLEPeripheral_enqueueMsg(SBP_UART_CHANGE_EVT, NULL);
     }
 }
@@ -492,11 +564,11 @@ static void SimpleBLEPeripheral_init(void)
     ICall_registerApp(&selfEntity, &sem);
 
     // Hard code the BD Address till CC2650 board gets its own IEEE address
-    //uint8 bdAddress[B_ADDR_LEN] = { 0xAD, 0xD0, 0x0A, 0xAD, 0xD0, 0x0A };
+    // uint8 bdAddress[B_ADDR_LEN] = { 0xAD, 0xD0, 0x0A, 0xAD, 0xD0, 0x0A };
     // HCI_EXT_SetBDADDRCmd(bdAddress);
 
     // Set device's Sleep Clock Accuracy
-    // HCI_EXT_SetSCACmd(500);
+    // HCI_EXT_SetSCACmd(40);
 
     // Create an RTOS queue for message from profile to be sent to app.
     appMsgQueue = Util_constructQueue(&appMsg);
@@ -615,24 +687,27 @@ static void SimpleBLEPeripheral_init(void)
     Reset_addService();
 #endif //IMAGE_INVALIDATE
 
+
 #ifndef FEATURE_OAD
     // Setup the SimpleProfile Characteristic Values
-    uint8_t charValue1 = 1;
-    uint8_t charValue2 = 2;
-    uint8_t charValue3 = 3;
-    uint8_t charValue4 = 4;
-    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
+    {
+        uint8_t charValue1 = 1;
+        uint8_t charValue2 = 2;
+        uint8_t charValue3 = 3;
+        uint8_t charValue4 = 4;
+        uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
 
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
-                               &charValue1);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
-                               &charValue2);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
-                               &charValue3);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &charValue4);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
-                               charValue5);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
+                                   &charValue1);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
+                                   &charValue2);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
+                                   &charValue3);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
+                                   &charValue4);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
+                                   charValue5);
+    }
 
     // Register callback with SimpleGATTprofile
     SimpleProfile_RegisterAppCBs(&SimpleBLEPeripheral_simpleProfileCBs);
@@ -658,9 +733,9 @@ static void SimpleBLEPeripheral_init(void)
 #endif // HAL_IMAGE_A
 #else
     LCD_WRITE_STRING("IRext sample", LCD_PAGE0);
-#endif // FEATURE_OAD
     LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
     HalLedSet(HAL_LED_1, HAL_LED_MODE_OFF);
+#endif
 }
 
 /*********************************************************************
@@ -747,7 +822,6 @@ static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1)
             // Perform periodic application task
             SimpleBLEPeripheral_performPeriodicTask();
 
-            // led light
             if(TEST_LED_MODE_ALL_BLINK == my_led_mode)
             {
                 static int count = 0;
@@ -764,8 +838,10 @@ static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1)
             {
                 static uint8 i = 0;
                 static int count = 0;
-                //uint8 ledshow[] = {HAL_LED_1, HAL_LED_2, HAL_LED_3, HAL_LED_4, HAL_LED_4, HAL_LED_3, HAL_LED_2, HAL_LED_1};
-                uint8 ledshow[] = {HAL_LED_1, HAL_LED_1, HAL_LED_2, HAL_LED_2, HAL_LED_3, HAL_LED_3, HAL_LED_4, HAL_LED_4, HAL_LED_3, HAL_LED_3, HAL_LED_2, HAL_LED_2};
+                uint8 ledshow[] = {HAL_LED_1, HAL_LED_1, HAL_LED_2, HAL_LED_2,
+                                   HAL_LED_3, HAL_LED_3, HAL_LED_4, HAL_LED_4,
+                                   HAL_LED_3, HAL_LED_3, HAL_LED_2, HAL_LED_2
+                                  };
 
                 HalLedSet(ledshow[i], HAL_LED_MODE_TOGGLE);
                 i++;
@@ -854,142 +930,33 @@ static void SimpleBLEPeripheral_handleKeys(uint8_t shift, uint8_t keys)
         HalLedSet(HAL_LED_1 | HAL_LED_2 | HAL_LED_3 | HAL_LED_4, HAL_LED_MODE_OFF);
     }
 
-    if (keys & (KEY_LEFT | KEY_UP | KEY_RIGHT | KEY_DOWN | KEY_SELECT))
-    {
-        LCD_WRITE_STRING("\r\n", LCD_PAGE6);
-        LCD_WRITE_STRING("\r\n", LCD_PAGE7);
-        {
-            static uint8_t v = 0;
-            static uint8_t valueToCopy[SIMPLEPROFILE_CHAR6_LEN] = {0};
-
-            for(int i = 0; i < sizeof(valueToCopy); i++)
-            {
-                valueToCopy[i] = v + i;
-            }
-            v++;
-
-            SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR6, sizeof(valueToCopy),
-                                       valueToCopy);
-        }
-    }
-
     if (keys & KEY_LEFT)
     {
-        if (IR_STATE_PARSED == ir_state)
-        {
-            user_data_length = ir_tv_lib_control(IR_KEY_POWER, user_data);
-            if (user_data_length > 0)
-            {
-                LCD_WRITE_STRING("POWER", LCD_PAGE6);
-                debug_ir_code();
-            }
-            else
-            {
-                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-            }
-        }
-        else
-        {
-            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-        }
+        IRext_processKey(IR_TYPE_TV, IR_KEY_POWER, "POWER");
         return;
     }
 
     if (keys & KEY_UP)
     {
-        if (IR_STATE_PARSED == ir_state)
-        {
-            user_data_length = ir_tv_lib_control(IR_KEY_VOL_PLUS, user_data);
-            if (user_data_length > 0)
-            {
-                LCD_WRITE_STRING("VOL+", LCD_PAGE6);
-                debug_ir_code();
-            }
-            else
-            {
-                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-            }
-        }
-        else
-        {
-            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-        }
+        IRext_processKey(IR_TYPE_TV, IR_KEY_VOL_UP, "VOL+");
         return;
     }
 
     if (keys & KEY_RIGHT)
     {
-        if (IR_STATE_PARSED == ir_state)
-        {
-            user_data_length = ir_tv_lib_control(IR_KEY_MUTE, user_data);
-            if (user_data_length > 0)
-            {
-                LCD_WRITE_STRING("MUTE", LCD_PAGE6);
-                debug_ir_code();
-            }
-            else
-            {
-                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-            }
-        }
-        else
-        {
-            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-        }
+        IRext_processKey(IR_TYPE_TV, IR_KEY_MUTE, "MUTE");
         return;
     }
 
     if (keys & KEY_DOWN)
     {
-        if (IR_STATE_PARSED == ir_state)
-        {
-            user_data_length = ir_tv_lib_control(IR_KEY_VOL_DOWN, user_data);
-            if (user_data_length > 0)
-            {
-                LCD_WRITE_STRING("VOL-", LCD_PAGE6);
-                debug_ir_code();
-            }
-            else
-            {
-                LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-            }
-        }
-        else
-        {
-            LCD_WRITE_STRING("ERROR", LCD_PAGE6);
-        }
+        IRext_processKey(IR_TYPE_TV, IR_KEY_VOL_DOWN, "VOL-");
         return;
     }
 
     if (keys & KEY_SELECT)
     {
-        if (IR_STATE_NONE == ir_state)
-        {
-            if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(source_tv, SAMPLE_TV_CODE_LENGTH))
-            {
-                LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
-                HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
-                ir_state = IR_STATE_OPENED;
-            }
-        }
-        else if (IR_STATE_OPENED == ir_state)
-        {
-            if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
-            {
-                LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
-                HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
-                ir_state = IR_STATE_PARSED;
-            }
-        }
-        else if (IR_STATE_PARSED == ir_state)
-        {
-            if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
-            {
-                LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
-                HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
-                ir_state = IR_STATE_NONE;
-            }
-        }
+        IRext_processState();
         return;
     }
 }
@@ -1146,23 +1113,21 @@ static void SimpleBLEPeripheral_processAppMsg(sbpEvt_t *pMsg)
         case SBP_UART_CHANGE_EVT:
         {
             uint8_t valueToCopy[SIMPLEPROFILE_CHAR6_LEN] = {0};
-            uint8 len = qq_read(valueToCopy, SIMPLEPROFILE_CHAR6_LEN);
-
-            UART_WriteTransport ((uint8*) valueToCopy, strlen((char*) valueToCopy));
-            UART_WriteTransport ("\r\n", 2);
-
+            uint8 len = queue_read(valueToCopy, SIMPLEPROFILE_CHAR6_LEN);
             if(len > 0)
             {
-                SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR6, len, valueToCopy);
+                // SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR6, len, valueToCopy);
+                IRext_processUartMsg(valueToCopy, len);
             }
-            if(qq_total() > 0)
+            if(queue_total() > 0)
             {
+                // receive next frame
                 SimpleBLEPeripheral_enqueueMsg(SBP_UART_CHANGE_EVT, NULL);
             }
         }
 
         default:
-            // Do nothing.
+            // Do nothing
             break;
     }
 }
@@ -1257,7 +1222,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
             SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
         }
         break;
-#endif //PLUS_BROADCASTER
+#endif //PLUS_BROADCASTER   
 
         case GAPROLE_CONNECTED:
         {
@@ -1334,9 +1299,6 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
             LCD_WRITE_STRING("", LCD_PAGE2);
             break;
     }
-
-    // Update the state
-    //gapProfileState = newState;
 }
 
 #ifndef FEATURE_OAD
@@ -1377,19 +1339,17 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
         case SIMPLEPROFILE_CHAR1:
             SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, newValue, &returnBytes);
 
-            LCD_WRITE_STRING_VALUE("Char 1:", (uint32_t)newValue, 10, LCD_PAGE4);
+            // LCD_WRITE_STRING_VALUE("Char 1:", (uint32_t)newValue, 10, LCD_PAGE4);
             break;
 
         case SIMPLEPROFILE_CHAR3:
             SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3,  newValue, &returnBytes);
 
-            LCD_WRITE_STRING_VALUE("Char 3:", (uint32_t)newValue, 10, LCD_PAGE4);
+            // LCD_WRITE_STRING_VALUE("Char 3:", (uint32_t)newValue, 10, LCD_PAGE4);
             break;
 
         case SIMPLEPROFILE_CHAR6:
             SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR6,  newValue, &returnBytes);
-
-            //LCD_WRITE_STRING_VALUE("Char 3:", (uint16_t)newValue, 10, LCD_PAGE4);
 
             if(returnBytes > 0)
             {
@@ -1419,22 +1379,7 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
  */
 static void SimpleBLEPeripheral_performPeriodicTask(void)
 {
-#ifndef FEATURE_OAD
-#if 0
-    uint8_t valueToCopy;
-
-    // Call to retrieve the value of the third characteristic in the profile
-    if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
-    {
-        // Call to set that value of the fourth characteristic in the profile.
-        // Note that if notifications of the fourth characteristic have been
-        // enabled by a GATT client device, then a notification will be sent
-        // every time this function is called.
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                                   &valueToCopy);
-    }
-#endif
-#endif //!FEATURE_OAD
+    // Do nothing
 }
 
 

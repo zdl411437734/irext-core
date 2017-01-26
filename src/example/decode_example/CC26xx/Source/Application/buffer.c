@@ -38,32 +38,30 @@
   contact Texas Instruments Incorporated at www.TI.com.
 *******************************************************************************/
 
-
 #include "bcomdef.h"
 #include "util.h"
 #include "stdio.h"
 #include "string.h"
+#include "buffer.h"
 
-#define SEND_BUF_MAX_SIZE   320
+static char sendBufForUsart[SEND_BUF_MAX_SIZE] = {0};         // usart send buffer.
+static unsigned short sendWrite = 0;                          // usart send buffer write position.
+static unsigned short sendRead = 0;                           // usart send buffer read position.
 
-static char sendBufForUsart[SEND_BUF_MAX_SIZE] = {0};        //usart send buffer.
-static unsigned short sendWrite = 0;                          //usart send buffer write position.
-static unsigned short sendRead = 0;                           //usart send buffer read position.
-
-bool qq_write(uint8 *WrBuf, unsigned short WrLen)
+bool queue_write(uint8 *WrBuf, unsigned short WrLen)
 {
     unsigned short emptyLen;
     unsigned short tmpAddr;
     unsigned short tmpLen;
 
-    emptyLen = (sendRead+SEND_BUF_MAX_SIZE-(sendWrite+1)) % SEND_BUF_MAX_SIZE;
+    emptyLen = (sendRead + SEND_BUF_MAX_SIZE - (sendWrite + 1)) % SEND_BUF_MAX_SIZE;
     if (emptyLen >= WrLen)
     {
-        tmpAddr = (sendWrite+WrLen) % SEND_BUF_MAX_SIZE;
-        if (tmpAddr <= sendWrite)            //If Circular array have inverse to begin.
+        tmpAddr = (sendWrite + WrLen) % SEND_BUF_MAX_SIZE;
+        if (tmpAddr <= sendWrite)
         {
             tmpLen =WrLen - tmpAddr;
-            memcpy(&sendBufForUsart[sendWrite], WrBuf, tmpLen);   //bug place
+            memcpy(&sendBufForUsart[sendWrite], WrBuf, tmpLen);
             memcpy(&sendBufForUsart[0], WrBuf+tmpLen, tmpAddr);
         }
         else
@@ -79,14 +77,13 @@ bool qq_write(uint8 *WrBuf, unsigned short WrLen)
     return FALSE;
 }
 
-
-unsigned short qq_read(uint8 *RdBuf, unsigned short RdLen)
+unsigned short queue_read(uint8 *RdBuf, unsigned short RdLen)
 {
     unsigned short validLen;
     unsigned short tmpAddr;
     unsigned short tmpLen;
 
-    validLen = (sendWrite+SEND_BUF_MAX_SIZE-sendRead) % SEND_BUF_MAX_SIZE;
+    validLen = (sendWrite + SEND_BUF_MAX_SIZE - sendRead) % SEND_BUF_MAX_SIZE;
 
     if(validLen == 0)
         return 0;
@@ -96,12 +93,12 @@ unsigned short qq_read(uint8 *RdBuf, unsigned short RdLen)
 
     if (validLen >= RdLen)
     {
-        tmpAddr = (sendRead+RdLen) % SEND_BUF_MAX_SIZE;
-        if (tmpAddr <= sendRead) //If Circular array have inverse to begin.
+        tmpAddr = (sendRead + RdLen) % SEND_BUF_MAX_SIZE;
+        if (tmpAddr <= sendRead)
         {
-            tmpLen =RdLen - tmpAddr;
+            tmpLen = RdLen - tmpAddr;
             memcpy(RdBuf, &sendBufForUsart[sendRead], tmpLen);
-            memcpy(RdBuf+tmpLen, &sendBufForUsart[0], tmpAddr);
+            memcpy(RdBuf + tmpLen, &sendBufForUsart[0], tmpAddr);
         }
         else
         {
@@ -114,17 +111,16 @@ unsigned short qq_read(uint8 *RdBuf, unsigned short RdLen)
     return RdLen;
 }
 
-
-unsigned short qq_total()
+unsigned short queue_total()
 {
     unsigned short validLen;
 
-    validLen = (sendWrite+SEND_BUF_MAX_SIZE-sendRead) % SEND_BUF_MAX_SIZE;
+    validLen = (sendWrite + SEND_BUF_MAX_SIZE - sendRead) % SEND_BUF_MAX_SIZE;
 
     return validLen;
 }
 
-void qq_clear()
+void queue_clear()
 {
     sendWrite = 0;                          //usart send buffer write position.
     sendRead = 0;                           //usart send buffer read position.

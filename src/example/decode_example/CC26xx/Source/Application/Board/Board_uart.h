@@ -54,6 +54,8 @@ extern void UART_WriteTransport (uint8 *str, uint8 len);
 
 extern uint8 *UART_GetRxBufferAddress();
 
+extern void UART_DLY_ms(unsigned int ms);
+
 #ifdef __cplusplus
 }
 #endif

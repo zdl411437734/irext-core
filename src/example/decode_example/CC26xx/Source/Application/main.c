@@ -62,7 +62,7 @@ bleUserCfg_t user0Cfg = BLE_USER_CFG;
  */
 void exceptionHandler()
 {
-    volatile uint8_t i = 1;
+	volatile uint8_t i = 1;
     while(i) {}
 }
 
@@ -79,7 +79,7 @@ extern uint32_t ti_sysbios_family_arm_m3_Hwi_resetVectors;
  */
 int main()
 {
-    PIN_init(BoardGpioInitTable);
+  PIN_init(BoardGpioInitTable);
 
 #ifndef POWER_SAVING
     /* Set constraints for Standby, powerdown and idle mode */
@@ -100,19 +100,19 @@ int main()
 
 #ifdef FEATURE_OAD
     {
-        uint8_t counter;
-        uint32_t *vectorTable =  (uint32_t*) 0x20000000;
+      uint8_t counter;
+      uint32_t *vectorTable =  (uint32_t*) 0x20000000;
 #if defined(__IAR_SYSTEMS_ICC__)
-        uint32_t *flashVectors = &__vector_table;
+      uint32_t *flashVectors = &__vector_table;
 #elif defined(__TI_COMPILER_VERSION__)
-        uint32_t *flashVectors = &ti_sysbios_family_arm_m3_Hwi_resetVectors;
+      uint32_t *flashVectors = &ti_sysbios_family_arm_m3_Hwi_resetVectors;
 #endif //Compiler.
 
-        // Write image specific interrupt vectors into RAM vector table.
-        for(counter = 0; counter < 15; ++counter)
-        {
-            *vectorTable++ = *flashVectors++;
-        }
+      // Write image specific interrupt vectors into RAM vector table.
+      for(counter = 0; counter < 15; ++counter)
+      {
+        *vectorTable++ = *flashVectors++;
+      }
     }
 #endif //FEATURE_OAD
 
@@ -127,7 +127,7 @@ int main()
  */
 Void smallErrorHook(Error_Block *eb)
 {
-    for (;;);
+  for (;;);
 }
 
 /**
@@ -135,5 +135,5 @@ Void smallErrorHook(Error_Block *eb)
  */
 void halAssertHandler(void)
 {
-    for (;;);
+  for (;;);
 }

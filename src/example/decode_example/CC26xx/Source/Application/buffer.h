@@ -46,14 +46,15 @@ extern "C"
 {
 #endif
 
+#define SEND_BUF_MAX_SIZE   320
 
-extern bool qq_write(uint8 *WrBuf, unsigned short WrLen);
+extern bool queue_write(uint8 *WrBuf, unsigned short WrLen);
 
-extern unsigned short qq_read(uint8 *RdBuf, unsigned short RdLen);
+extern unsigned short queue_read(uint8 *RdBuf, unsigned short RdLen);
 
-extern unsigned short qq_total();
+extern unsigned short queue_total();
 
-extern void qq_clear();
+extern void queue_clear();
 
 #ifdef __cplusplus
 }

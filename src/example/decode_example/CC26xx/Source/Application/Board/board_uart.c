@@ -94,7 +94,7 @@ void Uart_Init(npiCB_t npiCBack)
         NPITLUART_initializeTransport(tRxBuf, tTxBuf, npiCBack);
         uartInitFlag = TRUE;
 
-        sprintf(tTxBuf, "NPITLUART_initialize");
+        sprintf(tTxBuf, "NPITLUART_initialize\n");
         NPITLUART_writeTransport(strlen(tTxBuf));
     }
 }
@@ -112,6 +112,19 @@ uint8 *UART_GetRxBufferAddress()
 {
     return (uint8*)tRxBuf;
 }
+
+void UART_DLY_ms(unsigned int ms)
+{
+    unsigned int a;
+    while(ms)
+    {
+        a = 1800;
+        while(a--) ;
+        ms--;
+    }
+    return;
+}
+
 
 #endif
 
