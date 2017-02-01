@@ -75,12 +75,15 @@
 
 #include "Board.h"
 
+#include "osal.h"
 #include "board_uart.h"
 #include "board_LCD.h"
+#include "utils.h"
+
 #include "../../npi/inc/npi_tl_uart.h"
 
 
-#ifdef NPI_USE_UART
+#if defined NPI_USE_UART
 
 static char tRxBuf[256] = { 0 };
 static char tTxBuf[256] = { 0 };
@@ -125,6 +128,30 @@ void UART_DLY_ms(unsigned int ms)
     return;
 }
 
+
+#if defined UART_DEBUG
+
+void PrintString(uint8 *str)
+{
+    UART_WriteTransport(str, (strlen((char*)str)));
+}
+
+
+void PrintValue(char *content, uint32 value, uint8 format)
+{
+    uint8 tmpLen;
+    uint8 buf[UART_BUFFER_SIZE];
+    uint32 err;
+
+    tmpLen = (uint8)strlen((char*)content);
+    memcpy(buf, content, tmpLen);
+    err = (uint32)(value);
+    _ltoa(err, &buf[tmpLen], format);
+    PrintString(buf);
+}
+
+
+#endif
 
 #endif
 

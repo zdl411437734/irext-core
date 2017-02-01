@@ -46,13 +46,20 @@ extern "C" {
 
 #include "../../npi/inc/npi_tl_uart.h"
 
-#define uint8    unsigned char
+#define UART_BUFFER_SIZE 128
 
 extern void Uart_Init(npiCB_t npiCBack);
 
 extern void UART_WriteTransport (uint8 *str, uint8 len);
 
 extern uint8 *UART_GetRxBufferAddress();
+
+#if defined UART_DEBUG
+extern void PrintString(uint8 *str);
+
+extern void PrintValue(char *title, uint32 value, uint8 format);
+#endif
+
 
 extern void UART_DLY_ms(unsigned int ms);
 

@@ -171,6 +171,10 @@
 static ir_type_t ir_type = IR_TYPE_NONE;
 static ir_state_t ir_state = IR_STATE_NONE;
 
+static int32_t uart_recv_length = 0;
+static int32_t uart_recv_expected_length = 0;
+static int32_t uart_recv_started = 0;
+
 // sample source code
 static uint8_t source_tv[1024] =
 {
@@ -308,16 +312,31 @@ static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
 static void IRext_processUartMsg(uint8_t* data, uint16_t len)
 {
     uint16_t index = 0;
-    char debug[8] = { 0 };
 
+#if UART_DEBUG
     for (index = 0; index < len; index++)
     {
-        memset(debug, 0x00, 8);
-        sprintf(debug, "%02X,", data[index]);
-        UART_WriteTransport((uint8_t*)debug, strlen(debug));
+        PrintValue(" ", data[index], 16);
         UART_DLY_ms(10);
     }
-    UART_WriteTransport("\n", 1);
+    PrintString("\n");
+#endif
+
+    if (0 == uart_recv_started && len == 4)
+    {
+        uart_recv_expected_length = *(int *)data;
+        PrintValue("payload length = ", uart_recv_expected_length, 10);
+        uart_recv_started = 1;
+    }
+    else
+    {
+        uart_recv_length += len;
+        if (uart_recv_length >= uart_recv_expected_length)
+        {
+            PrintString("all data are received\n");
+            uart_recv_started = 0;
+        }
+    }
 }
 
 /* IREXT - end */
@@ -1112,11 +1131,10 @@ static void SimpleBLEPeripheral_processAppMsg(sbpEvt_t *pMsg)
 
         case SBP_UART_CHANGE_EVT:
         {
-            uint8_t valueToCopy[SIMPLEPROFILE_CHAR6_LEN] = {0};
-            uint8 len = queue_read(valueToCopy, SIMPLEPROFILE_CHAR6_LEN);
+            uint8_t valueToCopy[UART_BUFFER_SIZE] = {0};
+            uint8 len = queue_read(valueToCopy, UART_BUFFER_SIZE);
             if(len > 0)
             {
-                // SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR6, len, valueToCopy);
                 IRext_processUartMsg(valueToCopy, len);
             }
             if(queue_total() > 0)
