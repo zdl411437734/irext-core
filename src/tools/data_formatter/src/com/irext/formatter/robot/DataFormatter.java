@@ -12,7 +12,6 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.ResultSet;
 
-import java.io.*;
 import java.sql.DriverManager;
 
 public class DataFormatter {
@@ -196,8 +195,8 @@ public class DataFormatter {
                 int brandID = 0;
 
                 if (3 != categoryID) {
-                    innerDestSqlString = "SELECT * FROM remote_index WHERE category_id = '" + categoryID + "' AND " +
-                            "brand_name = '" + brandName + "';";
+                    innerDestSqlString = "SELECT * FROM brand WHERE category_id = '" + categoryID + "' AND " +
+                            "name = '" + brandName + "';";
                     innerDestStatement = (PreparedStatement) mDestConnection.prepareStatement(innerDestSqlString);
                     innerDestResultSet = (ResultSet) innerDestStatement.executeQuery();
                     if (innerDestResultSet.next()) {
