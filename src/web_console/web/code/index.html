@@ -84,9 +84,7 @@
                     <button id="download_bin_button" class="btn btn-normal btn-info" onclick="downloadBin();" style="font-size: 14px;">
                         <span class="glyphicon glyphicon-cloud-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
-                    <button id="decode_bin_button" class="btn btn-normal btn-primary" onclick="onDecodeBin();" style="font-size: 14px;">
-                        <span class="glyphicon glyphicon-flash" style="vertical-align:middle; margin-bottom: 3px;"></span>
-                    </button>
+
                     <button id="transfer_bin_button" class="btn btn-normal btn-primary" onclick="onTransferBin();" style="font-size: 14px;">
                         <span class="glyphicon glyphicon-import" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
@@ -305,113 +303,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" onclick="verifyRemote();">确定</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- decode dialog -->
-    <div class="modal fade" id="decode_dialog" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">解码测试</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="decode_panel">
-                        <div style="width: 100%;">
-                            <div style="width: 100%;">
-                                <textarea id="ir_wave_value" rows="1" style="resize: none; width: 100%; overflow-x: scroll; white-space: nowrap;"></textarea>
-                            </div>
-                            <div class="row" style="text-align: center;">
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_0" class="cbtn btn btn-danger glyphicon glyphicon-off"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_8" class="cbtn btn btn-info glyphicon glyphicon-home"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_9" class="cbtn btn btn-info glyphicon glyphicon-chevron-left"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_10" class="cbtn btn btn-info glyphicon glyphicon-list"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_6" class="cbtn btn btn-primary glyphicon glyphicon-plus"></button>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row" style="text-align: center;">
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_1" class="cbtn btn btn-warning glyphicon glyphicon-arrow-up"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row" style="text-align: center;">
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_3" class="cbtn btn btn-warning glyphicon glyphicon-arrow-left"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_5" class="cbtn btn btn-success glyphicon glyphicon-star"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_4" class="cbtn btn btn-warning glyphicon glyphicon-arrow-right"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row" style="text-align: center;">
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_2" class="cbtn btn btn-warning glyphicon glyphicon-arrow-down"></button>
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-
-                                </div>
-                                <div class="col-lg-2" style="text-align: center;">
-                                    <button id="btn_7" class="cbtn btn btn-primary glyphicon glyphicon-minus"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" onclick="quitDecoding();">退出</button>
                 </div>
             </div>
         </div>

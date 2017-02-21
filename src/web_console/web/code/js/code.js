@@ -71,12 +71,6 @@ var pass = 0;
 var brandsToPublish = [];
 var remoteIndexesToPublish = [];
 
-var decodeSock;
-var currentTicket;
-var currentControl = new Object();
-
-var localSocketAddr = "irext.net";
-
 ///////////////////////////// Initialization /////////////////////////////
 
 $('#menu_toggle').click(function(e) {
@@ -1457,40 +1451,6 @@ function downloadBin() {
     }
 }
 
-function onDecodeBin() {
-    if(null == selectedRemote) {
-        popUpHintDialog('请先选中一个索引');
-        return;
-    }
-
-    if(1 == selectedRemote.category_id) {
-        popUpHintDialog('空调在线解码不支持，您可以将编码下载到外部设备进行离线解码');
-        return;
-    }
-
-    freezeAllControlButtons();
-    var remoteToDecode = selectedRemote;
-    remoteToDecode.admin_id = id;
-    remoteToDecode.token = token;
-    $.ajax({
-        url: '/irext/decode/prepare_decoding_remote_index',
-        type: 'POST',
-        dataType: 'json',
-        data: selectedRemote,
-        timeout: 20000,
-        success: function (response) {
-            if(response.status.code == 0) {
-                enterDecoding(response.entity);
-            } else {
-                popUpHintDialog('启动解码失败');
-            }
-        },
-        error: function () {
-            popUpHintDialog('启动解码失败');
-        }
-    });
-}
-
 function onTransferBin() {
     if(null == selectedRemote) {
         popUpHintDialog('请先选中一个索引');
@@ -1511,88 +1471,6 @@ function showPublishDialog() {
     $('#publish_hint').append(hintText);
     $('#publish_dialog').modal();
 }
-
-///////////////////////////// control functions /////////////////////////////
-function enterDecoding(ticketKey) {
-    currentTicket = ticketKey;
-    decodeSock = io.connect('http://' + localSocketAddr, {
-        reconnection: false
-    });
-    decodeSock.on('connect', function() {
-        onDecodeSocketConnected(decodeSock);
-    });
-
-    decodeSock.on('disconnect', function() {
-        onDecodeSocketDisconnected();
-    });
-
-    decodeSock.on('init', function(result) {
-        onDecodeSocketInit(result, decodeSock);
-    });
-
-    decodeSock.on('decode', function(result) {
-        onDecodeSockDecode(result);
-    });
-
-
-    $('#decode_dialog').modal();
-}
-
-function quitDecoding() {
-    decodeSock.disconnect();
-    $('#decode_dialog').modal('hide');
-}
-
-function onDecodeSocketConnected(socket) {
-    socket.emit('init', currentTicket);
-}
-
-function onDecodeSocketEvent(data) {
-    console.log('decode socket data received : ' + data);
-}
-
-function onDecodeSocketDisconnected() {
-
-}
-
-function onDecodeSocketInit(result, decodeSock) {
-    if (result.status.code != 0) {
-        console.log(result.status.code);
-        decodeSock.disconnect();
-        $('#decode_dialog').modal('hide');
-    } else {
-        currentControl.category_id = result.entity.category_id;
-        currentControl.sub_category_id = result.entity.sub_category_id;
-        unfreezeAllControlButtons();
-    }
-}
-
-function onDecodeSockDecode(result) {
-    var codeArray = result.code.slice(0, result.len);
-    $('#ir_wave_value').val(JSON.stringify(codeArray));
-}
-
-function unfreezeAllControlButtons() {
-    $('.cbtn').prop('disabled', false);
-}
-
-function freezeAllControlButtons() {
-    $('.cbtn').prop('disabled', true);
-}
-
-function onControlClick(buttonID) {
-    currentControl.key_id = buttonID.substring(4);
-    var acStatus = {
-        power: 0,
-        temp: 0,
-        mode: 0,
-        wind_dir: 0,
-        wind_speed: 0
-    };
-    currentControl.ac_status = acStatus;
-    decodeSock.emit('control', currentControl);
-}
-
 
 ///////////////////////////// UI functions /////////////////////////////
 function fillProtocolList(protocols) {
