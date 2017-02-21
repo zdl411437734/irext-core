@@ -42,13 +42,6 @@ require('./routes');
 
 var certificateLogic = require('./work_unit/certificate_logic.js');
 
-// prepare decode socket
-var io = require('socket.io')(http);
-
-var decodeService = require('./services/decode_service.js');
-io.on('connection', decodeService.decodeSocketConnected);
-console.log("decode socket is listening...");
-
 // kick start the engine
 System.startupHttp(http, serverListenPort, "irext Console V0.0.4");
 

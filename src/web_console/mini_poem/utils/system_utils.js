@@ -17,6 +17,16 @@ function startup(expressApp, port, serverName) {
     }
 }
 
+function startupHttp(http, port, serverName) {
+    if(http) {
+        http.listen(port);
+
+        console.log(serverName +' restful webservice server is listening at port : ' +
+            port + " //" +  dateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));
+        console.log("driven by " + ICODE);
+    }
+}
+
 function getOS() {
     return platform.os;
 }
@@ -28,5 +38,6 @@ function getUAInfo(ua) {
 }
 
 exports.startup = startup;
+exports.startupHttp = startupHttp;
 exports.getOS = getOS;
 exports.getUAInfo = getUAInfo;
