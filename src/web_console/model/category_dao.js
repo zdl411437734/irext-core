@@ -43,7 +43,6 @@ Category.createCategory = function(category, callback) {
             logger.error('failed to create category : ' + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info('succeeded to create category');
             callback(errorCode.SUCCESS, createdCategory);
         }
     });
@@ -56,7 +55,6 @@ Category.findCategoryByConditions = function(conditions, callback) {
                 logger.error("find category error : " + error);
                 callback(errorCode.FAILED, null);
             } else {
-                logger.info("find category successfully, length of categories = " + categories.length);
                 callback(errorCode.SUCCESS, categories);
             }
         });
@@ -71,7 +69,6 @@ Category.listCategories = function(conditions, from, count, sortField, callback)
                     logger.error("list categories error : " + listCategoriesErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list categories successfully");
                     callback(errorCode.SUCCESS, categories);
                 }
             });
@@ -82,11 +79,21 @@ Category.listCategories = function(conditions, from, count, sortField, callback)
                     logger.error("list categories error : " + listCategoriesErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list categories successfully");
                     callback(errorCode.SUCCESS, categories);
                 }
             });
     }
+};
+
+Category.countCategories = function(conditions, callback) {
+    Category.count(conditions, function(countCategoriesErr, categoriesCount) {
+        if (countCategoriesErr) {
+            logger.error("count categories error : " + countCategoriesErr);
+            callback(errorCode.FAILED, 0);
+        } else {
+            callback(errorCode.SUCCESS, categoriesCount);
+        }
+    });
 };
 
 Category.getCategoryByID = function(categoryID, callback) {
@@ -95,7 +102,6 @@ Category.getCategoryByID = function(categoryID, callback) {
             logger.error("get category by ID error : " + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info("get category by ID successfully");
             callback(errorCode.SUCCESS, category);
         }
     });
@@ -111,7 +117,6 @@ Category.listRemoteCategories = function(conditions, from, count, sortField, cal
                     logger.error("list categories error : " + listCategoriesErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list categories successfully");
                     callback(errorCode.SUCCESS, categories);
                 }
             });
@@ -122,7 +127,6 @@ Category.listRemoteCategories = function(conditions, from, count, sortField, cal
                     logger.error("list categories error : " + listCategoriesErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list categories successfully");
                     callback(errorCode.SUCCESS, categories);
                 }
             });

@@ -25,4 +25,5 @@ exports.setupEnvironment = function () {
     REDIS_PASSWORD = "";
     EXTERNAL_SERVER_ADDRESS = "irext.net";
     EXTERNAL_SERVER_PORT = "80"
+    SOCKET_0_ADDRESS = "http://localhost:8300";
 };

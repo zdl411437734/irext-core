@@ -374,7 +374,7 @@ exports.fallbackRemoteIndex = function (req, res) {
 };
 
 /*
- * function :   Publish remote index accordingly
+ * function :   Publish remote index
  * parameter :  none
  * return :     ServiceResponse
  */
@@ -407,8 +407,8 @@ exports.createBrand = function (req, res) {
 };
 
 /*
- * function :   Publish created brand to primary server
- * parameter :  none
+ * function :   Publish brand
+ * parameter :  Brand body parameter
  * return :     Service response
  */
 exports.publishBrands = function (req, res) {

@@ -34,7 +34,6 @@ City.listProvinces = function(callback) {
                 error = errorCode.FAILED;
                 callback(error,null);
             } else {
-                logger.info("get provinces successfully");
                 callback(error, result);
             }
         }
@@ -50,11 +49,22 @@ City.listCities = function(provincePrefix, callback) {
                 error = errorCode.FAILED;
                 callback(error,null);
             } else {
-                logger.info("get cities successfully");
                 callback(error, result);
             }
         }
     );
+};
+
+City.countCities = function(conditions, callback) {
+    dbOrm.driver.execQuery("SELECT COUNT(id) AS number FROM city WHERE " + conditions,
+        function (countCitiesErr, result) {
+            if (countCitiesErr) {
+                logger.info("count cities failed : " + countCitiesErr);
+                callback(errorCode.FAILED, null);
+            } else {
+                callback(errorCode.SUCCESS, result);
+            }
+        });
 };
 
 City.findCitiesByConditions = function(conditions, from, count, sortField, callback) {
@@ -66,7 +76,6 @@ City.findCitiesByConditions = function(conditions, from, count, sortField, callb
                     logger.error("find city error : " + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("find city successfully, length of cities = " + cities.length);
                     callback(errorCode.SUCCESS, cities);
                 }
             });
@@ -77,7 +86,6 @@ City.findCitiesByConditions = function(conditions, from, count, sortField, callb
                     logger.error("find city error : " + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("find city successfully, length of cities = " + cities.length);
                     callback(errorCode.SUCCESS, cities);
                 }
             });

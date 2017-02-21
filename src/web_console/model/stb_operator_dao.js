@@ -36,7 +36,6 @@ StbOperator.listStbOperators = function(conditions, from, count, sortField, call
                     logger.error("list stbOperators error : " + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list stbOperators successfully");
                     callback(errorCode.SUCCESS, stbOperators);
                 }
             });
@@ -47,11 +46,21 @@ StbOperator.listStbOperators = function(conditions, from, count, sortField, call
                     logger.error("list stbOperators error : " + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list stbOperators successfully");
                     callback(errorCode.SUCCESS, stbOperators);
                 }
             });
     }
+};
+
+StbOperator.findStbOperatorsByConditions = function(conditions, callback) {
+    StbOperator.find(conditions, function (error, stbOperators) {
+        if (error) {
+            logger.error("find stbOperators error : " + error);
+            callback(errorCode.FAILED, null);
+        } else {
+            callback(errorCode.SUCCESS, stbOperators);
+        }
+    });
 };
 
 module.exports = StbOperator;

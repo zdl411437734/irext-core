@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <meta name="description" content="index page of IRext">
     <meta name="author" content="strawmanbobi">
-    <link rel="icon" href="../favicon.ico">
     <title>IRext</title>
     <link rel="stylesheet" href="./public_js/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./public_js/bower_components/toastr/toastr.min.css">
@@ -34,7 +33,6 @@
         </div>
     </div>
 
-    <!-- dialogs -->
     <div class="modal fade" id="changepw_confirm_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -53,10 +51,62 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="stat_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="color: #000;">统计数据</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="main_tab">
+                        <li class="active" style="cursor: pointer;"><a data-target="#activation_stat" data-toggle="tab">概要信息</a></li>
+                        <li style="cursor: pointer;"><a data-target="#remote_stat" data-toggle="tab" onclick="statCategories();">详细信息</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="activation_stat">
+                            <div id="panel_active_stat">
+                                <div class="row marketing">
+                                    <div class="row">
+                                        <div class="col-md-4" style="text-align: center;">
+                                            <h4>支持电器种类</h4>
+                                            <h1 style="color: #3FAF7F" id="categories_count"></h1>
+                                        </div>
+                                        <div class="col-md-4" style="text-align: center;">
+                                            <h4>支持品牌数量</h4>
+                                            <h1 style="color: #3FAF7F" id="brands_count"></h1>
+                                        </div>
+                                        <div class="col-md-4" style="text-align: center;">
+                                            <h4>支持索引数量</h4>
+                                            <h1 style="color: #3FAF7F" id="remote_indexes_count"></h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="remote_stat">
+                            <br>
+                            <div id="panel_remote_index_stat">
+                                <div class="panel-group" role="tablist" aria-multiselectable="true" id="categories_panel">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">已了解</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="./public_js/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="./public_js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="./public_js/bower_components/toastr/toastr.min.js"></script>
+<script src="./public_js/bower_components/highcharts/highcharts.js"></script>
 <script src="./public_js/utils/ciphering.js"></script>
 <script src="./js/index.js"></script>
 </html>

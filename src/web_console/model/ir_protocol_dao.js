@@ -23,7 +23,8 @@ var IRProtocol = dbOrm.define('ir_protocol',
         type: Number,
         status: Number,
         update_time: String,
-        contributor: String
+        contributor: String,
+        boot_code: String
     },
     {
         cache: false
@@ -37,15 +38,39 @@ IRProtocol.createIRProtocol = function(protocol, callback) {
         status: protocol.status,
         type: protocol.type,
         update_time: date,
-        contributor: protocol.contributor
+        contributor: protocol.contributor,
+        boot_code: protocol.boot_code
     });
     newProtocol.save(function(error, createdProtocol) {
         if(error) {
             logger.error('failed to create protocol : ' + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info('succeeded to create protocol');
             callback(errorCode.SUCCESS, createdProtocol);
+        }
+    });
+};
+
+IRProtocol.updateProtocolByID = function(protocolID, newProtocol, callback) {
+    IRProtocol.get(protocolID, function(error, protocol) {
+        if (error) {
+            logger.error("get protocol by ID error in update protocol : " + error);
+            callback(errorCode.FAILED, null);
+        } else {
+            protocol.name = newProtocol.name;
+            protocol.type = newProtocol.type;
+            protocol.status = newProtocol.status;
+            protocol.update_time = newProtocol.update_time;
+            protocol.boot_code = null;
+            protocol.contributor = newProtocol.contributor;
+            protocol.save(function(error, createdProtocol) {
+                if(error) {
+                    logger.error('failed to create protocol in update protocol : ' + error);
+                    callback(errorCode.FAILED, null);
+                } else {
+                    callback(errorCode.SUCCESS, createdProtocol);
+                }
+            });
         }
     });
 };
@@ -57,7 +82,6 @@ IRProtocol.findIRProtocolByConditions = function(conditions, callback) {
                 logger.error("find protocol error : " + error);
                 callback(errorCode.FAILED, null);
             } else {
-                logger.info("find protocol successfully, length of protocols = " + protocols.length);
                 callback(errorCode.SUCCESS, protocols);
             }
         });
@@ -72,7 +96,6 @@ IRProtocol.listIRProtocols = function(conditions, from, count, sortField, callba
                     logger.error("list protocols error : " + listProtocolsErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list protocols successfully");
                     callback(errorCode.SUCCESS, protocols);
                 }
             });
@@ -83,7 +106,6 @@ IRProtocol.listIRProtocols = function(conditions, from, count, sortField, callba
                     logger.error("list protocols error : " + listProtocolsErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list protocols successfully");
                     callback(errorCode.SUCCESS, protocols);
                 }
             });
@@ -96,7 +118,6 @@ IRProtocol.getIRProtocolByID = function(protocolID, callback) {
             logger.error("get protocol by ID error : " + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info("get protocol by ID successfully");
             callback(errorCode.SUCCESS, protocol);
         }
     });

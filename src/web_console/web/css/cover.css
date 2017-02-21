@@ -52,6 +52,12 @@ body {
     line-height: 32px;
 }
 
+.modal-body {
+    overflow-y: scroll;
+    width: 100%;
+    max-height: 640px;
+}
+
 /* Customize container */
 @media (min-width: 768px) {
 }

@@ -71,6 +71,12 @@ var pass = 0;
 var brandsToPublish = [];
 var remoteIndexesToPublish = [];
 
+var decodeSock;
+var currentTicket;
+var currentControl = new Object();
+
+var localSocketAddr = "irext.net";
+
 ///////////////////////////// Initialization /////////////////////////////
 
 $('#menu_toggle').click(function(e) {
@@ -102,6 +108,10 @@ $(document).ready(function() {
         $('#protocol_name_b').val(fileName);
     });
 
+    $('.cbtn').click(function() {
+        onControlClick(this.id);
+    });
+
 });
 
 function initializeSelectors() {
@@ -129,8 +139,6 @@ function loadRemoteList(isSearch, remoteMap) {
                 '&from=0&count=100&admin_id='+id+'&token='+token;
         }
     }
-
-    console.log(url);
 
     $('#remote_table_container').empty();
     $('#remote_table_container').append('<table id="remote_table" data-row-style="rowStyle"></table>');
@@ -220,7 +228,6 @@ function loadRemoteList(isSearch, remoteMap) {
         selectedRemote = null;
     }).on('load-success.bs.table', function (e, data) {
         var i = 0;
-        console.log('size of data loaded = ' + data.length);
         for (i = 0; i < data.length; i++) {
             if(data[i].status == '1') {
                 data[i].status = '已发布';
@@ -247,7 +254,6 @@ function loadRemoteList(isSearch, remoteMap) {
 
 function rowStyle(row, index) {
     var style = null;
-    // console.log(JSON.stringify(row));
     if (row.status == '已发布') {
         style = {
             classes: 'default'
@@ -295,6 +301,7 @@ function createRemote() {
         return;
     }
 
+    /*
     console.log('categoryID = ' + currentCategory.id + ', categoryName = ' + currentCategory.name + ', ' + currentCategory.name_en +
         ', ' + currentCategory.name_tw + ', brandID = ' + currentBrand.id +
         ', brandName = ' + currentBrand.name + ', ' + currentBrand.name_en + ', ' + currentBrand.name_tw +
@@ -302,6 +309,7 @@ function createRemote() {
         ', opID = ' + currentOperator.operator_id + ', opName = ' + currentOperator.operator_name + ', ' + currentOperator.operator_name_tw + ', subCate = ' + subCate +
         ', protocolID = ' + currentProtocol.id + ', protocolName = ' + currentProtocol.name +
         ', remoteName = ' +remoteName + ', remoteFile = ' + remoteFile + ', remoteNumber = ' + remoteNumber);
+    */
 
     var form = $('#remote_upload_form');
     form.attr('action', '/irext/int/create_remote_index');
@@ -501,10 +509,14 @@ function verifyRemote() {
     });
 }
 
-function publishUnpublished() {
-    var date = formatDate(new Date(), 'yyyy-MM-dd');
+function reportUnpublished() {
+    // var date = formatDate(new Date(), 'yyyy-MM-dd');
     // JSONToCSVConvertor(brandsToPublish, 'Unpublihshed Brand ' + date, true);
     // JSONToCSVConvertor(remoteIndexesToPublish, 'Unpublihshed Remote ' + date, true);
+}
+
+function publishUnpublished() {
+    publishBrands();
 }
 
 function publishBrands() {
@@ -525,16 +537,16 @@ function publishBrands() {
                 $('#publish_hint').empty();
                 $('#publish_hint').append('正在发布新增编码，请稍候...');
                 publishRemoteIndexes();
-                // loadRemoteList();
-                // $('#publish_dialog').modal('hide');
             } else {
-                popUpHintDialog('发布编码表操作失败');
-                $('#publish_dialog').modal('hide');
+                $('#publish_hint').empty();
+                $('#publish_hint').append('正在发布新增编码，请稍候...');
+                publishRemoteIndexes();
             }
         },
         error: function () {
-            popUpHintDialog('发布编码表操作失败');
-            $('#publish_dialog').modal('hide');
+            $('#publish_hint').empty();
+            $('#publish_hint').append('正在发布新增编码，请稍候...');
+            publishRemoteIndexes();
         }
     });
 }
@@ -631,26 +643,14 @@ function createProtocol() {
         return;
     }
 
-    console.log('protocolName = ' + protocolName + ', protocolFile = ' + protocolFile +
-        ', protocolType = ' + protocolType);
-
     var form = $('#protocol_upload_form');
     form.attr('action', '/irext/int/create_protocol');
-    //form.attr('method', 'post');
-    //form.attr('encoding', 'multipart/form-data');
-    //form.attr('enctype', 'multipart/form-data');
     $('#protocol_admin_id').val(id);
 
     form.submit();
     $('#create_protocol_dialog').modal('hide');
     $('#creating_protocol_dialog').modal();
     initializeProtocols();
-}
-
-function createBleTestInfo() {
-    var bleRemoteIndexInfo = $('#ble_test_info').val();
-    $('#ble_remote_index').val(bleRemoteIndexInfo);
-    $('#create_ble_test_dialog').modal('hide');
 }
 
 ///////////////////////////// Data process /////////////////////////////
@@ -1030,7 +1030,6 @@ function initializeFilterBrands() {
                     }
                 }
                 if(currentFilterCategory.id != 3) {
-                    console.log('reload remote table after brand is refreshed');
                     loadRemoteList();
                 }
             } else {
@@ -1058,7 +1057,6 @@ function onProtocolChange() {
 
 function onRadioTypeChange() {
     currentRadioType = $('#radio_type').val();
-    console.log('update current radio type to ' + currentRadioType);
 
     switch (parseInt(currentRadioType)) {
         case RADIO_TYPE_IRDA:
@@ -1076,12 +1074,10 @@ function onRadioTypeChange() {
 
 function onSubCateChange() {
     currentSubCate = $('#sub_cate').val();
-    console.log('update current sub category type to ' + currentSubCate);
 }
 
 function onProtocolTypeChange() {
     currentProtocolType = $('#protocol_type').val();
-    console.log('update current protocol type to ' + currentProtocolType);
 }
 
 function onCategoryChange() {
@@ -1228,7 +1224,6 @@ function onOperatorChange() {
     var currentOperatorID = $('#operator_id').val();
 
     currentOperator = getStbOperatorByID(currentOperatorID);
-    console.log('currentOperator = ' + JSON.stringify(currentOperator));
 }
 
 function discoverCityCode() {
@@ -1240,8 +1235,6 @@ function onFilterCategoryChange() {
         id: $('#filter_category_id').val(),
         name: $('#filter_category_id option:selected').text()
     };
-
-    console.log('onFilterCategoryChange, id = ' + currentFilterCategory.id);
 
     switch(parseInt(currentFilterCategory.id)) {
         case CATEGORY_AC:
@@ -1464,12 +1457,142 @@ function downloadBin() {
     }
 }
 
+function onDecodeBin() {
+    if(null == selectedRemote) {
+        popUpHintDialog('请先选中一个索引');
+        return;
+    }
+
+    if(1 == selectedRemote.category_id) {
+        popUpHintDialog('空调在线解码不支持，您可以将编码下载到外部设备进行离线解码');
+        return;
+    }
+
+    freezeAllControlButtons();
+    var remoteToDecode = selectedRemote;
+    remoteToDecode.admin_id = id;
+    remoteToDecode.token = token;
+    $.ajax({
+        url: '/irext/decode/prepare_decoding_remote_index',
+        type: 'POST',
+        dataType: 'json',
+        data: selectedRemote,
+        timeout: 20000,
+        success: function (response) {
+            if(response.status.code == 0) {
+                enterDecoding(response.entity);
+            } else {
+                popUpHintDialog('启动解码失败');
+            }
+        },
+        error: function () {
+            popUpHintDialog('启动解码失败');
+        }
+    });
+}
+
+function onTransferBin() {
+    if(null == selectedRemote) {
+        popUpHintDialog('请先选中一个索引');
+        return;
+    }
+    $('#binary_transfer_dialog').modal();
+}
+
+function transferBin() {
+
+}
+
 function showPublishDialog() {
-    var hintText = '共有 <font color="#FF0000">' + brandsToPublish.length + '</font> 个新增品牌，以及 <font color="#FF0000">' + remoteIndexesToPublish.length + '</font> 个新增编码待发布，请确认';
+    var hintText = '共有 <font color="#FF0000">' + brandsToPublish.length +
+        '</font> 个新增品牌，以及 <font color="#FF0000">' + remoteIndexesToPublish.length +
+        '</font> 个新增编码待发布，请确认';
     $('#publish_hint').empty();
     $('#publish_hint').append(hintText);
     $('#publish_dialog').modal();
 }
+
+///////////////////////////// control functions /////////////////////////////
+function enterDecoding(ticketKey) {
+    currentTicket = ticketKey;
+    decodeSock = io.connect('http://' + localSocketAddr, {
+        reconnection: false
+    });
+    decodeSock.on('connect', function() {
+        onDecodeSocketConnected(decodeSock);
+    });
+
+    decodeSock.on('disconnect', function() {
+        onDecodeSocketDisconnected();
+    });
+
+    decodeSock.on('init', function(result) {
+        onDecodeSocketInit(result, decodeSock);
+    });
+
+    decodeSock.on('decode', function(result) {
+        onDecodeSockDecode(result);
+    });
+
+
+    $('#decode_dialog').modal();
+}
+
+function quitDecoding() {
+    decodeSock.disconnect();
+    $('#decode_dialog').modal('hide');
+}
+
+function onDecodeSocketConnected(socket) {
+    socket.emit('init', currentTicket);
+}
+
+function onDecodeSocketEvent(data) {
+    console.log('decode socket data received : ' + data);
+}
+
+function onDecodeSocketDisconnected() {
+
+}
+
+function onDecodeSocketInit(result, decodeSock) {
+    if (result.status.code != 0) {
+        console.log(result.status.code);
+        decodeSock.disconnect();
+        $('#decode_dialog').modal('hide');
+    } else {
+        currentControl.category_id = result.entity.category_id;
+        currentControl.sub_category_id = result.entity.sub_category_id;
+        unfreezeAllControlButtons();
+    }
+}
+
+function onDecodeSockDecode(result) {
+    var codeArray = result.code.slice(0, result.len);
+    $('#ir_wave_value').val(JSON.stringify(codeArray));
+}
+
+function unfreezeAllControlButtons() {
+    $('.cbtn').prop('disabled', false);
+}
+
+function freezeAllControlButtons() {
+    $('.cbtn').prop('disabled', true);
+}
+
+function onControlClick(buttonID) {
+    currentControl.key_id = buttonID.substring(4);
+    var acStatus = {
+        power: 0,
+        temp: 0,
+        mode: 0,
+        wind_dir: 0,
+        wind_speed: 0
+    };
+    currentControl.ac_status = acStatus;
+    decodeSock.emit('control', currentControl);
+}
+
 
 ///////////////////////////// UI functions /////////////////////////////
 function fillProtocolList(protocols) {

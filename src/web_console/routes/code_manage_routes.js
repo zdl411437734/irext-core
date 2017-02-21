@@ -20,6 +20,7 @@ app.post('/irext/int/create_remote_index', intService.createRemoteIndex);
 app.post('/irext/int/delete_remote_index', intService.deleteRemoteIndex);
 app.post('/irext/int/verify_remote_index', intService.verifyRemoteIndex);
 app.post('/irext/int/fallback_remote_index', intService.fallbackRemoteIndex);
+
 app.post('/irext/int/publish_remote_index', intService.publishRemoteIndex);
 
 app.post('/irext/int/create_brand', intService.createBrand);

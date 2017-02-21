@@ -6,6 +6,7 @@
 // system inclusion
 var express= require('express');
 var app = module.exports = express();
+var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
@@ -23,8 +24,6 @@ var errorCode = new ErrorCode();
 
 SERVER = enums.SERVER_MAIN;
 
-var serverListenPort = enums.APP_PRODUCTION_MODE;
-
 console.log('Configuring Infrastructure...');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,8 +33,7 @@ app.use(methodOverride());
 app.use(tokenValidation);
 app.use("/", express.static(__dirname + '/web/'));
 systemConfig.setupEnvironment();
-serverListenPort = LISTEN_PORT;
-
+var serverListenPort = LISTEN_PORT;
 
 console.log("initializing MySQL connection to : " + MYSQL_DB_SERVER_ADDRESS + ":" + MYSQL_DB_NAME);
 dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
@@ -44,8 +42,15 @@ require('./routes');
 
 var certificateLogic = require('./work_unit/certificate_logic.js');
 
+// prepare decode socket
+var io = require('socket.io')(http);
+
+var decodeService = require('./services/decode_service.js');
+io.on('connection', decodeService.decodeSocketConnected);
+console.log("decode socket is listening...");
+
 // kick start the engine
-System.startup(app, serverListenPort, "irext Console V0.0.3");
+System.startupHttp(http, serverListenPort, "irext Console V0.0.4");
 
 ////////////////// authentication middleware //////////////////
 function tokenValidation (req, res, next) {

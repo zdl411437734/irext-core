@@ -52,7 +52,6 @@ Brand.createBrand = function(brand, callback) {
             logger.error('failed to create brand : ' + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info('succeeded to create brand');
             callback(errorCode.SUCCESS, createdBrand);
         }
     });
@@ -65,7 +64,6 @@ Brand.findBrandByConditions = function(conditions, callback) {
                 logger.error("find brand error : " + error);
                 callback(errorCode.FAILED, null);
             } else {
-                logger.info("find brand successfully, length of brands = " + brands.length);
                 callback(errorCode.SUCCESS, brands);
             }
         });
@@ -80,7 +78,6 @@ Brand.listBrands = function(conditions, from, count, sortField, callback) {
                     logger.error("list brands error : " + listBrandsErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list brands successfully");
                     callback(errorCode.SUCCESS, brands);
                 }
             });
@@ -91,11 +88,21 @@ Brand.listBrands = function(conditions, from, count, sortField, callback) {
                     logger.error("list brands error : " + listBrandsErr);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info("list brands successfully");
                     callback(errorCode.SUCCESS, brands);
                 }
             });
     }
+};
+
+Brand.countBrands = function(conditions, callback) {
+    Brand.count(conditions, function(countBrandsErr, brandsCount) {
+        if (countBrandsErr) {
+            logger.error("count brands error : " + countBrandsErr);
+            callback(errorCode.FAILED, 0);
+        } else {
+            callback(errorCode.SUCCESS, brandsCount);
+        }
+    });
 };
 
 Brand.getBrandByID = function(brandID, callback) {
@@ -104,7 +111,6 @@ Brand.getBrandByID = function(brandID, callback) {
             logger.error("get brand by ID error : " + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info("get brand by ID successfully");
             callback(errorCode.SUCCESS, brand);
         }
     });
@@ -130,7 +136,6 @@ Brand.updateBrandByID = function(brandID, newBrand, callback) {
                     logger.error('failed to create brand in update brand : ' + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info('succeeded to update brand');
                     callback(errorCode.SUCCESS, createdBrand);
                 }
             });

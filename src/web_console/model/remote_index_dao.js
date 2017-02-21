@@ -80,7 +80,6 @@ RemoteIndex.createRemoteIndex = function(remoteIndex, callback) {
             logger.error('failed to create remoteIndex : ' + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info('succeeded to create remoteIndex');
             callback(errorCode.SUCCESS, createdRemoteIndex);
         }
     });
@@ -94,7 +93,6 @@ RemoteIndex.deleteRemoteIndex = function(remoteIndexID, callback) {
                     logger.error('failed to remove remote index ' + remoteIndexID);
                     callback(errorCode.FAILED);
                 } else {
-                    logger.error('remove remote index successfully ' + remoteIndexID);
                     callback(errorCode.SUCCESS);
                 }
             });
@@ -112,7 +110,6 @@ RemoteIndex.findRemoteIndexByCondition = function(conditions, callback) {
             logger.error("find remoteIndex error : " + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info("find remoteIndex successfully, length of remoteIndexes = " + remoteIndexes.length);
             callback(errorCode.SUCCESS, remoteIndexes);
         }
     });
@@ -127,7 +124,6 @@ RemoteIndex.listRemoteIndexes = function(conditions, from, count, sortField, cal
                 logger.error("list remoteIndexes error : " + listRemoteIndexesErr);
                 callback(errorCode.FAILED, null);
             } else {
-                logger.info("list remoteIndexes successfully");
                 callback(errorCode.SUCCESS, remoteIndexes);
             }
         });
@@ -138,11 +134,21 @@ RemoteIndex.listRemoteIndexes = function(conditions, from, count, sortField, cal
                 logger.error("list remoteIndexes error : " + listRemoteIndexesErr);
                 callback(errorCode.FAILED, null);
             } else {
-                logger.info("list remoteIndexes successfully");
                 callback(errorCode.SUCCESS, remoteIndexes);
             }
         });
     }
+};
+
+RemoteIndex.countRemoteIndexes = function(conditions, callback) {
+    RemoteIndex.count(conditions, function(countRemoteIndexesErr, remoteIndexesCount) {
+        if (countRemoteIndexesErr) {
+            logger.error("count remoteIndexes error : " + countRemoteIndexesErr);
+            callback(errorCode.FAILED, 0);
+        } else {
+            callback(errorCode.SUCCESS, remoteIndexesCount);
+        }
+    });
 };
 
 RemoteIndex.getRemoteIndexByID = function(remoteIndexID, callback) {
@@ -151,7 +157,6 @@ RemoteIndex.getRemoteIndexByID = function(remoteIndexID, callback) {
             logger.error("get remoteIndex by ID error : " + error);
             callback(errorCode.FAILED, null);
         } else {
-            logger.info("get remoteIndex by ID successfully");
             callback(errorCode.SUCCESS, remoteIndex);
         }
     });
@@ -163,7 +168,9 @@ RemoteIndex.updateRemoteIndex = function(remoteIndexID, newRemoteIndex, callback
             logger.error("get remoteIndex by ID error in update remote index : " + error);
             callback(errorCode.FAILED, null);
         } else {
+            var date = dateUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
             logger.info("get remoteIndex by ID successfully in update remote index");
+            /*
             remoteIndex.name = newRemoteIndex.name;
             remoteIndex.category_id = newRemoteIndex.category_id;
             remoteIndex.category_name = newRemoteIndex.category_name;
@@ -186,14 +193,21 @@ RemoteIndex.updateRemoteIndex = function(remoteIndexID, newRemoteIndex, callback
             remoteIndex.city_name_tw = newRemoteIndex.city_name_tw;
             remoteIndex.binary_md5 = newRemoteIndex.binary_md5;
             remoteIndex.contributor = newRemoteIndex.contributor;
-            remoteIndex.update_time = newRemoteIndex.update_time;
+            remoteIndex.update_time = date;
+            */
+
+            for (var prop in remoteIndex) {
+                if (undefined != newRemoteIndex[prop] && null != newRemoteIndex[prop]) {
+                    remoteIndex[prop] = newRemoteIndex[prop];
+                }
+            }
+            remoteIndex.update_time = data;
 
             remoteIndex.save(function(error, updatedRemoteIndex) {
                 if(error) {
                     logger.error('failed to update remoteIndex : ' + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info('succeeded to update remoteIndex');
                     callback(errorCode.SUCCESS, updatedRemoteIndex);
                 }
             });
@@ -215,7 +229,6 @@ RemoteIndex.verifyRemoteIndex = function(remoteIndexID, status, callback) {
                     logger.error('failed to verify remoteIndex : ' + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info('succeeded to verify remoteIndex');
                     callback(errorCode.SUCCESS, updatedRemoteIndex);
                 }
             });
@@ -237,7 +250,6 @@ RemoteIndex.fallbackRemoteIndex = function(remoteIndexID, status, callback) {
                     logger.error('failed to fallback remoteIndex : ' + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info('succeeded to fallback remoteIndex');
                     callback(errorCode.SUCCESS, updatedRemoteIndex);
                 }
             });
@@ -259,7 +271,6 @@ RemoteIndex.publishRemoteIndex = function(remoteIndexID, status, callback) {
                     logger.error('failed to publish remoteIndex : ' + error);
                     callback(errorCode.FAILED, null);
                 } else {
-                    logger.info('succeeded to publish remoteIndex');
                     callback(errorCode.SUCCESS, updatedRemoteIndex);
                 }
             });

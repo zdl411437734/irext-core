@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../public_js/bower_components/select2/dist/css/select2.min.css">
     <link rel="stylesheet" href="../public_js/bower_components/bootstrap-table/dist/bootstrap-table.min.css">
     <link rel="stylesheet" href="../public_js/bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="./css/remote.css">
+    <link rel="stylesheet" href="css/code_index.css">
 </head>
 <body>
     <div class="navbar container">
@@ -81,15 +81,19 @@
                     <button class="btn btn-normal btn-warning" onclick="onVerifyRemote(0);" style="font-size: 14px;">
                         <span class="glyphicon glyphicon-ok" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
-                    <button id="download_bin_button" class="btn btn-normal btn-default" onclick="downloadBin();" style="font-size: 14px;">
-                        <span class="glyphicon glyphicon-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    <button id="download_bin_button" class="btn btn-normal btn-info" onclick="downloadBin();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-cloud-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button id="decode_bin_button" class="btn btn-normal btn-primary" onclick="onDecodeBin();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-flash" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    </button>
+                    <button id="transfer_bin_button" class="btn btn-normal btn-primary" onclick="onTransferBin();" style="font-size: 14px;">
+                        <span class="glyphicon glyphicon-import" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
                 </div>
-                <!--
                 <button id="publish_button" class="btn btn-normal btn-success" onclick="onPublishRemote();" style="font-size: 14px;">
-                    <span class="glyphicon glyphicon-cloud" style="vertical-align:middle; margin-bottom: 3px;"></span>
+                    <span class="glyphicon glyphicon-send" style="vertical-align:middle; margin-bottom: 3px;"></span>
                 </button>
-                -->
                 <button id="search_bin_button" class="btn btn-normal btn-default" onclick="onSearchRemote();" style="font-size: 14px;">
                     <span class="glyphicon glyphicon-search" style="vertical-align:middle; margin-bottom: 3px;"></span>
                 </button>
@@ -246,7 +250,7 @@
         </div>
     </div>
 
-    <!-- hint dialog -->
+    <!-- delete hint dialog -->
     <div class="modal fade" id="delete_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -266,6 +270,7 @@
         </div>
     </div>
 
+    <!-- fallback hint dialog -->
     <div class="modal fade" id="fallback_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -285,6 +290,7 @@
         </div>
     </div>
 
+    <!-- verify hint dialog -->
     <div class="modal fade" id="verify_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -304,6 +310,114 @@
         </div>
     </div>
 
+    <!-- decode dialog -->
+    <div class="modal fade" id="decode_dialog" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">解码测试</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="decode_panel">
+                        <div style="width: 100%;">
+                            <div style="width: 100%;">
+                                <textarea id="ir_wave_value" rows="1" style="resize: none; width: 100%; overflow-x: scroll; white-space: nowrap;"></textarea>
+                            </div>
+                            <div class="row" style="text-align: center;">
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_0" class="cbtn btn btn-danger glyphicon glyphicon-off"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_8" class="cbtn btn btn-info glyphicon glyphicon-home"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_9" class="cbtn btn btn-info glyphicon glyphicon-chevron-left"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_10" class="cbtn btn btn-info glyphicon glyphicon-list"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_6" class="cbtn btn btn-primary glyphicon glyphicon-plus"></button>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: center;">
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_1" class="cbtn btn btn-warning glyphicon glyphicon-arrow-up"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: center;">
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_3" class="cbtn btn btn-warning glyphicon glyphicon-arrow-left"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_5" class="cbtn btn btn-success glyphicon glyphicon-star"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_4" class="cbtn btn btn-warning glyphicon glyphicon-arrow-right"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: center;">
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_2" class="cbtn btn btn-warning glyphicon glyphicon-arrow-down"></button>
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-2" style="text-align: center;">
+                                    <button id="btn_7" class="cbtn btn btn-primary glyphicon glyphicon-minus"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="quitDecoding();">退出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- publish hint dialog -->
     <div class="modal fade" id="publish_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -324,6 +438,7 @@
         </div>
     </div>
 
+    <!-- uploading hint dialog -->
     <div class="modal fade" id="uploading_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -348,6 +463,7 @@
         </div>
     </div>
 
+    <!-- creating protocol dialog -->
     <div class="modal fade" id="creating_protocol_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -457,41 +573,28 @@
         </div>
     </div>
 
-    <!-- create ble remote index test info dialog -->
-    <div class="modal fade" id="create_ble_test_dialog" role="dialog" aria-labelledby="myModalLabel"
+    <!-- bin transfer dialog -->
+    <div class="modal fade" id="binary_transfer_dialog" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">蓝牙控制测试信令</h4>
+                    <h4 class="modal-title">传输编码</h4>
                 </div>
                 <div class="modal-body">
-                <textarea id="ble_test_info" name="description" style="width: 100%; height: 200px; resize: none;"
-                          maxlength="10000" class="form-control" placeholder="在这里按格式填入测试信令"></textarea>
+                    <div class="input-group" style="max-height: 25px;">
+                        <span class="input-group-addon">传输方式</span>
+                        <select id="transfer_type" name="protocol_type" class="input-group-addon"
+                                onchange="onTransferTypeChanged();" style="width: 100%;">
+                            <option value="0" selected>COM</option>
+                            <option value="1">BLE</option>
+                        </select>
+                </div>
+                    <br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="createBleTestInfo();">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- signout dialog -->
-    <div class="modal fade" id="signout_confirm_dialog" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">退出登录</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="signout_hint">确定要退出吗？</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="signout();">确定</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="transferBin();">确定</button>
                 </div>
             </div>
         </div>
@@ -525,9 +628,10 @@
 <script src="../public_js/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="../public_js/bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
 <script src="../public_js/bower_components/select2/dist/js/select2.min.js"></script>
+<script src="../public_js/bower_components/socket.io-client/dist/socket.io.slim.min.js"></script>
 <script src="../public_js/utils/date_utils.js"></script>
 <script src="../public_js/utils/url_parser.js"></script>
 <script src="../public_js/chinese/await.js"></script>
 <script src="../public_js/chinese/chinese.js"></script>
-<script type="text/javascript" src="js/code_index.js"></script>
+<script type="text/javascript" src="js/code.js"></script>
 </html>
