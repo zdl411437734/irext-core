@@ -104,15 +104,15 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
         // calculate the bit scope
         UINT8 bit_range = end_bit - start_bit;
 
-		raw_value = comp_data->segment[current_seg + 2];
-		origin_hi = dc_data[cover_byte_pos_hi];
-		origin_lo = dc_data[cover_byte_pos_lo];
+        raw_value = comp_data->segment[current_seg + 2];
+        origin_hi = dc_data[cover_byte_pos_hi];
+        origin_lo = dc_data[cover_byte_pos_lo];
 
-		int_start_bit = start_bit - (cover_byte_pos_hi << 3);
-		int_end_bit = end_bit - (cover_byte_pos_lo << 3);
+        int_start_bit = start_bit - (cover_byte_pos_hi << 3);
+        int_end_bit = end_bit - (cover_byte_pos_lo << 3);
 
-		mask_hi = 0xFF << (8 - int_start_bit);
-		mask_lo = 0xFF >> int_end_bit;
+        mask_hi = 0xFF << (8 - int_start_bit);
+        mask_lo = 0xFF >> int_end_bit;
 
         value = ((origin_hi & ~mask_hi) << int_end_bit) | ((origin_lo & ~mask_lo) >> (8 - int_end_bit));
 
