@@ -63,7 +63,7 @@ INT8 ir_ac_file_open(const char *file_name)
     FILE *stream = fopen(file_name, "rb");
 #else
     FILE *stream;
-	fopen_s(&stream, file_name, "rb");
+    fopen_s(&stream, file_name, "rb");
 #endif
     if (NULL == stream)
     {
@@ -216,11 +216,11 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     time_length = create_ir_frame();
 
 #if defined BOARD_PC
-	for (i = 0; i < context->code_cnt; i++)
-	{
-		ir_printf("%d,", context->time[i]);
-	}
-	ir_printf("\n");
+    for (i = 0; i < context->code_cnt; i++)
+    {
+        ir_printf("%d,", context->time[i]);
+    }
+    ir_printf("\n");
 #endif
 
     return time_length;
@@ -393,7 +393,7 @@ INT8 ir_tv_file_open(const char *file_name)
     FILE *stream = fopen(file_name, "rb");
 #else
     FILE *stream;
-	fopen_s(&stream, file_name, "rb");
+    fopen_s(&stream, file_name, "rb");
 #endif
 
     if (stream == NULL)

@@ -187,8 +187,8 @@ static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
     for (i = 0; i < protocol->mode2.comp_data[mode_status].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->mode2.comp_data[mode_status]),
-			(UINT8)i, FALSE);
+            &(protocol->mode2.comp_data[mode_status]),
+            (UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -229,8 +229,8 @@ static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
     for (i = 0; i < protocol->speed2.comp_data[wind_speed].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->speed2.comp_data[wind_speed]),
-			(UINT8)i, FALSE);
+            &(protocol->speed2.comp_data[wind_speed]),
+            (UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -340,8 +340,8 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
     for (i = 0; i < protocol->swing2.comp_data[swing_mode].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->swing2.comp_data[swing_mode]),
-			(UINT8)i, FALSE);
+            &(protocol->swing2.comp_data[swing_mode]),
+            (UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -568,8 +568,8 @@ INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
     for (i = 0; i < protocol->function2.comp_data[function - 1].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->function2.comp_data[function - 1]),
-			(UINT8)i, FALSE);
+            &(protocol->function2.comp_data[function - 1]),
+            (UINT8)i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
