@@ -30,7 +30,6 @@ UINT8* ir_hex_code = NULL;
 UINT8 ir_hex_len = 0;
 
 UINT8 byteArray[PROTOCOL_SIZE] = { 0 };
-UINT8 tv_bin[EXPECTED_MEM_SIZE] = { 0 };
 
 size_t binary_length = 0;
 UINT8 *binary_content = NULL;
@@ -445,7 +444,6 @@ INT8 ir_tv_lib_parse(UINT8 ir_hex_encode)
     if (FALSE == tv_lib_parse(ir_hex_encode))
     {
         ir_printf("parse irda binary failed\n");
-        memset(tv_bin, 0x00, EXPECTED_MEM_SIZE);
         return IR_DECODE_FAILED;
     }
     return IR_DECODE_SUCCEEDED;
