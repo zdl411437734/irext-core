@@ -97,8 +97,10 @@ void Uart_Init(npiCB_t npiCBack)
         NPITLUART_initializeTransport(tRxBuf, tTxBuf, npiCBack);
         uartInitFlag = TRUE;
 
+#if defined UART_DEBUG
         sprintf(tTxBuf, "NPITLUART_initialize\n");
         NPITLUART_writeTransport(strlen(tTxBuf));
+#endif
     }
 }
 
@@ -128,17 +130,17 @@ void UART_DLY_ms(unsigned int ms)
     return;
 }
 
-
-#if defined UART_DEBUG
-
 void PrintString(uint8 *str)
 {
+#if defined UART_DEBUG
     UART_WriteTransport(str, (strlen((char*)str)));
+#endif
 }
 
 
 void PrintValue(char *content, uint32 value, uint8 format)
 {
+#if defined UART_DEBUG
     uint8 tmpLen;
     uint8 buf[UART_BUFFER_SIZE];
     uint32 err;
@@ -148,10 +150,27 @@ void PrintValue(char *content, uint32 value, uint8 format)
     err = (uint32)(value);
     _ltoa(err, &buf[tmpLen], format);
     PrintString(buf);
+#endif
 }
 
 
-#endif
+void WriteBytes(uint8 *str)
+{
+	UART_WriteTransport(str, (strlen((char*)str)));
+}
+
+void WriteValue(char *content, uint32 value, uint8 format)
+{
+    uint8 tmpLen;
+    uint8 buf[UART_BUFFER_SIZE];
+    uint32 err;
+
+    tmpLen = (uint8)strlen((char*)content);
+    memcpy(buf, content, tmpLen);
+    err = (uint32)(value);
+    _ltoa(err, &buf[tmpLen], format);
+    WriteBytes(buf);
+}
 
 #endif
 

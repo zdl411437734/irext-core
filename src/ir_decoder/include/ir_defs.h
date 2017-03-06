@@ -39,7 +39,7 @@ typedef int BOOL;
 #define ir_memset(A, B, C) memset(A, B, C)
 #define ir_strlen(A) strlen(A)
 #define ir_printf printf
-#define USER_DATA_SIZE 2048
+#define USER_DATA_SIZE 1636
 
 #ifdef __cplusplus
 }

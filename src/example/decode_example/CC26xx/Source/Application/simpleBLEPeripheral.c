@@ -1,42 +1,14 @@
-/*******************************************************************************
-  Filename:       simpleBLEPeripheral.c
-  Revised:        $Date: 2016-01-07 16:59:59 -0800 (Thu, 07 Jan 2016) $
-  Revision:       $Revision: 44594 $
+/**************************************************************************************
+Filename:       simpleBLEPeripheral.c
+Revised:        Date: 2017-01-10
+Revision:       Revision: 1.0
 
-  Description:    This file contains the Simple BLE Peripheral sample
-                  application for use with the CC2650 Bluetooth Low Energy
-                  Protocol Stack.
+Description:    This file provides algorithms for IR decode (status type)
 
-  Copyright 2013 - 2015 Texas Instruments Incorporated. All rights reserved.
+Revision log:
+* 2016-10-01: created by strawmanbobi
+**************************************************************************************/
 
-  IMPORTANT: Your use of this Software is limited to those specific rights
-  granted under the terms of a software license agreement between the user
-  who downloaded the software, his/her employer (which must be your employer)
-  and Texas Instruments Incorporated (the "License").  You may not use this
-  Software unless you agree to abide by the terms of the License. The License
-  limits your use, and you acknowledge, that the Software may not be modified,
-  copied or distributed unless embedded on a Texas Instruments microcontroller
-  or used solely and exclusively in conjunction with a Texas Instruments radio
-  frequency transceiver, which is integrated into your product.  Other than for
-  the foregoing purpose, you may not use, reproduce, copy, prepare derivative
-  works of, modify, distribute, perform, display or sell this Software and/or
-  its documentation for any purpose.
-
-  YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED “AS IS?WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-  INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
-  NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
-  TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
-  NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
-  LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-  INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
-  OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
-  OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-  (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
-
-  Should you have any questions regarding your right to use this Software,
-  contact Texas Instruments Incorporated at www.TI.com.
-*******************************************************************************/
 
 /*********************************************************************
  * INCLUDES
@@ -153,104 +125,77 @@
 #define SBP_IREXT_DECODE_EVT                  0x0080
 
 /* IREXT - begin */
-
-#include "./irext/include/ir_decode.h"
-
-#define IR_KEY_POWER    0
-#define IR_KEY_MUTE     1
-#define IR_KEY_VOL_UP   7
-#define IR_KEY_VOL_DOWN 8
-
-
-#define SAMPLE_TV_CODE_LENGTH 150
-#define SAMPLE_AC_CODE_LENGTH 568
-
-static ir_type_t ir_type = IR_TYPE_NONE;
-static ir_state_t ir_state = IR_STATE_NONE;
-
-static int32_t uart_recv_length = 0;
-static int32_t uart_recv_expected_length = 0;
-static int32_t uart_recv_started = 0;
-
-// sample source code
-static uint8_t source_tv[1024] =
+static transfer_control_block btcb =
 {
-    0x74, 0x63, 0x39, 0x30, 0x31, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x94, 0x11, 0x94,
-    0x11, 0x00, 0x30, 0x02, 0x00, 0x00, 0x00, 0x30, 0x02, 0x9A, 0x06, 0x00, 0x30, 0x02, 0x30, 0x02,
-    0x06, 0x01, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00,
-    0x03, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0x00, 0x01, 0x69, 0x72, 0x64, 0x61, 0x03, 0x0A, 0x0A,
-    0x0B, 0x0A, 0x0A, 0x14, 0x0A, 0x0A, 0x10, 0x0A, 0x0A, 0x11, 0x0A, 0x0A, 0x12, 0x0A, 0x0A, 0x13,
-    0x0A, 0x0A, 0xFF, 0x0A, 0x0A, 0x13, 0x0A, 0x0A, 0x12, 0x0A, 0x0A, 0x3B, 0x0A, 0x0A, 0x0F, 0x0A,
-    0x0A, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0A, 0x09, 0x0A, 0x0A, 0x00, 0x0A, 0x0A,
-    0x01, 0x0A, 0x0A, 0x02, 0x0A, 0x0A, 0x03, 0x0A, 0x0A, 0x04, 0x0A, 0x0A, 0x05, 0x0A, 0x0A, 0x06,
-    0x0A, 0x0A, 0x07, 0x0A, 0x0A, 0x08
+    .binary_recv_length = 0,
+    .binary_recv_expected_length = 0,
+    .transfer_on_going = 0,
 };
 
-static uint16_t user_data[USER_DATA_SIZE] = { 0 };
-
-uint16_t code_length_tv = SAMPLE_TV_CODE_LENGTH;
-uint16_t code_length_ac = SAMPLE_AC_CODE_LENGTH;
-uint16_t user_data_length = 0;
-
-static void IRext_uartDebug()
+static decode_control_block dccb =
 {
-#if defined UART_DEBUG
-    uint16_t index = 0;
+    .ir_type = IR_TYPE_NONE,
+    .ir_state = IR_STATE_NONE,
+    .source_code_length = 0,
+    .decoded_length = 0,
+};
 
-    if (user_data_length > 0)
-    {
-        // output to UART
-        char debug[16] = { 0 };
-        for (index = 0; index < user_data_length; index++)
-        {
-            memset(debug, 0x00, 16);
-            sprintf(debug, "%d,", user_data[index]);
-            UART_WriteTransport((uint8_t*)debug, strlen(debug));
-            UART_DLY_ms(10);
-        }
-        UART_WriteTransport((uint8_t*)"\n", 1);
-    }
-#endif
-}
+/* source code holder */
+static uint8_t binary_source[BINARY_SOURCE_SIZE_MAX] =
+{
+    0x00,
+};
 
+
+// local function prototypes
+static void IRext_uartDebug();
+
+static void ParseSummary(uint8_t* data, uint16_t len);
+
+static void ParseBinary(uint8_t* data, uint16_t len);
+
+static void ParseCommand(uint8_t* data, uint16_t len);
+
+
+// IR operation
 static void IRext_processState()
 {
-    if (IR_STATE_NONE == ir_state)
+    if (IR_STATE_NONE == dccb.ir_state)
     {
-        if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(source_tv, SAMPLE_TV_CODE_LENGTH))
+        if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(dccb.source_code, dccb.source_code_length))
         {
             LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
             HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
-            ir_state = IR_STATE_OPENED;
+            dccb.ir_state = IR_STATE_OPENED;
         }
     }
-    else if (IR_STATE_OPENED == ir_state)
+    else if (IR_STATE_OPENED == dccb.ir_state)
     {
         if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
         {
             LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
             HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
-            ir_state = IR_STATE_PARSED;
+            dccb.ir_state = IR_STATE_PARSED;
         }
     }
-    else if (IR_STATE_PARSED == ir_state)
+    else if (IR_STATE_PARSED == dccb.ir_state)
     {
         if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
         {
             LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
             HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
-            ir_state = IR_STATE_NONE;
+            dccb.ir_state = IR_STATE_NONE;
         }
     }
 }
 
+// KEY operation
 static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
 {
-    if (IR_STATE_PARSED == ir_state)
+    if (IR_STATE_PARSED == dccb.ir_state)
     {
-        user_data_length = ir_tv_lib_control(ir_key, user_data);
-        if (user_data_length > 0)
+        dccb.decoded_length = ir_tv_lib_control(ir_key, dccb.ir_decoded);
+        if (dccb.decoded_length > 0)
         {
             LCD_WRITE_STRING(key_display, LCD_PAGE6);
             IRext_uartDebug();
@@ -266,34 +211,116 @@ static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
     }
 }
 
-static void IRext_processUartMsg(uint8_t* data, uint16_t len)
+// UART operation
+static void IRext_uartDebug()
 {
+#if defined UART_DEBUG
     uint16_t index = 0;
 
-#if UART_DEBUG
+    if (user_data_length > 0)
+    {
+        // output to UART
+        char debug[16] = { 0 };
+        for (index = 0; index < dccb.decoded_length; index++)
+        {
+            memset(debug, 0x00, 16);
+            sprintf(debug, "%d,", dccb.ir_decoded[index]);
+            UART_WriteTransport((uint8_t*)debug, strlen(debug));
+            UART_DLY_ms(10);
+        }
+        UART_WriteTransport((uint8_t*)"\n", 1);
+    }
+#endif
+}
+
+static void IRext_processUartMsg(uint8_t* data, uint16_t len)
+{
+#if defined UART_DEBUG
+    uint16_t index = 0;
+
     for (index = 0; index < len; index++)
     {
-        PrintValue(" ", data[index], 16);
+        PrintValue(" ", data[index], FORMAT_HEX);
         UART_DLY_ms(10);
     }
     PrintString("\n");
 #endif
 
-    if (0 == uart_recv_started && len == 4)
+    if (NULL == data)
     {
-        uart_recv_expected_length = *(int *)data;
-        PrintValue("payload length = ", uart_recv_expected_length, 10);
-        uart_recv_started = 1;
+        return;
+    }
+
+	// 1 byte UART packet type (header)
+    uint8_t header = data[0];
+
+    if (HEADER_SR == header)
+    {
+        ParseSummary(&data[1], len - 2);
+    }
+    else if (HEADER_BT == header)
+    {
+        ParseBinary(&data[1], len - 2);
+    }
+    else if (HEADER_CMD == header)
+    {
+        ParseCommand(&data[1], len - 2);
     }
     else
     {
-        uart_recv_length += len;
-        if (uart_recv_length >= uart_recv_expected_length)
-        {
-            PrintString("all data are received\n");
-            uart_recv_started = 0;
-        }
+        // invalid header
     }
+}
+
+static void ParseSummary(uint8_t* data, uint16_t len)
+{
+    char cat_char[2] = { 0 };
+    char len_char[5] = { 0 };
+
+    if (len == BINARY_LENGTH_SIZE)
+    {
+        memset(&btcb, 0x00, sizeof(transfer_control_block));
+        // to compatible with irext web console (transfer binary)
+        // |cate|length|
+        // 1 byte category
+        // 4 bytes length in ASCII format value = n
+        memcpy(cat_char, &data[0], CATEGORY_LENGTH_SIZE);
+        dccb.ir_type = (ir_type_t)atoi(cat_char);
+
+        memcpy(len_char, &data[1], BINARY_LENGTH_SIZE);
+        btcb.binary_recv_expected_length = atoi(len_char);
+        btcb.binary_recv_length = 0;
+
+        btcb.transfer_on_going = 1;
+        WriteValue("0", btcb.binary_recv_length, FORMAT_DECIMAL);
+    }
+    else
+    {
+        // invalid summary
+        
+    }
+}
+
+static void ParseBinary(uint8_t* data, uint16_t len)
+{
+    // n bytes payload fragment
+    memcpy(&binary_source[btcb.binary_recv_length],
+                data,
+                len);
+    btcb.binary_recv_length += len;
+    if (btcb.binary_recv_length >= btcb.binary_recv_expected_length)
+    {
+        // finish binary transfer
+        dccb.source_code_length = btcb.binary_recv_length;
+        btcb.transfer_on_going = 0;
+    }
+    // feed back next expected offset in any cases
+    WriteValue("0", btcb.binary_recv_length, FORMAT_DECIMAL);
+}
+
+static void ParseCommand(uint8_t* data, uint16_t len)
+{
+    // TODO:
 }
 
 /* IREXT - end */
@@ -354,25 +381,25 @@ static uint8_t scanRspData[] =
     // complete name
     0x14,   // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    0x53,   // 'S'
-    0x69,   // 'i'
-    0x6d,   // 'm'
-    0x70,   // 'p'
-    0x6c,   // 'l'
-    0x65,   // 'e'
-    0x42,   // 'B'
-    0x4c,   // 'L'
-    0x45,   // 'E'
-    0x50,   // 'P'
-    0x65,   // 'e'
-    0x72,   // 'r'
-    0x69,   // 'i'
-    0x70,   // 'p'
-    0x68,   // 'h'
-    0x65,   // 'e'
-    0x72,   // 'r'
-    0x61,   // 'a'
-    0x6c,   // 'l'
+    'I',
+    'R',
+    'E',
+    'X',
+    'T',
+    '_',
+    'C',
+    'C',
+    '2',
+    '6',
+    'X',
+    'X',
+    '_',
+    'S',
+    'a',
+    'm',
+    'p',
+    'l',
+    'e',
 
     // connection interval range
     0x05,   // length of this data
@@ -509,7 +536,7 @@ void SimpleBLEPeripheral_createTask(void)
     Task_construct(&sbpTask, SimpleBLEPeripheral_taskFxn, &taskParams, NULL);
 }
 
-void  UartCallBack(uint16_t rxLen, uint16_t txLen)
+void UartCallBack(uint16_t rxLen, uint16_t txLen)
 {
     if(rxLen > 0)
     {

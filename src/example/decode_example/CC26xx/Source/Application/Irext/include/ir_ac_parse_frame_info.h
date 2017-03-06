@@ -38,7 +38,7 @@ extern INT8 parse_repeat_times(struct tag_head *tag);
 extern INT8 parse_bit_num(struct tag_head *tag);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 #endif // _IRDA_PARSE_FRAME_PARAMETER_H_

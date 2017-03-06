@@ -48,17 +48,24 @@ extern "C" {
 
 #define UART_BUFFER_SIZE 128
 
+#define FORMAT_HEX 16
+#define FORMAT_DECIMAL 10
+
+
 extern void Uart_Init(npiCB_t npiCBack);
 
 extern void UART_WriteTransport (uint8 *str, uint8 len);
 
 extern uint8 *UART_GetRxBufferAddress();
 
-#if defined UART_DEBUG
 extern void PrintString(uint8 *str);
 
 extern void PrintValue(char *title, uint32 value, uint8 format);
-#endif
+
+extern void WriteBytes(uint8 *str);
+
+extern void WriteValue(char *title, uint32 value, uint8 format);
+
 
 
 extern void UART_DLY_ms(unsigned int ms);
