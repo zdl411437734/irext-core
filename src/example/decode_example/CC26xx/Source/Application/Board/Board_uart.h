@@ -62,7 +62,7 @@ extern void PrintString(uint8 *str);
 
 extern void PrintValue(char *title, uint32 value, uint8 format);
 
-extern void WriteBytes(uint8 *str);
+extern void WriteBytes(uint8 *data, uint16_t len);
 
 extern void WriteValue(char *title, uint32 value, uint8 format);
 

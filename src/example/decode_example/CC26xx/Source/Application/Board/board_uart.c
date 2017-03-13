@@ -154,9 +154,9 @@ void PrintValue(char *content, uint32 value, uint8 format)
 }
 
 
-void WriteBytes(uint8 *str)
+void WriteBytes(uint8 *data, uint16_t len)
 {
-	UART_WriteTransport(str, (strlen((char*)str)));
+	UART_WriteTransport(data, len);
 }
 
 void WriteValue(char *content, uint32 value, uint8 format)
@@ -169,7 +169,7 @@ void WriteValue(char *content, uint32 value, uint8 format)
     memcpy(buf, content, tmpLen);
     err = (uint32)(value);
     _ltoa(err, &buf[tmpLen], format);
-    WriteBytes(buf);
+    WriteBytes(buf, strlen(buf));
 }
 
 #endif

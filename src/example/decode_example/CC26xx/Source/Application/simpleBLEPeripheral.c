@@ -135,15 +135,9 @@ static transfer_control_block btcb =
 static decode_control_block dccb =
 {
     .ir_type = IR_TYPE_NONE,
-    .ir_state = IR_STATE_NONE,
+    .ir_state = IR_STATE_STANDBY,
     .source_code_length = 0,
     .decoded_length = 0,
-};
-
-/* source code holder */
-static uint8_t binary_source[BINARY_SOURCE_SIZE_MAX] =
-{
-    0x00,
 };
 
 
@@ -160,31 +154,50 @@ static void ParseCommand(uint8_t* data, uint16_t len);
 // IR operation
 static void IRext_processState()
 {
-    if (IR_STATE_NONE == dccb.ir_state)
+    if (IR_STATE_STANDBY == dccb.ir_state)
     {
-        if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(dccb.source_code, dccb.source_code_length))
+        dccb.ir_state = IR_STATE_NONE;
+        LCD_WRITE_STRING("IR READY", LCD_PAGE7);
+    }
+    else if (IR_STATE_READY == dccb.ir_state)
+    {
+        if (dccb.ir_type == IR_TYPE_TV)
         {
-            LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
-            HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
-            dccb.ir_state = IR_STATE_OPENED;
+            if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(dccb.source_code, dccb.source_code_length))
+            {
+                LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
+                HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
+                dccb.ir_state = IR_STATE_OPENED;
+            }
+            else
+            {
+                LCD_WRITE_STRING("OPEN ERROR", LCD_PAGE7);
+            }
         }
     }
     else if (IR_STATE_OPENED == dccb.ir_state)
     {
-        if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
+        if (dccb.ir_type == IR_TYPE_TV)
         {
-            LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
-            HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
-            dccb.ir_state = IR_STATE_PARSED;
+            if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
+            {
+                LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
+                HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
+                dccb.ir_state = IR_STATE_PARSED;
+            }
+            else
+            {
+                LCD_WRITE_STRING("PARSE ERROR", LCD_PAGE7);
+            }
         }
     }
     else if (IR_STATE_PARSED == dccb.ir_state)
     {
         if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
         {
-            LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
+            LCD_WRITE_STRING("IR READY", LCD_PAGE7);
             HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
-            dccb.ir_state = IR_STATE_NONE;
+            dccb.ir_state = IR_STATE_READY;
         }
     }
 }
@@ -214,10 +227,9 @@ static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
 // UART operation
 static void IRext_uartDebug()
 {
-#if defined UART_DEBUG
     uint16_t index = 0;
 
-    if (user_data_length > 0)
+    if (dccb.source_code_length > 0)
     {
         // output to UART
         char debug[16] = { 0 };
@@ -230,7 +242,6 @@ static void IRext_uartDebug()
         }
         UART_WriteTransport((uint8_t*)"\n", 1);
     }
-#endif
 }
 
 static void IRext_processUartMsg(uint8_t* data, uint16_t len)
@@ -256,15 +267,16 @@ static void IRext_processUartMsg(uint8_t* data, uint16_t len)
 
     if (HEADER_SR == header)
     {
+        // since there is 1 more byte for eos
         ParseSummary(&data[1], len - 2);
     }
     else if (HEADER_BT == header)
     {
-        ParseBinary(&data[1], len - 2);
+        ParseBinary(&data[1], len - 1);
     }
     else if (HEADER_CMD == header)
     {
-        ParseCommand(&data[1], len - 2);
+        ParseCommand(&data[1], len - 1);
     }
     else
     {
@@ -286,6 +298,8 @@ static void ParseSummary(uint8_t* data, uint16_t len)
         // 4 bytes length in ASCII format value = n
         memcpy(cat_char, &data[0], CATEGORY_LENGTH_SIZE);
         dccb.ir_type = (ir_type_t)atoi(cat_char);
+        dccb.source_code_length = 0;
+        memset(dccb.source_code, 0x00, BINARY_SOURCE_SIZE_MAX);
 
         memcpy(len_char, &data[1], BINARY_LENGTH_SIZE);
         btcb.binary_recv_expected_length = atoi(len_char);
@@ -304,7 +318,7 @@ static void ParseSummary(uint8_t* data, uint16_t len)
 static void ParseBinary(uint8_t* data, uint16_t len)
 {
     // n bytes payload fragment
-    memcpy(&binary_source[btcb.binary_recv_length],
+    memcpy(&dccb.source_code[btcb.binary_recv_length],
                 data,
                 len);
     btcb.binary_recv_length += len;
@@ -312,6 +326,7 @@ static void ParseBinary(uint8_t* data, uint16_t len)
     {
         // finish binary transfer
         dccb.source_code_length = btcb.binary_recv_length;
+        dccb.ir_state = IR_STATE_READY;
         btcb.transfer_on_going = 0;
     }
     // feed back next expected offset in any cases
@@ -322,6 +337,12 @@ static void ParseCommand(uint8_t* data, uint16_t len)
 {
     // TODO:
 }
+
+void TransportDataToUart(uint8_t* data, uint16_t len)
+{
+    UART_WriteTransport(data, len);
+}
+
 
 /* IREXT - end */
 
@@ -736,7 +757,7 @@ static void SimpleBLEPeripheral_init(void)
 #endif // HAL_IMAGE_A
 #else
     LCD_WRITE_STRING("IRext sample", LCD_PAGE0);
-    LCD_WRITE_STRING("IR NONE", LCD_PAGE7);
+    LCD_WRITE_STRING("STANDBY", LCD_PAGE7);
     HalLedSet(HAL_LED_1, HAL_LED_MODE_OFF);
 #endif
 }
@@ -1119,7 +1140,14 @@ static void SimpleBLEPeripheral_processAppMsg(sbpEvt_t *pMsg)
             uint8 len = queue_read(valueToCopy, UART_BUFFER_SIZE);
             if(len > 0)
             {
-                IRext_processUartMsg(valueToCopy, len);
+                if (IR_STATE_STANDBY == dccb.ir_state)
+                {
+                    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR6, len, valueToCopy);
+                }
+                else
+                {
+                    IRext_processUartMsg(valueToCopy, len);
+                }
             }
             if(queue_total() > 0)
             {

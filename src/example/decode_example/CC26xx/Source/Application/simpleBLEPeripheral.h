@@ -64,7 +64,9 @@ typedef enum
 
 typedef enum
 {
-    IR_STATE_NONE = 0,
+    IR_STATE_STANDBY = 0,
+    IR_STATE_NONE,
+    IR_STATE_READY,
     IR_STATE_OPENED,
     IR_STATE_PARSED,
     IR_STATE_MAX
@@ -93,6 +95,8 @@ typedef struct
 /*********************************************************************
  * FUNCTIONS
  */
+
+extern void TransportDataToUart(uint8_t* data, uint16_t len);
 
 /*
  * Task creation function for the Simple BLE Peripheral.

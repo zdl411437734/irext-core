@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#define SEND_BUF_MAX_SIZE   320
+#define SEND_BUF_MAX_SIZE   256
 
 extern bool queue_write(uint8 *WrBuf, unsigned short WrLen);
 
