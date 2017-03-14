@@ -777,7 +777,7 @@ void HalLcdDisplayPercentBar( char *title, uint8 value )
     buf[1+x] = '+';
 
   err = (uint32)value;
-  _ltoa( err, (uint8*)&buf[13], 10 );
+  _ltoa( err, &buf[13], 10 );
 
   HalLcdWriteString( (char*)buf, 1 );
 

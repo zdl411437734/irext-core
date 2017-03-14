@@ -162,14 +162,14 @@ void WriteBytes(uint8 *data, uint16_t len)
 void WriteValue(char *content, uint32 value, uint8 format)
 {
     uint8 tmpLen;
-    uint8 buf[UART_BUFFER_SIZE];
+    char buf[UART_BUFFER_SIZE];
     uint32 err;
 
     tmpLen = (uint8)strlen((char*)content);
     memcpy(buf, content, tmpLen);
     err = (uint32)(value);
-    _ltoa(err, &buf[tmpLen], format);
-    WriteBytes(buf, strlen(buf));
+    _ltoa(err, (uint8*)&buf[tmpLen], format);
+    WriteBytes((uint8*)buf, strlen(buf));
 }
 
 #endif

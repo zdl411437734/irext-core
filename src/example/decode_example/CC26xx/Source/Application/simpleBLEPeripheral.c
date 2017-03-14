@@ -161,7 +161,7 @@ static void IRext_processState()
     }
     else if (IR_STATE_READY == dccb.ir_state)
     {
-        if (dccb.ir_type == IR_TYPE_TV)
+        if (IR_TYPE_TV == dccb.ir_type)
         {
             if (IR_DECODE_SUCCEEDED == ir_tv_lib_open(dccb.source_code, dccb.source_code_length))
             {
@@ -171,13 +171,30 @@ static void IRext_processState()
             }
             else
             {
-                LCD_WRITE_STRING("OPEN ERROR", LCD_PAGE7);
+                LCD_WRITE_STRING("OPEN TV ERROR", LCD_PAGE7);
             }
+        }
+        else if (IR_TYPE_AC == dccb.ir_type)
+        {
+            if (IR_DECODE_SUCCEEDED == ir_ac_lib_open(dccb.source_code, dccb.source_code_length))
+            {
+                LCD_WRITE_STRING("IR OPENED", LCD_PAGE7);
+                HalLedSet(HAL_LED_1, HAL_LED_MODE_ON);
+                dccb.ir_state = IR_STATE_OPENED;
+            }
+            else
+            {
+                LCD_WRITE_STRING("OPEN AC ERROR", LCD_PAGE7);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("TYPE ERROR", LCD_PAGE7);
         }
     }
     else if (IR_STATE_OPENED == dccb.ir_state)
     {
-        if (dccb.ir_type == IR_TYPE_TV)
+        if (IR_TYPE_TV == dccb.ir_type)
         {
             if (IR_DECODE_SUCCEEDED == ir_tv_lib_parse(0))
             {
@@ -187,13 +204,31 @@ static void IRext_processState()
             }
             else
             {
-                LCD_WRITE_STRING("PARSE ERROR", LCD_PAGE7);
+                LCD_WRITE_STRING("PARSE TV ERROR", LCD_PAGE7);
             }
+        }
+        else if (IR_TYPE_AC == dccb.ir_type)
+        {
+            if (IR_DECODE_SUCCEEDED == ir_ac_lib_parse())
+            {
+                LCD_WRITE_STRING("IR PARSED", LCD_PAGE7);
+                HalLedSet(HAL_LED_2, HAL_LED_MODE_ON);
+                dccb.ir_state = IR_STATE_PARSED;
+            }
+            else
+            {
+                LCD_WRITE_STRING("PARSE AC ERROR", LCD_PAGE7);
+            }
+        }
+        else
+        {
+            LCD_WRITE_STRING("TYPE ERROR", LCD_PAGE7);
         }
     }
     else if (IR_STATE_PARSED == dccb.ir_state)
     {
-        if (IR_DECODE_SUCCEEDED == ir_tv_lib_close())
+        if ((dccb.ir_type == IR_TYPE_TV && IR_DECODE_SUCCEEDED == ir_tv_lib_close()) ||
+            (dccb.ir_type == IR_TYPE_AC && IR_DECODE_SUCCEEDED == ir_ac_lib_close()))
         {
             LCD_WRITE_STRING("IR READY", LCD_PAGE7);
             HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);

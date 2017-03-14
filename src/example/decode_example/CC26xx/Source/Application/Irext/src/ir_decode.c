@@ -225,7 +225,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     return time_length;
 }
 
-void ir_ac_lib_close()
+INT8 ir_ac_lib_close()
 {
     // free context
     if (NULL != tags)
@@ -235,7 +235,7 @@ void ir_ac_lib_close()
     }
     free_ac_context();
 
-    return;
+    return IR_DECODE_SUCCEEDED;
 }
 
 // utils
