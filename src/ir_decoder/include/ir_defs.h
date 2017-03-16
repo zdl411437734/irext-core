@@ -22,6 +22,10 @@ extern "C"
 #define LOG_TAG "ir_decode"
 #endif
 
+#if defined BOARD_CC26XX
+#include "OSAL.h"
+#endif
+
 #define TRUE    1
 #define FALSE   0
 
@@ -33,8 +37,14 @@ typedef signed int INT;
 typedef unsigned int UINT;
 typedef int BOOL;
 
+#if !defined BOARD_CC26XX
 #define ir_malloc(A) malloc(A)
 #define ir_free(A) free(A)
+#else
+#define ir_malloc(A) ICall_malloc(A)
+#define ir_free(A) ICall_free(A)
+#endif
+
 #define ir_memcpy(A, B, C) memcpy(A, B, C)
 #define ir_memset(A, B, C) memset(A, B, C)
 #define ir_strlen(A) strlen(A)
