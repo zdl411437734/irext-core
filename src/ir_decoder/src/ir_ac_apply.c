@@ -371,10 +371,6 @@ static INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inver
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-    ir_printf("checksum value = %02X\n", checksum);
-    ir_printf("checksum byte pos = %d\n", cs.checksum_byte_pos);
-    ir_printf("\n");
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -402,10 +398,6 @@ static INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL i
 
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
-
-    ir_printf("checksum value = %02X\n", checksum & 0x0F);
-    ir_printf("checksum byte pos = %d\n", cs.checksum_byte_pos);
-    ir_printf("\n");
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -458,9 +450,6 @@ static INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL 
         ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F);
     }
 
-    ir_printf("checksum value = %02X\n", checksum & 0x0F);
-    ir_printf("checksum byte pos = %d\n", apply_byte_pos);
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -502,9 +491,6 @@ static INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data c
     // apply checksum, for specific-half-byte checksum, the byte pos actually indicates the half-byte pos
     apply_byte_pos = cs.checksum_byte_pos >> 1;
     ac_code[apply_byte_pos] = checksum;
-
-    ir_printf("checksum value = %02X\n", checksum);
-    ir_printf("checksum byte pos = %d\n", apply_byte_pos);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -583,16 +569,8 @@ INT8 apply_checksum(struct ac_protocol *protocol)
         return IR_DECODE_SUCCEEDED;
     }
 
-    // have some debug
-    ir_printf("\napply checksum :\n");
-    ir_printf("checksum num = %d\n", protocol->checksum.count);
-
     for(i = 0; i < protocol->checksum.count; i++)
     {
-        // have some debug
-        ir_printf("num : %d\n", i + 1);
-        ir_printf("checksum type = %02X\n", protocol->checksum.checksum_data[i].type);
-
         switch (protocol->checksum.checksum_data[i].type)
         {
             case CHECKSUM_TYPE_BYTE:
