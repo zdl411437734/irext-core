@@ -42,9 +42,9 @@ INT8 parse_boot_code(struct tag_head *tag)
             index++;
         }
         ir_memcpy(buf, tag->pdata + pos, index - pos);
-        pos = (UINT16)(index + 1);
+        pos = (UINT16) (index + 1);
         index = pos;
-        context->bootcode.data[cnt++] = (UINT16)(atoi((char *) buf));
+        context->bootcode.data[cnt++] = (UINT16) (atoi((char *) buf));
         ir_memset(buf, 0, 16);
     }
     context->bootcode.len = cnt;
@@ -75,10 +75,10 @@ INT8 parse_zero(struct tag_head *tag)
     }
 
     ir_memcpy(low, tag->pdata, index);
-    ir_memcpy(high, tag->pdata + index + 1, (size_t)(tag->len - index - 1));
+    ir_memcpy(high, tag->pdata + index + 1, (size_t) (tag->len - index - 1));
 
-    context->zero.low = (UINT16)(atoi((char *) low));
-    context->zero.high = (UINT16)(atoi((char *) high));
+    context->zero.low = (UINT16) (atoi((char *) low));
+    context->zero.high = (UINT16) (atoi((char *) high));
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -105,10 +105,10 @@ INT8 parse_one(struct tag_head *tag)
         index++;
     }
     ir_memcpy(low, tag->pdata, index);
-    ir_memcpy(high, tag->pdata + index + 1, (size_t)(tag->len - index - 1));
+    ir_memcpy(high, tag->pdata + index + 1, (size_t) (tag->len - index - 1));
 
-    context->one.low = (UINT16)(atoi((char *) low));
-    context->one.high = (UINT16)(atoi((char *) high));
+    context->one.low = (UINT16) (atoi((char *) low));
+    context->one.high = (UINT16) (atoi((char *) high));
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -133,9 +133,9 @@ INT8 parse_delay_code_data(UINT8 *pdata)
             index++;
         }
         ir_memcpy(buf, pdata + pos, index - pos);
-        pos = (UINT16)(index + 1);
+        pos = (UINT16) (index + 1);
         index = pos;
-        context->dc[context->dc_cnt].time[cnt++] = (UINT16)(atoi((char *) buf));
+        context->dc[context->dc_cnt].time[cnt++] = (UINT16) (atoi((char *) buf));
         context->dc[context->dc_cnt].time_cnt = cnt;
         ir_memset(buf, 0, 16);
     }
@@ -163,7 +163,7 @@ INT8 parse_delay_code_pos(UINT8 *buf)
         }
     }
     parse_delay_code_data(data);
-    context->dc[context->dc_cnt].pos = (UINT16)(atoi((char *) start));
+    context->dc[context->dc_cnt].pos = (UINT16) (atoi((char *) start));
 
     context->dc_cnt++;
     return IR_DECODE_SUCCEEDED;
@@ -186,7 +186,7 @@ INT8 parse_delay_code(struct tag_head *tag)
         if (tag->pdata[i] == '|')
         {
             ir_memcpy(buf, tag->pdata + preindex, i - preindex);
-            preindex = (UINT16)(i + 1);
+            preindex = (UINT16) (i + 1);
             parse_delay_code_pos(buf);
             ir_memset(buf, 0, 64);
         }
@@ -208,7 +208,7 @@ INT8 parse_frame_len(struct tag_head *tag, UINT16 len)
         return IR_DECODE_FAILED;
     }
 
-    temp = (UINT8 *)ir_malloc(len + 1);
+    temp = (UINT8 *) ir_malloc(len + 1);
 
     if (NULL == temp)
     {
@@ -220,7 +220,7 @@ INT8 parse_frame_len(struct tag_head *tag, UINT16 len)
     ir_memcpy(temp, tag->pdata, len);
     temp[len] = '\0';
 
-    context->frame_length = (UINT16)(atoi((char *) temp));
+    context->frame_length = (UINT16) (atoi((char *) temp));
 
     ir_free(temp);
     return IR_DECODE_SUCCEEDED;
@@ -235,7 +235,7 @@ INT8 parse_endian(struct tag_head *tag)
         return IR_DECODE_FAILED;
     }
     ir_memcpy(buf, tag->pdata, tag->len);
-    context->endian = (UINT8)(atoi((char *) buf));
+    context->endian = (UINT8) (atoi((char *) buf));
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -248,7 +248,7 @@ INT8 parse_lastbit(struct tag_head *tag)
         return IR_DECODE_FAILED;
     }
     ir_memcpy(buf, tag->pdata, tag->len);
-    context->lastbit = (UINT8)(atoi((char *) buf));
+    context->lastbit = (UINT8) (atoi((char *) buf));
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -262,7 +262,7 @@ INT8 parse_repeat_times(struct tag_head *tag)
 
     ir_memcpy(asc_code, tag->pdata, tag->len);
 
-    context->repeat_times = (UINT16)(atoi((char *) asc_code));
+    context->repeat_times = (UINT16) (atoi((char *) asc_code));
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -287,8 +287,8 @@ INT8 parse_delay_code_tag48_pos(UINT8 *buf)
         }
     }
 
-    context->bitnum[context->bitnum_cnt].pos = (UINT16)(atoi((char *) start));
-    context->bitnum[context->bitnum_cnt].bits = (UINT16)(atoi((char *) data));
+    context->bitnum[context->bitnum_cnt].pos = (UINT16) (atoi((char *) start));
+    context->bitnum[context->bitnum_cnt].bits = (UINT16) (atoi((char *) data));
     context->bitnum_cnt++;
     return IR_DECODE_SUCCEEDED;
 }
@@ -310,7 +310,7 @@ INT8 parse_bit_num(struct tag_head *tag)
         if (tag->pdata[i] == '|')
         {
             ir_memcpy(buf, tag->pdata + preindex, i - preindex);
-            preindex = (UINT16)(i + 1);
+            preindex = (UINT16) (i + 1);
             parse_delay_code_tag48_pos(buf);
             ir_memset(buf, 0, 64);
         }
@@ -323,7 +323,7 @@ INT8 parse_bit_num(struct tag_head *tag)
     for (i = 0; i < context->bitnum_cnt; i++)
     {
         if (context->bitnum[i].pos == -1)
-            context->bitnum[i].pos = (UINT16)(context->default_code.len - 1); //convert -1 to last data pos
+            context->bitnum[i].pos = (UINT16) (context->default_code.len - 1); //convert -1 to last data pos
     }
     return IR_DECODE_SUCCEEDED;
 }

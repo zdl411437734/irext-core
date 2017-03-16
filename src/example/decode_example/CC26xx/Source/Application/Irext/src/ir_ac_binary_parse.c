@@ -21,11 +21,11 @@ extern struct tag_head *tags;
 
 UINT8 tag_count = 0;
 const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
-{
-    1, 2, 3, 4, 5, 6, 7,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-    41, 42, 43, 44, 45, 46, 47, 48
-};
+        {
+                1, 2, 3, 4, 5, 6, 7,
+                21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                41, 42, 43, 44, 45, 46, 47, 48
+        };
 
 INT8 binary_parse_offset()
 {
@@ -33,12 +33,12 @@ INT8 binary_parse_offset()
     UINT16 *phead = (UINT16 *) &p_ir_buffer->data[1];
 
     tag_count = p_ir_buffer->data[0];
-    if(TAG_COUNT_FOR_PROTOCOL != tag_count)
+    if (TAG_COUNT_FOR_PROTOCOL != tag_count)
     {
         return IR_DECODE_FAILED;
     }
 
-    tag_head_offset = (UINT16)((tag_count << 1) + 1);
+    tag_head_offset = (UINT16) ((tag_count << 1) + 1);
 
     tags = (t_tag_head *) ir_malloc(tag_count * sizeof(t_tag_head));
     if (NULL == tags)
@@ -68,7 +68,7 @@ INT8 binary_parse_len()
             continue;
         }
 
-        for (j = (UINT16)(i + 1); j < tag_count; j++)
+        for (j = (UINT16) (i + 1); j < tag_count; j++)
         {
             if (tags[j].offset != TAG_INVALID)
             {

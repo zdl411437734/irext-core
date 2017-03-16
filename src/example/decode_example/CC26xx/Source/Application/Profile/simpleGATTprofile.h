@@ -66,13 +66,13 @@ extern "C"
 #define SIMPLEPROFILE_SERV_UUID               0xFFF0
     
 // UUID
-#define SIMPLEPROFILE_CHAR1_UUID            0xFFF1
-#define SIMPLEPROFILE_CHAR2_UUID            0xFFF2
-#define SIMPLEPROFILE_CHAR3_UUID            0xFFF3
-#define SIMPLEPROFILE_CHAR4_UUID            0xFFF4
-#define SIMPLEPROFILE_CHAR5_UUID            0xFFF5
-#define SIMPLEPROFILE_CHAR6_UUID            0xFFF6
-#define SIMPLEPROFILE_CHAR7_UUID            0xFFF7
+#define SIMPLEPROFILE_CHAR1_UUID              0xFFF1
+#define SIMPLEPROFILE_CHAR2_UUID              0xFFF2
+#define SIMPLEPROFILE_CHAR3_UUID              0xFFF3
+#define SIMPLEPROFILE_CHAR4_UUID              0xFFF4
+#define SIMPLEPROFILE_CHAR5_UUID              0xFFF5
+#define SIMPLEPROFILE_CHAR6_UUID              0xFFF6
+#define SIMPLEPROFILE_CHAR7_UUID              0xFFF7
   
 // Simple Keys Profile Services bit fields
 #define SIMPLEPROFILE_SERVICE               0x00000001

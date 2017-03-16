@@ -15,11 +15,11 @@ UINT8 char_to_hex(char chr)
 {
     UINT8 value = 0;
     if (chr >= '0' && chr <= '9')
-        value = (UINT8)(chr - '0');
+        value = (UINT8) (chr - '0');
     if (chr >= 'a' && chr <= 'f')
-        value = (UINT8)(chr - 'a' + 10);
+        value = (UINT8) (chr - 'a' + 10);
     if (chr >= 'A' && chr <= 'F')
-        value = (UINT8)(chr - 'A' + 10);
+        value = (UINT8) (chr - 'A' + 10);
     return value;
 }
 
@@ -44,7 +44,6 @@ void string_to_hex(UINT8 *p, ac_hex *pac_hex, UINT16 len)
 {
     UINT8 i = 0;
 
-    ir_printf("string to hex");
     pac_hex->len = chars_to_hex(p);
     p = p + 2;
     for (i = 0; i < pac_hex->len; i++)
@@ -62,15 +61,15 @@ char hex_half_byte_to_single_char(UINT8 length, UINT8 half_byte)
     }
     if (half_byte >= 10 && half_byte < 16)
     {
-        return (char)(half_byte - 10 + 0x41);
+        return (char) (half_byte - 10 + 0x41);
     }
     else
     {
-        return (char)(half_byte + 0x30);
+        return (char) (half_byte + 0x30);
     }
 }
 
-void hex_byte_to_double_char(char* dest, UINT8 length, UINT8 src)
+void hex_byte_to_double_char(char *dest, UINT8 length, UINT8 src)
 {
     UINT8 hi_num = 0;
     UINT8 lo_num = 0;
@@ -78,8 +77,8 @@ void hex_byte_to_double_char(char* dest, UINT8 length, UINT8 src)
     {
         return;
     }
-    hi_num = (UINT8)((src >> 4) & 0x0F);
-    lo_num = (UINT8)(src & 0x0F);
+    hi_num = (UINT8) ((src >> 4) & 0x0F);
+    lo_num = (UINT8) (src & 0x0F);
 
     dest[0] = hex_half_byte_to_single_char(1, hi_num);
     dest[1] = hex_half_byte_to_single_char(1, lo_num);
@@ -88,9 +87,9 @@ void hex_byte_to_double_char(char* dest, UINT8 length, UINT8 src)
 BOOL isin(UINT8 array[], UINT8 value, UINT8 len)
 {
     UINT16 i = 0;
-    for(i = 0; i < len; i++)
+    for (i = 0; i < len; i++)
     {
-        if(array[i] == value)
+        if (array[i] == value)
         {
             return TRUE;
         }

@@ -104,15 +104,15 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
         // calculate the bit scope
         UINT8 bit_range = end_bit - start_bit;
 
-		raw_value = comp_data->segment[current_seg + 2];
-		origin_hi = dc_data[cover_byte_pos_hi];
-		origin_lo = dc_data[cover_byte_pos_lo];
+        raw_value = comp_data->segment[current_seg + 2];
+        origin_hi = dc_data[cover_byte_pos_hi];
+        origin_lo = dc_data[cover_byte_pos_lo];
 
-		int_start_bit = start_bit - (cover_byte_pos_hi << 3);
-		int_end_bit = end_bit - (cover_byte_pos_lo << 3);
+        int_start_bit = start_bit - (cover_byte_pos_hi << 3);
+        int_end_bit = end_bit - (cover_byte_pos_lo << 3);
 
-		mask_hi = 0xFF << (8 - int_start_bit);
-		mask_lo = 0xFF >> int_end_bit;
+        mask_hi = 0xFF << (8 - int_start_bit);
+        mask_lo = 0xFF >> int_end_bit;
 
         value = ((origin_hi & ~mask_hi) << int_end_bit) | ((origin_lo & ~mask_lo) >> (8 - int_end_bit));
 
@@ -146,7 +146,7 @@ static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status)
     }
     for (i = 0; i < protocol->power1.comp_data[power_status].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->power1.comp_data[power_status]), (UINT8)i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->power1.comp_data[power_status]), (UINT8) i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -167,7 +167,7 @@ static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
 
     for (i = 0; i < protocol->mode1.comp_data[mode_status].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->mode1.comp_data[mode_status]), (UINT8)i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->mode1.comp_data[mode_status]), (UINT8) i, FALSE);
     }
 
     // get return here since wind mode 1 is already applied
@@ -187,8 +187,8 @@ static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status)
     for (i = 0; i < protocol->mode2.comp_data[mode_status].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->mode2.comp_data[mode_status]),
-			(UINT8)i, FALSE);
+                                  &(protocol->mode2.comp_data[mode_status]),
+                                  (UINT8) i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -209,7 +209,7 @@ static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
 
     for (i = 0; i < protocol->speed1.comp_data[wind_speed].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->speed1.comp_data[wind_speed]), (UINT8)i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->speed1.comp_data[wind_speed]), (UINT8) i, FALSE);
     }
 
     // get return here since wind speed 1 is already applied
@@ -229,8 +229,8 @@ static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed)
     for (i = 0; i < protocol->speed2.comp_data[wind_speed].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->speed2.comp_data[wind_speed]),
-			(UINT8)i, FALSE);
+                                  &(protocol->speed2.comp_data[wind_speed]),
+                                  (UINT8) i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -253,11 +253,11 @@ static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
     {
         if (TEMP_TYPE_DYNAMIC == protocol->temp1.type)
         {
-            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8)i, TRUE);
+            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8) i, TRUE);
         }
         else if (TEMP_TYPE_STATIC == protocol->temp1.type)
         {
-            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8)i, FALSE);
+            apply_ac_parameter_type_1(ir_hex_code, &(protocol->temp1.comp_data[temp_diff]), (UINT8) i, FALSE);
         }
     }
 
@@ -277,15 +277,15 @@ static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff)
 
     for (i = 0; i < protocol->temp2.comp_data[temp_diff].seg_len; i += 3)
     {
-        if(0 != protocol->temp2.comp_data[temp_diff].seg_len)
+        if (0 != protocol->temp2.comp_data[temp_diff].seg_len)
         {
             if (TEMP_TYPE_DYNAMIC == protocol->temp2.type)
             {
-                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8)i, TRUE);
+                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8) i, TRUE);
             }
             else if (TEMP_TYPE_STATIC == protocol->temp2.type)
             {
-                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8)i, FALSE);
+                apply_ac_parameter_type_2(ir_hex_code, &(protocol->temp2.comp_data[temp_diff]), (UINT8) i, FALSE);
             }
         }
     }
@@ -314,7 +314,7 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
 
     for (i = 0; i < protocol->swing1.comp_data[swing_mode].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->swing1.comp_data[swing_mode]), (UINT8)i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->swing1.comp_data[swing_mode]), (UINT8) i, FALSE);
     }
 
     // get return here since temperature 1 is already applied
@@ -340,8 +340,8 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
     for (i = 0; i < protocol->swing2.comp_data[swing_mode].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->swing2.comp_data[swing_mode]),
-			(UINT8)i, FALSE);
+                                  &(protocol->swing2.comp_data[swing_mode]),
+                                  (UINT8) i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -371,10 +371,6 @@ static INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inver
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
 
-    ir_printf("checksum value = %02X\n", checksum);
-    ir_printf("checksum byte pos = %d\n", cs.checksum_byte_pos);
-    ir_printf("\n");
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -402,10 +398,6 @@ static INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL i
 
     // apply checksum
     ac_code[cs.checksum_byte_pos] = checksum;
-
-    ir_printf("checksum value = %02X\n", checksum & 0x0F);
-    ir_printf("checksum byte pos = %d\n", cs.checksum_byte_pos);
-    ir_printf("\n");
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -458,9 +450,6 @@ static INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL 
         ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F);
     }
 
-    ir_printf("checksum value = %02X\n", checksum & 0x0F);
-    ir_printf("checksum byte pos = %d\n", apply_byte_pos);
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -503,9 +492,6 @@ static INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data c
     apply_byte_pos = cs.checksum_byte_pos >> 1;
     ac_code[apply_byte_pos] = checksum;
 
-    ir_printf("checksum value = %02X\n", checksum);
-    ir_printf("checksum byte pos = %d\n", apply_byte_pos);
-
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -513,15 +499,15 @@ static UINT8 has_function(struct ac_protocol *protocol, UINT8 function)
 {
     if (0 != protocol->function1.len)
     {
-        if(0 != protocol->function1.comp_data[function - 1].seg_len)
+        if (0 != protocol->function1.comp_data[function - 1].seg_len)
         {
             return TRUE;
         }
     }
 
-    if(0 != protocol->function2.len)
+    if (0 != protocol->function2.len)
     {
-        if(0 != protocol->function2.comp_data[function - 1].seg_len)
+        if (0 != protocol->function2.comp_data[function - 1].seg_len)
         {
             return TRUE;
         }
@@ -548,7 +534,7 @@ INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
 
     for (i = 0; i < protocol->function1.comp_data[function - 1].seg_len; i += 2)
     {
-        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), (UINT8)i, FALSE);
+        apply_ac_parameter_type_1(ir_hex_code, &(protocol->function1.comp_data[function - 1]), (UINT8) i, FALSE);
     }
 
     // get return here since function 1 is already applied
@@ -568,8 +554,8 @@ INT8 apply_function(struct ac_protocol *protocol, UINT8 function)
     for (i = 0; i < protocol->function2.comp_data[function - 1].seg_len; i += 3)
     {
         apply_ac_parameter_type_2(ir_hex_code,
-			&(protocol->function2.comp_data[function - 1]),
-			(UINT8)i, FALSE);
+                                  &(protocol->function2.comp_data[function - 1]),
+                                  (UINT8) i, FALSE);
     }
     return IR_DECODE_SUCCEEDED;
 }
@@ -583,16 +569,8 @@ INT8 apply_checksum(struct ac_protocol *protocol)
         return IR_DECODE_SUCCEEDED;
     }
 
-    // have some debug
-    ir_printf("\napply checksum :\n");
-    ir_printf("checksum num = %d\n", protocol->checksum.count);
-
-    for(i = 0; i < protocol->checksum.count; i++)
+    for (i = 0; i < protocol->checksum.count; i++)
     {
-        // have some debug
-        ir_printf("num : %d\n", i + 1);
-        ir_printf("checksum type = %02X\n", protocol->checksum.checksum_data[i].type);
-
         switch (protocol->checksum.checksum_data[i].type)
         {
             case CHECKSUM_TYPE_BYTE:
@@ -653,12 +631,12 @@ INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
     if (FALSE == context->n_mode[ac_status.acMode].allspeed)
     {
         // if this level is not in black list
-        if(!isin(context->n_mode[ac_status.acMode].speed,
-                 ac_status.acWindSpeed,
-                 context->n_mode[ac_status.acMode].speed_cnt))
+        if (!isin(context->n_mode[ac_status.acMode].speed,
+                  ac_status.acWindSpeed,
+                  context->n_mode[ac_status.acMode].speed_cnt))
         {
-            if(IR_DECODE_FAILED == apply_ac_wind_speed(context, ac_status.acWindSpeed) &&
-               function_code == AC_FUNCTION_WIND_SPEED)
+            if (IR_DECODE_FAILED == apply_ac_wind_speed(context, ac_status.acWindSpeed) &&
+                function_code == AC_FUNCTION_WIND_SPEED)
             {
                 // do not implement this mechanism since mode, temperature, wind
                 // speed would have unspecified function
@@ -671,7 +649,7 @@ INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
         else
         {
             // if this level is in black list, do not send IR wave if user want to apply this function
-            if(function_code == AC_FUNCTION_WIND_SPEED)
+            if (function_code == AC_FUNCTION_WIND_SPEED)
             {
                 // do not implement this mechanism since mode, temperature, wind
                 // speed would have unspecified function
@@ -685,7 +663,7 @@ INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
     else
     {
         // if this level is in black list, do not send IR wave if user want to apply this function
-        if(function_code == AC_FUNCTION_WIND_SPEED)
+        if (function_code == AC_FUNCTION_WIND_SPEED)
         {
             // do not implement this mechanism since mode, temperature, wind
             // speed would have unspecified function
@@ -700,17 +678,17 @@ INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
 
 INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
 {
-    if(function_code == AC_FUNCTION_WIND_FIX)
+    if (function_code == AC_FUNCTION_WIND_FIX)
     {
         // adjust fixed wind direction according to current status
-        if(context->si.type == SWING_TYPE_NORMAL && context->si.mode_count > 1)
+        if (context->si.type == SWING_TYPE_NORMAL && context->si.mode_count > 1)
         {
             if (TRUE == context->change_wind_direction)
             {
                 context->si.dir_index++;
             }
 
-            if(context->si.dir_index == context->si.mode_count)
+            if (context->si.dir_index == context->si.mode_count)
             {
                 // reset dir index
                 context->si.dir_index = 1;
@@ -718,7 +696,7 @@ INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
             context->swing_status = context->si.dir_index;
         }
     }
-    else if(function_code == AC_FUNCTION_WIND_SWING)
+    else if (function_code == AC_FUNCTION_WIND_SWING)
     {
         context->swing_status = 0;
     }
@@ -727,13 +705,13 @@ INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
         // do nothing
     }
 
-    if(IR_DECODE_FAILED == apply_ac_swing(context, context->swing_status))
+    if (IR_DECODE_FAILED == apply_ac_swing(context, context->swing_status))
     {
-        if(function_code == AC_FUNCTION_WIND_SWING && FALSE == has_function(context, AC_FUNCTION_WIND_SWING))
+        if (function_code == AC_FUNCTION_WIND_SWING && FALSE == has_function(context, AC_FUNCTION_WIND_SWING))
         {
             return IR_DECODE_FAILED;
         }
-        else if(function_code == AC_FUNCTION_WIND_FIX && FALSE == has_function(context, AC_FUNCTION_WIND_FIX))
+        else if (function_code == AC_FUNCTION_WIND_FIX && FALSE == has_function(context, AC_FUNCTION_WIND_FIX))
         {
             return IR_DECODE_FAILED;
         }
@@ -745,18 +723,18 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
 {
     if (FALSE == context->n_mode[ac_status.acMode].alltemp)
     {
-        if(!isin(context->n_mode[ac_status.acMode].temp,
-                 ac_status.acTemp,
-                 context->n_mode[ac_status.acMode].temp_cnt))
+        if (!isin(context->n_mode[ac_status.acMode].temp,
+                  ac_status.acTemp,
+                  context->n_mode[ac_status.acMode].temp_cnt))
         {
-            if(IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.acTemp))
+            if (IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.acTemp))
             {
-                if(function_code == AC_FUNCTION_TEMPERATURE_UP
+                if (function_code == AC_FUNCTION_TEMPERATURE_UP
                     /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
                 {
                     return IR_DECODE_FAILED;
                 }
-                else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+                else if (function_code == AC_FUNCTION_TEMPERATURE_DOWN
                     /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
                 {
                     return IR_DECODE_FAILED;
@@ -766,12 +744,12 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
         else
         {
             // if this level is in black list, do not send IR wave if user want to apply this function
-            if(function_code == AC_FUNCTION_TEMPERATURE_UP
+            if (function_code == AC_FUNCTION_TEMPERATURE_UP
                 /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
             {
                 return IR_DECODE_FAILED;
             }
-            else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+            else if (function_code == AC_FUNCTION_TEMPERATURE_DOWN
                 /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
             {
                 return IR_DECODE_FAILED;
@@ -781,12 +759,12 @@ INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
     else
     {
         // if this level is in black list, do not send IR wave if user want to apply this function
-        if(function_code == AC_FUNCTION_TEMPERATURE_UP
+        if (function_code == AC_FUNCTION_TEMPERATURE_UP
             /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)
         {
             return IR_DECODE_FAILED;
         }
-        else if(function_code == AC_FUNCTION_TEMPERATURE_DOWN
+        else if (function_code == AC_FUNCTION_TEMPERATURE_DOWN
             /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_DOWN)*/)
         {
             return IR_DECODE_FAILED;

@@ -17,7 +17,7 @@ Revision log:
 #include "../include/ir_ac_parse_forbidden_info.h"
 
 
-extern protocol* context;
+extern protocol *context;
 
 
 INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
@@ -34,10 +34,10 @@ INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
             index++;
         }
         ir_memcpy(buf, pdata + pos, index - pos);
-        pos = (UINT16)(index + 1);
+        pos = (UINT16) (index + 1);
         index = pos;
-        context->n_mode[seq].speed[cnt++] = (UINT8)atoi(buf);
-        context->n_mode[seq].speed_cnt = (UINT8)cnt;
+        context->n_mode[seq].speed[cnt++] = (UINT8) atoi(buf);
+        context->n_mode[seq].speed_cnt = (UINT8) cnt;
         ir_memset(buf, 0, 16);
     }
 
@@ -59,10 +59,10 @@ INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
             index++;
         }
         ir_memcpy(buf, pdata + pos, index - pos);
-        pos = (UINT16)(index + 1);
+        pos = (UINT16) (index + 1);
         index = pos;
-        context->n_mode[seq].temp[cnt++] = (UINT8)(atoi(buf) - 16);
-        context->n_mode[seq].temp_cnt = (UINT8)cnt;
+        context->n_mode[seq].temp[cnt++] = (UINT8) (atoi(buf) - 16);
+        context->n_mode[seq].temp_cnt = (UINT8) cnt;
         ir_memset(buf, 0, 16);
     }
     return IR_DECODE_SUCCEEDED;
@@ -98,7 +98,7 @@ INT8 parse_nmode_pos(char *buf, ac_n_mode index)
     {
         parse_nmode_data_speed(data, index);
     }
-    else 
+    else
     {
         parse_nmode_data_temp(data, index);
     }
@@ -130,7 +130,7 @@ INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
         if (tag->pdata[i] == '|')
         {
             ir_memcpy(buf, tag->pdata + preindex, i - preindex);
-            preindex = (UINT16)(i + 1);
+            preindex = (UINT16) (i + 1);
             parse_nmode_pos(buf, index);
             ir_memset(buf, 0, 64);
         }

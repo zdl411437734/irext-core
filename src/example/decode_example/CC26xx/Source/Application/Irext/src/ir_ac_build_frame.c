@@ -12,7 +12,7 @@ Revision log:
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_decode.h"
 
-extern protocol* context;
+extern protocol *context;
 
 
 //return bit number per byte,default value is 8
@@ -27,12 +27,12 @@ UINT8 bits_per_byte(UINT8 index)
     if (context->bitnum_cnt >= MAX_BITNUM)
         size = MAX_BITNUM;
     else
-        size = (UINT8)context->bitnum_cnt;
+        size = (UINT8) context->bitnum_cnt;
 
     for (i = 0; i < size; i++)
     {
         if (context->bitnum[i].pos == index)
-            return (UINT8)context->bitnum[i].bits;
+            return (UINT8) context->bitnum[i].bits;
         if (context->bitnum[i].pos > index)
             return 8;
     }
@@ -46,9 +46,9 @@ UINT16 add_delaycode(UINT8 index)
     UINT8 tail_delaycode = 0;
     UINT16 tail_pos = 0;
 
-    if(context->dc_cnt != 0)
+    if (context->dc_cnt != 0)
     {
-        size = (UINT8)context->dc_cnt;
+        size = (UINT8) context->dc_cnt;
 
         for (i = 0; i < size; i++)
         {
@@ -59,7 +59,7 @@ UINT16 add_delaycode(UINT8 index)
                     context->time[context->code_cnt++] = context->dc[i].time[j];
                 }
             }
-            else if(context->dc[i].pos == -1)
+            else if (context->dc[i].pos == -1)
             {
                 tail_delaycode = 1;
                 tail_pos = i;
@@ -72,9 +72,9 @@ UINT16 add_delaycode(UINT8 index)
         context->time[context->code_cnt++] = context->one.low; //high
     }
 
-    if(context->dc_cnt != 0)
+    if (context->dc_cnt != 0)
     {
-        if((index == (ir_hex_len - 1)) && (tail_delaycode == 1))
+        if ((index == (ir_hex_len - 1)) && (tail_delaycode == 1))
         {
             for (i = 0; i < context->dc[tail_pos].time_cnt; i++)
             {
@@ -105,13 +105,13 @@ UINT16 create_ir_frame()
 
     for (i = 0; i < ir_hex_len; i++)
     {
-        bitnum = bits_per_byte((UINT8)i);
+        bitnum = bits_per_byte((UINT8) i);
         for (j = 0; j < bitnum; j++)
         {
             if (context->endian == 0)
-                mask = (UINT8)((1 << (bitnum - 1)) >> j);
+                mask = (UINT8) ((1 << (bitnum - 1)) >> j);
             else
-                mask = (UINT8)(1 << j);
+                mask = (UINT8) (1 << j);
 
             if (irdata[i] & mask)
             {
@@ -126,7 +126,7 @@ UINT16 create_ir_frame()
                 context->time[context->code_cnt++] = context->zero.high;
             }
         }
-        add_delaycode((UINT8)i);
+        add_delaycode((UINT8) i);
     }
 
     framelen = context->code_cnt;

@@ -71,7 +71,7 @@ typedef struct ir_data
     UINT8 lsb;
     UINT8 mode;
     UINT8 index;
-}  ir_data_t;
+} ir_data_t;
 
 #if !defined BOARD_51
 #pragma pack(1)
@@ -198,7 +198,7 @@ typedef struct ir_data_tv
 } ir_data_tv_t;
 
 
-extern INT8 tv_lib_open(UINT8* binary, UINT16 binary_length);
+extern INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length);
 
 extern BOOL tv_lib_parse(UINT8 encode_type);
 

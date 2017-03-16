@@ -134,6 +134,7 @@ void PrintString(uint8 *str)
 {
 #if defined UART_DEBUG
     UART_WriteTransport(str, (strlen((char*)str)));
+    UART_DLY_ms(10);
 #endif
 }
 
@@ -150,6 +151,7 @@ void PrintValue(char *content, uint32 value, uint8 format)
     err = (uint32)(value);
     _ltoa(err, &buf[tmpLen], format);
     PrintString(buf);
+    UART_DLY_ms(10);
 #endif
 }
 

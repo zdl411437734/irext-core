@@ -62,7 +62,7 @@ bleUserCfg_t user0Cfg = BLE_USER_CFG;
  */
 void exceptionHandler()
 {
-	volatile uint8_t i = 1;
+    volatile uint8_t i = 1;
     while(i) {}
 }
 

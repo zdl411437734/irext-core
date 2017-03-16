@@ -22,14 +22,14 @@ Revision log:
 #include "../include/ir_tv_control.h"
 
 struct ir_bin_buffer binary_file;
-struct ir_bin_buffer* p_ir_buffer = &binary_file;
+struct ir_bin_buffer *p_ir_buffer = &binary_file;
 struct tag_head *tags;
 
 
-UINT8* ir_hex_code = NULL;
+UINT8 *ir_hex_code = NULL;
 UINT8 ir_hex_len = 0;
 
-UINT8 byteArray[PROTOCOL_SIZE] = { 0 };
+UINT8 byteArray[PROTOCOL_SIZE] = {0};
 
 size_t binary_length = 0;
 UINT8 *binary_content = NULL;
@@ -38,18 +38,20 @@ UINT8 *binary_content = NULL;
 protocol *context = (protocol *) byteArray;
 
 lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
-{
-    apply_power,
-    apply_mode,
-    apply_temperature,
-    apply_temperature,
-    apply_wind_speed,
-    apply_swing,
-    apply_swing
-};
+        {
+                apply_power,
+                apply_mode,
+                apply_temperature,
+                apply_temperature,
+                apply_wind_speed,
+                apply_swing,
+                apply_swing
+        };
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
+
 void ir_lib_free_inner_buffer();
+
 #endif
 
 
@@ -62,7 +64,7 @@ INT8 ir_ac_file_open(const char *file_name)
     FILE *stream = fopen(file_name, "rb");
 #else
     FILE *stream;
-	fopen_s(&stream, file_name, "rb");
+    fopen_s(&stream, file_name, "rb");
 #endif
     if (NULL == stream)
     {
@@ -72,7 +74,7 @@ INT8 ir_ac_file_open(const char *file_name)
 
     fseek(stream, 0, SEEK_END);
     binary_length = (size_t) ftell(stream);
-    binary_content = (UINT8*) ir_malloc(binary_length);
+    binary_content = (UINT8 *) ir_malloc(binary_length);
 
     if (NULL == binary_content)
     {
@@ -145,7 +147,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
         }
     }
 #else
-    if(ac_status.acPower == AC_POWER_OFF)
+    if (ac_status.acPower == AC_POWER_OFF)
     {
         // otherwise, power should always be applied
         apply_power(ac_status, function_code);
@@ -153,7 +155,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     else
     {
         // check the mode as the first priority, despite any other status
-        if(TRUE == context->n_mode[ac_status.acMode].enable)
+        if (TRUE == context->n_mode[ac_status.acMode].enable)
         {
             if (is_solo_function(function_code))
             {
@@ -162,12 +164,12 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
             }
             else
             {
-                if(!is_solo_function(AC_FUNCTION_POWER))
+                if (!is_solo_function(AC_FUNCTION_POWER))
                 {
                     apply_power(ac_status, function_code);
                 }
 
-                if(!is_solo_function(AC_FUNCTION_MODE))
+                if (!is_solo_function(AC_FUNCTION_MODE))
                 {
                     if (IR_DECODE_FAILED == apply_mode(ac_status, function_code))
                     {
@@ -175,7 +177,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
                     }
                 }
 
-                if(!is_solo_function(AC_FUNCTION_WIND_SPEED))
+                if (!is_solo_function(AC_FUNCTION_WIND_SPEED))
                 {
                     if (IR_DECODE_FAILED == apply_wind_speed(ac_status, function_code))
                     {
@@ -183,8 +185,8 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
                     }
                 }
 
-                if(!is_solo_function(AC_FUNCTION_WIND_SWING) &&
-                   !is_solo_function(AC_FUNCTION_WIND_FIX))
+                if (!is_solo_function(AC_FUNCTION_WIND_SWING) &&
+                    !is_solo_function(AC_FUNCTION_WIND_FIX))
                 {
                     if (IR_DECODE_FAILED == apply_swing(ac_status, function_code))
                     {
@@ -192,8 +194,8 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
                     }
                 }
 
-                if(!is_solo_function(AC_FUNCTION_TEMPERATURE_UP) &&
-                   !is_solo_function(AC_FUNCTION_TEMPERATURE_DOWN))
+                if (!is_solo_function(AC_FUNCTION_TEMPERATURE_UP) &&
+                    !is_solo_function(AC_FUNCTION_TEMPERATURE_DOWN))
                 {
                     if (IR_DECODE_FAILED == apply_temperature(ac_status, function_code))
                     {
@@ -215,11 +217,11 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     time_length = create_ir_frame();
 
 #if defined BOARD_PC
-	for (i = 0; i < context->code_cnt; i++)
-	{
-		ir_printf("%d,", context->time[i]);
-	}
-	ir_printf("\n");
+    for (i = 0; i < context->code_cnt; i++)
+    {
+        ir_printf("%d,", context->time[i]);
+    }
+    ir_printf("\n");
 #endif
 
     return time_length;
@@ -239,7 +241,7 @@ INT8 ir_ac_lib_close()
 }
 
 // utils
-INT8 get_temperature_range(UINT8 ac_mode, INT8* temp_min, INT8* temp_max)
+INT8 get_temperature_range(UINT8 ac_mode, INT8 *temp_min, INT8 *temp_max)
 {
     UINT8 i = 0;
 
@@ -262,9 +264,9 @@ INT8 get_temperature_range(UINT8 ac_mode, INT8* temp_min, INT8* temp_max)
     *temp_max = -1;
     for (i = 0; i < AC_TEMP_MAX; i++)
     {
-        if(isin(context->n_mode[ac_mode].temp, i, context->n_mode[ac_mode].temp_cnt) ||
-                (context->temp1.len != 0 && 0 == context->temp1.comp_data[i].seg_len) ||
-                (context->temp2.len != 0 && 0 == context->temp2.comp_data[i].seg_len))
+        if (isin(context->n_mode[ac_mode].temp, i, context->n_mode[ac_mode].temp_cnt) ||
+            (context->temp1.len != 0 && 0 == context->temp1.comp_data[i].seg_len) ||
+            (context->temp2.len != 0 && 0 == context->temp2.comp_data[i].seg_len))
         {
             continue;
         }
@@ -280,7 +282,7 @@ INT8 get_temperature_range(UINT8 ac_mode, INT8* temp_min, INT8* temp_max)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 get_supported_mode(UINT8* supported_mode)
+INT8 get_supported_mode(UINT8 *supported_mode)
 {
     UINT8 i = 0;
     if (NULL == supported_mode)
@@ -292,8 +294,8 @@ INT8 get_supported_mode(UINT8* supported_mode)
     for (i = 0; i < AC_MODE_MAX; i++)
     {
         if (0 == context->n_mode[i].enable ||
-                (context->mode1.len != 0 && 0 == context->mode1.comp_data[i].seg_len) ||
-                (context->mode2.len != 0 && 0 == context->mode2.comp_data[i].seg_len))
+            (context->mode1.len != 0 && 0 == context->mode1.comp_data[i].seg_len) ||
+            (context->mode2.len != 0 && 0 == context->mode2.comp_data[i].seg_len))
         {
             *supported_mode &= ~(1 << i);
         }
@@ -302,7 +304,7 @@ INT8 get_supported_mode(UINT8* supported_mode)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8* supported_wind_speed)
+INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8 *supported_wind_speed)
 {
     UINT8 i = 0;
     if (ac_mode >= AC_MODE_MAX)
@@ -336,7 +338,7 @@ INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8* supported_wind_speed)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing)
+INT8 get_supported_swing(UINT8 ac_mode, UINT8 *supported_swing)
 {
     if (ac_mode >= AC_MODE_MAX)
     {
@@ -367,11 +369,11 @@ INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 get_supported_wind_direction(UINT8* supported_wind_direction)
+INT8 get_supported_wind_direction(UINT8 *supported_wind_direction)
 {
     if (NULL != context)
     {
-        *supported_wind_direction = (UINT8)(context->si.mode_count - 1);
+        *supported_wind_direction = (UINT8) (context->si.mode_count - 1);
         return IR_DECODE_SUCCEEDED;
     }
     else
@@ -392,7 +394,7 @@ INT8 ir_tv_file_open(const char *file_name)
     FILE *stream = fopen(file_name, "rb");
 #else
     FILE *stream;
-	fopen_s(&stream, file_name, "rb");
+    fopen_s(&stream, file_name, "rb");
 #endif
 
     if (stream == NULL)
@@ -402,9 +404,9 @@ INT8 ir_tv_file_open(const char *file_name)
     }
 
     fseek(stream, 0, SEEK_END);
-    binary_length = (size_t)ftell(stream);
+    binary_length = (size_t) ftell(stream);
 
-    binary_content = (UINT8*) ir_malloc(binary_length);
+    binary_content = (UINT8 *) ir_malloc(binary_length);
     if (NULL == binary_content)
     {
         ir_printf("\nfailed to alloc memory for binary\n");
@@ -462,7 +464,7 @@ UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
     // have some debug
     ir_printf("=============================\n");
     ir_printf("length of IRDA code = %d\n", ir_code_length);
-    for(print_index = 0; print_index < ir_code_length; print_index++)
+    for (print_index = 0; print_index < ir_code_length; print_index++)
     {
         ir_printf("%d ", l_user_data[print_index]);
     }
@@ -483,11 +485,14 @@ INT8 ir_tv_lib_close()
 
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
+
 void ir_lib_free_inner_buffer()
 {
-    if (NULL != binary_content) {
+    if (NULL != binary_content)
+    {
         ir_free(binary_content);
         binary_content = NULL;
     }
 }
+
 #endif
