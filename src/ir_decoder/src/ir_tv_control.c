@@ -42,10 +42,15 @@ static UINT8 cycles_num_size = 0;
 
 
 static BOOL get_ir_protocol(UINT8 encode_type);
+
 static BOOL get_ir_keymap(void);
+
 static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time);
+
 static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time);
+
 static void convert_to_ir_time(UINT8 value, UINT16 *ir_time);
+
 static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time);
 
 
@@ -327,7 +332,7 @@ static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bi
     UINT8 bit_num = data->bits / valid_bits;
     UINT8 valid_value = 0;
 
-    valid_value = (UINT8)((valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1));
+    valid_value = (UINT8) ((valid_bits == 1) ? 1 : (valid_bits * valid_bits - 1));
 
     if (data->lsb == IRDA_LSB)
     {

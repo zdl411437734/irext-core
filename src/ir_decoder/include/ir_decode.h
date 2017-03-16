@@ -385,9 +385,7 @@ typedef struct REMOTE_AC_STATUS
 } remote_ac_status_t;
 
 // function polymorphism
-typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 function_code);
-
-
+typedef INT8 (*lp_apply_ac_parameter)(remote_ac_status_t ac_status, UINT8 function_code);
 
 
 #define TAG_AC_BOOT_CODE                  1
@@ -428,9 +426,9 @@ typedef INT8 (*lp_apply_ac_parameter) (remote_ac_status_t ac_status, UINT8 funct
 #define PROTOCOL_SIZE (sizeof(protocol))
 
 /* exported variables */
-extern UINT8* ir_hex_code;
+extern UINT8 *ir_hex_code;
 extern UINT8 ir_hex_len;
-extern protocol* context;
+extern protocol *context;
 
 
 /* exported functions */
@@ -545,7 +543,7 @@ extern INT8 ir_tv_lib_close();
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 get_temperature_range(UINT8 ac_mode, INT8* temp_min, INT8* temp_max);
+extern INT8 get_temperature_range(UINT8 ac_mode, INT8 *temp_min, INT8 *temp_max);
 
 /*
  * function get_supported_mode
@@ -554,7 +552,7 @@ extern INT8 get_temperature_range(UINT8 ac_mode, INT8* temp_min, INT8* temp_max)
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 get_supported_mode(UINT8* supported_mode);
+extern INT8 get_supported_mode(UINT8 *supported_mode);
 
 /*
  * function get_supported_wind_speed
@@ -564,7 +562,7 @@ extern INT8 get_supported_mode(UINT8* supported_mode);
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8* supported_wind_speed);
+extern INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8 *supported_wind_speed);
 
 /*
  * function get_supported_swing
@@ -574,7 +572,7 @@ extern INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8* supported_wind_speed)
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
+extern INT8 get_supported_swing(UINT8 ac_mode, UINT8 *supported_swing);
 
 /*
  * function get_supported_wind_direction
@@ -583,11 +581,13 @@ extern INT8 get_supported_swing(UINT8 ac_mode, UINT8* supported_swing);
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-extern INT8 get_supported_wind_direction(UINT8* supported_wind_direction);
+extern INT8 get_supported_wind_direction(UINT8 *supported_wind_direction);
 
 // private extern function
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
+
 extern void ir_lib_free_inner_buffer();
+
 #endif
 
 ///////////////////////////////////////////////// Utils End /////////////////////////////////////////////////

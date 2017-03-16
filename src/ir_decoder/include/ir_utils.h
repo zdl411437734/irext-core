@@ -30,7 +30,7 @@ extern void string_to_hex_common(UINT8 *p, UINT8 *hex_data, UINT16 len);
 
 extern BOOL isin(UINT8 array[], UINT8 value, UINT8 len);
 
-extern void hex_byte_to_double_char(char* dest, UINT8 length, UINT8 src);
+extern void hex_byte_to_double_char(char *dest, UINT8 length, UINT8 src);
 
 #ifdef __cplusplus
 }

@@ -22,7 +22,7 @@ UINT16 user_data[USER_DATA_SIZE];
 INT8 ir_tv_file_open(const char *file_name);
 
 
-INT8 decode_as_ac(char* file_name)
+INT8 decode_as_ac(char *file_name)
 {
     // keyboard input
     int in_char = 0;
@@ -66,17 +66,17 @@ INT8 decode_as_ac(char* file_name)
         in_char = getchar();
         op_match = TRUE;
         need_control = TRUE;
-        switch(in_char)
+        switch (in_char)
         {
             case 'w':
             case 'W':
                 // temperature plus
-                ac_status.acTemp = (UINT8)((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
+                ac_status.acTemp = (UINT8) ((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
                 function_code = AC_FUNCTION_TEMPERATURE_UP;
                 break;
             case 's':
             case 'S':
-                ac_status.acTemp = (UINT8)((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
+                ac_status.acTemp = (UINT8) ((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
                 function_code = AC_FUNCTION_TEMPERATURE_DOWN;
                 // temperature minus
                 break;
@@ -89,7 +89,7 @@ INT8 decode_as_ac(char* file_name)
                 break;
             case 'd':
             case 'D':
-                ac_status.acWindDir = (UINT8)((ac_status.acWindDir == 0) ? 1 : 0);
+                ac_status.acWindDir = (UINT8) ((ac_status.acWindDir == 0) ? 1 : 0);
                 function_code = AC_FUNCTION_WIND_SWING;
                 // wind swing loop
                 break;
@@ -155,7 +155,7 @@ INT8 decode_as_ac(char* file_name)
                 break;
         }
 
-        if(TRUE == op_match && TRUE == need_control)
+        if (TRUE == op_match && TRUE == need_control)
         {
             ir_printf("switch AC to power = %d, mode = %d, temp = %d, speed = %d, swing = %d\n",
                       ac_status.acPower,
@@ -167,7 +167,7 @@ INT8 decode_as_ac(char* file_name)
 
             ir_ac_lib_control(ac_status, user_data, function_code, TRUE);
         }
-    } while('0' != in_char);
+    } while ('0' != in_char);
 
     ir_ac_lib_close();
 
@@ -210,7 +210,7 @@ INT8 decode_as_tv(char *file_name, UINT8 ir_hex_encode)
         {
             // do nothing
         }
-    } while('Q' != in_char);
+    } while ('Q' != in_char);
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     }
 
     function = argv[1][0];
-    ir_hex_encode = (UINT8)(argv[3][0] - '0');
+    ir_hex_encode = (UINT8) (argv[3][0] - '0');
     ir_printf("decode functionality = %c\n", function);
 
     switch (function)
