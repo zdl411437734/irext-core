@@ -120,6 +120,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
                          BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
+
 #if defined BOARD_PC
     UINT8 i = 0;
 #endif
