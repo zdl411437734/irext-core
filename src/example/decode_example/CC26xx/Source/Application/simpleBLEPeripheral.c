@@ -140,9 +140,21 @@ static decode_control_block dccb =
     .decoded_length = 0,
 };
 
+static remote_ac_status_t ac_status =
+{
+    .acPower = AC_POWER_OFF,
+    .acTemp = AC_TEMP_24,
+    .acMode = AC_MODE_COOL,
+    .acWindDir = AC_SWING_ON,
+    .acWindSpeed = AC_WS_AUTO,
+    .acDisplay = 0,
+    .acSleep = 0,
+    .acTimer = 0,
+};
+
 
 // local function prototypes
-static void IRext_uartDebug();
+static void IRext_uartFeedback();
 
 static void ParseSummary(uint8_t* data, uint16_t len);
 
@@ -258,7 +270,7 @@ static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
         if (dccb.decoded_length > 0)
         {
             LCD_WRITE_STRING(key_display, LCD_PAGE6);
-            IRext_uartDebug();
+            IRext_uartFeedback();
         }
         else
         {
@@ -272,38 +284,21 @@ static void IRext_processKey(uint8_t ir_type, uint8_t ir_key, char* key_display)
 }
 
 // UART operation
-static void IRext_uartDebug()
+static void IRext_uartFeedback()
 {
-    uint16_t index = 0;
 
-    if (dccb.source_code_length > 0)
+    if (dccb.decoded_length > 0)
     {
-        // output to UART
-        char debug[16] = { 0 };
-        for (index = 0; index < dccb.decoded_length; index++)
+        for (uint16_t index = 0; index < dccb.decoded_length; index++)
         {
-            memset(debug, 0x00, 16);
-            sprintf(debug, "%d,", dccb.ir_decoded[index]);
-            UART_WriteTransport((uint8_t*)debug, strlen(debug));
+            WriteBytes((uint8_t*)&dccb.ir_decoded[index], 2);
             UART_DLY_ms(10);
         }
-        UART_WriteTransport((uint8_t*)"\n", 1);
     }
 }
 
 static void IRext_processUartMsg(uint8_t* data, uint16_t len)
 {
-#if defined UART_DEBUG
-    uint16_t index = 0;
-
-    for (index = 0; index < len; index++)
-    {
-        PrintValue(" ", data[index], FORMAT_HEX);
-        UART_DLY_ms(10);
-    }
-    PrintString("\n");
-#endif
-
     if (NULL == data)
     {
         return;
@@ -314,19 +309,22 @@ static void IRext_processUartMsg(uint8_t* data, uint16_t len)
 
     if (HEADER_SR == header)
     {
-        // since there is 1 more byte for eos
+        LCD_WRITE_STRING("PARSE SUMMARY", LCD_PAGE6);
         ParseSummary(&data[1], len - 2);
     }
     else if (HEADER_BT == header)
     {
+        LCD_WRITE_STRING("PARSE BINARY", LCD_PAGE6);
         ParseBinary(&data[1], len - 1);
     }
     else if (HEADER_CMD == header)
     {
+        LCD_WRITE_STRING("PARSE COMMAND", LCD_PAGE6);
         ParseCommand(&data[1], len - 1);
     }
     else
     {
+        LCD_WRITE_STRING("ERROR MESSAGE", LCD_PAGE6);
         // invalid header
     }
 }
@@ -373,7 +371,10 @@ static void ParseBinary(uint8_t* data, uint16_t len)
     {
         // finish binary transfer
         dccb.source_code_length = btcb.binary_recv_length;
+        LCD_WRITE_STRING("IR READY", LCD_PAGE7);
+        HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
         dccb.ir_state = IR_STATE_READY;
+        
         btcb.transfer_on_going = 0;
     }
     // feed back next expected offset in any cases
@@ -382,7 +383,40 @@ static void ParseBinary(uint8_t* data, uint16_t len)
 
 static void ParseCommand(uint8_t* data, uint16_t len)
 {
-    // TODO:
+    uint8 ir_type = 0;
+    uint8 key_code = 0;
+    uint8 ac_function = 0;
+
+    if (IR_STATE_PARSED != dccb.ir_state)
+    {
+        // feek back error state
+        WriteBytes("11", 2);
+        return;
+    }
+
+    ir_type = data[0];
+
+    if (IR_TYPE_TV == dccb.ir_type && 0x31 == ir_type)
+    {
+        // decode as TV
+        key_code = data[1] - 0x30;
+        dccb.decoded_length = ir_tv_lib_control(key_code, dccb.ir_decoded);
+    }
+    else if (IR_TYPE_AC == dccb.ir_type && 0x32 == ir_type)
+    {
+        ac_function = data[1] - 0x30;
+        dccb.decoded_length = ir_ac_lib_control(ac_status, dccb.ir_decoded, ac_function, 0);
+    }
+
+    if (dccb.decoded_length > 0)
+    {
+        LCD_WRITE_STRING("decoded", LCD_PAGE6);
+        IRext_uartFeedback();
+    }
+    else
+    {
+        LCD_WRITE_STRING("ERROR", LCD_PAGE6);
+    }
 }
 
 void TransportDataToUart(uint8_t* data, uint16_t len)
