@@ -91,7 +91,7 @@ INT8 decode_as_ac(char* file_name)
 
 	if (IR_DECODE_FAILED == IRDAACLibParse())
 	{
-		IR_PRINTF("\nac lib parse failed\n");
+		IR_PRINTF("ac lib parse failed\n");
 		IRDAACLibClose();
 		return IR_DECODE_FAILED;
 	}
@@ -147,7 +147,7 @@ INT8 decode_as_ac(char* file_name)
 		case '3':
 			if (IR_DECODE_SUCCEEDED == GetSupportedMode(&supported_mode))
 			{
-				IR_PRINTF("\nsupported mode = %02X\n", supported_mode);
+				IR_PRINTF("supported mode = %02X\n", supported_mode);
 			}
 			need_control = FALSE;
 			break;
@@ -155,14 +155,14 @@ INT8 decode_as_ac(char* file_name)
 		case '4':
 			if (IR_DECODE_SUCCEEDED == GetSupportedSwing(ac_status.acMode, &supported_swing))
 			{
-				IR_PRINTF("\nsupported swing in %d = %02X\n", ac_status.acMode, supported_swing);
+				IR_PRINTF("supported swing in %d = %02X\n", ac_status.acMode, supported_swing);
 			}
 			need_control = FALSE;
 			break;
 		case '5':
 			if (IR_DECODE_SUCCEEDED == GetSupportedWindSpeed(ac_status.acMode, &supported_speed))
 			{
-				IR_PRINTF("\nsupported wind speed in %d = %02X\n", ac_status.acMode, supported_speed);
+				IR_PRINTF("supported wind speed in %d = %02X\n", ac_status.acMode, supported_speed);
 			}
 			need_control = FALSE;
 			break;
@@ -170,7 +170,7 @@ INT8 decode_as_ac(char* file_name)
 		case '6':
 			if (IR_DECODE_SUCCEEDED == GetTemperatureRange(ac_status.acMode, &min_temperature, &max_temperature))
 			{
-				IR_PRINTF("\nsupported temperature range in mode %d = %d, %d\n",
+				IR_PRINTF("supported temperature range in mode %d = %d, %d\n",
 					ac_status.acMode, min_temperature, max_temperature);
 			}
 			need_control = FALSE;
@@ -190,7 +190,6 @@ INT8 decode_as_ac(char* file_name)
 				ac_status.acWindSpeed,
 				ac_status.acWindDir
 				);
-
 			IRDAACLibControl(ac_status, user_data, function_code, TRUE);
 		}
 	} while ('0' != in_char);
@@ -268,7 +267,7 @@ int main(int argc, char *argv[])
 			hInDecodeDll = LoadLibrary(_T("ir_decoder.dll"));
 			if (NULL != hInDecodeDll)
 			{
-				IR_PRINTF("load library successfully");
+				IR_PRINTF("load library successfully\n");
 				IRDAACFileOpen = (lp_irda_ac_file_open)GetProcAddress(hInDecodeDll, "irda_ac_file_open");
 				IRDAACLibOpen = (lp_irda_ac_lib_open)GetProcAddress(hInDecodeDll, "irda_ac_lib_open");
 				IRDAACLibParse = (lp_irda_ac_lib_parse)GetProcAddress(hInDecodeDll, "irda_ac_lib_parse");
@@ -321,7 +320,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				IR_PRINTF("load library failed");
+				IR_PRINTF("load library failed\n");
 			}
 		}
 	}
