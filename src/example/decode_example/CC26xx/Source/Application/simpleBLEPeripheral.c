@@ -374,7 +374,7 @@ static void ParseBinary(uint8_t* data, uint16_t len)
         LCD_WRITE_STRING("IR READY", LCD_PAGE7);
         HalLedSet(HAL_LED_1 | HAL_LED_2,  HAL_LED_MODE_OFF);
         dccb.ir_state = IR_STATE_READY;
-        
+
         btcb.transfer_on_going = 0;
     }
     // feed back next expected offset in any cases
