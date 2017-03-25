@@ -204,6 +204,8 @@ extern BOOL tv_lib_parse(UINT8 encode_type);
 
 extern UINT16 tv_lib_control(UINT8 key, UINT16 *user_data);
 
+extern UINT8 tv_lib_close();
+
 #ifdef __cplusplus
 }
 #endif

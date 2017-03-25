@@ -89,7 +89,7 @@ extern INT8 ir_ac_lib_close();
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-INT8 ir_tv_file_open(const char *file_name);
+extern INT8 ir_tv_file_open(const char *file_name);
 
 /*
  * function ir_tv_lib_open
@@ -99,7 +99,7 @@ INT8 ir_tv_file_open(const char *file_name);
  *
  * return: IR_DECODE_SUCCEEDED / IR_DECODE_FAILED
  */
-INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length);
+extern INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length);
 
 /*
  * function ir_tv_lib_parse
