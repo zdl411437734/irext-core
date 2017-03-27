@@ -470,22 +470,151 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">传输编码</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group" style="max-height: 25px;">
+                    <div id="transfer_select" class="input-group" style="max-height: 25px;">
                         <span class="input-group-addon">传输方式</span>
                         <select id="transfer_type" name="protocol_type" class="input-group-addon"
                                 onchange="onTransferTypeChanged();" style="width: 100%;">
-                            <option value="0" selected>COM</option>
-                            <option value="1">BLE</option>
+                            <option value="0" selected>Web COM</option>
+                            <!-- <option value="1">Web BLE</option> -->
                         </select>
-                </div>
+                    </div>
                     <br>
+                    <div class="progress">
+                        <div id="transfer_progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                             aria-valuemax="100">
+                            <span id="transfer_progress_desc">空闲</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="transferBin();">确定</button>
+                    <button type="button" class="btn btn-primary" onclick="prepareTransfer();">连接</button>
+                    <button type="button" class="btn btn-primary" onclick="startTransfer();">开始传输</button>
+                    <button type="button" class="btn btn-success" onclick="startDoB();">板载解码</button>
+                    <button type="button" class="btn btn-warning" onclick="cancelTransfer();">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- decode on-board dialog -->
+    <div class="modal fade" id="dob_dialog" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">板载解码</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="dob panel">
+                        <div style="width: 100%;">
+                            <div style="width: 100%;">
+                                <textarea id="dob_ir_wave_value" rows="1" style="resize: none; width: 100%; overflow-x: scroll; white-space: nowrap;"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4" style="text-align: left;">
+                                    <hr>
+                                    <div id="key_press" style="height: 25px;"></div>
+                                    <hr>
+                                    <div id="ac_status_power" style="height: 25px;"></div>
+                                    <div id="ac_status_mode" style="height: 25px;"></div>
+                                    <div id="ac_status_temp" style="height: 25px;"></div>
+                                    <div id="ac_status_speed" style="height: 25px;"></div>
+                                    <div id="ac_status_swing" style="height: 25px;"></div>
+                                </div>
+                                <div class="col-lg-8" style="text-align: left;">
+                                    <div class="row" style="text-align: left;">
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_0" class="dob_cbtn btn btn-danger glyphicon glyphicon-off"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_8" class="dob_cbtn btn btn-info glyphicon glyphicon-home"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_9" class="dob_cbtn btn btn-info glyphicon glyphicon-chevron-left"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_10" class="dob_cbtn btn btn-info glyphicon glyphicon-list"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_6" class="dob_cbtn btn btn-primary glyphicon glyphicon-plus"></button>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row" style="text-align: center;">
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_1" class="dob_cbtn btn btn-warning glyphicon glyphicon-arrow-up"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row" style="text-align: center;">
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_3" class="dob_cbtn btn btn-warning glyphicon glyphicon-arrow-left"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_5" class="dob_cbtn btn btn-success glyphicon glyphicon-star"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_4" class="dob_cbtn btn btn-warning glyphicon glyphicon-arrow-right"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row" style="text-align: center;">
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_2" class="dob_cbtn btn btn-warning glyphicon glyphicon-arrow-down"></button>
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+
+                                        </div>
+                                        <div class="col-lg-2" style="text-align: center;">
+                                            <button id="dob_btn_7" class="dob_cbtn btn btn-primary glyphicon glyphicon-minus"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="quitDob();">退出</button>
                 </div>
             </div>
         </div>
@@ -519,10 +648,11 @@
 <script src="../public_js/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="../public_js/bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
 <script src="../public_js/bower_components/select2/dist/js/select2.min.js"></script>
-<script src="../public_js/bower_components/socket.io-client/dist/socket.io.slim.min.js"></script>
 <script src="../public_js/utils/date_utils.js"></script>
 <script src="../public_js/utils/url_parser.js"></script>
 <script src="../public_js/chinese/await.js"></script>
 <script src="../public_js/chinese/chinese.js"></script>
-<script type="text/javascript" src="js/code.js"></script>
+<script type="text/javascript" src="js/constants.js"></script>
+<script type="text/javascript" src="js/manage.js"></script>
+<script type="text/javascript" src="js/operate.js"></script>
 </html>

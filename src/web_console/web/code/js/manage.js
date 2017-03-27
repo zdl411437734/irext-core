@@ -1,31 +1,12 @@
 /**
  * Created by strawmanbobi
- * 2016-11-30
+ * 2017-03-27
  */
 
-var LS_KEY_ID = 'user_name';
-var LS_KEY_TOKEN = 'token';
 var id = "";
 var token = "";
 var client = null;
 
-var RADIO_TYPE_IRDA = 0;
-
-var CATEGORY_AC = 1;
-var CATEGORY_TV = 2;
-var CATEGORY_STB = 3;
-var CATEGORY_NW = 4;
-var CATEGORY_IPTV = 5;
-var CATEGORY_DVD = 6;
-var CATEGORY_FAN = 7;
-var CATEGORY_PROJECTOR = 8;
-var CATEGORY_STEREO = 9;
-var CATEGORY_LIGHT_BULB = 10;
-var CATEGORY_BSTB = 11;
-var CATEGORY_CLEANING_ROBOT = 12;
-var CATEGORY_AIR_CLEANER = 13;
-
-var currentRadioType = 0;
 var currentSubCate = 1;
 var currentProtocol = null;
 var currentProtocolType = 1;
@@ -102,9 +83,11 @@ $(document).ready(function() {
         $('#protocol_name_b').val(fileName);
     });
 
-    $('.cbtn').click(function() {
-        onControlClick(this.id);
+    $('.dob_cbtn').click(function() {
+        onDoBClick(this.id);
     });
+
+    updateTransferState(TRANSFER_STATE_NONE);
 
 });
 
@@ -1049,23 +1032,6 @@ function onProtocolChange() {
     };
 }
 
-function onRadioTypeChange() {
-    currentRadioType = $('#radio_type').val();
-
-    switch (parseInt(currentRadioType)) {
-        case RADIO_TYPE_IRDA:
-            showBleRemoteInfo(false);
-            switchCategory();
-            break;
-        case RADIO_TYPE_BLE_CENTRAL:
-            showBleRemoteInfo(true);
-            showProtocolSelector(false);
-            break;
-        default:
-            break;
-    }
-}
-
 function onSubCateChange() {
     currentSubCate = $('#sub_cate').val();
 }
@@ -1084,15 +1050,7 @@ function onCategoryChange() {
     var currentCategoryID = $('#category_id').val();
     currentCategory = getCategoryByID(currentCategoryID);
 
-    if (currentRadioType == RADIO_TYPE_IRDA) {
-        switchCategory();
-    } else if (currentRadioType == RADIO_TYPE_BLE_CENTRAL) {
-        if (currentCategoryID != CATEGORY_STB) {
-            showBrandSelector();
-        } else {
-            showCitySelector();
-        }
-    }
+    switchCategory();
 }
 
 function switchCategory() {
@@ -1433,36 +1391,6 @@ function getUnpublishedRemoteIndexes() {
     });
 }
 
-function downloadBin() {
-    var downloadURL = "";
-    if(null == selectedRemote) {
-        popUpHintDialog('请先选中一个索引');
-        return;
-    }
-    downloadURL = '/irext/int/download_remote_index?remote_index_id='+selectedRemote.id+'&admin_id='+id+'&token='+token;
-
-    if (null != client && client == 'console') {
-        // directly download binary to remote via serial port
-    } else {
-        window.open(
-            downloadURL,
-            '_blank'
-        );
-    }
-}
-
-function onTransferBin() {
-    if(null == selectedRemote) {
-        popUpHintDialog('请先选中一个索引');
-        return;
-    }
-    $('#binary_transfer_dialog').modal();
-}
-
-function transferBin() {
-
-}
-
 function showPublishDialog() {
     var hintText = '共有 <font color="#FF0000">' + brandsToPublish.length +
         '</font> 个新增品牌，以及 <font color="#FF0000">' + remoteIndexesToPublish.length +
@@ -1678,14 +1606,6 @@ function showProtocolSelector(show) {
         $('.protocol_panel').show();
     } else {
         $('.protocol_panel').hide();
-    }
-}
-
-function showBleRemoteInfo(show) {
-    if (true == show) {
-        $('.ble_central_panel').show();
-    } else {
-        $('.ble_central_panel').hide();
     }
 }
 
