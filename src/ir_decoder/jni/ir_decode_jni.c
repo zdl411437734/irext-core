@@ -66,7 +66,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACCont
     jfieldID ac_wind_speed_fid = (*env)->GetFieldID(env, n_ac_status, "acWindSpeed", "I");
     jint i_ac_wind_speed = (*env)->GetIntField(env, jni_ac_status, ac_wind_speed_fid);
 
-    IR_PRINTF("\nget ac status : %d, %d, %d, %d, %d, %d\n",
+    ir_printf("\nget ac status : %d, %d, %d, %d, %d, %d\n",
         i_ac_power,
         i_ac_mode,
         i_ac_temp,
@@ -85,7 +85,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACCont
 
     int wave_code_length = ir_ac_lib_control(ac_status, user_data, function_code, change_wind_direction);
 
-    IR_PRINTF("\nsize of wave code = %d\n", wave_code_length);
+    ir_printf("\nsize of wave code = %d\n", wave_code_length);
 
     jintArray result = (*env)->NewIntArray(env, wave_code_length);
     if (result == NULL)
@@ -193,7 +193,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVCont
     int copy_array[USER_DATA_SIZE] = {0};
     int wave_code_length = ir_tv_lib_control(key_number, user_data);
 
-    IR_PRINTF("\nsize of wave code = %d\n", wave_code_length);
+    ir_printf("\nsize of wave code = %d\n", wave_code_length);
 
     jintArray result = (*env)->NewIntArray(env, wave_code_length);
     if (result == NULL)
