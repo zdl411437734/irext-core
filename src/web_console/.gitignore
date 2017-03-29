@@ -1,8 +1,0 @@
-backup/
-.idea/
-logs/
-tools/
-node_modules/
-bower_components/
-*.DS_Store
-nohup.out
