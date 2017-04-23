@@ -20,7 +20,7 @@ Revision log:
 extern size_t binary_length;
 extern UINT8 *binary_content;
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
@@ -42,7 +42,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACControl
+JNIEXPORT jintArray JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACControl
           (JNIEnv *env, jobject this_obj, jobject jni_ac_status, jint function_code, jint change_wind_direction)
 {
 	UINT16 user_data[USER_DATA_SIZE];
@@ -104,13 +104,13 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACCont
     return result;
 }
 
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irACLibClose
+JNIEXPORT void JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACLibClose
           (JNIEnv *env, jobject this_obj)
 {
     ir_ac_lib_close();
 }
 
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTemperatureRange
+JNIEXPORT jobject JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACGetTemperatureRange
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int tempMin = 0;
@@ -132,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTem
     return temperature_range;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedMode
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACGetSupportedMode
           (JNIEnv *env, jobject this_obj)
 {
     int supported_mode = 0;
@@ -140,7 +140,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
     return supported_mode;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindSpeed
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACGetSupportedWindSpeed
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_wind_speed = 0;
@@ -148,7 +148,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
     return supported_wind_speed;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedSwing
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACGetSupportedSwing
           (JNIEnv *env, jobject this_obj, jint ac_mode)
 {
     int supported_swing = 0;
@@ -156,7 +156,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
     return supported_swing;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindDirection
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irACGetSupportedWindDirection
           (JNIEnv *env, jobject this_obj)
 {
     int supported_wind_direction = 0;
@@ -164,7 +164,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
     return supported_wind_direction;
 }
 
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irTVLibOpen
           (JNIEnv *env, jobject this_obj, jstring file_name, jint j_ir_hex_encode)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
@@ -185,7 +185,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVControl
+JNIEXPORT jintArray JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irTVControl
           (JNIEnv *env, jobject this_obj, jint key_number)
 {
     UINT16 user_data[USER_DATA_SIZE];
@@ -209,7 +209,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVCont
     return result;
 }
 
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irTVLibClose
+JNIEXPORT void JNICALL Java_net_irext_sdk_decodeapi_IRDecode_irTVLibClose
           (JNIEnv *env, jobject this_obj)
 {
     // do nothing

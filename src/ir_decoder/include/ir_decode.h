@@ -25,8 +25,6 @@ extern "C"
 #define IR_DECODE_FAILED             (-1)
 #define IR_DECODE_SUCCEEDED          (0)
 
-#define EXPECTED_MEM_SIZE            1024
-
 
 /* exported functions */
 ///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
