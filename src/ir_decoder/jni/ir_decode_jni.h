@@ -7,60 +7,60 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef net_irext_remote_service_DecodeService_BIND_ABOVE_CLIENT
-#define net_irext_remote_service_DecodeService_BIND_ABOVE_CLIENT 8L
-#undef net_irext_remote_service_DecodeService_BIND_ADJUST_WITH_ACTIVITY
-#define net_irext_remote_service_DecodeService_BIND_ADJUST_WITH_ACTIVITY 128L
-#undef net_irext_remote_service_DecodeService_BIND_ALLOW_OOM_MANAGEMENT
-#define net_irext_remote_service_DecodeService_BIND_ALLOW_OOM_MANAGEMENT 16L
-#undef net_irext_remote_service_DecodeService_BIND_AUTO_CREATE
-#define net_irext_remote_service_DecodeService_BIND_AUTO_CREATE 1L
-#undef net_irext_remote_service_DecodeService_BIND_DEBUG_UNBIND
-#define net_irext_remote_service_DecodeService_BIND_DEBUG_UNBIND 2L
-#undef net_irext_remote_service_DecodeService_BIND_IMPORTANT
-#define net_irext_remote_service_DecodeService_BIND_IMPORTANT 64L
-#undef net_irext_remote_service_DecodeService_BIND_NOT_FOREGROUND
-#define net_irext_remote_service_DecodeService_BIND_NOT_FOREGROUND 4L
-#undef net_irext_remote_service_DecodeService_BIND_WAIVE_PRIORITY
-#define net_irext_remote_service_DecodeService_BIND_WAIVE_PRIORITY 32L
-#undef net_irext_remote_service_DecodeService_CONTEXT_IGNORE_SECURITY
-#define net_irext_remote_service_DecodeService_CONTEXT_IGNORE_SECURITY 2L
-#undef net_irext_remote_service_DecodeService_CONTEXT_INCLUDE_CODE
-#define net_irext_remote_service_DecodeService_CONTEXT_INCLUDE_CODE 1L
-#undef net_irext_remote_service_DecodeService_CONTEXT_RESTRICTED
-#define net_irext_remote_service_DecodeService_CONTEXT_RESTRICTED 4L
-#undef net_irext_remote_service_DecodeService_MODE_APPEND
-#define net_irext_remote_service_DecodeService_MODE_APPEND 32768L
-#undef net_irext_remote_service_DecodeService_MODE_ENABLE_WRITE_AHEAD_LOGGING
-#define net_irext_remote_service_DecodeService_MODE_ENABLE_WRITE_AHEAD_LOGGING 8L
-#undef net_irext_remote_service_DecodeService_MODE_MULTI_PROCESS
-#define net_irext_remote_service_DecodeService_MODE_MULTI_PROCESS 4L
-#undef net_irext_remote_service_DecodeService_MODE_PRIVATE
-#define net_irext_remote_service_DecodeService_MODE_PRIVATE 0L
-#undef net_irext_remote_service_DecodeService_MODE_WORLD_READABLE
-#define net_irext_remote_service_DecodeService_MODE_WORLD_READABLE 1L
-#undef net_irext_remote_service_DecodeService_MODE_WORLD_WRITEABLE
-#define net_irext_remote_service_DecodeService_MODE_WORLD_WRITEABLE 2L
-#undef net_irext_remote_service_DecodeService_START_CONTINUATION_MASK
-#define net_irext_remote_service_DecodeService_START_CONTINUATION_MASK 15L
-#undef net_irext_remote_service_DecodeService_START_FLAG_REDELIVERY
-#define net_irext_remote_service_DecodeService_START_FLAG_REDELIVERY 1L
-#undef net_irext_remote_service_DecodeService_START_FLAG_RETRY
-#define net_irext_remote_service_DecodeService_START_FLAG_RETRY 2L
-#undef net_irext_remote_service_DecodeService_START_NOT_STICKY
-#define net_irext_remote_service_DecodeService_START_NOT_STICKY 2L
-#undef net_irext_remote_service_DecodeService_START_REDELIVER_INTENT
-#define net_irext_remote_service_DecodeService_START_REDELIVER_INTENT 3L
-#undef net_irext_remote_service_DecodeService_START_STICKY
-#define net_irext_remote_service_DecodeService_START_STICKY 1L
-#undef net_irext_remote_service_DecodeService_START_STICKY_COMPATIBILITY
-#define net_irext_remote_service_DecodeService_START_STICKY_COMPATIBILITY 0L
+#undef net_irext_decodesdk_IRDecode_BIND_ABOVE_CLIENT
+#define net_irext_decodesdk_IRDecode_BIND_ABOVE_CLIENT 8L
+#undef net_irext_decodesdk_IRDecode_BIND_ADJUST_WITH_ACTIVITY
+#define net_irext_decodesdk_IRDecode_BIND_ADJUST_WITH_ACTIVITY 128L
+#undef net_irext_decodesdk_IRDecode_BIND_ALLOW_OOM_MANAGEMENT
+#define net_irext_decodesdk_IRDecode_BIND_ALLOW_OOM_MANAGEMENT 16L
+#undef net_irext_decodesdk_IRDecode_BIND_AUTO_CREATE
+#define net_irext_decodesdk_IRDecode_BIND_AUTO_CREATE 1L
+#undef net_irext_decodesdk_IRDecode_BIND_DEBUG_UNBIND
+#define net_irext_decodesdk_IRDecode_BIND_DEBUG_UNBIND 2L
+#undef net_irext_decodesdk_IRDecode_BIND_IMPORTANT
+#define net_irext_decodesdk_IRDecode_BIND_IMPORTANT 64L
+#undef net_irext_decodesdk_IRDecode_BIND_NOT_FOREGROUND
+#define net_irext_decodesdk_IRDecode_BIND_NOT_FOREGROUND 4L
+#undef net_irext_decodesdk_IRDecode_BIND_WAIVE_PRIORITY
+#define net_irext_decodesdk_IRDecode_BIND_WAIVE_PRIORITY 32L
+#undef net_irext_decodesdk_IRDecode_CONTEXT_IGNORE_SECURITY
+#define net_irext_decodesdk_IRDecode_CONTEXT_IGNORE_SECURITY 2L
+#undef net_irext_decodesdk_IRDecode_CONTEXT_INCLUDE_CODE
+#define net_irext_decodesdk_IRDecode_CONTEXT_INCLUDE_CODE 1L
+#undef net_irext_decodesdk_IRDecode_CONTEXT_RESTRICTED
+#define net_irext_decodesdk_IRDecode_CONTEXT_RESTRICTED 4L
+#undef net_irext_decodesdk_IRDecode_MODE_APPEND
+#define net_irext_decodesdk_IRDecode_MODE_APPEND 32768L
+#undef net_irext_decodesdk_IRDecode_MODE_ENABLE_WRITE_AHEAD_LOGGING
+#define net_irext_decodesdk_IRDecode_MODE_ENABLE_WRITE_AHEAD_LOGGING 8L
+#undef net_irext_decodesdk_IRDecode_MODE_MULTI_PROCESS
+#define net_irext_decodesdk_IRDecode_MODE_MULTI_PROCESS 4L
+#undef net_irext_decodesdk_IRDecode_MODE_PRIVATE
+#define net_irext_decodesdk_IRDecode_MODE_PRIVATE 0L
+#undef net_irext_decodesdk_IRDecode_MODE_WORLD_READABLE
+#define net_irext_decodesdk_IRDecode_MODE_WORLD_READABLE 1L
+#undef net_irext_decodesdk_IRDecode_MODE_WORLD_WRITEABLE
+#define net_irext_decodesdk_IRDecode_MODE_WORLD_WRITEABLE 2L
+#undef net_irext_decodesdk_IRDecode_START_CONTINUATION_MASK
+#define net_irext_decodesdk_IRDecode_START_CONTINUATION_MASK 15L
+#undef net_irext_decodesdk_IRDecode_START_FLAG_REDELIVERY
+#define net_irext_decodesdk_IRDecode_START_FLAG_REDELIVERY 1L
+#undef net_irext_decodesdk_IRDecode_START_FLAG_RETRY
+#define net_irext_decodesdk_IRDecode_START_FLAG_RETRY 2L
+#undef net_irext_decodesdk_IRDecode_START_NOT_STICKY
+#define net_irext_decodesdk_IRDecode_START_NOT_STICKY 2L
+#undef net_irext_decodesdk_IRDecode_START_REDELIVER_INTENT
+#define net_irext_decodesdk_IRDecode_START_REDELIVER_INTENT 3L
+#undef net_irext_decodesdk_IRDecode_START_STICKY
+#define net_irext_decodesdk_IRDecode_START_STICKY 1L
+#undef net_irext_decodesdk_IRDecode_START_STICKY_COMPATIBILITY
+#define net_irext_decodesdk_IRDecode_START_STICKY_COMPATIBILITY 0L
 /*
  * Class:     net_irext_remote_service_DecodeService
  * Method:    irACLibOpen
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACLibOpen
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -68,7 +68,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACLibOpen
  * Method:    irACControl
  * Signature: (Lcom/irext/remote/bean/jnibean/JNIACStatus;II)[I
  */
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACControl
+JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irACControl
   (JNIEnv *, jobject, jobject, jint, jint);
 
 /*
@@ -76,7 +76,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irACCont
  * Method:    irACLibClose
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irACLibClose
+JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irACLibClose
   (JNIEnv *, jobject);
 
 /*
@@ -84,7 +84,7 @@ JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irACLibClose
  * Method:    irACGetTemperatureRange
  * Signature: (I)Lcom/irext/remote/bean/jnibean/JNITemperatureRange;
  */
-JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTemperatureRange
+JNIEXPORT jobject JNICALL Java_net_irext_decodesdk_IRDecode_irACGetTemperatureRange
   (JNIEnv *, jobject, jint);
 
 /*
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_net_irext_remote_service_DecodeService_irACGetTem
  * Method:    irACGetSupportedMode
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedMode
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACGetSupportedMode
   (JNIEnv *, jobject);
 
 /*
@@ -100,7 +100,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
  * Method:    irACGetSupportedWindSpeed
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindSpeed
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACGetSupportedWindSpeed
   (JNIEnv *, jobject, jint);
 
 /*
@@ -108,7 +108,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
  * Method:    irACGetSupportedSwing
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedSwing
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACGetSupportedSwing
   (JNIEnv *, jobject, jint);
 
 /*
@@ -116,7 +116,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
  * Method:    irACGetSupportedWindDirection
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSupportedWindDirection
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACGetSupportedWindDirection
   (JNIEnv *, jobject);
 
 /*
@@ -124,7 +124,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irACGetSuppor
  * Method:    irTVLibOpen
  * Signature: (Ljava/lang/String;I)I
  */
-JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irTVLibOpen
   (JNIEnv *, jobject, jstring, jint);
 
 /*
@@ -132,7 +132,7 @@ JNIEXPORT jint JNICALL Java_net_irext_remote_service_DecodeService_irTVLibOpen
  * Method:    irTVControl
  * Signature: (I)[I
  */
-JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVControl
+JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irTVControl
   (JNIEnv *, jobject, jint);
 
 /*
@@ -140,17 +140,17 @@ JNIEXPORT jintArray JNICALL Java_net_irext_remote_service_DecodeService_irTVCont
  * Method:    irTVLibClose
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_irext_remote_service_DecodeService_irTVLibClose
+JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irTVLibClose
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }
 #endif
 #endif
-/* Header for class net_irext_remote_service_DecodeService_LocalBinder */
+/* Header for class net_irext_decodesdk_IRDecode_LocalBinder */
 
-#ifndef _Included_net_irext_remote_service_DecodeService_LocalBinder
-#define _Included_net_irext_remote_service_DecodeService_LocalBinder
+#ifndef _Included_net_irext_decodesdk_IRDecode_LocalBinder
+#define _Included_net_irext_decodesdk_IRDecode_LocalBinder
 #ifdef __cplusplus
 extern "C" {
 #endif
