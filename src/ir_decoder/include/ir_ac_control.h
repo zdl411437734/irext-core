@@ -22,6 +22,8 @@ extern "C"
 #define TAG_COUNT_FOR_PROTOCOL       29
 
 #define TAG_INVALID                  0xffff
+#define TAG_INVALID_2                0xfdfd
+
 #define MAX_DELAYCODE_NUM            16
 #define MAX_BITNUM                   16
 

@@ -21,11 +21,11 @@ extern struct tag_head *tags;
 
 UINT8 tag_count = 0;
 const UINT16 tag_index[TAG_COUNT_FOR_PROTOCOL] =
-        {
-                1, 2, 3, 4, 5, 6, 7,
-                21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-                41, 42, 43, 44, 45, 46, 47, 48
-        };
+{
+    1, 2, 3, 4, 5, 6, 7,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+    41, 42, 43, 44, 45, 46, 47, 48
+};
 
 INT8 binary_parse_offset()
 {
@@ -50,7 +50,8 @@ INT8 binary_parse_offset()
     {
         tags[i].tag = tag_index[i];
         tags[i].offset = *(phead + i);
-        if (tags[i].offset == TAG_INVALID)
+
+        if (tags[i].offset == TAG_INVALID || tags[i].offset == TAG_INVALID_2)
         {
             tags[i].len = 0;
         }
@@ -63,14 +64,14 @@ INT8 binary_parse_len()
     UINT16 i = 0, j = 0;
     for (i = 0; i < (tag_count - 1); i++)
     {
-        if (tags[i].offset == TAG_INVALID)
+        if (tags[i].offset == TAG_INVALID || tags[i].offset == TAG_INVALID_2)
         {
             continue;
         }
 
         for (j = (UINT16) (i + 1); j < tag_count; j++)
         {
-            if (tags[j].offset != TAG_INVALID)
+            if (tags[j].offset != TAG_INVALID && tags[j].offset != TAG_INVALID_2)
             {
                 break;
             }
@@ -85,7 +86,7 @@ INT8 binary_parse_len()
             return IR_DECODE_SUCCEEDED;
         }
     }
-    if (tags[tag_count - 1].offset != TAG_INVALID)
+    if (tags[tag_count - 1].offset != TAG_INVALID && tags[tag_count - 1].offset != TAG_INVALID_2)
     {
         tags[tag_count - 1].len = p_ir_buffer->len - tag_head_offset - tags[tag_count - 1].offset;
     }
