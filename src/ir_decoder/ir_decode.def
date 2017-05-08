@@ -2,19 +2,13 @@ LIBRARY
 
 EXPORTS
 
-ir_ac_file_open @1
-ir_ac_lib_open @2
-ir_ac_lib_parse @3
-ir_ac_lib_control @4
-ir_ac_lib_close @5
+ir_file_open @1
+ir_binary_open @2
+ir_decode @3
+ir_close @4
 
-ir_tv_file_open @6
-ir_tv_lib_open @7
-ir_tv_lib_parse @8
-ir_tv_lib_control @9
-ir_tv_lib_close @19
-get_temperature_range @11
-get_supported_mode @12
-get_supported_wind_speed @13
-get_supported_swing @14
-get_supported_wind_direction @15
+get_temperature_range @5
+get_supported_mode @6
+get_supported_wind_speed @7
+get_supported_swing @8
+get_supported_wind_direction @9

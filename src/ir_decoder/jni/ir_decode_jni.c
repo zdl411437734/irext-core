@@ -20,20 +20,13 @@ Revision log:
 extern size_t binary_length;
 extern UINT8 *binary_content;
 
-JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACLibOpen
-          (JNIEnv *env, jobject this_obj, jstring file_name)
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpen
+          (JNIEnv *env, jobject this_obj, jint category_id, jint sub_cate, jstring file_name)
 {
     const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
-    if (IR_DECODE_FAILED == ir_ac_file_open(n_file_name))
+    if (IR_DECODE_FAILED == ir_file_open(category_id, sub_cate, n_file_name))
     {
-        ir_ac_lib_close();
-        (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-        return IR_DECODE_FAILED;
-    }
-
-    if (IR_DECODE_FAILED == ir_ac_lib_parse())
-    {
-        ir_ac_lib_close();
+        ir_close();
         (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
         return IR_DECODE_FAILED;
     }
@@ -42,8 +35,8 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACLibOpen
     return IR_DECODE_SUCCEEDED;
 }
 
-JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irACControl
-          (JNIEnv *env, jobject this_obj, jobject jni_ac_status, jint function_code, jint change_wind_direction)
+JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
+          (JNIEnv *env, jobject this_obj, jint key_code, jobject jni_ac_status, jint change_wind_direction)
 {
 	UINT16 user_data[USER_DATA_SIZE];
     int i = 0;
@@ -51,41 +44,35 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irACControl
 	remote_ac_status_t ac_status;
 
     jclass n_ac_status = (*env)->GetObjectClass(env, jni_ac_status);
-    jfieldID ac_power_fid = (*env)->GetFieldID(env, n_ac_status, "acPower", "I");
-    jint i_ac_power = (*env)->GetIntField(env, jni_ac_status, ac_power_fid);
 
-    jfieldID ac_mode_fid = (*env)->GetFieldID(env, n_ac_status, "acMode", "I");
-    jint i_ac_mode = (*env)->GetIntField(env, jni_ac_status, ac_mode_fid);
+	if (NULL != n_ac_status)
+	{
+		jfieldID ac_power_fid = (*env)->GetFieldID(env, n_ac_status, "acPower", "I");
+        jint i_ac_power = (*env)->GetIntField(env, jni_ac_status, ac_power_fid);
 
-    jfieldID ac_temp_fid = (*env)->GetFieldID(env, n_ac_status, "acTemp", "I");
-    jint i_ac_temp = (*env)->GetIntField(env, jni_ac_status, ac_temp_fid);
+        jfieldID ac_mode_fid = (*env)->GetFieldID(env, n_ac_status, "acMode", "I");
+        jint i_ac_mode = (*env)->GetIntField(env, jni_ac_status, ac_mode_fid);
 
-    jfieldID ac_wind_dir_fid = (*env)->GetFieldID(env, n_ac_status, "acWindDir", "I");
-    jint i_ac_wind_dir = (*env)->GetIntField(env, jni_ac_status, ac_wind_dir_fid);
+        jfieldID ac_temp_fid = (*env)->GetFieldID(env, n_ac_status, "acTemp", "I");
+        jint i_ac_temp = (*env)->GetIntField(env, jni_ac_status, ac_temp_fid);
 
-    jfieldID ac_wind_speed_fid = (*env)->GetFieldID(env, n_ac_status, "acWindSpeed", "I");
-    jint i_ac_wind_speed = (*env)->GetIntField(env, jni_ac_status, ac_wind_speed_fid);
+        jfieldID ac_wind_dir_fid = (*env)->GetFieldID(env, n_ac_status, "acWindDir", "I");
+        jint i_ac_wind_dir = (*env)->GetIntField(env, jni_ac_status, ac_wind_dir_fid);
 
-    ir_printf("\nget ac status : %d, %d, %d, %d, %d, %d\n",
-        i_ac_power,
-        i_ac_mode,
-        i_ac_temp,
-        i_ac_wind_dir,
-        i_ac_wind_speed,
-        function_code);
+        jfieldID ac_wind_speed_fid = (*env)->GetFieldID(env, n_ac_status, "acWindSpeed", "I");
+        jint i_ac_wind_speed = (*env)->GetIntField(env, jni_ac_status, ac_wind_speed_fid);
+		
+        ac_status.acDisplay = 0;
+        ac_status.acSleep = 0;
+        ac_status.acTimer = 0;
+        ac_status.acPower = i_ac_power;
+        ac_status.acMode = i_ac_mode;
+        ac_status.acTemp = i_ac_temp;
+        ac_status.acWindDir = i_ac_wind_dir;
+        ac_status.acWindSpeed = i_ac_wind_speed;
+	}
 
-    ac_status.acDisplay = 0;
-    ac_status.acSleep = 0;
-    ac_status.acTimer = 0;
-    ac_status.acPower = i_ac_power;
-    ac_status.acMode = i_ac_mode;
-    ac_status.acTemp = i_ac_temp;
-    ac_status.acWindDir = i_ac_wind_dir;
-    ac_status.acWindSpeed = i_ac_wind_speed;
-
-    int wave_code_length = ir_ac_lib_control(ac_status, user_data, function_code, change_wind_direction);
-
-    ir_printf("\nsize of wave code = %d\n", wave_code_length);
+    int wave_code_length = ir_decode(key_code, user_data, &ac_status, change_wind_direction);
 
     jintArray result = (*env)->NewIntArray(env, wave_code_length);
     if (result == NULL)
@@ -97,17 +84,15 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irACControl
         copy_array[i] = (int)user_data[i];
     }
     (*env)->SetIntArrayRegion(env, result, 0, wave_code_length, copy_array);
-
-    // temporary solution, close ac lib here in order to release memory
-    // ir_ac_lib_close();
+	(*env)->DeleteLocalRef(env, n_ac_status);
 
     return result;
 }
 
-JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irACLibClose
+JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irClose
           (JNIEnv *env, jobject this_obj)
 {
-    ir_ac_lib_close();
+    ir_close();
 }
 
 JNIEXPORT jobject JNICALL Java_net_irext_decodesdk_IRDecode_irACGetTemperatureRange
@@ -162,56 +147,4 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irACGetSupportedWindDir
     int supported_wind_direction = 0;
     get_supported_wind_direction((UINT8*)&supported_wind_direction);
     return supported_wind_direction;
-}
-
-JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irTVLibOpen
-          (JNIEnv *env, jobject this_obj, jstring file_name, jint j_ir_hex_encode)
-{
-    const char *n_file_name = (*env)->GetStringUTFChars(env, file_name, 0);
-
-    if (IR_DECODE_FAILED == ir_tv_file_open(n_file_name))
-    {
-        (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-        return IR_DECODE_FAILED;
-    }
-
-    if (IR_DECODE_FAILED == ir_tv_lib_parse(j_ir_hex_encode))
-    {
-        (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-        return IR_DECODE_FAILED;
-    }
-
-    (*env)->ReleaseStringUTFChars(env, file_name, n_file_name);
-    return IR_DECODE_SUCCEEDED;
-}
-
-JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irTVControl
-          (JNIEnv *env, jobject this_obj, jint key_number)
-{
-    UINT16 user_data[USER_DATA_SIZE];
-    int i = 0;
-    int copy_array[USER_DATA_SIZE] = {0};
-    int wave_code_length = ir_tv_lib_control(key_number, user_data);
-
-    ir_printf("\nsize of wave code = %d\n", wave_code_length);
-
-    jintArray result = (*env)->NewIntArray(env, wave_code_length);
-    if (result == NULL)
-    {
-        return NULL; /* out of memory error thrown */
-    }
-    for (i = 0; i < wave_code_length; i++)
-    {
-        copy_array[i] = (int)user_data[i];
-    }
-    (*env)->SetIntArrayRegion(env, result, 0, wave_code_length, copy_array);
-
-    return result;
-}
-
-JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irTVLibClose
-          (JNIEnv *env, jobject this_obj)
-{
-    // do nothing
-    return;
 }
