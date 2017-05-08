@@ -51,7 +51,7 @@ INT8 binary_parse_offset()
         tags[i].tag = tag_index[i];
         tags[i].offset = *(phead + i);
 
-        if (tags[i].offset == TAG_INVALID || tags[i].offset == TAG_INVALID_2)
+        if (tags[i].offset == TAG_INVALID)
         {
             tags[i].len = 0;
         }
@@ -64,14 +64,14 @@ INT8 binary_parse_len()
     UINT16 i = 0, j = 0;
     for (i = 0; i < (tag_count - 1); i++)
     {
-        if (tags[i].offset == TAG_INVALID || tags[i].offset == TAG_INVALID_2)
+        if (tags[i].offset == TAG_INVALID)
         {
             continue;
         }
 
         for (j = (UINT16) (i + 1); j < tag_count; j++)
         {
-            if (tags[j].offset != TAG_INVALID && tags[j].offset != TAG_INVALID_2)
+            if (tags[j].offset != TAG_INVALID)
             {
                 break;
             }
@@ -86,7 +86,7 @@ INT8 binary_parse_len()
             return IR_DECODE_SUCCEEDED;
         }
     }
-    if (tags[tag_count - 1].offset != TAG_INVALID && tags[tag_count - 1].offset != TAG_INVALID_2)
+    if (tags[tag_count - 1].offset != TAG_INVALID)
     {
         tags[tag_count - 1].len = p_ir_buffer->len - tag_head_offset - tags[tag_count - 1].offset;
     }

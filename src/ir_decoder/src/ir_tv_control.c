@@ -45,7 +45,7 @@ static BOOL get_ir_protocol(UINT8 encode_type);
 
 static BOOL get_ir_keymap(void);
 
-static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time);
+static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time);
 
 static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time);
 
@@ -181,12 +181,12 @@ static BOOL get_ir_keymap(void)
     return FALSE;
 }
 
-static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time)
+static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time)
 {
     UINT8 i = 0;
     UINT8 cycles_num = 0;
     ir_cycles_t *pcycles = NULL;
-    UINT8 keycode = 0;
+    UINT8 key_code = 0;
 
     if (NULL == data || NULL == ir_time)
     {
@@ -194,7 +194,7 @@ static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time)
     }
 
     pcycles = prot_cycles_data[data->index];
-    keycode = remote_pdata[remote_p->per_keycode_bytes * keyindex + data->index - 1];
+    key_code = remote_pdata[remote_p->per_keycode_bytes * key_index + data->index - 1];
 
     if (prot_cycles_num[IRDA_ONE] != 1 || prot_cycles_num[IRDA_ZERO] != 1)
     {
@@ -305,22 +305,22 @@ static void print_ir_time(ir_data_t *data, UINT8 keyindex, UINT16 *ir_time)
     {
         // mode: inverse
         if (data->mode == 1)
-            keycode = ~keycode;
+            key_code = ~key_code;
 
         if (ir_decode_flag == IRDA_DECODE_1_BIT)
         {
             // for binary formatted code
-            process_decode_number(keycode, data, 1, ir_time);
+            process_decode_number(key_code, data, 1, ir_time);
         }
         else if (ir_decode_flag == IRDA_DECODE_2_BITS)
         {
             // for quanternary formatted code
-            process_decode_number(keycode, data, 2, ir_time);
+            process_decode_number(key_code, data, 2, ir_time);
         }
         else if (ir_decode_flag == IRDA_DECODE_4_BITS)
         {
             // for hexadecimal formatted code
-            process_decode_number(keycode, data, 4, ir_time);
+            process_decode_number(key_code, data, 4, ir_time);
         }
     }
 }
