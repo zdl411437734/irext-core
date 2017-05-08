@@ -18,8 +18,6 @@ Revision log:
 #include "../include/ir_utils.h"
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_ac_apply.h"
-#include "../include/ir_ac_control.h"
-#include "../include/ir_tv_control.h"
 
 struct ir_bin_buffer binary_file;
 struct ir_bin_buffer *p_ir_buffer = &binary_file;
@@ -34,29 +32,166 @@ UINT8 byteArray[PROTOCOL_SIZE] = {0};
 size_t binary_length = 0;
 UINT8 *binary_content = NULL;
 
+UINT8 ir_binary_type = IR_TYPE_STATUS;
+UINT8 ir_hexadecimal = SUB_CATEGORY_QUATERNARY;
 
 protocol *context = (protocol *) byteArray;
 
 lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
+{
+    apply_power,
+    apply_mode,
+    apply_temperature,
+    apply_temperature,
+    apply_wind_speed,
+    apply_swing,
+    apply_swing
+};
+
+// static functions declarations
+static INT8 ir_ac_file_open(const char *file_name);
+static INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length);
+static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+                                BOOL change_wind_direction);
+static INT8 ir_ac_lib_close();
+static INT8 ir_tv_file_open(const char *file_name);
+static INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length);
+static INT8 ir_tv_lib_parse(UINT8 ir_hex_encode);
+static UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data);
+static INT8 ir_tv_lib_close();
+
+
+// pubic function definitions
+
+INT8 ir_file_open(const UINT8 category, const UINT8 sub_category, const char* file_name)
+{
+    INT8 ret = IR_DECODE_SUCCEEDED;
+    if (category == IR_CATEGORY_AC)
+    {
+        ir_binary_type = IR_TYPE_STATUS;
+        ret = ir_ac_file_open(file_name);
+        if (IR_DECODE_SUCCEEDED == ret)
         {
-                apply_power,
-                apply_mode,
-                apply_temperature,
-                apply_temperature,
-                apply_wind_speed,
-                apply_swing,
-                apply_swing
-        };
+            return ir_ac_lib_parse();
+        }
+        else
+        {
+            return ret;
+        }
+    }
+    else
+    {
+        ir_binary_type = IR_TYPE_COMMANDS;
+        if (1 == sub_category)
+        {
+            ir_hexadecimal = SUB_CATEGORY_QUATERNARY;
+        }
+        else if (2 == sub_category)
+        {
+            ir_hexadecimal = SUB_CATEGORY_HEXADECIMAL;
+        }
+        else
+        {
+            return IR_DECODE_FAILED;
+        }
+
+        ret = ir_tv_file_open(file_name);
+        if (IR_DECODE_SUCCEEDED == ret)
+        {
+            return ir_tv_lib_parse(ir_hexadecimal);
+        }
+        else
+        {
+            return ret;
+        }
+    }
+}
+
+
+INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8* binary, UINT16 binary_length)
+{
+    INT8 ret = IR_DECODE_SUCCEEDED;
+    if (category == IR_TYPE_STATUS)
+    {
+        ir_binary_type = IR_TYPE_STATUS;
+        ret = ir_ac_lib_open(binary, binary_length);
+        if (IR_DECODE_SUCCEEDED == ret)
+        {
+            return ir_ac_lib_parse();
+        }
+        else
+        {
+            return ret;
+        }
+    }
+    else
+    {
+        ir_binary_type = IR_TYPE_COMMANDS;
+        if (1 == sub_category)
+        {
+            ir_hexadecimal = SUB_CATEGORY_QUATERNARY;
+        }
+        else if (2 == sub_category)
+        {
+            ir_hexadecimal = SUB_CATEGORY_HEXADECIMAL;
+        }
+        else
+        {
+            return IR_DECODE_FAILED;
+        }
+
+        ret = ir_tv_lib_open(binary, binary_length);
+        if (IR_DECODE_SUCCEEDED == ret)
+        {
+            return ir_tv_lib_parse(ir_hexadecimal);
+        }
+        else
+        {
+            return ret;
+        }
+    }
+}
+
+
+UINT16 ir_decode(UINT8 key_code, UINT16* user_data, remote_ac_status_t* ac_status, BOOL change_wind_direction)
+{
+    if (IR_TYPE_COMMANDS == ir_binary_type)
+    {
+        return ir_tv_lib_control(key_code, user_data);
+    }
+    else
+    {
+        if (NULL == ac_status)
+        {
+            return 0;
+        }
+        return ir_ac_lib_control(*ac_status, user_data, key_code, change_wind_direction);
+    }
+}
+
+
+INT8 ir_close()
+{
+    if (IR_TYPE_COMMANDS == ir_binary_type)
+    {
+        return ir_tv_lib_close();
+    }
+    else
+    {
+        return ir_ac_lib_close();
+    }
+}
+
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-
 void ir_lib_free_inner_buffer();
-
 #endif
 
 
-///////////////////////////////////////////////// AC Begin /////////////////////////////////////////////////
-INT8 ir_ac_file_open(const char *file_name)
+// static function definitions
+
+//////// AC Begin ////////
+static INT8 ir_ac_file_open(const char *file_name)
 {
 #if !defined NO_FS
     size_t ret = 0;
@@ -106,7 +241,7 @@ INT8 ir_ac_file_open(const char *file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length)
+static INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     // it is recommended that the parameter binary pointing to
     // a global memory block in embedded platform environment
@@ -116,7 +251,7 @@ INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
                          BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
@@ -228,7 +363,7 @@ UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 
     return time_length;
 }
 
-INT8 ir_ac_lib_close()
+static INT8 ir_ac_lib_close()
 {
     // free context
     if (NULL != tags)
@@ -383,10 +518,10 @@ INT8 get_supported_wind_direction(UINT8 *supported_wind_direction)
     }
 }
 
-///////////////////////////////////////////////// AC End //////////////////////////////////////////////////
+//////// AC End ////////
 
-///////////////////////////////////////////////// TV Begin /////////////////////////////////////////////////
-INT8 ir_tv_file_open(const char *file_name)
+//////// TV Begin ////////
+static INT8 ir_tv_file_open(const char *file_name)
 {
 #if !defined NO_FS
     size_t ret = 0;
@@ -437,12 +572,12 @@ INT8 ir_tv_file_open(const char *file_name)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length)
+static INT8 ir_tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     return tv_lib_open(binary, binary_length);
 }
 
-INT8 ir_tv_lib_parse(UINT8 ir_hex_encode)
+static INT8 ir_tv_lib_parse(UINT8 ir_hex_encode)
 {
     if (FALSE == tv_lib_parse(ir_hex_encode))
     {
@@ -452,7 +587,7 @@ INT8 ir_tv_lib_parse(UINT8 ir_hex_encode)
     return IR_DECODE_SUCCEEDED;
 }
 
-UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
+static UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
 {
 #if defined BOARD_PC
     UINT16 print_index = 0;
@@ -463,30 +598,27 @@ UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data)
 
 #if defined BOARD_PC
     // have some debug
-    ir_printf("=============================\n");
-    ir_printf("length of IRDA code = %d\n", ir_code_length);
+    ir_printf("length of IR code = %d\n", ir_code_length);
     for (print_index = 0; print_index < ir_code_length; print_index++)
     {
         ir_printf("%d ", l_user_data[print_index]);
     }
-    ir_printf("\n=============================\n\n");
 #endif
 
     return ir_code_length;
 }
 
-INT8 ir_tv_lib_close()
+static INT8 ir_tv_lib_close()
 {
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
     ir_lib_free_inner_buffer();
 #endif
     return IR_DECODE_SUCCEEDED;
 }
-///////////////////////////////////////////////// TV End /////////////////////////////////////////////////
+//////// TV End ////////
 
 
 #if (defined BOARD_PC || defined BOARD_PC_DLL)
-
 void ir_lib_free_inner_buffer()
 {
     if (NULL != binary_content)
@@ -495,5 +627,4 @@ void ir_lib_free_inner_buffer()
         binary_content = NULL;
     }
 }
-
 #endif

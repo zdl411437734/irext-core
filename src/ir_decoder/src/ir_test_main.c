@@ -49,18 +49,12 @@ INT8 decode_as_ac(char *file_name)
     ac_status.acWindDir = AC_SWING_ON;
     ac_status.acWindSpeed = AC_WS_AUTO;
 
-    if (IR_DECODE_FAILED == ir_ac_file_open(file_name))
+    if (IR_DECODE_FAILED == ir_file_open(IR_CATEGORY_AC, 0, file_name))
     {
-        ir_ac_lib_close();
+        ir_close();
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == ir_ac_lib_parse())
-    {
-        ir_printf("\nac lib parse failed\n");
-        ir_ac_lib_close();
-        return IR_DECODE_FAILED;
-    }
     do
     {
         in_char = getchar();
@@ -71,12 +65,12 @@ INT8 decode_as_ac(char *file_name)
             case 'w':
             case 'W':
                 // temperature plus
-                ac_status.acTemp = (UINT8) ((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
+                ac_status.acTemp = ((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
                 function_code = AC_FUNCTION_TEMPERATURE_UP;
                 break;
             case 's':
             case 'S':
-                ac_status.acTemp = (UINT8) ((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
+                ac_status.acTemp = ((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
                 function_code = AC_FUNCTION_TEMPERATURE_DOWN;
                 // temperature minus
                 break;
@@ -89,7 +83,7 @@ INT8 decode_as_ac(char *file_name)
                 break;
             case 'd':
             case 'D':
-                ac_status.acWindDir = (UINT8) ((ac_status.acWindDir == 0) ? 1 : 0);
+                ac_status.acWindDir = ((ac_status.acWindDir == 0) ? AC_SWING_OFF : AC_SWING_ON);
                 function_code = AC_FUNCTION_WIND_SWING;
                 // wind swing loop
                 break;
@@ -165,11 +159,11 @@ INT8 decode_as_ac(char *file_name)
                       ac_status.acWindDir
             );
 
-            ir_ac_lib_control(ac_status, user_data, function_code, TRUE);
+            ir_decode(function_code, user_data, &ac_status, TRUE);
         }
     } while ('0' != in_char);
 
-    ir_ac_lib_close();
+    ir_close();
 
     return IR_DECODE_SUCCEEDED;
 }
@@ -180,31 +174,28 @@ INT8 decode_as_tv(char *file_name, UINT8 ir_hex_encode)
     int in_char = 0;
     int key_code = 0;
 
-    if (IR_DECODE_FAILED == ir_tv_file_open(file_name))
+    if (IR_DECODE_FAILED == ir_file_open(IR_CATEGORY_TV, ir_hex_encode, file_name))
     {
+        ir_close();
         return IR_DECODE_FAILED;
     }
 
-    if (IR_DECODE_FAILED == ir_tv_lib_parse(ir_hex_encode))
-    {
-        return IR_DECODE_FAILED;
-    }
     do
     {
         in_char = getchar();
         if (in_char >= '0' && in_char <= '9')
         {
             key_code = in_char - '0';
-            ir_tv_lib_control((UINT8) key_code, user_data);
+            ir_decode((UINT8)key_code, user_data, NULL, 0);
         }
         else if (in_char >= 'a' && in_char <= 'f')
         {
             key_code = 10 + (in_char - 'a');
-            ir_tv_lib_control((UINT8) key_code, user_data);
+            ir_decode((UINT8) key_code, user_data, NULL, 0);
         }
         else if (in_char == 'q')
         {
-            ir_tv_lib_close();
+            ir_close();
         }
         else
         {
