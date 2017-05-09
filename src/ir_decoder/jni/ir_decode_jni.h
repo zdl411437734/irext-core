@@ -76,7 +76,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
  * Method:    irClose
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irACLibClose
+JNIEXPORT void JNICALL Java_net_irext_decodesdk_IRDecode_irClose
   (JNIEnv *, jobject);
 
 /*
