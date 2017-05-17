@@ -35,6 +35,25 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpen
     return IR_DECODE_SUCCEEDED;
 }
 
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpenBinary
+          (JNIEnv *env, jobject this_obj, jint category_id, jint sub_cate,
+           jbyteArray binaries, jint bin_length)
+{
+    jbyte* j_buffer = (*env)->GetByteArrayElements(env, binaries, 0);
+    unsigned char* buffer = (unsigned char*)j_buffer;
+
+    if (IR_DECODE_FAILED == ir_binary_open(category_id, sub_cate, buffer, bin_length))
+    {
+        ir_close();
+        (*env)->ReleaseByteArrayElements(env, binaries, j_buffer, JNI_ABORT);
+        return IR_DECODE_FAILED;
+    }
+
+    (*env)->ReleaseByteArrayElements(env, binaries, j_buffer, JNI_ABORT);
+
+    return IR_DECODE_SUCCEEDED;
+}
+
 JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
           (JNIEnv *env, jobject this_obj, jint key_code, jobject jni_ac_status, jint change_wind_direction)
 {
@@ -102,8 +121,12 @@ JNIEXPORT jobject JNICALL Java_net_irext_decodesdk_IRDecode_irACGetTemperatureRa
     int tempMax = 0;
 
     jobject temperature_range = NULL;
-    jclass temperature_range_class = (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNITemperatureRange");
-    jmethodID temperature_range_mid = (*env)->GetMethodID(env, temperature_range_class, "<init>", "()V");
+    jclass temperature_range_class =
+        (*env)->FindClass(env, "com/irext/remote/bean/jnibean/JNITemperatureRange");
+
+    jmethodID temperature_range_mid =
+        (*env)->GetMethodID(env, temperature_range_class, "<init>", "()V");
+
     jfieldID min_temp_fid = (*env)->GetFieldID(env, temperature_range_class, "tempMin", "I");
     jfieldID max_temp_fid = (*env)->GetFieldID(env, temperature_range_class, "tempMax", "I");
 

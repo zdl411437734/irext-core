@@ -65,6 +65,14 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpen
 
 /*
  * Class:     net_irext_decodesdk_IRDecode
+ * Method:    irOpenBinary
+ * Signature: II(Ljava/lang/String;)
+ */
+JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpenBinary
+  (JNIEnv *, jobject, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     net_irext_decodesdk_IRDecode
  * Method:    irDecode
  * Signature: I(Lnet/irext/decodesdk/bean/ACStatus;I)[I
  */
