@@ -6,10 +6,15 @@ project(irda_decoder)
 add_definitions(-DBOARD_PC -DBOARD_PC_JNI)
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    MESSAGE("compile platform : Linux")
     add_definitions(-DPLATFORM_LINUX)
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    MESSAGE("compile platform : win32")
     add_definitions(-DPLATFORM_WIN32)
-ENDIF()
+ELSE ()
+    MESSAGE("invalid compile platform")
+    add_definitions(-DPLATFORM_WIN32)
+ENDIF ()
 
 set(SOURCE_FILES_EXECUTABLE
         include/ir_defs.h
@@ -83,6 +88,6 @@ set(SOURCE_FILES_JNI_SHARED_LIB
         src/ir_decode.c
         include/ir_decode.h)
 
-add_executable(irda_decoder ${SOURCE_FILES_EXECUTABLE})
+# add_executable(irda_decoder ${SOURCE_FILES_EXECUTABLE})
 # add_library(irda_decoder SHARED ${SOURCE_FILES_SHARED_LIB})
-# add_library(irda_decoder SHARED ${SOURCE_FILES_JNI_SHARED_LIB})
+add_library(irda_decoder SHARED ${SOURCE_FILES_JNI_SHARED_LIB})
