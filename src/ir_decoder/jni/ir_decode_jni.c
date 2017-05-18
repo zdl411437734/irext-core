@@ -8,10 +8,12 @@ Description:    This file links to java layer for Android application
 Revision log:
 * 2016-03-21: created by strawmanbobi
 **************************************************************************************************/
-#include <jni.h>
+// #include <jni.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+
+#include "./include/jni.h"
 #include "ir_decode_jni.h"
 #include "../include/ir_defs.h"
 #include "../include/ir_decode.h"
@@ -59,7 +61,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
 {
 	UINT16 user_data[USER_DATA_SIZE];
     int i = 0;
-    int copy_array[USER_DATA_SIZE] = {0};
+    jint copy_array[USER_DATA_SIZE] = {0};
 	remote_ac_status_t ac_status;
 
     jclass n_ac_status = (*env)->GetObjectClass(env, jni_ac_status);
