@@ -8,12 +8,10 @@ Description:    This file links to java layer for Android application
 Revision log:
 * 2016-03-21: created by strawmanbobi
 **************************************************************************************************/
-// #include <jni.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 
-#include "./include/jni.h"
 #include "ir_decode_jni.h"
 #include "../include/ir_defs.h"
 #include "../include/ir_decode.h"
@@ -82,7 +80,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
 
         jfieldID ac_wind_speed_fid = (*env)->GetFieldID(env, n_ac_status, "acWindSpeed", "I");
         jint i_ac_wind_speed = (*env)->GetIntField(env, jni_ac_status, ac_wind_speed_fid);
-		
+
         ac_status.acDisplay = 0;
         ac_status.acSleep = 0;
         ac_status.acTimer = 0;
