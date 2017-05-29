@@ -1,4 +1,4 @@
-# irext (revision 0.1.0)
+# irext (revision 0.1.2)
   IRDA code lib for household electrical appliances
 
   IREXT helps people who is working on a smart home remote controller for the IRDA household appliances.
