@@ -10,7 +10,6 @@ Revision log:
 **************************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include <errno.h>
 
 #include "ir_decode_jni.h"
 #include "../include/ir_defs.h"
@@ -48,8 +47,6 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpenBinary
         (*env)->ReleaseByteArrayElements(env, binaries, j_buffer, JNI_ABORT);
         return IR_DECODE_FAILED;
     }
-
-    (*env)->ReleaseByteArrayElements(env, binaries, j_buffer, JNI_ABORT);
 
     return IR_DECODE_SUCCEEDED;
 }

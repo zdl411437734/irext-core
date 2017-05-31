@@ -70,22 +70,22 @@ INT8 decode_as_ac(char *file_name)
                 break;
             case 's':
             case 'S':
+                // temperature minus
                 ac_status.acTemp = ((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
                 function_code = AC_FUNCTION_TEMPERATURE_DOWN;
-                // temperature minus
                 break;
             case 'a':
             case 'A':
+                // wind speed loop
                 ++ac_status.acWindSpeed;
                 ac_status.acWindSpeed = ac_status.acWindSpeed % AC_WS_MAX;
                 function_code = AC_FUNCTION_WIND_SPEED;
-                // wind speed loop
                 break;
             case 'd':
             case 'D':
+                // wind swing loop
                 ac_status.acWindDir = ((ac_status.acWindDir == 0) ? AC_SWING_OFF : AC_SWING_ON);
                 function_code = AC_FUNCTION_WIND_SWING;
-                // wind swing loop
                 break;
             case 'q':
             case 'Q':

@@ -61,6 +61,11 @@ static UINT16 ir_tv_lib_control(UINT8 key, UINT16 *l_user_data);
 static INT8 ir_tv_lib_close();
 
 
+void noprint(const char *fmt, ...)
+{
+    return;
+}
+
 // pubic function definitions
 
 INT8 ir_file_open(const UINT8 category, const UINT8 sub_category, const char* file_name)
@@ -111,7 +116,8 @@ INT8 ir_file_open(const UINT8 category, const UINT8 sub_category, const char* fi
 INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8* binary, UINT16 binary_length)
 {
     INT8 ret = IR_DECODE_SUCCEEDED;
-    if (category == IR_TYPE_STATUS)
+
+    if (category == IR_CATEGORY_AC)
     {
         ir_binary_type = IR_TYPE_STATUS;
         ret = ir_ac_lib_open(binary, binary_length);
@@ -352,11 +358,15 @@ static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data,
 
     time_length = create_ir_frame();
 
-#if defined BOARD_PC
+#if (defined BOARD_PC)
+#if (defined BOARD_PC_JNI)
+    ir_printf("code count = %d\n", context->code_cnt);
+#else
     for (i = 0; i < context->code_cnt; i++)
     {
         ir_printf("%d,", context->time[i]);
     }
+#endif
     ir_printf("\n");
 #endif
 

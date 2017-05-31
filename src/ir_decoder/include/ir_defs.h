@@ -37,6 +37,8 @@ typedef signed int INT;
 typedef unsigned int UINT;
 typedef int BOOL;
 
+void noprint(const char *fmt, ...);
+
 #if !defined BOARD_CC26XX
 #define ir_malloc(A) malloc(A)
 #define ir_free(A) free(A)
@@ -48,7 +50,11 @@ typedef int BOOL;
 #define ir_memcpy(A, B, C) memcpy(A, B, C)
 #define ir_memset(A, B, C) memset(A, B, C)
 #define ir_strlen(A) strlen(A)
+#if (defined BOARD_PC) && (!defined BOARD_PC_JNI)
 #define ir_printf printf
+#else
+#define ir_printf noprint
+#endif
 #define USER_DATA_SIZE 1636
 
 #ifdef __cplusplus
