@@ -57,7 +57,6 @@ static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time);
 INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
 {
     // load binary to buffer
-    ir_printf("tv_lib_open entry, %d\n", binary_length);
     pbuffer->data = binary;
     pbuffer->len = binary_length;
     pbuffer->offset = 0;

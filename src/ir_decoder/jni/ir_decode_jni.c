@@ -54,16 +54,16 @@ JNIEXPORT jint JNICALL Java_net_irext_decodesdk_IRDecode_irOpenBinary
 JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
           (JNIEnv *env, jobject this_obj, jint key_code, jobject jni_ac_status, jint change_wind_direction)
 {
-	UINT16 user_data[USER_DATA_SIZE];
+    UINT16 user_data[USER_DATA_SIZE];
     int i = 0;
     jint copy_array[USER_DATA_SIZE] = {0};
-	remote_ac_status_t ac_status;
+    remote_ac_status_t ac_status;
 
     jclass n_ac_status = (*env)->GetObjectClass(env, jni_ac_status);
 
-	if (NULL != n_ac_status)
-	{
-		jfieldID ac_power_fid = (*env)->GetFieldID(env, n_ac_status, "acPower", "I");
+    if (NULL != n_ac_status)
+    {
+        jfieldID ac_power_fid = (*env)->GetFieldID(env, n_ac_status, "acPower", "I");
         jint i_ac_power = (*env)->GetIntField(env, jni_ac_status, ac_power_fid);
 
         jfieldID ac_mode_fid = (*env)->GetFieldID(env, n_ac_status, "acMode", "I");
@@ -86,7 +86,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
         ac_status.acTemp = i_ac_temp;
         ac_status.acWindDir = i_ac_wind_dir;
         ac_status.acWindSpeed = i_ac_wind_speed;
-	}
+    }
 
     int wave_code_length = ir_decode(key_code, user_data, &ac_status, change_wind_direction);
 
@@ -100,7 +100,7 @@ JNIEXPORT jintArray JNICALL Java_net_irext_decodesdk_IRDecode_irDecode
         copy_array[i] = (int)user_data[i];
     }
     (*env)->SetIntArrayRegion(env, result, 0, wave_code_length, copy_array);
-	(*env)->DeleteLocalRef(env, n_ac_status);
+    (*env)->DeleteLocalRef(env, n_ac_status);
 
     return result;
 }
