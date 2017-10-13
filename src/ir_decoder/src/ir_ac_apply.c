@@ -17,16 +17,16 @@ static INT8 apply_ac_power(struct ac_protocol *protocol, UINT8 power_status);
 
 static INT8 apply_ac_mode(struct ac_protocol *protocol, UINT8 mode_status);
 
-static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temperature);
+static INT8 apply_ac_temperature(struct ac_protocol *protocol, UINT8 temp_diff);
 
 static INT8 apply_ac_wind_speed(struct ac_protocol *protocol, UINT8 wind_speed);
 
-static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_status);
+static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode);
 
 static UINT8 has_function(struct ac_protocol *protocol, UINT8 function);
 
 
-INT8 apply_ac_parameter_type_1(UINT8 *dc_data, tag_comp *comp_data, UINT8 current_seg, UINT8 is_temp)
+INT8 apply_ac_parameter_type_1(UINT8 *dc_data, t_tag_comp *comp_data, UINT8 current_seg, UINT8 is_temp)
 {
     if (0 != (comp_data->seg_len & 0x01))
     {
@@ -45,7 +45,7 @@ INT8 apply_ac_parameter_type_1(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 current_seg, UINT8 is_temp)
+INT8 apply_ac_parameter_type_2(UINT8 *dc_data, t_tag_comp *comp_data, UINT8 current_seg, UINT8 is_temp)
 {
     UINT8 start_bit = 0;
     UINT8 end_bit = 0;
@@ -59,11 +59,10 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
         return IR_DECODE_FAILED;
     }
 
-    // TODO: to be validated
     start_bit = comp_data->segment[current_seg];
     end_bit = comp_data->segment[current_seg + 1];
     cover_byte_pos_hi = start_bit >> 3;
-    cover_byte_pos_lo = (end_bit - 1) >> 3;
+    cover_byte_pos_lo = (UINT8) (end_bit - 1) >> 3;
     if (cover_byte_pos_hi == cover_byte_pos_lo)
     {
         // cover_byte_pos_hi or cover_bytes_pos_lo is target byte to be applied with AC parameter
@@ -72,12 +71,12 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
         UINT8 int_start_bit = start_bit - (cover_byte_pos_hi << 3);
         UINT8 int_end_bit = end_bit - (cover_byte_pos_lo << 3);
         UINT8 bit_range = end_bit - start_bit;
-        UINT8 mask = (0xFF << (8 - int_start_bit)) | (0xFF >> int_end_bit);
+        UINT8 mask = (UINT8) ((0xFF << (8 - int_start_bit)) | (0xFF >> int_end_bit));
         UINT8 origin = dc_data[cover_byte_pos_lo];
 
         if (TRUE == is_temp)
         {
-            move_bit = 8 - int_end_bit;
+            move_bit = (UINT8) (8 - int_end_bit);
             value = (origin & mask) | (((((origin & ~mask) >> move_bit) + raw_value) << move_bit) & ~mask);
         }
         else
@@ -88,14 +87,13 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
     }
     else
     {
-        UINT8 value = 0x00;
-        UINT8 origin_hi = 0x00;
-        UINT8 origin_lo = 0x00;
-        UINT8 mask_hi = 0x00;
-        UINT8 mask_lo = 0x00;
-        UINT8 raw_value = 0x00;
-        UINT8 int_start_bit = 0x00;
-        UINT8 int_end_bit = 0x00;
+        UINT8 origin_hi = 0;
+        UINT8 origin_lo = 0;
+        UINT8 mask_hi = 0;
+        UINT8 mask_lo = 0;
+        UINT8 raw_value = 0;
+        UINT8 int_start_bit = 0;
+        UINT8 int_end_bit = 0;
 
         if (cover_byte_pos_hi > cover_byte_pos_lo)
         {
@@ -111,8 +109,8 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
         int_start_bit = start_bit - (cover_byte_pos_hi << 3);
         int_end_bit = end_bit - (cover_byte_pos_lo << 3);
 
-        mask_hi = 0xFF << (8 - int_start_bit);
-        mask_lo = 0xFF >> int_end_bit;
+        mask_hi = (UINT8) 0xFF << (8 - int_start_bit);
+        mask_lo = (UINT8) 0xFF >> int_end_bit;
 
         value = ((origin_hi & ~mask_hi) << int_end_bit) | ((origin_lo & ~mask_lo) >> (8 - int_end_bit));
 
@@ -121,11 +119,11 @@ INT8 apply_ac_parameter_type_2(UINT8 *dc_data, tag_comp *comp_data, UINT8 curren
             raw_value += value;
         }
 
-        dc_data[cover_byte_pos_hi] = (origin_hi & mask_hi) |
-                                     (((0xFF >> (8 - bit_range)) & raw_value) >> int_end_bit);
+        dc_data[cover_byte_pos_hi] = (UINT8) ((origin_hi & mask_hi) |
+                                     (((0xFF >> (8 - bit_range)) & raw_value) >> int_end_bit));
 
-        dc_data[cover_byte_pos_lo] = (origin_lo & mask_lo) |
-                                     (((0xFF >> (8 - bit_range)) & raw_value) << (8 - int_end_bit));
+        dc_data[cover_byte_pos_lo] = (UINT8) ((origin_lo & mask_lo) |
+                                     (((0xFF >> (8 - bit_range)) & raw_value) << (8 - int_end_bit)));
     }
 
     return IR_DECODE_SUCCEEDED;
@@ -346,7 +344,7 @@ static INT8 apply_ac_swing(struct ac_protocol *protocol, UINT8 swing_mode)
     return IR_DECODE_SUCCEEDED;
 }
 
-static INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_byte(UINT8 *ac_code, t_tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 checksum = 0x00;
@@ -374,7 +372,7 @@ static INT8 apply_checksum_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inver
     return IR_DECODE_SUCCEEDED;
 }
 
-static INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_halfbyte(UINT8 *ac_code, t_tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 checksum = 0x00;
@@ -402,7 +400,7 @@ static INT8 apply_checksum_halfbyte(UINT8 *ac_code, tag_checksum_data cs, BOOL i
     return IR_DECODE_SUCCEEDED;
 }
 
-static INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_spec_byte(UINT8 *ac_code, t_tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 apply_byte_pos = 0;
@@ -442,18 +440,18 @@ static INT8 apply_checksum_spec_byte(UINT8 *ac_code, tag_checksum_data cs, BOOL 
     if (0 == (cs.checksum_byte_pos & 0x01))
     {
         // save low bits and add checksum as high bits
-        ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0x0F) | (checksum << 4);
+        ac_code[apply_byte_pos] = (UINT8) ((ac_code[apply_byte_pos] & 0x0F) | (checksum << 4));
     }
     else
     {
         // save high bits and add checksum as low bits
-        ac_code[apply_byte_pos] = (ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F);
+        ac_code[apply_byte_pos] = (UINT8) ((ac_code[apply_byte_pos] & 0xF0) | (checksum & 0x0F));
     }
 
     return IR_DECODE_SUCCEEDED;
 }
 
-static INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, tag_checksum_data cs, BOOL inverse)
+static INT8 apply_checksum_spec_byte_onebyte(UINT8 *ac_code, t_tag_checksum_data cs, BOOL inverse)
 {
     UINT16 i = 0;
     UINT8 apply_byte_pos = 0;
@@ -605,15 +603,15 @@ INT8 apply_checksum(struct ac_protocol *protocol)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_power(remote_ac_status_t ac_status, UINT8 function_code)
+INT8 apply_power(t_remote_ac_status ac_status, UINT8 function_code)
 {
-    apply_ac_power(context, ac_status.acPower);
+    apply_ac_power(context, ac_status.ac_power);
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_mode(remote_ac_status_t ac_status, UINT8 function_code)
+INT8 apply_mode(t_remote_ac_status ac_status, UINT8 function_code)
 {
-    if (IR_DECODE_FAILED == apply_ac_mode(context, ac_status.acMode))
+    if (IR_DECODE_FAILED == apply_ac_mode(context, ac_status.ac_mode))
     {
         // do not implement this mechanism since mode, temperature, wind
         // speed would have unspecified function
@@ -626,16 +624,16 @@ INT8 apply_mode(remote_ac_status_t ac_status, UINT8 function_code)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
+INT8 apply_wind_speed(t_remote_ac_status ac_status, UINT8 function_code)
 {
-    if (FALSE == context->n_mode[ac_status.acMode].allspeed)
+    if (FALSE == context->n_mode[ac_status.ac_mode].all_speed)
     {
         // if this level is not in black list
-        if (!isin(context->n_mode[ac_status.acMode].speed,
-                  ac_status.acWindSpeed,
-                  context->n_mode[ac_status.acMode].speed_cnt))
+        if (!is_in(context->n_mode[ac_status.ac_mode].speed,
+                   ac_status.ac_wind_speed,
+                   context->n_mode[ac_status.ac_mode].speed_cnt))
         {
-            if (IR_DECODE_FAILED == apply_ac_wind_speed(context, ac_status.acWindSpeed) &&
+            if (IR_DECODE_FAILED == apply_ac_wind_speed(context, ac_status.ac_wind_speed) &&
                 function_code == AC_FUNCTION_WIND_SPEED)
             {
                 // do not implement this mechanism since mode, temperature, wind
@@ -676,7 +674,7 @@ INT8 apply_wind_speed(remote_ac_status_t ac_status, UINT8 function_code)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
+INT8 apply_swing(t_remote_ac_status ac_status, UINT8 function_code)
 {
     if (function_code == AC_FUNCTION_WIND_FIX)
     {
@@ -719,15 +717,15 @@ INT8 apply_swing(remote_ac_status_t ac_status, UINT8 function_code)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 apply_temperature(remote_ac_status_t ac_status, UINT8 function_code)
+INT8 apply_temperature(t_remote_ac_status ac_status, UINT8 function_code)
 {
-    if (FALSE == context->n_mode[ac_status.acMode].alltemp)
+    if (FALSE == context->n_mode[ac_status.ac_mode].all_temp)
     {
-        if (!isin(context->n_mode[ac_status.acMode].temp,
-                  ac_status.acTemp,
-                  context->n_mode[ac_status.acMode].temp_cnt))
+        if (!is_in(context->n_mode[ac_status.ac_mode].temp,
+                   ac_status.ac_temp,
+                   context->n_mode[ac_status.ac_mode].temp_cnt))
         {
-            if (IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.acTemp))
+            if (IR_DECODE_FAILED == apply_ac_temperature(context, ac_status.ac_temp))
             {
                 if (function_code == AC_FUNCTION_TEMPERATURE_UP
                     /*&& FALSE == has_function(context, AC_FUNCTION_TEMPERATURE_UP)*/)

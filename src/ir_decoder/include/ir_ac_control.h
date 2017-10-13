@@ -19,22 +19,22 @@ extern "C"
 #include "ir_defs.h"
 
 
-#define TAG_COUNT_FOR_PROTOCOL       29
+#define TAG_COUNT_FOR_PROTOCOL 29
 
-#define TAG_INVALID                  0xffff
+#define TAG_INVALID 0xffff
 
-#define MAX_DELAYCODE_NUM            16
-#define MAX_BITNUM                   16
+#define MAX_DELAYCODE_NUM 16
+#define MAX_BITNUM 16
 
-#define AC_PARAMETER_TYPE_1          0
-#define AC_PARAMETER_TYPE_2          1
+#define AC_PARAMETER_TYPE_1 0
+#define AC_PARAMETER_TYPE_2 1
 
 typedef enum
 {
     AC_POWER_ON = 0,
     AC_POWER_OFF,
     AC_POWER_MAX
-} ac_power;
+} t_ac_power;
 
 typedef enum
 {
@@ -54,7 +54,7 @@ typedef enum
     AC_TEMP_29,
     AC_TEMP_30,
     AC_TEMP_MAX
-} ac_temperature;
+} t_ac_temperature;
 
 typedef enum
 {
@@ -64,7 +64,7 @@ typedef enum
     AC_MODE_FAN,
     AC_MODE_DRY,
     AC_MODE_MAX
-} ac_mode;
+} t_ac_mode;
 
 typedef enum
 {
@@ -76,7 +76,7 @@ typedef enum
     AC_FUNCTION_WIND_SWING,
     AC_FUNCTION_WIND_FIX,
     AC_FUNCTION_MAX,
-} ac_function;
+} t_ac_function;
 
 typedef enum
 {
@@ -85,14 +85,14 @@ typedef enum
     AC_WS_MEDIUM,
     AC_WS_HIGH,
     AC_WS_MAX
-} ac_wind_speed;
+} t_ac_wind_speed;
 
 typedef enum
 {
     AC_SWING_ON = 0,
     AC_SWING_OFF,
     AC_SWING_MAX
-} ac_swing;
+} t_ac_swing;
 
 typedef enum
 {
@@ -107,7 +107,7 @@ typedef enum
     TEMP_TYPE_DYNAMIC = 0,
     TEMP_TYPE_STATIC,
     TEMP_TYPE_MAX,
-} temp_type;
+} t_temp_type;
 
 // enumeration for application polymorphism
 typedef enum
@@ -120,32 +120,32 @@ typedef enum
     AC_APPLY_WIND_SWING,
     AC_APPLY_WIND_FIX,
     AC_APPLY_MAX
-} ac_apply;
+} t_ac_apply;
 
 typedef struct _ac_hex
 {
     UINT8 len;
     UINT8 *data;
-} ac_hex;
+} t_ac_hex;
 
 typedef struct _ac_level
 {
     UINT16 low;
     UINT16 high;
-} ac_level;
+} t_ac_level;
 
 typedef struct _ac_bootcode
 {
     UINT16 len;
     UINT16 data[16];
-} ac_bootcode;
+} t_ac_bootcode;
 
 typedef struct _ac_delaycode
 {
     INT16 pos;
     UINT16 time[8];
     UINT16 time_cnt;
-} ac_delaycode;
+} t_ac_delaycode;
 
 /*
  * the array of tag_100X application data
@@ -157,78 +157,78 @@ typedef struct _tag_comp_type_1
 {
     UINT8 seg_len;
     UINT8 *segment;
-} tag_comp;
+} t_tag_comp;
 
 typedef struct _tag_swing_info
 {
     swing_type type;
     UINT8 mode_count;
     UINT8 dir_index;
-} swing_info;
+} t_swing_info;
 
 typedef struct _tag_power_1
 {
     UINT8 len;
-    tag_comp comp_data[AC_POWER_MAX];
-} power_1;
+    t_tag_comp comp_data[AC_POWER_MAX];
+} t_power_1;
 
 typedef struct _tag_temp_1
 {
     UINT8 len;
     UINT8 type;
-    tag_comp comp_data[AC_TEMP_MAX];
-} temp_1;
+    t_tag_comp comp_data[AC_TEMP_MAX];
+} t_temp_1;
 
 typedef struct tag_mode_1
 {
     UINT8 len;
-    tag_comp comp_data[AC_MODE_MAX];
-} mode_1;
+    t_tag_comp comp_data[AC_MODE_MAX];
+} t_mode_1;
 
 typedef struct tag_speed_1
 {
     UINT8 len;
-    tag_comp comp_data[AC_WS_MAX];
-} speed_1;
+    t_tag_comp comp_data[AC_WS_MAX];
+} t_speed_1;
 
 typedef struct tag_swing_1
 {
     UINT8 len;
     UINT16 count;
-    tag_comp *comp_data;
-} swing_1;
+    t_tag_comp *comp_data;
+} t_swing_1;
 
 typedef struct tag_temp_2
 {
     UINT8 len;
     UINT8 type;
-    tag_comp comp_data[AC_TEMP_MAX];
-} temp_2;
+    t_tag_comp comp_data[AC_TEMP_MAX];
+} t_temp_2;
 
 typedef struct tag_mode_2
 {
     UINT8 len;
-    tag_comp comp_data[AC_MODE_MAX];
-} mode_2;
+    t_tag_comp comp_data[AC_MODE_MAX];
+} t_mode_2;
 
 typedef struct tag_speed_2
 {
     UINT8 len;
-    tag_comp comp_data[AC_WS_MAX];
-} speed_2;
+    t_tag_comp comp_data[AC_WS_MAX];
+} t_speed_2;
 
 typedef struct tag_swing_2
 {
     UINT8 len;
     UINT16 count;
-    tag_comp *comp_data;
-} swing_2;
+    t_tag_comp *comp_data;
+} t_swing_2;
 
 #if defined SUPPORT_HORIZONTAL_SWING
 typedef struct tag_horiswing_1
 {
     UINT16 len;
-    tag_comp comp_data[AC_HORI_SWING_MAX];
+    t_tag_comp comp_data[AC_HORI_SWING_MAX];
 } hori_swing_1;
 #endif
 
@@ -241,39 +241,39 @@ typedef struct _tag_checksum_data
     UINT8 checksum_byte_pos;
     UINT8 checksum_plus;
     UINT8 *spec_pos;
-} tag_checksum_data;
+} t_tag_checksum_data;
 
 typedef struct tag_checksum
 {
     UINT8 len;
     UINT16 count;
-    tag_checksum_data *checksum_data;
-} tchecksum;
+    t_tag_checksum_data *checksum_data;
+} t_checksum;
 
 typedef struct tag_function_1
 {
     UINT8 len;
-    tag_comp comp_data[AC_FUNCTION_MAX - 1];
-} function_1;
+    t_tag_comp comp_data[AC_FUNCTION_MAX - 1];
+} t_function_1;
 
 typedef struct tag_function_2
 {
     UINT8 len;
-    tag_comp comp_data[AC_FUNCTION_MAX - 1];
-} function_2;
+    t_tag_comp comp_data[AC_FUNCTION_MAX - 1];
+} t_function_2;
 
 typedef struct tag_solo_code
 {
     UINT8 len;
     UINT8 solo_func_count;
     UINT8 solo_function_codes[AC_FUNCTION_MAX - 1];
-} solo_code;
+} t_solo_code;
 
 typedef struct _ac_bitnum
 {
     INT16 pos;
     UINT16 bits;
-} ac_bitnum;
+} t_ac_bit_num;
 
 typedef enum
 {
@@ -283,7 +283,7 @@ typedef enum
     N_FAN,
     N_DRY,
     N_MODE_MAX,
-} ac_n_mode;
+} t_ac_n_mode;
 
 typedef enum
 {
@@ -296,68 +296,69 @@ typedef enum
     CHECKSUM_TYPE_SPEC_HALF_BYTE_ONE_BYTE,
     CHECKSUM_TYPE_SPEC_HALF_BYTE_INVERSE_ONE_BYTE,
     CHECKSUM_TYPE_MAX,
-} checksum_type;
+} t_checksum_type;
 
 typedef struct _ac_n_mode_info
 {
     UINT8 enable;
-    UINT8 allspeed;
-    UINT8 alltemp;
+    UINT8 all_speed;
+    UINT8 all_temp;
     UINT8 temp[AC_TEMP_MAX];
     UINT8 temp_cnt;
     UINT8 speed[AC_WS_MAX];
     UINT8 speed_cnt;
-} ac_n_mode_info;
+} t_ac_n_mode_info;
 
 typedef struct ac_protocol
 {
     UINT8 endian;
-    // ac_hex default_code;
-    ac_hex default_code;
-    ac_level zero;
-    ac_level one;
-    ac_bootcode bootcode;
-    ac_delaycode dc[MAX_DELAYCODE_NUM];
-    power_1 power1;
-    temp_1 temp1;
-    mode_1 mode1;
-    speed_1 speed1;
-    swing_1 swing1;
-    tchecksum checksum;
+    // t_ac_hex default_code;
+    t_ac_hex default_code;
+    t_ac_level zero;
+    t_ac_level one;
+    t_ac_bootcode boot_code;
+    t_ac_delaycode dc[MAX_DELAYCODE_NUM];
+    t_power_1 power1;
+    t_temp_1 temp1;
+    t_mode_1 mode1;
+    t_speed_1 speed1;
+    t_swing_1 swing1;
+    t_checksum checksum;
 
-    function_1 function1;
-    function_2 function2;
+    t_function_1 function1;
+    t_function_2 function2;
 
-    temp_2 temp2;
-    mode_2 mode2;
-    speed_2 speed2;
-    swing_2 swing2;
+    t_temp_2 temp2;
+    t_mode_2 mode2;
+    t_speed_2 speed2;
+    t_swing_2 swing2;
 
-    swing_info si;
-    solo_code sc;
+    t_swing_info si;
+    t_solo_code sc;
 
     UINT8 swing_status;
 
     BOOL change_wind_direction;
 
     UINT16 dc_cnt;
-    ac_bitnum bitnum[MAX_BITNUM];
-    UINT16 bitnum_cnt;
+    t_ac_bit_num bit_num[MAX_BITNUM];
+    UINT16 bit_num_cnt;
     UINT16 repeat_times;
-    UINT16 frame_length;
-    ac_n_mode_info n_mode[N_MODE_MAX];
+    t_ac_n_mode_info n_mode[N_MODE_MAX];
     UINT16 code_cnt;
-    UINT8 lastbit;
+    UINT8 last_bit;
     UINT16 *time;
     UINT8 solo_function_mark;
-} protocol;
+
+    UINT16 frame_length;
+} t_ac_protocol;
 
 typedef struct tag_head
 {
     UINT16 tag;
     UINT16 len;
     unsigned short offset;
-    UINT8 *pdata;
+    UINT8 *p_data;
 } t_tag_head;
 
 struct ir_bin_buffer
@@ -369,19 +370,18 @@ struct ir_bin_buffer
 
 typedef struct REMOTE_AC_STATUS
 {
-    ac_power acPower;
-    ac_temperature acTemp;
-    ac_mode acMode;
-    ac_swing acWindDir;
-    ac_wind_speed acWindSpeed;
-    UINT8 acDisplay;
-    UINT8 acSleep;
-    UINT8 acTimer;
-} remote_ac_status_t;
+    t_ac_power ac_power;
+    t_ac_temperature ac_temp;
+    t_ac_mode ac_mode;
+    t_ac_swing ac_wind_dir;
+    t_ac_wind_speed ac_wind_speed;
+    UINT8 ac_display;
+    UINT8 ac_sleep;
+    UINT8 ac_timer;
+} t_remote_ac_status;
 
 // function polymorphism
-typedef INT8 (*lp_apply_ac_parameter)(remote_ac_status_t ac_status, UINT8 function_code);
-
+typedef INT8 (*lp_apply_ac_parameter)(t_remote_ac_status ac_status, UINT8 function_code);
 
 #define TAG_AC_BOOT_CODE                  1
 #define TAG_AC_ZERO                       2
@@ -389,7 +389,7 @@ typedef INT8 (*lp_apply_ac_parameter)(remote_ac_status_t ac_status, UINT8 functi
 #define TAG_AC_DELAY_CODE                 4
 #define TAG_AC_FRAME_LENGTH               5
 #define TAG_AC_ENDIAN                     6
-#define TAG_AC_LASTBIT                    7
+#define TAG_AC_LAST_BIT                   7
 
 #define TAG_AC_POWER_1                    21
 #define TAG_AC_DEFAULT_CODE               22
@@ -413,17 +413,17 @@ typedef INT8 (*lp_apply_ac_parameter)(remote_ac_status_t ac_status, UINT8 functi
 #define TAG_AC_BAN_FUNCTION_IN_DRY_MODE   45
 #define TAG_AC_SWING_INFO                 46
 #define TAG_AC_REPEAT_TIMES               47
-#define TAG_AC_BITNUM                     48
+#define TAG_AC_BIT_NUM                    48
 
 
 // definition about size
 
-#define PROTOCOL_SIZE (sizeof(protocol))
+#define PROTOCOL_SIZE (sizeof(t_ac_protocol))
 
 /* exported variables */
 extern UINT8 *ir_hex_code;
 extern UINT8 ir_hex_len;
-extern protocol *context;
+extern t_ac_protocol *context;
 
 
 extern INT8 ir_ac_lib_parse();

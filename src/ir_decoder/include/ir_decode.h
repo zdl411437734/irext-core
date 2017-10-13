@@ -75,7 +75,7 @@ extern INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8
  *
  * returns:     length of decoded data (0 indicates decode failure)
  */
-extern UINT16 ir_decode(UINT8 key_code, UINT16* user_data, remote_ac_status_t* ac_status, BOOL change_wind_direction);
+extern UINT16 ir_decode(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction);
 
 /**
  * function     ir_close

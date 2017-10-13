@@ -17,10 +17,10 @@ Revision log:
 #include "../include/ir_ac_parse_forbidden_info.h"
 
 
-extern protocol *context;
+extern t_ac_protocol *context;
 
 
-INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
+INT8 parse_nmode_data_speed(char *pdata, t_ac_n_mode seq)
 {
     char buf[16] = {0};
     char *p = pdata;
@@ -44,7 +44,7 @@ INT8 parse_nmode_data_speed(char *pdata, ac_n_mode seq)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
+INT8 parse_nmode_data_temp(char *pdata, t_ac_n_mode seq)
 {
 
     char buf[16] = {0};
@@ -68,7 +68,7 @@ INT8 parse_nmode_data_temp(char *pdata, ac_n_mode seq)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode_pos(char *buf, ac_n_mode index)
+INT8 parse_nmode_pos(char *buf, t_ac_n_mode index)
 {
     UINT16 i = 0;
     char data[64] = {0};
@@ -77,11 +77,11 @@ INT8 parse_nmode_pos(char *buf, ac_n_mode index)
     {
         if (buf[0] == 'S' || buf[0] == 's')
         {
-            context->n_mode[index].allspeed = 1;
+            context->n_mode[index].all_speed = 1;
         }
         else if (buf[0] == 'T' || buf[0] == 't')
         {
-            context->n_mode[index].alltemp = 1;
+            context->n_mode[index].all_temp = 1;
         }
         return IR_DECODE_SUCCEEDED;
     }
@@ -106,14 +106,14 @@ INT8 parse_nmode_pos(char *buf, ac_n_mode index)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
+INT8 parse_nmode(struct tag_head *tag, t_ac_n_mode index)
 {
     UINT16 i = 0;
     UINT16 preindex = 0;
 
     char buf[64] = {0};
 
-    if (tag->pdata[0] == 'N' && tag->pdata[1] == 'A')
+    if (tag->p_data[0] == 'N' && tag->p_data[1] == 'A')
     {
         // ban this function directly
         context->n_mode[index].enable = 0;
@@ -127,16 +127,16 @@ INT8 parse_nmode(struct tag_head *tag, ac_n_mode index)
     preindex = 0;
     for (i = 0; i < tag->len; i++)
     {
-        if (tag->pdata[i] == '|')
+        if (tag->p_data[i] == '|')
         {
-            ir_memcpy(buf, tag->pdata + preindex, i - preindex);
+            ir_memcpy(buf, tag->p_data + preindex, i - preindex);
             preindex = (UINT16) (i + 1);
             parse_nmode_pos(buf, index);
             ir_memset(buf, 0, 64);
         }
 
     }
-    ir_memcpy(buf, tag->pdata + preindex, i - preindex);
+    ir_memcpy(buf, tag->p_data + preindex, i - preindex);
     parse_nmode_pos(buf, index);
     ir_memset(buf, 0, 64);
     return IR_DECODE_SUCCEEDED;

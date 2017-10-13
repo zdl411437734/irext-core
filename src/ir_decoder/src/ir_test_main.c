@@ -15,7 +15,7 @@ Revision log:
 #include "../include/ir_decode.h"
 
 // global variable definition
-remote_ac_status_t ac_status;
+t_remote_ac_status ac_status;
 UINT16 user_data[USER_DATA_SIZE];
 
 
@@ -40,14 +40,14 @@ INT8 decode_as_ac(char *file_name)
     BOOL need_control;
 
     // init air conditioner status
-    ac_status.acDisplay = 0;
-    ac_status.acSleep = 0;
-    ac_status.acTimer = 0;
-    ac_status.acPower = AC_POWER_OFF;
-    ac_status.acMode = AC_MODE_COOL;
-    ac_status.acTemp = AC_TEMP_20;
-    ac_status.acWindDir = AC_SWING_ON;
-    ac_status.acWindSpeed = AC_WS_AUTO;
+    ac_status.ac_display = 0;
+    ac_status.ac_sleep = 0;
+    ac_status.ac_timer = 0;
+    ac_status.ac_power = AC_POWER_OFF;
+    ac_status.ac_mode = AC_MODE_COOL;
+    ac_status.ac_temp = AC_TEMP_20;
+    ac_status.ac_wind_dir = AC_SWING_ON;
+    ac_status.ac_wind_speed = AC_WS_AUTO;
 
     if (IR_DECODE_FAILED == ir_file_open(IR_CATEGORY_AC, 0, file_name))
     {
@@ -65,42 +65,42 @@ INT8 decode_as_ac(char *file_name)
             case 'w':
             case 'W':
                 // temperature plus
-                ac_status.acTemp = ((ac_status.acTemp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.acTemp + 1));
+                ac_status.ac_temp = ((ac_status.ac_temp == AC_TEMP_30) ? AC_TEMP_30 : (ac_status.ac_temp + 1));
                 function_code = AC_FUNCTION_TEMPERATURE_UP;
                 break;
             case 's':
             case 'S':
                 // temperature minus
-                ac_status.acTemp = ((ac_status.acTemp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.acTemp - 1));
+                ac_status.ac_temp = ((ac_status.ac_temp == AC_TEMP_16) ? AC_TEMP_16 : (ac_status.ac_temp - 1));
                 function_code = AC_FUNCTION_TEMPERATURE_DOWN;
                 break;
             case 'a':
             case 'A':
                 // wind speed loop
-                ++ac_status.acWindSpeed;
-                ac_status.acWindSpeed = ac_status.acWindSpeed % AC_WS_MAX;
+                ++ac_status.ac_wind_speed;
+                ac_status.ac_wind_speed = ac_status.ac_wind_speed % AC_WS_MAX;
                 function_code = AC_FUNCTION_WIND_SPEED;
                 break;
             case 'd':
             case 'D':
                 // wind swing loop
-                ac_status.acWindDir = ((ac_status.acWindDir == 0) ? AC_SWING_OFF : AC_SWING_ON);
+                ac_status.ac_wind_dir = ((ac_status.ac_wind_dir == 0) ? AC_SWING_OFF : AC_SWING_ON);
                 function_code = AC_FUNCTION_WIND_SWING;
                 break;
             case 'q':
             case 'Q':
-                ++ac_status.acMode;
-                ac_status.acMode = ac_status.acMode % AC_MODE_MAX;
+                ++ac_status.ac_mode;
+                ac_status.ac_mode = ac_status.ac_mode % AC_MODE_MAX;
                 function_code = AC_FUNCTION_MODE;
                 break;
             case '1':
                 // turn on
-                ac_status.acPower = AC_POWER_ON;
+                ac_status.ac_power = AC_POWER_ON;
                 function_code = AC_FUNCTION_POWER;
                 break;
             case '2':
                 // turn off
-                ac_status.acPower = AC_POWER_OFF;
+                ac_status.ac_power = AC_POWER_OFF;
                 // FUNCTION MAX refers to power off
                 // function_code = AC_FUNCTION_POWER;
                 break;
@@ -113,25 +113,25 @@ INT8 decode_as_ac(char *file_name)
                 break;
 
             case '4':
-                if (IR_DECODE_SUCCEEDED == get_supported_swing(ac_status.acMode, &supported_swing))
+                if (IR_DECODE_SUCCEEDED == get_supported_swing(ac_status.ac_mode, &supported_swing))
                 {
-                    ir_printf("\nsupported swing in %d = %02X\n", ac_status.acMode, supported_swing);
+                    ir_printf("\nsupported swing in %d = %02X\n", ac_status.ac_mode, supported_swing);
                 }
                 need_control = FALSE;
                 break;
             case '5':
-                if (IR_DECODE_SUCCEEDED == get_supported_wind_speed(ac_status.acMode, &supported_speed))
+                if (IR_DECODE_SUCCEEDED == get_supported_wind_speed(ac_status.ac_mode, &supported_speed))
                 {
-                    ir_printf("\nsupported wind speed in %d = %02X\n", ac_status.acMode, supported_speed);
+                    ir_printf("\nsupported wind speed in %d = %02X\n", ac_status.ac_mode, supported_speed);
                 }
                 need_control = FALSE;
                 break;
 
             case '6':
-                if (IR_DECODE_SUCCEEDED == get_temperature_range(ac_status.acMode, &min_temperature, &max_temperature))
+                if (IR_DECODE_SUCCEEDED == get_temperature_range(ac_status.ac_mode, &min_temperature, &max_temperature))
                 {
                     ir_printf("\nsupported temperature range in mode %d = %d, %d\n",
-                              ac_status.acMode, min_temperature, max_temperature);
+                              ac_status.ac_mode, min_temperature, max_temperature);
                 }
                 need_control = FALSE;
                 break;
@@ -152,11 +152,11 @@ INT8 decode_as_ac(char *file_name)
         if (TRUE == op_match && TRUE == need_control)
         {
             ir_printf("switch AC to power = %d, mode = %d, temp = %d, speed = %d, swing = %d\n",
-                      ac_status.acPower,
-                      ac_status.acMode,
-                      ac_status.acTemp,
-                      ac_status.acWindSpeed,
-                      ac_status.acWindDir
+                      ac_status.ac_power,
+                      ac_status.ac_mode,
+                      ac_status.ac_temp,
+                      ac_status.ac_wind_speed,
+                      ac_status.ac_wind_dir
             );
 
             ir_decode(function_code, user_data, &ac_status, TRUE);

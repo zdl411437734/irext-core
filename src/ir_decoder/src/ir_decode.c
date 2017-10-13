@@ -35,7 +35,7 @@ UINT8 *binary_content = NULL;
 UINT8 ir_binary_type = IR_TYPE_STATUS;
 UINT8 ir_hexadecimal = SUB_CATEGORY_QUATERNARY;
 
-protocol *context = (protocol *) byteArray;
+t_ac_protocol *context = (t_ac_protocol *) byteArray;
 
 lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
 {
@@ -51,7 +51,7 @@ lp_apply_ac_parameter apply_table[AC_APPLY_MAX] =
 // static functions declarations
 static INT8 ir_ac_file_open(const char *file_name);
 static INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length);
-static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+static UINT16 ir_ac_lib_control(t_remote_ac_status ac_status, UINT16 *user_data, UINT8 function_code,
                                 BOOL change_wind_direction);
 static INT8 ir_ac_lib_close();
 static INT8 ir_tv_file_open(const char *file_name);
@@ -159,7 +159,7 @@ INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8* binar
 }
 
 
-UINT16 ir_decode(UINT8 key_code, UINT16* user_data, remote_ac_status_t* ac_status, BOOL change_wind_direction)
+UINT16 ir_decode(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction)
 {
     if (IR_TYPE_COMMANDS == ir_binary_type)
     {
@@ -257,7 +257,7 @@ static INT8 ir_ac_lib_open(UINT8 *binary, UINT16 binary_length)
     return IR_DECODE_SUCCEEDED;
 }
 
-static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data, UINT8 function_code,
+static UINT16 ir_ac_lib_control(t_remote_ac_status ac_status, UINT16 *user_data, UINT8 function_code,
                          BOOL change_wind_direction)
 {
     UINT16 time_length = 0;
@@ -281,7 +281,7 @@ static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data,
     ir_memcpy(ir_hex_code, context->default_code.data, context->default_code.len);
 
 #if defined USE_APPLY_TABLE
-    if(ac_status.acPower != AC_POWER_OFF)
+    if(ac_status.ac_power != AC_POWER_OFF)
     {
         for (i = AC_APPLY_POWER; i < AC_APPLY_MAX; i++)
         {
@@ -289,7 +289,7 @@ static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data,
         }
     }
 #else
-    if (ac_status.acPower == AC_POWER_OFF)
+    if (ac_status.ac_power == AC_POWER_OFF)
     {
         // otherwise, power should always be applied
         apply_power(ac_status, function_code);
@@ -297,7 +297,7 @@ static UINT16 ir_ac_lib_control(remote_ac_status_t ac_status, UINT16 *user_data,
     else
     {
         // check the mode as the first priority, despite any other status
-        if (TRUE == context->n_mode[ac_status.acMode].enable)
+        if (TRUE == context->n_mode[ac_status.ac_mode].enable)
         {
             if (is_solo_function(function_code))
             {
@@ -400,7 +400,7 @@ INT8 get_temperature_range(UINT8 ac_mode, INT8 *temp_min, INT8 *temp_max)
         return IR_DECODE_FAILED;
     }
 
-    if (1 == context->n_mode[ac_mode].alltemp)
+    if (1 == context->n_mode[ac_mode].all_temp)
     {
         *temp_min = *temp_max = -1;
         return IR_DECODE_SUCCEEDED;
@@ -410,7 +410,7 @@ INT8 get_temperature_range(UINT8 ac_mode, INT8 *temp_min, INT8 *temp_max)
     *temp_max = -1;
     for (i = 0; i < AC_TEMP_MAX; i++)
     {
-        if (isin(context->n_mode[ac_mode].temp, i, context->n_mode[ac_mode].temp_cnt) ||
+        if (is_in(context->n_mode[ac_mode].temp, i, context->n_mode[ac_mode].temp_cnt) ||
             (context->temp1.len != 0 && 0 == context->temp1.comp_data[i].seg_len) ||
             (context->temp2.len != 0 && 0 == context->temp2.comp_data[i].seg_len))
         {
@@ -463,7 +463,7 @@ INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8 *supported_wind_speed)
         return IR_DECODE_FAILED;
     }
 
-    if (1 == context->n_mode[ac_mode].allspeed)
+    if (1 == context->n_mode[ac_mode].all_speed)
     {
         *supported_wind_speed = 0;
         return IR_DECODE_SUCCEEDED;
@@ -473,7 +473,7 @@ INT8 get_supported_wind_speed(UINT8 ac_mode, UINT8 *supported_wind_speed)
 
     for (i = 0; i < AC_WS_MAX; i++)
     {
-        if (isin(context->n_mode[ac_mode].speed, i, context->n_mode[ac_mode].speed_cnt) ||
+        if (is_in(context->n_mode[ac_mode].speed, i, context->n_mode[ac_mode].speed_cnt) ||
             (context->speed1.len != 0 && 0 == context->speed1.comp_data[i].seg_len) ||
             (context->speed2.len != 0 && 0 == context->speed2.comp_data[i].seg_len))
         {

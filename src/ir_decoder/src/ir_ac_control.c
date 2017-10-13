@@ -30,7 +30,7 @@ static INT8 ir_context_init();
 
 static INT8 ir_context_init()
 {
-    ir_memset(context, 0, sizeof(protocol));
+    ir_memset(context, 0, sizeof(t_ac_protocol));
     return IR_DECODE_SUCCEEDED;
 }
 
@@ -59,14 +59,14 @@ INT8 ir_ac_lib_parse()
     binary_tags_info();
 
     context->endian = 0;
-    context->lastbit = 0;
+    context->last_bit = 0;
     context->repeat_times = 1;
 
     for (i = 0; i < N_MODE_MAX; i++)
     {
         context->n_mode[i].enable = TRUE;
-        context->n_mode[i].allspeed = FALSE;
-        context->n_mode[i].alltemp = FALSE;
+        context->n_mode[i].all_speed = FALSE;
+        context->n_mode[i].all_temp = FALSE;
         ir_memset(context->n_mode[i].speed, 0x00, AC_WS_MAX);
         context->n_mode[i].speed_cnt = 0;
         ir_memset(context->n_mode[i].temp, 0x00, AC_TEMP_MAX);
@@ -105,8 +105,8 @@ INT8 ir_ac_lib_parse()
             {
                 context->swing1.count = context->si.mode_count;
                 context->swing1.len = (UINT8) tags[i].len >> 1;
-                swing_space_size = sizeof(tag_comp) * context->si.mode_count;
-                context->swing1.comp_data = (tag_comp *) ir_malloc(swing_space_size);
+                swing_space_size = sizeof(t_tag_comp) * context->si.mode_count;
+                context->swing1.comp_data = (t_tag_comp *) ir_malloc(swing_space_size);
                 if (NULL == context->swing1.comp_data)
                 {
                     return IR_DECODE_FAILED;
@@ -125,8 +125,8 @@ INT8 ir_ac_lib_parse()
             {
                 context->swing2.count = context->si.mode_count;
                 context->swing2.len = (UINT8) tags[i].len >> 1;
-                swing_space_size = sizeof(tag_comp) * context->si.mode_count;
-                context->swing2.comp_data = (tag_comp *) ir_malloc(swing_space_size);
+                swing_space_size = sizeof(t_tag_comp) * context->si.mode_count;
+                context->swing2.comp_data = (t_tag_comp *) ir_malloc(swing_space_size);
                 if (NULL == context->swing2.comp_data)
                 {
                     return IR_DECODE_FAILED;
@@ -286,7 +286,7 @@ INT8 ir_ac_lib_parse()
                 return IR_DECODE_FAILED;
             }
         }
-        else if (tags[i].tag == TAG_AC_BITNUM)
+        else if (tags[i].tag == TAG_AC_BIT_NUM)
         {
             if (IR_DECODE_FAILED == parse_bit_num(&tags[i]))
             {
@@ -350,7 +350,7 @@ INT8 ir_ac_lib_parse()
                 return IR_DECODE_FAILED;
             }
         }
-        if (tags[i].tag == TAG_AC_LASTBIT)
+        if (tags[i].tag == TAG_AC_LAST_BIT)
         {
             if (IR_DECODE_FAILED == parse_lastbit(&tags[i]))
             {
@@ -382,7 +382,7 @@ INT8 ir_ac_lib_parse()
         // bit order from right to left : power, mode, temp+, temp-, wind_speed, swing, fix
         for (i = AC_FUNCTION_POWER; i < AC_FUNCTION_MAX; i++)
         {
-            if (isin(context->sc.solo_function_codes, i, context->sc.solo_func_count))
+            if (is_in(context->sc.solo_function_codes, i, context->sc.solo_func_count))
             {
                 context->solo_function_mark |= (1 << (i - 1));
             }

@@ -17,7 +17,7 @@ Revision log:
 #include "../include/ir_ac_parse_parameter.h"
 
 
-INT8 parse_comp_data_type_1(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
+INT8 parse_comp_data_type_1(UINT8 *data, UINT16 *trav_offset, t_tag_comp *comp)
 {
     UINT8 seg_len = data[*trav_offset];
     (*trav_offset)++;
@@ -43,7 +43,7 @@ INT8 parse_comp_data_type_1(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
+INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, t_tag_comp *comp)
 {
     UINT8 seg_len = data[*trav_offset];
     (*trav_offset)++;
@@ -69,7 +69,7 @@ INT8 parse_comp_data_type_2(UINT8 *data, UINT16 *trav_offset, tag_comp *comp)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_end, UINT8 type)
+INT8 parse_common_ac_parameter(t_tag_head *tag, t_tag_comp *comp_data, UINT8 with_end, UINT8 type)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -93,7 +93,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to AC data structure
     //*comp_len = hex_len;
@@ -136,7 +136,7 @@ INT8 parse_common_ac_parameter(t_tag_head *tag, tag_comp *comp_data, UINT8 with_
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_default_code(struct tag_head *tag, ac_hex *default_code)
+INT8 parse_default_code(struct tag_head *tag, t_ac_hex *default_code)
 {
     UINT16 byteLen = 0;
 
@@ -146,12 +146,12 @@ INT8 parse_default_code(struct tag_head *tag, ac_hex *default_code)
     }
 
     byteLen = tag->len >> 1;
-    string_to_hex(tag->pdata, default_code, byteLen);
+    string_to_hex(tag->p_data, default_code);
 
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
+INT8 parse_power_1(struct tag_head *tag, t_power_1 *power1)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -176,7 +176,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to power1 data structure
     power1->len = (UINT8) hex_len;
@@ -201,7 +201,7 @@ INT8 parse_power_1(struct tag_head *tag, power_1 *power1)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
+INT8 parse_temp_1(struct tag_head *tag, t_temp_1 *temp1)
 {
     UINT16 hex_len = 0;
     UINT16 i = 0;
@@ -222,7 +222,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data according to length
     if (hex_data[0] == hex_len - 1)
@@ -276,7 +276,7 @@ INT8 parse_temp_1(struct tag_head *tag, temp_1 *temp1)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
+INT8 parse_mode_1(struct tag_head *tag, t_mode_1 *mode1)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -296,7 +296,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
     mode1->len = (UINT8) hex_len;
@@ -320,7 +320,7 @@ INT8 parse_mode_1(struct tag_head *tag, mode_1 *mode1)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
+INT8 parse_speed_1(struct tag_head *tag, t_speed_1 *speed1)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -340,7 +340,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to speed1 data structure
     speed1->len = (UINT8) hex_len;
@@ -364,7 +364,7 @@ INT8 parse_speed_1(struct tag_head *tag, speed_1 *speed1)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
+INT8 parse_swing_1(struct tag_head *tag, t_swing_1 *swing1, UINT16 swing_count)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -384,12 +384,12 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to swing1 data structure
     swing1->count = swing_count;
     swing1->len = (UINT8) hex_len;
-    swing1->comp_data = (tag_comp *) ir_malloc(sizeof(tag_comp) * swing_count);
+    swing1->comp_data = (t_tag_comp *) ir_malloc(sizeof(t_tag_comp) * swing_count);
     if (NULL == swing1->comp_data)
     {
         ir_free(hex_data);
@@ -415,7 +415,7 @@ INT8 parse_swing_1(struct tag_head *tag, swing_1 *swing1, UINT16 swing_count)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, UINT16 len)
+INT8 parse_checksum_byte_typed(UINT8 *csdata, t_tag_checksum_data *checksum, UINT16 len)
 {
     checksum->start_byte_pos = csdata[2];
     checksum->end_byte_pos = csdata[3];
@@ -434,7 +434,7 @@ INT8 parse_checksum_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, UINT1
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum_half_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, UINT16 len)
+INT8 parse_checksum_half_byte_typed(UINT8 *csdata, t_tag_checksum_data *checksum, UINT16 len)
 {
     checksum->start_byte_pos = csdata[2];
     checksum->end_byte_pos = csdata[3];
@@ -452,7 +452,7 @@ INT8 parse_checksum_half_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, 
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum_spec_half_byte_typed(UINT8 *csdata, tag_checksum_data *checksum, UINT16 len)
+INT8 parse_checksum_spec_half_byte_typed(UINT8 *csdata, t_tag_checksum_data *checksum, UINT16 len)
 {
     /*
      * note:
@@ -478,14 +478,14 @@ INT8 parse_checksum_spec_half_byte_typed(UINT8 *csdata, tag_checksum_data *check
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum_malloc(struct tag_head *tag, tchecksum *checksum)
+INT8 parse_checksum_malloc(struct tag_head *tag, t_checksum *checksum)
 {
     UINT8 i = 0;
     UINT8 cnt = 0;
 
     for (i = 0; i < tag->len; i++)
     {
-        if (tag->pdata[i] == '|')
+        if (tag->p_data[i] == '|')
         {
             cnt++;
         }
@@ -493,18 +493,18 @@ INT8 parse_checksum_malloc(struct tag_head *tag, tchecksum *checksum)
 
     checksum->len = (UINT8) ((tag->len - cnt) >> 1);
     checksum->count = (UINT16) (cnt + 1);
-    checksum->checksum_data = (tag_checksum_data *) ir_malloc(sizeof(tag_checksum_data) * checksum->count);
+    checksum->checksum_data = (t_tag_checksum_data *) ir_malloc(sizeof(t_tag_checksum_data) * checksum->count);
 
     if (NULL == checksum->checksum_data)
     {
         return IR_DECODE_FAILED;
     }
-    ir_memset(checksum->checksum_data, 0x00, sizeof(tag_checksum_data) * checksum->count);
+    ir_memset(checksum->checksum_data, 0x00, sizeof(t_tag_checksum_data) * checksum->count);
 
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
+INT8 parse_checksum_data(UINT8 *buf, t_tag_checksum_data *checksum, UINT8 length)
 {
     UINT8 *hex_data = NULL;
     UINT16 hex_len = 0;
@@ -574,7 +574,7 @@ INT8 parse_checksum_data(UINT8 *buf, tag_checksum_data *checksum, UINT8 length)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
+INT8 parse_checksum(struct tag_head *tag, t_checksum *checksum)
 {
     UINT8 i = 0;
     UINT8 num = 0;
@@ -597,9 +597,9 @@ INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
 
     for (i = 0; i < tag->len; i++)
     {
-        if (tag->pdata[i] == '|')
+        if (tag->p_data[i] == '|')
         {
-            if (IR_DECODE_FAILED == parse_checksum_data(tag->pdata + preindex,
+            if (IR_DECODE_FAILED == parse_checksum_data(tag->p_data + preindex,
                                                         checksum->checksum_data + num,
                                                         (UINT8) (i - preindex) >> 1))
             {
@@ -610,7 +610,7 @@ INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
         }
     }
 
-    if (IR_DECODE_FAILED == parse_checksum_data(tag->pdata + preindex,
+    if (IR_DECODE_FAILED == parse_checksum_data(tag->p_data + preindex,
                                                 checksum->checksum_data + num,
                                                 (UINT8) (i - preindex) >> 1))
     {
@@ -620,7 +620,7 @@ INT8 parse_checksum(struct tag_head *tag, tchecksum *checksum)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
+INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, t_tag_comp *mode_seg)
 {
     UINT8 seg_len = 0;
     BOOL valid_function_id = TRUE;
@@ -687,7 +687,7 @@ INT8 parse_function_1(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     return function_id;
 }
 
-INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
+INT8 parse_function_1_tag29(struct tag_head *tag, t_function_1 *function1)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -712,7 +712,7 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
     function1->len = (UINT8) hex_len;
@@ -743,7 +743,7 @@ INT8 parse_function_1_tag29(struct tag_head *tag, function_1 *function1)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
+INT8 parse_temp_2(struct tag_head *tag, t_temp_2 *temp2)
 {
     UINT16 hex_len = 0;
     UINT16 i = 0;
@@ -769,7 +769,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data according to length
     if (hex_data[0] == hex_len - 1)
@@ -823,7 +823,7 @@ INT8 parse_temp_2(struct tag_head *tag, temp_2 *temp2)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
+INT8 parse_mode_2(struct tag_head *tag, t_mode_2 *mode2)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -848,7 +848,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
     mode2->len = (UINT8) hex_len;
@@ -872,7 +872,7 @@ INT8 parse_mode_2(struct tag_head *tag, mode_2 *mode2)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
+INT8 parse_speed_2(struct tag_head *tag, t_speed_2 *speed2)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -897,7 +897,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to speed1 data structure
     speed2->len = (UINT8) hex_len;
@@ -921,7 +921,7 @@ INT8 parse_speed_2(struct tag_head *tag, speed_2 *speed2)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
+INT8 parse_swing_2(struct tag_head *tag, t_swing_2 *swing2, UINT16 swing_count)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -946,12 +946,12 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to swing2 data structure
     swing2->count = swing_count;
     swing2->len = (UINT8) hex_len;
-    swing2->comp_data = (tag_comp *) ir_malloc(sizeof(tag_comp) * swing_count);
+    swing2->comp_data = (t_tag_comp *) ir_malloc(sizeof(t_tag_comp) * swing_count);
     if (NULL == swing2->comp_data)
     {
         ir_free(hex_data);
@@ -977,7 +977,7 @@ INT8 parse_swing_2(struct tag_head *tag, swing_2 *swing2, UINT16 swing_count)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
+INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, t_tag_comp *mode_seg)
 {
     UINT8 seg_len = 0;
     BOOL valid_function_id = TRUE;
@@ -1045,7 +1045,7 @@ INT8 parse_function_2(UINT8 *data, UINT16 *trav_offset, tag_comp *mode_seg)
     return function_id;
 }
 
-INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
+INT8 parse_function_2_tag34(struct tag_head *tag, t_function_2 *function2)
 {
     UINT16 hex_len = 0;
     UINT16 trav_offset = 0;
@@ -1070,7 +1070,7 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
         return IR_DECODE_FAILED;
     }
 
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
     function2->len = (UINT8) hex_len;
@@ -1101,7 +1101,7 @@ INT8 parse_function_2_tag34(struct tag_head *tag, function_2 *function2)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_swing_info(struct tag_head *tag, swing_info *si)
+INT8 parse_swing_info(struct tag_head *tag, t_swing_info *si)
 {
     if (NULL == tag)
     {
@@ -1117,13 +1117,13 @@ INT8 parse_swing_info(struct tag_head *tag, swing_info *si)
      */
     if (1 == tag->len)
     {
-        if ('0' == tag->pdata[0])
+        if ('0' == tag->p_data[0])
         {
             // to identify if there is only 1 status in TAG 26 OR 33
             si->type = SWING_TYPE_NOT_SPECIFIED;
             si->mode_count = 0;
         }
-        else if ('1' == tag->pdata[0])
+        else if ('1' == tag->p_data[0])
         {
             si->type = SWING_TYPE_SWING_ONLY;
             si->mode_count = 1;
@@ -1145,7 +1145,7 @@ INT8 parse_swing_info(struct tag_head *tag, swing_info *si)
     return IR_DECODE_SUCCEEDED;
 }
 
-INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
+INT8 parse_solo_code(struct tag_head *tag, t_solo_code *sc)
 {
     UINT16 hex_len = 0;
     UINT8 *hex_data = NULL;
@@ -1175,7 +1175,7 @@ INT8 parse_solo_code(struct tag_head *tag, solo_code *sc)
     {
         return IR_DECODE_FAILED;
     }
-    string_to_hex_common(tag->pdata, hex_data, hex_len);
+    string_to_hex_common(tag->p_data, hex_data, hex_len);
 
     // parse hex data to mode1 data structure
     sc->len = (UINT8) hex_len;

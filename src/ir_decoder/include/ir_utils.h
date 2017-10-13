@@ -22,15 +22,11 @@ extern "C"
 
 #include <stdio.h>
 
-extern void string_to_hex(UINT8 *p, ac_hex *pac_hex, UINT16 len);
-
-extern void string_to_intArray(UINT8 *p, UINT8 *binary_code, UINT16 len);
+extern void string_to_hex(UINT8 *p, t_ac_hex *pac_hex);
 
 extern void string_to_hex_common(UINT8 *p, UINT8 *hex_data, UINT16 len);
 
-extern BOOL isin(UINT8 array[], UINT8 value, UINT8 len);
-
-extern void hex_byte_to_double_char(char *dest, UINT8 length, UINT8 src);
+extern BOOL is_in(const UINT8 *array, UINT8 value, UINT8 len);
 
 #ifdef __cplusplus
 }

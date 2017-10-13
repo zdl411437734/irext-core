@@ -12,7 +12,7 @@ Revision log:
 #include "../include/ir_ac_build_frame.h"
 #include "../include/ir_decode.h"
 
-extern protocol *context;
+extern t_ac_protocol *context;
 
 
 //return bit number per byte,default value is 8
@@ -21,19 +21,19 @@ UINT8 bits_per_byte(UINT8 index)
     UINT8 i = 0;
     UINT8 size = 0;
 
-    if (context->bitnum_cnt == 0)
+    if (context->bit_num_cnt == 0)
         return 8; //defaut value
 
-    if (context->bitnum_cnt >= MAX_BITNUM)
+    if (context->bit_num_cnt >= MAX_BITNUM)
         size = MAX_BITNUM;
     else
-        size = (UINT8) context->bitnum_cnt;
+        size = (UINT8) context->bit_num_cnt;
 
     for (i = 0; i < size; i++)
     {
-        if (context->bitnum[i].pos == index)
-            return (UINT8) context->bitnum[i].bits;
-        if (context->bitnum[i].pos > index)
+        if (context->bit_num[i].pos == index)
+            return (UINT8) context->bit_num[i].bits;
+        if (context->bit_num[i].pos > index)
             return 8;
     }
     return 8;
@@ -67,7 +67,7 @@ UINT16 add_delaycode(UINT8 index)
         }
     }
 
-    if ((context->lastbit == 0) && (index == (ir_hex_len - 1)))
+    if ((context->last_bit == 0) && (index == (ir_hex_len - 1)))
     {
         context->time[context->code_cnt++] = context->one.low; //high
     }
@@ -97,11 +97,11 @@ UINT16 create_ir_frame()
     context->code_cnt = 0;
 
     // boot code
-    for (i = 0; i < context->bootcode.len; i++)
+    for (i = 0; i < context->boot_code.len; i++)
     {
-        context->time[context->code_cnt++] = context->bootcode.data[i];
+        context->time[context->code_cnt++] = context->boot_code.data[i];
     }
-    //code_cnt += context->bootcode.len;
+    //code_cnt += context->boot_code.len;
 
     for (i = 0; i < ir_hex_len; i++)
     {

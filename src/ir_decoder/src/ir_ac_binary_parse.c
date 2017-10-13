@@ -114,7 +114,7 @@ INT8 binary_parse_data()
     UINT16 i = 0;
     for (i = 0; i < tag_count; i++)
     {
-        tags[i].pdata = p_ir_buffer->data + tags[i].offset + tag_head_offset;
+        tags[i].p_data = p_ir_buffer->data + tags[i].offset + tag_head_offset;
     }
 
     return IR_DECODE_SUCCEEDED;

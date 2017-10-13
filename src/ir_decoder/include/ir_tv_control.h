@@ -63,7 +63,7 @@ typedef enum ir_flags
     IRDA_E,
     IRDA_F,
     IRDA_MAX = 20,
-} ir_flags_t;
+} t_ir_flags;
 
 typedef struct ir_data
 {
@@ -71,7 +71,7 @@ typedef struct ir_data
     UINT8 lsb;
     UINT8 mode;
     UINT8 index;
-} ir_data_t;
+} t_ir_data;
 
 #if !defined BOARD_51
 #pragma pack(1)
@@ -81,7 +81,8 @@ typedef struct ir_cycles
     UINT8 flag;
     UINT16 mask;
     UINT16 space;
-} ir_cycles_t;
+} t_ir_cycles;
+
 #if !defined BOARD_51
 #pragma pack()
 #endif
@@ -113,7 +114,7 @@ typedef enum tv_key_value
     TV_8,
     TV_9,
     TV_KEY_MAX,
-} tv_key_value_t;
+} t_tv_key_value;
 
 
 typedef enum stb_key_value
@@ -143,7 +144,7 @@ typedef enum stb_key_value
     STB_8,
     STB_9,
     STB_KEY_MAX,
-} stb_key_value_t;
+} t_stb_key_value;
 
 typedef enum nw_key_value
 {
@@ -169,7 +170,7 @@ typedef enum nw_key_value
     NW_8,
     NW_9,
     NW_KEY_MAX,
-} nw_key_value_t;
+} t_nw_key_value;
 
 typedef enum cm_key_value
 {
@@ -189,13 +190,13 @@ typedef enum cm_key_value
     CM_MENU,
     CM_MODE,
     CM_KEY_MAX,
-} cm_key_value_t;
+} t_cm_key_value;
 
 typedef struct ir_data_tv
 {
     char magic[4];
     UINT8 per_keycode_bytes;
-} ir_data_tv_t;
+} t_ir_data_tv;
 
 
 extern INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length);

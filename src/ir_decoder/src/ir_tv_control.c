@@ -13,8 +13,6 @@ Revision log:
 
 #include "../include/ir_defs.h"
 #include "../include/ir_decode.h"
-#include "../include/ir_tv_control.h"
-
 
 struct buffer
 {
@@ -26,12 +24,11 @@ struct buffer
 
 static struct buffer *pbuffer = &ir_file;
 
-//static UINT8 *prot_name = NULL;
 static UINT8 *prot_cycles_num = NULL;
-static ir_cycles_t *prot_cycles_data[IRDA_MAX];
+static t_ir_cycles *prot_cycles_data[IRDA_MAX];
 static UINT8 prot_items_cnt = 0;
-static ir_data_t *prot_items_data = NULL;
-static ir_data_tv_t *remote_p;
+static t_ir_data *prot_items_data = NULL;
+static t_ir_data_tv *remote_p;
 static UINT8 *remote_pdata = NULL;
 
 static UINT16 time_index = 0;
@@ -45,13 +42,13 @@ static BOOL get_ir_protocol(UINT8 encode_type);
 
 static BOOL get_ir_keymap(void);
 
-static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time);
+static void print_ir_time(t_ir_data *data, UINT8 key_index, UINT16 *ir_time);
 
-static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time);
+static void process_decode_number(UINT8 keycode, t_ir_data *data, UINT8 valid_bits, UINT16 *ir_time);
 
 static void convert_to_ir_time(UINT8 value, UINT16 *ir_time);
 
-static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time);
+static void replace_with(t_ir_cycles *pcycles_num, UINT16 *ir_time);
 
 
 INT8 tv_lib_open(UINT8 *binary, UINT16 binary_length)
@@ -109,8 +106,7 @@ static BOOL get_ir_protocol(UINT8 encode_type)
 
     pbuffer->offset = 0;
 
-    /* protocol name */
-    // prot_name = pbuffer->data + pbuffer->offset;
+    /* t_ac_protocol name */
     pbuffer->offset += name_size;
 
     /* cycles number */
@@ -145,7 +141,7 @@ static BOOL get_ir_protocol(UINT8 encode_type)
     {
         if (0 != prot_cycles_num[i])
         {
-            prot_cycles_data[i] = (ir_cycles_t *) (&prot_cycles[sizeof(ir_cycles_t) * cycles_sum]);
+            prot_cycles_data[i] = (t_ir_cycles *) (&prot_cycles[sizeof(t_ir_cycles) * cycles_sum]);
         }
         else
         {
@@ -153,15 +149,15 @@ static BOOL get_ir_protocol(UINT8 encode_type)
         }
         cycles_sum += prot_cycles_num[i];
     }
-    pbuffer->offset += sizeof(ir_cycles_t) * cycles_sum;
+    pbuffer->offset += sizeof(t_ir_cycles) * cycles_sum;
 
     /* items count */
     prot_items_cnt = pbuffer->data[pbuffer->offset];
     pbuffer->offset += sizeof(UINT8);
 
     /* items data */
-    prot_items_data = (ir_data_t *) (pbuffer->data + pbuffer->offset);
-    pbuffer->offset += prot_items_cnt * sizeof(ir_data_t);
+    prot_items_data = (t_ir_data *) (pbuffer->data + pbuffer->offset);
+    pbuffer->offset += prot_items_cnt * sizeof(t_ir_data);
 
     ir_toggle_bit = FALSE;
 
@@ -170,8 +166,8 @@ static BOOL get_ir_protocol(UINT8 encode_type)
 
 static BOOL get_ir_keymap(void)
 {
-    remote_p = (ir_data_tv_t *) (pbuffer->data + pbuffer->offset);
-    pbuffer->offset += sizeof(ir_data_tv_t);
+    remote_p = (t_ir_data_tv *) (pbuffer->data + pbuffer->offset);
+    pbuffer->offset += sizeof(t_ir_data_tv);
 
     if (strncmp(remote_p->magic, "irda", 4) == 0)
     {
@@ -182,11 +178,11 @@ static BOOL get_ir_keymap(void)
     return FALSE;
 }
 
-static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time)
+static void print_ir_time(t_ir_data *data, UINT8 key_index, UINT16 *ir_time)
 {
     UINT8 i = 0;
     UINT8 cycles_num = 0;
-    ir_cycles_t *pcycles = NULL;
+    t_ir_cycles *pcycles = NULL;
     UINT8 key_code = 0;
 
     if (NULL == data || NULL == ir_time)
@@ -301,10 +297,7 @@ static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time)
             {
                 break;
             }
-            else
-            {
-                pcycles++;
-            }
+            pcycles++;
         }
     }
     else
@@ -331,7 +324,7 @@ static void print_ir_time(ir_data_t *data, UINT8 key_index, UINT16 *ir_time)
     }
 }
 
-static void process_decode_number(UINT8 keycode, ir_data_t *data, UINT8 valid_bits, UINT16 *ir_time)
+static void process_decode_number(UINT8 keycode, t_ir_data *data, UINT8 valid_bits, UINT16 *ir_time)
 {
     UINT8 i = 0;
     UINT8 value = 0;
@@ -415,7 +408,7 @@ static void convert_to_ir_time(UINT8 value, UINT16 *ir_time)
     }
 }
 
-static void replace_with(ir_cycles_t *pcycles_num, UINT16 *ir_time)
+static void replace_with(t_ir_cycles *pcycles_num, UINT16 *ir_time)
 {
     if (NULL == pcycles_num || NULL == ir_time)
     {
