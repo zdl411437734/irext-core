@@ -159,7 +159,8 @@ INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8* binar
 }
 
 
-UINT16 ir_decode(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction)
+UINT16 ir_decode_f(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction,
+                   UINT8 output_format)
 {
     if (IR_TYPE_COMMANDS == ir_binary_type)
     {
