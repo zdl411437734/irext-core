@@ -34,10 +34,6 @@ extern "C"
 #define SUB_CATEGORY_QUATERNARY      0
 #define SUB_CATEGORY_HEXADECIMAL     1
 
-// update 2017-11-07: for backward compatibility purpose
-#define ir_decode(key_code, user_data, ac_status, change_wind_direction) \
-        ir_decode_f(key_code, user_data, ac_status, change_wind_direction, 0)
-
 // exported functions
 /**
  * function     ir_file_open
@@ -76,12 +72,24 @@ extern INT8 ir_binary_open(const UINT8 category, const UINT8 sub_category, UINT8
  *              user_data (out) - output decoded data in INT16 array format
  *              ac_status(in) - pointer to AC status (optional)
  *              change_wind_direction (in) - if control changes wind direction for AC (for AC only)
- *              output_format - 0x00 for analog signal output, 0x01 for digital signal output, default is 0x00
  *
  * returns:     length of decoded data (0 indicates decode failure)
  */
-extern UINT16 ir_decode_f(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction,
-                        UINT8 output_format);
+extern UINT16 ir_decode(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction);
+
+/**
+ * function     ir_decode_d
+ *
+ * description: decode IR binary into digital NEC code
+ *
+ * parameters:  key_code (in) - the code of pressed key
+ *              user_data (out) - output decoded data in INT16 array format
+ *              ac_status(in) - pointer to AC status (optional)
+ *              change_wind_direction (in) - if control changes wind direction for AC (for AC only)
+ *
+ * returns:     length of decoded data (0 indicates decode failure)
+ */
+extern UINT16 ir_decode_d(UINT8 key_code, UINT16* user_data, t_remote_ac_status* ac_status, BOOL change_wind_direction);
 
 /**
  * function     ir_close
