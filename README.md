@@ -1,4 +1,4 @@
-#### For users out of China, please refer to the official website http://irext.net for documentations.
+#### For users out of China, please refer to the official website https://irext.net for documentations.
 
 # IRext (revision 0.1.4)
 #### 开源家用电器红外的编解码和免费码库方案
@@ -6,7 +6,7 @@
   IRext 提供数以万计的红外设备遥控编码, 并以独特的编、解码算法为任何嵌入式设备、移动设备以及服务器提供红外设备遥控功能
 
 
-#### 官方站点: http://irext.net
+#### 官方站点: https://irext.net
 
 
 #### IRext 具有的功能:
@@ -24,11 +24,11 @@
 
 ------
 
-#### 红外码原理简介: http://irext.net/doc/
+#### 红外码原理简介: https://irext.net/doc/
 
-#### 码库品牌索引RestAPI: http://irext.net/doc/#services
+#### 码库品牌索引RestAPI: https://irext.net/doc/#services
 
-#### 解码算法使用方法: http://irext.net/doc/#decode
+#### 解码算法使用方法: https://irext.net/doc/#decode
 
 ------
 
@@ -42,4 +42,4 @@
 
 #### 联系作者: 
 
-<img src="https://github.com/irext/irext-public-console/blob/master/web/images/bobi_qr.png" align="left" height="160" width="160">
+<img src="http://irext.net/images/bobi_qr.png" align="left" height="160" width="160">
